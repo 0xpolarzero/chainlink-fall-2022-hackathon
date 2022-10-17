@@ -31,9 +31,9 @@ contract ChildContract {
 
     /// Events
     event ParticipantCreated(
-        string _participantName,
-        string _participantTwitterHandle,
-        address _participantAddress
+        string participantName,
+        string participantTwitterHandle,
+        address indexed participantAddress
     );
 
     /// Modifiers

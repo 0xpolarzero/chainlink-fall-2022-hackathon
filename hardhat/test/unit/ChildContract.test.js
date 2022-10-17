@@ -4,7 +4,7 @@ const { deployments, network, ethers } = require('hardhat');
 
 !developmentChains.includes(network.name)
   ? describe.skip
-  : describe.only('MasterContract unit tests', function() {
+  : describe('MasterContract unit tests', function() {
       let deployer;
       let userFirst;
       let userSecond;
@@ -67,15 +67,35 @@ const { deployments, network, ethers } = require('hardhat');
         });
 
         it('Should emit an event ParticipantCreated with the right arguments', async () => {
-          const masterEvent = deployTxReceipt.events[2];
-          const childEvent = (await masterEvent.getTransactionReceipt())
-            .events[2];
-          console.log(masterEvent);
+          // Here the child contract will emit and event once created by the master contract
+          // So we need to access the events from the child contract
+          const filter = childContract.filters.ParticipantCreated();
+          const logs = await childContract.queryFilter(filter);
 
-          //   assert.equal(event.event, 'ParticipantCreated');
-          //   assert.equal(event.args.participantName, 'Bob');
-          //   assert.equal(event.args.participantTwitterHandle, '@bob');
-          //   assert.equal(event.args.participantAddress, userFirst.address);
+          const participantFirst = {
+            name: logs[0].args.participantName,
+            twitter: logs[0].args.participantTwitterHandle,
+            address: logs[0].args.participantAddress,
+          };
+
+          const participantSecond = {
+            name: logs[1].args.participantName,
+            twitter: logs[1].args.participantTwitterHandle,
+            address: logs[1].args.participantAddress,
+          };
+
+          assert(
+            logs[0].event === 'ParticipantCreated' &&
+              logs[1].event === 'ParticipantCreated',
+          );
+
+          assert.equal(participantFirst.name, 'Bob');
+          assert.equal(participantFirst.twitter, '@bob');
+          assert.equal(participantFirst.address, userFirst.address);
+
+          assert.equal(participantSecond.name, 'Alice');
+          assert.equal(participantSecond.twitter, '@alice');
+          assert.equal(participantSecond.address, userSecond.address);
         });
       });
     });

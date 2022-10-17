@@ -35,9 +35,9 @@ contract MasterContract {
      * @param _agreementName The name of the contract specified by the user
      * @param _pdfUri The URI of the PDF file stored on IPFS
      * @param _partyNames The names of the parties specified by the user
+     * @param _partyTwitterHandles The Twitter handles of the parties specified by the user
      * @param _partyAddresses The addresses specified by the user that will be allowed to interact
      * with the contract
-     * @param _partyTwitterHandles The Twitter handles of the parties specified by the user
      */
 
     function createContract(
@@ -46,7 +46,7 @@ contract MasterContract {
         string[] memory _partyNames,
         string[] memory _partyTwitterHandles,
         address[] memory _partyAddresses
-    ) public {
+    ) public returns (address childContractAddress) {
         // Revert if one of the fields is empty
         if (
             !(bytes(_agreementName).length > 0 &&
@@ -89,6 +89,8 @@ contract MasterContract {
             _partyTwitterHandles,
             _partyAddresses
         );
+
+        return address(childContract);
     }
 
     /// Getters
