@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
+import "hardhat/console.sol";
+
 /**
  * @author polarzero
  * @title Child Contract
@@ -9,6 +11,8 @@ pragma solidity ^0.8.16;
  */
 
 contract ChildContract {
+    error ChildContract__createParticipant__NOT_PARTICIPANT();
+
     /// Types
     struct Participant {
         string participantName;
@@ -33,18 +37,24 @@ contract ChildContract {
     );
 
     /// Modifiers
-    modifier onlyParties() {
-        bool isParty = false;
+    modifier onlyParticipant() {
+        bool isParticipant = false;
 
-        // Loop through the parties and check if the sender is a party
-        for (uint256 i = 0; i < s_participantCount; i++) {
-            if (s_parties[msg.sender].participantAddress == msg.sender) {
-                isParty = true;
-                break;
+        console.log("owner", i_owner, "msg sender", msg.sender);
+        if (i_owner == msg.sender) {
+            isParticipant = true;
+        } else {
+            // Loop through the parties and check if the sender is a party
+            for (uint256 i = 0; i < s_participantCount; i++) {
+                if (s_parties[msg.sender].participantAddress == msg.sender) {
+                    isParticipant = true;
+                    break;
+                }
             }
         }
 
-        require(isParty, "You are not allowed to interact with this contract");
+        if (!isParticipant)
+            revert ChildContract__createParticipant__NOT_PARTICIPANT();
         _;
     }
 
@@ -68,7 +78,7 @@ contract ChildContract {
         s_participantCount = _partyAddresses.length;
 
         for (uint256 i = 0; i < _partyAddresses.length; i++) {
-            createParticipant(
+            _createParticipant(
                 _partyNames[i],
                 _partyTwitterHandles[i],
                 _partyAddresses[i]
@@ -76,7 +86,7 @@ contract ChildContract {
         }
     }
 
-    function createParticipant(
+    function _createParticipant(
         string memory _participantName,
         string memory _participantTwitterHandle,
         address _participantAddress
@@ -93,5 +103,30 @@ contract ChildContract {
             _participantTwitterHandle,
             _participantAddress
         );
+    }
+
+    /// Getters
+    function getOwner() public view returns (address) {
+        return i_owner;
+    }
+
+    function getName() public view returns (string memory) {
+        return s_agreementName;
+    }
+
+    function getPdfUri() public view returns (string memory) {
+        return s_pdfUri;
+    }
+
+    function getParticipant(address _participantAddress)
+        public
+        view
+        returns (Participant memory)
+    {
+        return s_parties[_participantAddress];
+    }
+
+    function getParticipantCount() public view returns (uint256) {
+        return s_participantCount;
     }
 }

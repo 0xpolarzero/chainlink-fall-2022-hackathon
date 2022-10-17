@@ -2,6 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "./ChildContract.sol";
+import "hardhat/console.sol";
 
 /**
  * @author polarzero
@@ -10,12 +11,14 @@ import "./ChildContract.sol";
  */
 
 contract MasterContract {
-    /// Types
+    error MasterContract__createContract__EMPTY_FIELD();
+    error MasterContract__createContract__INCORRECT_FIELD_LENGTH();
+    error MasterContract__createContract__DUPLICATE_ADDRESS();
 
     mapping(address => ChildContract[]) public childContracts;
 
     /// Events
-    event ContractCreated(
+    event ChildContractCreated(
         address _owner,
         address indexed _contractAddress,
         string _agreementName,
@@ -44,6 +47,28 @@ contract MasterContract {
         string[] memory _partyTwitterHandles,
         address[] memory _partyAddresses
     ) public {
+        // Revert if one of the fields is empty
+        if (
+            !(bytes(_agreementName).length > 0 &&
+                bytes(_pdfUri).length > 0 &&
+                _partyNames.length > 0 &&
+                _partyAddresses.length > 0)
+        ) revert MasterContract__createContract__EMPTY_FIELD();
+
+        // Revert if the number of names, twitter handles and addresses are not equal
+        if (
+            !(_partyAddresses.length == _partyTwitterHandles.length &&
+                _partyAddresses.length == _partyNames.length)
+        ) revert MasterContract__createContract__INCORRECT_FIELD_LENGTH();
+
+        // Revert if the same address is used twice
+        for (uint256 i = 0; i < _partyAddresses.length; i++) {
+            for (uint256 j = i + 1; j < _partyAddresses.length; j++) {
+                if (_partyAddresses[i] == _partyAddresses[j])
+                    revert MasterContract__createContract__DUPLICATE_ADDRESS();
+            }
+        }
+
         // Create a new contract for this letter of intent
         ChildContract childContract = new ChildContract(
             msg.sender,
@@ -55,7 +80,7 @@ contract MasterContract {
         );
         childContracts[msg.sender].push(childContract);
 
-        emit ContractCreated(
+        emit ChildContractCreated(
             msg.sender,
             address(childContract),
             _agreementName,
@@ -64,5 +89,23 @@ contract MasterContract {
             _partyTwitterHandles,
             _partyAddresses
         );
+    }
+
+    /// Getters
+
+    function getChildContractAddresses(address _owner)
+        public
+        view
+        returns (ChildContract[] memory)
+    {
+        return childContracts[_owner];
+    }
+
+    function getChildContractCount(address _userAddress)
+        public
+        view
+        returns (uint256)
+    {
+        return childContracts[_userAddress].length;
     }
 }
