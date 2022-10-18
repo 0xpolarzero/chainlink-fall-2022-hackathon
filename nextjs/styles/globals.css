@@ -1,17 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --main-font: 'Titillium web', -apple-system, BlinkMacSystemFont, Segoe UI,
+  --font-poppins: 'Poppins', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-titillium: 'Titillium Web', -apple-system, BlinkMacSystemFont, Segoe UI,
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
+  --font-outfit: 'Outfit', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-quicksand: 'Quicksand', -apple-system, BlinkMacSystemFont, Segoe UI,
+    Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
+  --primary-color-pink: #fe3dce;
+  --primary-color-blue: #26afe6;
+  --primary-color-white: #ffffff;
+  --background-color-light: #2b313a;
+  --background-color-medium: #131923;
+  --background-color-dark: #0b111b;
+  --background-color-purple: #211d34;
+  --gradient-color-main: linear-gradient(90deg, #26afe6 0%, #fe3dce 100%);
+  --gradient-color-light: linear-gradient(90deg, #bff2ff 0%, #f15ad9 100%);
+  --gradient-color-warm: linear-gradient(90deg, #faaef2 0%, #9989ff 100%);
+  --tab-nav-items: 3;
+  --tab-nav-current-item: 0;
 }
 
 html,
 body {
+  font-family: var(--font-quicksand);
+  color: var(--primary-color-white);
   padding: 0;
   margin: 0;
-  font-family: var(--main-font);
+  scroll-behavior: smooth;
 }
 
 a {
@@ -23,12 +46,88 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  /* html {
-    color-scheme: dark;
+.highlight {
+  background: var(--gradient-color-main);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.action-btn {
+  all: unset;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  /* border-width: 3px;
+  border-style: solid; */
+  border-radius: 6px;
+  /* border-image: linear-gradient(to bottom, #fe3dce, rgba(254, 61, 206, 0)) 1
+    100%; */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.action-btn.styled {
+  background: var(--gradient-color-main);
+  box-shadow: rgba(50, 45, 71, 0.5) 2px 1000px 1px inset;
+  text-align: center;
+  padding: 0.3rem 2rem;
+  outline: none;
+  border: 0;
+}
+
+.action-btn.styled:hover {
+  box-shadow: none;
+  transform: scale(1.02);
+}
+
+.section {
+  position: relative;
+  scroll-snap-align: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 3rem 2rem 3rem;
+}
+
+@media (min-height: 30em) {
+  main {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
   }
-  body {
-    color: white;
-    background: black;
-  } */
+
+  .section {
+    height: 100vh;
+  }
+}
+
+.section-home {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.section-home .title {
+  font-size: 3rem;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+}
+
+.section-home .title .title-sub {
+  margin-left: 4rem;
+}
+
+.section-home .caption {
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.section-home .action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
 }

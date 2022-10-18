@@ -1,23 +1,70 @@
 .container {
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  background: var(--background-color-purple);
+  position: relative;
+  /* display: grid; */
+  /* grid-template-rows: auto 1fr auto; */
 }
 
-.main {
-  padding: 1rem 2rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+.header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 2rem 3rem;
+}
+
+.header .title {
+  font-family: var(--font-quicksand);
+  font-weight: 500;
+  letter-spacing: 0.2rem;
+  font-size: 1.3rem;
+}
+
+.header .links {
+  position: relative;
+  letter-spacing: 0.1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   justify-content: center;
   align-items: center;
+}
+
+.header .links > * {
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.header .links > *:not(:nth-child(4)) {
+  transition: all 0.3s ease;
+}
+
+.header .links > *:hover {
+  color: rgba(254, 61, 206, 1);
+}
+
+.slider {
+  position: absolute;
+  inset-block-end: -0.5rem;
+  block-size: 2px;
+  inline-size: calc(100% / var(--tab-nav-items));
+  background: var(--gradient-color-light);
+  transition: inset-inline-end 0.3s ease;
+}
+
+.links > :global(*.active) ~ .slider {
+  inset-inline-end: calc(
+    100% * var(--tab-nav-current-item) / var(--tab-nav-items)
+  );
 }
 
 .footer {
   display: flex;
   flex: 1;
   padding: 1rem 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   justify-content: center;
   align-items: center;
 }
@@ -33,10 +80,4 @@
   margin: 0;
   line-height: 1.15;
   font-size: 4rem;
-}
-
-@media (prefers-color-scheme: dark) {
-  .footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
 }

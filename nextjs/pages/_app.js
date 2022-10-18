@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
     <div className={styles.container}>
       <Header />
       <Component {...pageProps} />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
