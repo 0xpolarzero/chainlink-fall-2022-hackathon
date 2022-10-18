@@ -27,7 +27,7 @@ contract MasterContract {
         string _pdfUri,
         string[] _partyNames,
         string[] _partyTwitterHandles,
-        address[] indexed _partyAddresses
+        address[] _partyAddresses
     );
 
     /// Functions

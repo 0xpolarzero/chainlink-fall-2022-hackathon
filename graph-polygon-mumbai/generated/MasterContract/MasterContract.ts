@@ -47,8 +47,8 @@ export class ChildContractCreated__Params {
     return this._event.parameters[5].value.toStringArray();
   }
 
-  get _partyAddresses(): Bytes {
-    return this._event.parameters[6].value.toBytes();
+  get _partyAddresses(): Array<Address> {
+    return this._event.parameters[6].value.toAddressArray();
   }
 }
 

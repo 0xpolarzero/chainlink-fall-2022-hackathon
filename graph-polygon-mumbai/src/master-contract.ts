@@ -1,4 +1,4 @@
-import { Address } from '@graphprotocol/graph-ts';
+import { Address, Bytes } from '@graphprotocol/graph-ts';
 import { ChildContractCreated as ChildContractCreatedEvent } from '../generated/MasterContract/MasterContract';
 import { ChildContractCreated } from '../generated/schema';
 
@@ -29,7 +29,9 @@ export function handleChildContractCreated(
   childContractCreated.pdfUri = event.params._pdfUri;
   childContractCreated.partyNames = event.params._partyNames;
   childContractCreated.partyTwitterHandles = event.params._partyTwitterHandles;
-  childContractCreated.partyAddresses = event.params._partyAddresses;
+  childContractCreated.partyAddresses = event.params._partyAddresses.map<Bytes>(
+    (e: Bytes) => e,
+  );
 
   childContractCreated.save();
 }

@@ -54,7 +54,7 @@
         "type": "string[]"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address[]",
         "name": "_partyAddresses",
         "type": "address[]"
