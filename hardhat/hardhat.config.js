@@ -6,9 +6,10 @@ require('hardhat-gas-reporter');
 require('hardhat-contract-sizer');
 require('dotenv').config();
 
-const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL;
+const POLYGON_RPC_URL = process.env.POLYGON_RPC_URL;
+const MUMBAI_RPC_URL = process.env.MUMBAI_RPC_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
+const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY;
 
 /** @type import('hardhat/config').HardhatUserConfig */
@@ -26,10 +27,16 @@ module.exports = {
       url: 'http://127.0.0.1:8545/',
       chainId: 31337,
     },
-    goerli: {
-      url: GOERLI_RPC_URL,
+    polygon: {
+      url: POLYGON_RPC_URL,
       accounts: [PRIVATE_KEY],
-      chainId: 5,
+      chainId: 137,
+      blockConfirmations: 5,
+    },
+    mumbai: {
+      url: MUMBAI_RPC_URL,
+      accounts: [PRIVATE_KEY],
+      chainId: 80001,
       blockConfirmations: 5,
     },
   },
@@ -42,14 +49,25 @@ module.exports = {
     },
   },
   etherscan: {
-    apiKey: ETHERSCAN_API_KEY,
+    apiKey: {
+      polygon: POLYGONSCAN_API_KEY,
+      mumbai: POLYGONSCAN_API_KEY,
+    },
     customChains: [
       {
-        network: 'goerli',
-        chainId: 5,
+        network: 'polygon',
+        chainId: 137,
         urls: {
-          apiURL: 'https://api-goerli.etherscan.io/api',
-          browserURL: 'https://goerli.etherscan.io',
+          apiURL: 'https://api.polygonscan.com/api',
+          browserURL: 'https://polygonscan.com',
+        },
+      },
+      {
+        network: 'mumbai',
+        chainId: 80001,
+        urls: {
+          apiURL: 'https://api-mumbai.polygonscan.com/api',
+          browserURL: 'https://mumbai.polygonscan.com',
         },
       },
     ],

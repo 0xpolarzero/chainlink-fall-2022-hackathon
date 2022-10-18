@@ -11,25 +11,26 @@ import "hardhat/console.sol";
  */
 
 contract MasterContract {
+    /// Errors
     error MasterContract__createContract__EMPTY_FIELD();
     error MasterContract__createContract__INCORRECT_FIELD_LENGTH();
     error MasterContract__createContract__DUPLICATE_ADDRESS();
 
+    // Map the owner addresses to the child contracts they created
     mapping(address => ChildContract[]) public childContracts;
 
     /// Events
     event ChildContractCreated(
-        address _owner,
+        address indexed _owner,
         address indexed _contractAddress,
         string _agreementName,
         string _pdfUri,
-        string[] indexed _partyNames,
+        string[] _partyNames,
         string[] _partyTwitterHandles,
         address[] indexed _partyAddresses
     );
 
     /// Functions
-
     /**
      * @notice Create a new contract and add it to the list of child contracts
      * @param _agreementName The name of the contract specified by the user
@@ -94,7 +95,6 @@ contract MasterContract {
     }
 
     /// Getters
-
     function getChildContractAddresses(address _owner)
         public
         view

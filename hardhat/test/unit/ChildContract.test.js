@@ -97,5 +97,110 @@ const { deployments, network, ethers } = require('hardhat');
           assert.equal(participantSecond.twitter, '@alice');
           assert.equal(participantSecond.address, userSecond.address);
         });
+
+        it('Should be able to get a list of addresses and get a participant only if the address is in the list', async () => {
+          const participantAddresses = await childContract.getParticipantAddresses();
+          const firstParticipantAddress = participantAddresses[0];
+          const secondParticipantAddress = participantAddresses[1];
+
+          assert.equal(firstParticipantAddress, userFirst.address);
+          assert.equal(secondParticipantAddress, userSecond.address);
+
+          await expect(
+            childContract.getParticipant(userForbidden.address),
+          ).to.be.revertedWith('ChildContract__NOT_PARTICIPANT');
+        });
+      });
+
+      describe('approveAgreement', function() {
+        let txReceipt;
+
+        beforeEach(async () => {
+          const tx = await childContract.approveAgreement();
+          txReceipt = await tx.wait(1);
+        });
+
+        it('Should approve the agreement for the user', async () => {
+          const isApproved = await childContract.getIsAgreementApproved(
+            userFirst.address,
+          );
+
+          assert.equal(isApproved, true);
+        });
+
+        it('Should emit an event AgreementApproved with the right arguments', async () => {
+          const event = txReceipt.events[0];
+
+          assert.equal(event.event, 'ParticipantApproved');
+          assert.equal(event.args.participantAddress, userFirst.address);
+          assert.equal(event.args.participantName, 'Bob');
+          assert.equal(event.args.participantTwitterHandle, '@bob');
+        });
+
+        it('Should revert if the user is not a participant', async () => {
+          await expect(
+            childContract.connect(userForbidden).approveAgreement(),
+          ).to.be.revertedWith('ChildContract__NOT_PARTICIPANT()');
+        });
+
+        it('Should revert if the user has already approved the agreement', async () => {
+          await expect(childContract.approveAgreement()).to.be.revertedWith(
+            'ChildContract__approveAgreement__ALREADY_APPROVED()',
+          );
+        });
+
+        it('Should revert if the agreement is locked', async () => {
+          await childContract.connect(userSecond).approveAgreement();
+          await childContract.lockAgreement();
+          await expect(childContract.approveAgreement()).to.be.revertedWith(
+            'ChildContract__AGREEMENT_LOCKED()',
+          );
+        });
+      });
+
+      describe('lockAgreement', function() {
+        let txReceipt;
+
+        beforeEach(async () => {
+          await childContract.approveAgreement();
+        });
+
+        it('Should not allow to lock the agreement if not all participants have approved', async () => {
+          await expect(childContract.lockAgreement()).to.be.revertedWith(
+            'ChildContract__lockAgreement__PARTICIPANT_NOT_APPROVED()',
+          );
+        });
+
+        it('Should lock the agreement if all users have approved', async () => {
+          await childContract.connect(userSecond).approveAgreement();
+          await childContract.lockAgreement();
+          const isLocked = await childContract.getIsAgreementLocked();
+
+          assert.equal(isLocked, true);
+        });
+
+        it('Should emit an event AgreementLocked with the right arguments', async () => {
+          await childContract.connect(userSecond).approveAgreement();
+
+          expect(await childContract.lockAgreement()).to.emit(
+            childContract,
+            'AgreementLocked',
+          );
+        });
+
+        it('Should revert if the user is not a participant', async () => {
+          await expect(
+            childContract.connect(userForbidden).lockAgreement(),
+          ).to.be.revertedWith('ChildContract__NOT_PARTICIPANT()');
+        });
+
+        it('Should revert if the agreement is already locked', async () => {
+          await childContract.connect(userSecond).approveAgreement();
+          await childContract.lockAgreement();
+
+          await expect(childContract.lockAgreement()).to.be.revertedWith(
+            'ChildContract__AGREEMENT_LOCKED()',
+          );
+        });
       });
     });
