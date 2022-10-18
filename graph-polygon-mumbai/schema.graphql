@@ -1,0 +1,10 @@
+type ChildContractCreated @entity {
+  id: ID!
+  owner: Bytes!
+  contractAddress: Bytes!
+  agreementName: String!
+  pdfUri: String!
+  partyNames: [String!]!
+  partyTwitterHandles: [String!]
+  partyAddresses: [Bytes!]!
+}

@@ -1,0 +1,133 @@
+[
+  {
+    "inputs": [],
+    "name": "MasterContract__createContract__DUPLICATE_ADDRESS",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MasterContract__createContract__EMPTY_FIELD",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MasterContract__createContract__INCORRECT_FIELD_LENGTH",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_contractAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_agreementName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_pdfUri",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string[]",
+        "name": "_partyNames",
+        "type": "string[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "string[]",
+        "name": "_partyTwitterHandles",
+        "type": "string[]"
+      },
+      {
+        "indexed": true,
+        "internalType": "address[]",
+        "name": "_partyAddresses",
+        "type": "address[]"
+      }
+    ],
+    "name": "ChildContractCreated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "childContracts",
+    "outputs": [
+      {
+        "internalType": "contract ChildContract",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "_agreementName", "type": "string" },
+      { "internalType": "string", "name": "_pdfUri", "type": "string" },
+      { "internalType": "string[]", "name": "_partyNames", "type": "string[]" },
+      {
+        "internalType": "string[]",
+        "name": "_partyTwitterHandles",
+        "type": "string[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_partyAddresses",
+        "type": "address[]"
+      }
+    ],
+    "name": "createContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "childContractAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_owner", "type": "address" }
+    ],
+    "name": "getChildContractAddresses",
+    "outputs": [
+      {
+        "internalType": "contract ChildContract[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_userAddress", "type": "address" }
+    ],
+    "name": "getChildContractCount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

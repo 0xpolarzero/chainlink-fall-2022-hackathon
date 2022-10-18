@@ -1,0 +1,25 @@
+specVersion: 0.0.4
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: MasterContract
+    network: mumbai
+    source:
+      address: "0xEA9A6d373d4f1cA9E65c4394A0d49427C28b674d"
+      abi: MasterContract
+      startBlock: 28679312
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - ChildContractCreated
+      abis:
+        - name: MasterContract
+          file: MasterContract/abis/MasterContract.json
+      eventHandlers:
+        - event: ChildContractCreated(indexed address,indexed
+            address,string,string,string[],string[],indexed address[])
+          handler: handleChildContractCreated
+      file: MasterContract/MasterContract.wasm
