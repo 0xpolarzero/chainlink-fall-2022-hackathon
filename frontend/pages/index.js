@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
 
@@ -9,7 +8,8 @@ export default function Home() {
         <div className='left'></div>
         <div className='right'>
           <div className='title'>
-            <div className='title-main'>PROMISE</div>
+            <div className='title-main'>PROMISES</div>
+            <div className='title-sub'>_NETWORK</div>
           </div>
           <div className='caption'>
             <p>

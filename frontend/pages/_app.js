@@ -1,6 +1,5 @@
 import styles from '../styles/Home.module.css';
-import '../styles/globals.css';
-import '@rainbow-me/rainbowkit/styles.css';
+import '../styles/index.css';
 import Head from 'next/head';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
@@ -15,7 +14,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { useState } from 'react';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { ToastContainer } from 'react-toastify';
 
 // Rainbowkit & Wagmi config
 const { chains, provider, webSocketProvider } = configureChains(
@@ -79,6 +78,11 @@ function MyApp({ Component, pageProps }) {
           </ApolloProvider>
         </RainbowKitProvider>
       </WagmiConfig>
+      <ToastContainer
+        theme='colored'
+        progressStyle={{ background: '#fff' }}
+        position={'bottom-right'}
+      />
     </div>
   );
 }

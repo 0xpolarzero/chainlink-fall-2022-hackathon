@@ -1,10 +1,14 @@
 import styles from '../styles/Home.module.css';
 import ContractCard from '../components/ContractCard';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
+import { Collapse } from 'antd';
+import { CaretRightOutlined } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
 import { useEffect } from 'react';
+import ShrinkedAddress from '../components/ShrinkedAddress';
 
 export default function explorePromises({ setActivePage }) {
+  const { Panel } = Collapse;
   const { data, loading, error } = useQuery(GET_CHILD_CONTRACT_CREATED);
 
   useEffect(() => {
@@ -41,19 +45,43 @@ export default function explorePromises({ setActivePage }) {
     return (
       <main className={styles.main}>
         <section className='section section-explore'>
-          {data.childContractCreateds.map((childContract) => {
-            return (
-              <div key={childContract.id}>
-                <div>{childContract.agreementName}</div>
-                <div>{childContract.contractAddress}</div>
-                <div>{childContract.owner}</div>
-                <div>{childContract.pdfUri}</div>
-                <div>{childContract.partyNames}</div>
-                <div>{childContract.partyTwitterHandles}</div>
-                <div>{childContract.partyAddresses}</div>
-              </div>
-            );
-          })}
+          <div className='header'>Recent promises</div>
+          <div className='promises-list'>
+            <Collapse
+              accordion={true}
+              bordered={false}
+              expandIcon={({ isActive }) => (
+                <CaretRightOutlined rotate={isActive ? 90 : 0} />
+              )}
+              className='site-collapse-custom-collapse'
+            >
+              {data.childContractCreateds.map((childContract) => {
+                return (
+                  <Panel
+                    // header={childContract.agreementName}
+                    header={
+                      <div className='promise-header'>
+                        <div className='promise-header-name'>
+                          {childContract.agreementName}
+                        </div>
+                        <div className='promise-header-address'>
+                          Created by{' '}
+                          <ShrinkedAddress address={childContract.owner} />
+                        </div>
+                      </div>
+                    }
+                    key={childContract.id}
+                    className='site-collapse-custom-panel'
+                  >
+                    <ContractCard
+                      key={childContract.id}
+                      contractAttributes={childContract}
+                    />
+                  </Panel>
+                );
+              })}
+            </Collapse>
+          </div>
         </section>
       </main>
     );

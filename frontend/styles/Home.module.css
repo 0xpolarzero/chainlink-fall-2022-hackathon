@@ -4,63 +4,6 @@
   background: url('../asset/vivid-blurred-colorful-wallpaper-background(1).jpg');
   background-size: cover;
   position: relative;
-  /* display: grid; */
-  /* grid-template-rows: auto 1fr auto; */
-}
-
-.header {
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 10;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  padding: 2rem 3rem;
-}
-
-.header .title {
-  font-family: var(--font-quicksand);
-  font-weight: 500;
-  letter-spacing: 0.2rem;
-  font-size: 1.3rem;
-}
-
-.header .links {
-  position: relative;
-  letter-spacing: 0.1rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  justify-content: center;
-  align-items: center;
-}
-
-.header .links > * {
-  text-align: center;
-  padding: 0 1rem;
-}
-
-.header .links > *:not(:nth-child(4)) {
-  transition: all 0.3s ease;
-}
-
-.header .links > *:hover {
-  color: var(--popstar);
-}
-
-.slider {
-  position: absolute;
-  inset-block-end: -0.5rem;
-  block-size: 2px;
-  inline-size: calc(100% / var(--tab-nav-items));
-  background: var(--gradient-color-light);
-  transition: inset-inline-start 0.3s ease;
-}
-
-.links > :global(*.active) ~ .slider {
-  inset-inline-start: calc(
-    100% * var(--tab-nav-current-item) / var(--tab-nav-items)
-  );
 }
 
 .footer {

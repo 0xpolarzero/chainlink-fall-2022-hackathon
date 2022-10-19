@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css';
+import styles from '../styles/Header.module.css';
 import Link from 'next/link';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useState, useEffect } from 'react';
@@ -40,7 +40,7 @@ export const Header = ({ activePage, setActivePage }) => {
               handleNavItemClick(null, 0);
             }}
           >
-            PROMISE
+            PROMISES_NETWORK
           </a>
         </Link>
       </div>

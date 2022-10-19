@@ -30,7 +30,16 @@
     var(--popstar) 0%,
     var(--liberty) 100%
   );
-  --gradient-color-warm: linear-gradient(90deg, #faaef2 0%, #9989ff 100%);
+  --gradient-high-transparent: linear-gradient(
+    90deg,
+    rgba(195, 87, 100, 0.2) 0%,
+    rgba(62, 16, 53, 0.6) 100%
+  );
+  --gradient-medium-transparent: linear-gradient(
+    90deg,
+    rgba(195, 87, 100, 0.3) 0%,
+    rgba(62, 16, 53, 0.8) 100%
+  );
 
   --primary-color-white: #ffffff;
   --background-color-light: #2b313a;
@@ -44,6 +53,13 @@
   /* --gradient-color-warm: linear-gradient(90deg, #faaef2 0%, #9989ff 100%); */
   --tab-nav-items: 4;
   --tab-nav-current-item: 0;
+
+  --toastify-color-info: var(--liberty) !important;
+  --toastify-color-success: #58ad8b !important;
+  --toastify-color-warning: #d5a87a !important;
+  --toastify-color-error: #c95966 !important;
+  --toastify-spinner-color: #616161;
+  --toastify-spinner-color-empty-area: #e0e0e0;
 }
 
 html,
@@ -55,8 +71,13 @@ body {
   scroll-behavior: smooth;
 }
 
-a {
-  color: inherit;
+header a {
+  color: inherit !important;
+}
+
+a:not(.header) {
+  font-weight: 500;
+  color: var(--popstar);
   text-decoration: none;
 }
 
@@ -99,6 +120,37 @@ a {
   transform: scale(1.02);
 }
 
+.address {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.address .hint {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 0;
+  background: var(--popstar);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  z-index: 100;
+}
+
+.address-wrapper i {
+  opacity: 0.7;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.address-wrapper i:hover {
+  opacity: 1;
+}
+
+.address-wrapper i:active {
+  transform: scale(0.9);
+}
+
 .section {
   position: relative;
   scroll-snap-align: center;
@@ -119,36 +171,6 @@ a {
   .section {
     height: 100vh;
   }
-}
-
-.section-home {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.section-home .right {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.section-home .title {
-  font-size: 3rem;
-  font-weight: 600;
-}
-
-.section-home .caption {
-  font-size: 1.3rem;
-  font-weight: 400;
-  line-height: 1.3;
-}
-
-.section-home .action {
-  font-size: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
 }
 
 /* Override Rainbow wallet CSS */

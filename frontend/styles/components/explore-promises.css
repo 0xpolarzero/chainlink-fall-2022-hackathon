@@ -1,0 +1,76 @@
+.section-explore {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 7rem 3rem 4rem 3rem;
+}
+
+.section-explore .header {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* ---------- CARD ---------- */
+
+.promises-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.promise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.promise-header-name {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.promise-header-address {
+  opacity: 0.8;
+}
+
+.ant-collapse {
+  border-radius: 6px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.ant-collapse-header {
+  cursor: pointer;
+  overflow: visible !important;
+}
+
+.ant-collapse-content {
+  overflow: scroll;
+}
+
+.ant-collapse-item {
+  background: var(--gradient-high-transparent);
+  backdrop-filter: blur(10px);
+}
+
+.ant-collapse-item:not(.ant-collapse-item-active):hover {
+  background: var(--gradient-high-transparent);
+  box-shadow: rgba(85, 94, 153, 0.3) 2px 1000px 1px inset;
+  /* transform: scale(1.01); */
+}
+
+/* Prevent address absolute popup from overflowing */
+
+.promise-card div:nth-child(1) .address .hint,
+.promise-card div:nth-child(2) .address .hint {
+  top: 1.5rem;
+  bottom: initial;
+}
+
+.ant-collapse-header .address .hint {
+  right: 0;
+  left: initial;
+}
