@@ -6,9 +6,10 @@ export default function ShrinkedAddress({ address }) {
   const [shrinkedAddress, setShrinkedAddress] = useState('');
   const [isAddressHovered, setIsAddressHovered] = useState(false);
 
-  const copyAddress = () => {
+  const copyAddress = (e) => {
     navigator.clipboard.writeText(address);
     toast.success('Address copied to clipboard.');
+    e.stopPropagation();
   };
 
   useEffect(() => {
@@ -17,23 +18,22 @@ export default function ShrinkedAddress({ address }) {
   }, [address]);
 
   return (
-    <span className='address-wrapper'>
-      <Popover content={address}>
-        <span
-          onMouseEnter={() => setIsAddressHovered(true)}
-          onMouseLeave={() => setIsAddressHovered(false)}
-          className='address'
-        >
-          <a
-            href={`https://mumbai.polygonscan.com/address/${address}`}
-            target='_blank'
-          >
-            {shrinkedAddress}
-          </a>
-          {isAddressHovered && <span className='hint'>{address}</span>}
-        </span>
-      </Popover>
-      <i className='fa-solid fa-copy' onClick={copyAddress}></i>
-    </span>
+    <Popover
+      content={
+        <div className='popover-address'>
+          <div>{address}</div>
+          <i className='fa-solid fa-copy' onClick={copyAddress}></i>
+        </div>
+      }
+    >
+      <a
+        href={`https://mumbai.polygonscan.com/address/${address}`}
+        target='_blank'
+      >
+        {shrinkedAddress}
+      </a>
+      {isAddressHovered && <span className='hint'>{address}</span>}
+      {/* </span> */}
+    </Popover>
   );
 }

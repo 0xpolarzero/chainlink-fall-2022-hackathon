@@ -61,16 +61,3 @@
   box-shadow: rgba(85, 94, 153, 0.3) 2px 1000px 1px inset;
   /* transform: scale(1.01); */
 }
-
-/* Prevent address absolute popup from overflowing */
-
-.promise-card div:nth-child(1) .address .hint,
-.promise-card div:nth-child(2) .address .hint {
-  top: 1.5rem;
-  bottom: initial;
-}
-
-.ant-collapse-header .address .hint {
-  right: 0;
-  left: initial;
-}

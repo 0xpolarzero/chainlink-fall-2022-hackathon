@@ -6,5 +6,5 @@
 @import '@rainbow-me/rainbowkit/styles.css';
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 @import 'react-toastify/dist/ReactToastify.css';
-/* @import 'antd-specified.css'; */
-@import 'antd.dark.css';
+@import 'antd-specified.css';
+@import 'antd-animations.css';
