@@ -1,71 +1,103 @@
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useState, useEffect } from 'react';
 
-export const Header = () => {
-  const [active, setActive] = useState(0);
-
-  const handleNavItemClick = (e) => {
-    // if (typeof window === 'undefined') return;
+export const Header = ({ activePage, setActivePage }) => {
+  const updateSlider = (i) => {
     const root = document.querySelector(':root');
-    root.style.setProperty('--tab-nav-current-item', e);
-    setActive(e);
+    root.style.setProperty('--tab-nav-current-item', i);
+  };
 
-    if (e === 2) smoothScrollTo('.section-about');
+  const handleNavItemClick = (e, i) => {
+    updateSlider(i);
+    setActivePage(i);
+
+    if (e && i === 0) smoothScrollTo(e.target.attributes.to.value);
   };
 
   const smoothScrollTo = (target) => {
-    // See if active page is home or another page
-    const home = document.querySelector('.section-home');
+    // Make sure the activePage page is '/' and not '/explore-promises' or '/user-promises'
+    if (typeof window === 'undefined') return;
+    if (window.location.pathname !== '/') return;
+
     document.querySelector(target).scrollIntoView({
       behavior: 'smooth',
     });
   };
 
-  const handleNavItemHover = (e) => {
-    const root = document.querySelector(':root');
-    root.style.setProperty('--tab-nav-current-item', e);
-  };
+  useEffect(() => {
+    updateSlider(activePage);
+  }, [activePage]);
 
   return (
     <header className={styles.header}>
       <div className={styles.title}>
         <Link href='/'>
-          <a onClick={() => smoothScrollTo('.section-home')}>PROMISE</a>
+          <a
+            onClick={() => {
+              smoothScrollTo('.section-home');
+              handleNavItemClick(null, 0);
+            }}
+          >
+            PROMISE
+          </a>
         </Link>
       </div>
       <TabNav>
+        {/* <Link href='/'>
+          <a
+            className={activePage === 0 ? 'active' : ''}
+            onClick={(e) => handleNavItemClick(e, 0)}
+            onMouseEnter={() => updateSlider(0)}
+            onMouseLeave={() => updateSlider(activePage)}
+            to='.section-home'
+          ></a>
+        </Link> */}
         <Link href='/'>
           <a
-            className={active === 2 ? 'active' : ''}
-            onClick={() => handleNavItemClick(2)}
-            onMouseEnter={() => handleNavItemHover(2)}
-            onMouseLeave={() => handleNavItemHover(active)}
-            to='.about'
+            className={activePage === 0 ? 'active' : ''}
+            onClick={(e) => handleNavItemClick(e, 0)}
+            onMouseEnter={() => updateSlider(0)}
+            onMouseLeave={() => updateSlider(activePage)}
+            to='.section-about'
           >
             The project
           </a>
         </Link>
-        <Link href='/explore'>
+        <Link href='/explore-promises'>
           <a
-            className={active === 1 ? 'active' : ''}
-            onClick={() => handleNavItemClick(1)}
-            onMouseEnter={() => handleNavItemHover(1)}
-            onMouseLeave={() => handleNavItemHover(active)}
+            className={activePage === 1 ? 'active' : ''}
+            onClick={(e) => handleNavItemClick(e, 1)}
+            onMouseEnter={() => updateSlider(1)}
+            onMouseLeave={() => updateSlider(activePage)}
           >
             Explore
           </a>
         </Link>
-        <Link href='/user'>
+        <Link href='/user-promises'>
           <a
-            className={active === 0 ? 'active' : ''}
-            onClick={() => handleNavItemClick(0)}
-            onMouseEnter={() => handleNavItemHover(0)}
-            onMouseLeave={() => handleNavItemHover(active)}
+            className={activePage === 2 ? 'active' : ''}
+            onClick={(e) => handleNavItemClick(e, 2)}
+            onMouseEnter={() => updateSlider(2)}
+            onMouseLeave={() => updateSlider(activePage)}
           >
             Your promises
           </a>
         </Link>
+        <ConnectButton
+          label='Connect'
+          showBalance={false}
+          showNetwork={false}
+          accountStatus={{
+            smallScreen: 'avatar',
+            largeScreen: 'avatar',
+          }}
+          chainStatus={{
+            smallScreen: 'icon',
+            largeScreen: 'full',
+          }}
+        />
       </TabNav>
     </header>
   );

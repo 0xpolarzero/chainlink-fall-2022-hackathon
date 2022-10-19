@@ -1,5 +1,8 @@
 .container {
-  background: var(--background-color-purple);
+  background: var(--background-color-dark);
+  /* background: url('../asset/vivid-blurred-colorful-background.jpg'); */
+  background: url('../asset/vivid-blurred-colorful-wallpaper-background(1).jpg');
+  background-size: cover;
   position: relative;
   /* display: grid; */
   /* grid-template-rows: auto 1fr auto; */
@@ -27,7 +30,7 @@
   position: relative;
   letter-spacing: 0.1rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   justify-content: center;
   align-items: center;
 }
@@ -42,7 +45,7 @@
 }
 
 .header .links > *:hover {
-  color: rgba(254, 61, 206, 1);
+  color: var(--popstar);
 }
 
 .slider {
@@ -51,11 +54,11 @@
   block-size: 2px;
   inline-size: calc(100% / var(--tab-nav-items));
   background: var(--gradient-color-light);
-  transition: inset-inline-end 0.3s ease;
+  transition: inset-inline-start 0.3s ease;
 }
 
 .links > :global(*.active) ~ .slider {
-  inset-inline-end: calc(
+  inset-inline-start: calc(
     100% * var(--tab-nav-current-item) / var(--tab-nav-items)
   );
 }

@@ -14,17 +14,35 @@
   --font-quicksand: 'Quicksand', -apple-system, BlinkMacSystemFont, Segoe UI,
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
-  --primary-color-pink: #fe3dce;
-  --primary-color-blue: #26afe6;
+
+  --twilight-lavender: #8b4562ff;
+  --dark-purple: #3e1035ff;
+  --crimson-ua: #96202eff;
+  --liberty: #555e99ff;
+  --popstar: #c35764ff;
+  --gradient-color-main: linear-gradient(
+    90deg,
+    var(--crimson-ua) 0%,
+    var(--liberty) 100%
+  );
+  --gradient-color-light: linear-gradient(
+    90deg,
+    var(--popstar) 0%,
+    var(--liberty) 100%
+  );
+  --gradient-color-warm: linear-gradient(90deg, #faaef2 0%, #9989ff 100%);
+
   --primary-color-white: #ffffff;
   --background-color-light: #2b313a;
   --background-color-medium: #131923;
   --background-color-dark: #0b111b;
   --background-color-purple: #211d34;
-  --gradient-color-main: linear-gradient(90deg, #26afe6 0%, #fe3dce 100%);
-  --gradient-color-light: linear-gradient(90deg, #bff2ff 0%, #f15ad9 100%);
-  --gradient-color-warm: linear-gradient(90deg, #faaef2 0%, #9989ff 100%);
-  --tab-nav-items: 3;
+  /* --primary-color-pink: #fe3dce;
+  --primary-color-blue: #26afe6; */
+  /* --gradient-color-main: linear-gradient(90deg, #26afe6 0%, #fe3dce 100%); */
+  /* --gradient-color-light: linear-gradient(90deg, #bff2ff 0%, #f15ad9 100%); */
+  /* --gradient-color-warm: linear-gradient(90deg, #faaef2 0%, #9989ff 100%); */
+  --tab-nav-items: 4;
   --tab-nav-current-item: 0;
 }
 
@@ -88,7 +106,7 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4rem 3rem 2rem 3rem;
+  padding: 4rem;
 }
 
 @media (min-height: 30em) {
@@ -108,26 +126,40 @@ a {
   grid-template-columns: 1fr 1fr;
 }
 
+.section-home .right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .section-home .title {
   font-size: 3rem;
   font-weight: 600;
-  line-height: 1.2;
-  margin-bottom: 2rem;
-}
-
-.section-home .title .title-sub {
-  margin-left: 4rem;
 }
 
 .section-home .caption {
   font-size: 1.3rem;
   font-weight: 400;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .section-home .action {
+  font-size: 1.2rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
+}
+
+/* Override Rainbow wallet CSS */
+
+.iekbcc0.ju367va.ju367v1n:not(.ju367vz) {
+  justify-content: center;
+}
+
+.iekbcc0.ju367va.ju367v1n,
+.iekbcc0.ju367va.ju367v1n button,
+.ju367vz * {
+  font-family: var(--font-poppins) !important;
+  font-weight: 400;
 }
