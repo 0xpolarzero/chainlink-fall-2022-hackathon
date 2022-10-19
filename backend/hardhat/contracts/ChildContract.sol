@@ -26,7 +26,7 @@ contract ChildContract {
 
     /// Variables
     uint256 public s_participantCount;
-    string public s_agreementName;
+    string public s_promiseName;
     string public s_pdfUri;
     address public immutable i_owner;
     address[] public s_participantAddresses;
@@ -87,14 +87,14 @@ contract ChildContract {
 
     constructor(
         address _owner,
-        string memory _agreementName,
+        string memory _promiseName,
         string memory _pdfUri,
         string[] memory _partyNames,
         string[] memory _partyTwitterHandles,
         address[] memory _partyAddresses
     ) {
         i_owner = _owner;
-        s_agreementName = _agreementName;
+        s_promiseName = _promiseName;
         s_pdfUri = _pdfUri;
         s_participantCount = _partyAddresses.length;
 
@@ -178,7 +178,7 @@ contract ChildContract {
     }
 
     function getName() public view returns (string memory) {
-        return s_agreementName;
+        return s_promiseName;
     }
 
     function getPdfUri() public view returns (string memory) {

@@ -1,4 +1,5 @@
 import styles from '../styles/Home.module.css';
+import ContractCard from '../components/ContractCard';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
 import { useQuery } from '@apollo/client';
 import { useEffect } from 'react';

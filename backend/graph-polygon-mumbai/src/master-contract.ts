@@ -9,7 +9,7 @@ export function handleChildContractCreated(
   // But we can't ever be sure enough, so we check if the entity already exists anyway
   let childContractCreated = ChildContractCreated.load(
     getIdFromEventParams(
-      event.params._agreementName,
+      event.params._promiseName,
       event.params._contractAddress,
     ),
   );
@@ -17,7 +17,7 @@ export function handleChildContractCreated(
   if (!childContractCreated) {
     childContractCreated = new ChildContractCreated(
       getIdFromEventParams(
-        event.params._agreementName,
+        event.params._promiseName,
         event.params._contractAddress,
       ),
     );
@@ -25,7 +25,7 @@ export function handleChildContractCreated(
 
   childContractCreated.owner = event.params._owner;
   childContractCreated.contractAddress = event.params._contractAddress;
-  childContractCreated.agreementName = event.params._agreementName;
+  childContractCreated.promiseName = event.params._promiseName;
   childContractCreated.pdfUri = event.params._pdfUri;
   childContractCreated.partyNames = event.params._partyNames;
   childContractCreated.partyTwitterHandles = event.params._partyTwitterHandles;
@@ -37,8 +37,8 @@ export function handleChildContractCreated(
 }
 
 function getIdFromEventParams(
-  agreementName: String,
+  promiseName: String,
   contractAddress: Address,
 ): string {
-  return agreementName + '-' + contractAddress.toHexString();
+  return promiseName + '-' + contractAddress.toHexString();
 }

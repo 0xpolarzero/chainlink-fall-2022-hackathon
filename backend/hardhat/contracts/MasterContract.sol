@@ -23,7 +23,7 @@ contract MasterContract {
     event ChildContractCreated(
         address indexed _owner,
         address indexed _contractAddress,
-        string _agreementName,
+        string _promiseName,
         string _pdfUri,
         string[] _partyNames,
         string[] _partyTwitterHandles,
@@ -33,7 +33,7 @@ contract MasterContract {
     /// Functions
     /**
      * @notice Create a new contract and add it to the list of child contracts
-     * @param _agreementName The name of the contract specified by the user
+     * @param _promiseName The name of the contract specified by the user
      * @param _pdfUri The URI of the PDF file stored on IPFS
      * @param _partyNames The names of the parties specified by the user
      * @param _partyTwitterHandles The Twitter handles of the parties specified by the user
@@ -42,7 +42,7 @@ contract MasterContract {
      */
 
     function createContract(
-        string memory _agreementName,
+        string memory _promiseName,
         string memory _pdfUri,
         string[] memory _partyNames,
         string[] memory _partyTwitterHandles,
@@ -50,7 +50,7 @@ contract MasterContract {
     ) public returns (address childContractAddress) {
         // Revert if one of the fields is empty
         if (
-            !(bytes(_agreementName).length > 0 &&
+            !(bytes(_promiseName).length > 0 &&
                 bytes(_pdfUri).length > 0 &&
                 _partyNames.length > 0 &&
                 _partyAddresses.length > 0)
@@ -73,7 +73,7 @@ contract MasterContract {
         // Create a new contract for this letter of intent
         ChildContract childContract = new ChildContract(
             msg.sender,
-            _agreementName,
+            _promiseName,
             _pdfUri,
             _partyNames,
             _partyTwitterHandles,
@@ -84,7 +84,7 @@ contract MasterContract {
         emit ChildContractCreated(
             msg.sender,
             address(childContract),
-            _agreementName,
+            _promiseName,
             _pdfUri,
             _partyNames,
             _partyTwitterHandles,
