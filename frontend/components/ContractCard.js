@@ -14,9 +14,15 @@ export default function ContractCard({ contractAttributes }) {
 
   return (
     <div className='promise-card'>
-      <div key='address' className='card-item contract-address'>
-        <div className='title'>Contract address </div>
-        <FormattedAddress address={contractAddress} isShrinked='responsive' />
+      <div key='contract' className='card-item contract-identity'>
+        <div className='contract-address'>
+          <div className='title'>Contract address </div>
+          <FormattedAddress address={contractAddress} isShrinked='responsive' />
+        </div>
+        <div className='pdf-link'>
+          <div className='title'>PDF link</div>
+          {pdfUri}
+        </div>
       </div>
       <div key='parties' className='card-item parties'>
         <div className='title'>Involved parties</div>
@@ -54,10 +60,6 @@ export default function ContractCard({ contractAttributes }) {
             );
           })}
         </div>
-      </div>
-      <div key='link' className='card-item pdf-link'>
-        <div className='title'>PDF link</div>
-        {pdfUri}
       </div>
       <div key='viewer' className='card-item pdf-viewer'>
         {/* {displayPdf(pdfUri)} */}

@@ -71,17 +71,16 @@
 @media (min-width: 60em) {
   .promise-card {
     grid-template-areas:
-      'contract-address pdf-viewer'
-      'parties pdf-viewer'
-      'pdf-link pdf-viewer';
+      'contract-identity parties'
+      'pdf-viewer pdf-viewer';
   }
 }
 
 @media (max-width: 60em) {
   .promise-card {
     grid-template-areas:
-      'contract-address parties'
-      'pdf-link parties'
+      'contract-identity contract-identity'
+      'parties parties'
       'pdf-viewer pdf-viewer';
   }
 }
@@ -96,23 +95,20 @@
   font-weight: 500;
 }
 
-.card-item.contract-address {
-  grid-area: contract-address;
+.card-item.contract-identity {
+  grid-area: contract-identity;
 }
 
 .card-item.parties {
   grid-area: parties;
 }
 
-.card-item.pdf-link {
-  grid-area: pdf-link;
-}
-
 .card-item.pdf-viewer {
   grid-area: pdf-viewer;
 }
 
-.parties .parties-list {
+.parties .parties-list,
+.contract-identity {
   display: flex;
   flex-direction: column;
   gap: 1rem;
