@@ -70,6 +70,11 @@ export default function PromiseModal({ modalOpen, setModalOpen }) {
             }
             maxLength={70}
             onChange={(e) => setPromiseName(e.target.value)}
+            status={
+              promiseName.length <= 3 && promiseName !== ''
+                ? 'warning'
+                : 'success'
+            }
           />
         </div>
         upload pdf
