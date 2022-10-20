@@ -1,10 +1,13 @@
 import { toast } from 'react-toastify';
 import { Popover } from 'antd';
+import { useWidth } from '../systems/useWidth';
 import { useEffect, useState } from 'react';
 
-export default function ShrinkedAddress({ address }) {
+export default function FormattedAddress({ address, isShrinked }) {
   const [shrinkedAddress, setShrinkedAddress] = useState('');
   const [isAddressHovered, setIsAddressHovered] = useState(false);
+  const [shouldShrinkAddress, setShouldShrinkAddress] = useState(false);
+  const width = useWidth();
 
   const copyAddress = (e) => {
     navigator.clipboard.writeText(address);
@@ -13,9 +16,18 @@ export default function ShrinkedAddress({ address }) {
   };
 
   useEffect(() => {
-    const shrinkedAddress = address.slice(0, 6) + '...' + address.slice(-4);
+    const shrinkedAddress =
+      isShrinked === undefined ||
+      isShrinked === true ||
+      (isShrinked === 'responsive' && shouldShrinkAddress)
+        ? address.slice(0, 6) + '...' + address.slice(-4)
+        : address;
     setShrinkedAddress(shrinkedAddress);
-  }, [address]);
+  }, [address, width]);
+
+  useEffect(() => {
+    if (isShrinked === 'responsive') setShouldShrinkAddress(width < 768);
+  }, [width]);
 
   return (
     <Popover

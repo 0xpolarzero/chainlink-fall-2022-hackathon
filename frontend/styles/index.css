@@ -8,3 +8,5 @@
 @import 'react-toastify/dist/ReactToastify.css';
 @import 'antd-specified.css';
 @import 'antd-animations.css';
+@import '@react-pdf-viewer/core/lib/styles/index.css';
+@import '@react-pdf-viewer/default-layout/lib/styles/index.css';

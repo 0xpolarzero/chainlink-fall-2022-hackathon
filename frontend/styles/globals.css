@@ -94,6 +94,7 @@ a:not(.header) {
 
 .action-btn {
   all: unset;
+  color: #fff;
   font-weight: 600;
   letter-spacing: 0.1rem;
   text-transform: uppercase;
@@ -118,6 +119,10 @@ a:not(.header) {
 .action-btn.styled:hover {
   box-shadow: none;
   transform: scale(1.02);
+}
+
+.action-btn a {
+  color: #fff;
 }
 
 .popover-address {
@@ -151,9 +156,12 @@ a:not(.header) {
 
 @media (min-height: 30em) {
   main {
-    scroll-snap-type: y mandatory;
     overflow-y: scroll;
     height: 100vh;
+  }
+
+  main.home {
+    scroll-snap-type: y mandatory;
   }
 
   .section {
@@ -184,4 +192,10 @@ a:not(.header) {
 
 .ant-popover-arrow-content {
   --antd-arrow-background-color: var(--popstar) !important;
+}
+
+/* Font Awesome icons */
+
+.fa-twitter {
+  color: #50b0ec;
 }

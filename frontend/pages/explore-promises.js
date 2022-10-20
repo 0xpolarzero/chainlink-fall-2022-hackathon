@@ -5,7 +5,7 @@ import { Collapse } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
 import { useEffect } from 'react';
-import ShrinkedAddress from '../components/ShrinkedAddress';
+import FormattedAddress from '../components/FormattedAddress';
 
 export default function explorePromises({ setActivePage }) {
   const { Panel } = Collapse;
@@ -14,13 +14,6 @@ export default function explorePromises({ setActivePage }) {
   useEffect(() => {
     setActivePage(1);
   }, []);
-
-  useEffect(() => {
-    let interval = setInterval(() => {
-      console.log(loading);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [loading]);
 
   if (loading) {
     console.log('loading');
@@ -43,7 +36,7 @@ export default function explorePromises({ setActivePage }) {
   if (!!data) {
     console.log(data);
     return (
-      <main className={styles.main}>
+      <main className={styles.explore}>
         <section className='section section-explore'>
           <div className='header'>Recent promises</div>
           <div className='promises-list'>
@@ -66,7 +59,10 @@ export default function explorePromises({ setActivePage }) {
                         </div>
                         <div className='promise-header-address'>
                           Created by{' '}
-                          <ShrinkedAddress address={childContract.owner} />
+                          <FormattedAddress
+                            address={childContract.owner}
+                            isShrinked='responsive'
+                          />
                         </div>
                       </div>
                     }

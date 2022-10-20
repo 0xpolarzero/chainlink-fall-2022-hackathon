@@ -3,7 +3,7 @@ import styles from '../styles/Home.module.css';
 
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <main className='home'>
       <section className='section section-home'>
         <div className='left'></div>
         <div className='right'>
