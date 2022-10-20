@@ -315,6 +315,10 @@ a:not(.header) {
   margin-right: 1rem !important;
 }
 
+.ant-pagination-simple-pager input {
+  color: #fff !important;
+}
+
 /* Font Awesome icons */
 
 .fa-twitter {

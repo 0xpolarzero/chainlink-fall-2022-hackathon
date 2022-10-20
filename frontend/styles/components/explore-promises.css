@@ -22,6 +22,17 @@
   width: 100%;
 }
 
+.promises-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.promises-list-wrapper .ant-pagination {
+  align-self: center;
+}
+
 .promise-header {
   display: flex;
   justify-content: space-between;
