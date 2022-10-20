@@ -191,7 +191,8 @@ a:not(.header) {
 /* Override Rainbow wallet CSS */
 
 .iekbcc0.ju367va.ju367v1n:not(.ju367vz) {
-  justify-content: center;
+  justify-content: flex-end;
+  padding-right: 0;
 }
 
 .iekbcc0.ju367va.ju367v1n,
