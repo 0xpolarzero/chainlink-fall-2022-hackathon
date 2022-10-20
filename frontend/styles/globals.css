@@ -320,18 +320,6 @@ a:not(.header) {
   color: #fff !important;
 }
 
-.ant-select-dropdown {
-  /* background: var(--popstar-dark) !important; */
-}
-
-.ant-select-dropdown div {
-  /* background: var(--popstar-dark) !important; */
-}
-
-.ant-select-dropdown div:hover {
-  /* background: var(--twilight-lavender) !important; */
-}
-
 .ant-select-clear {
   color: rgba(255, 255, 255, 0.7) !important;
 }

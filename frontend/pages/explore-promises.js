@@ -11,7 +11,6 @@ export default function explorePromises({ setActivePage }) {
   const [shownPromises, setShownPromises] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [searchOptions, setSearchOptions] = useState([]);
-  const [isSearchLoading, setIsSearchLoading] = useState(false);
   const { data, loading, error } = useQuery(GET_CHILD_CONTRACT_CREATED);
 
   const handleSearch = (e) => {
@@ -19,10 +18,20 @@ export default function explorePromises({ setActivePage }) {
 
     // Show the promises corresponding to the search value
     if (!!data && searchValue !== '') {
-      const filteredPromises = data.childContractCreateds.filter((promise) =>
-        promise.agreementName
-          .toLowerCase()
-          .includes(e.target.value.toLowerCase()),
+      const filteredPromises = data.childContractCreateds.filter(
+        (promise) =>
+          promise.agreementName
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          promise.partyNames.some((name) =>
+            name.toLowerCase().includes(searchValue.toLowerCase()),
+          ) ||
+          promise.partyAddresses.some((address) =>
+            address.toLowerCase().includes(searchValue.toLowerCase()),
+          ) ||
+          promise.partyTwitterHandles.some((handle) =>
+            handle.toLowerCase().includes(searchValue.toLowerCase()),
+          ),
       );
       setShownPromises(filteredPromises);
       // ... but get it back if the user deletes the search
@@ -36,14 +45,12 @@ export default function explorePromises({ setActivePage }) {
   useEffect(() => {
     setActivePage(1);
 
-    // Put all the promises names in the search options
+    // Put all the promises names in the search options with a unique key
     if (!!data && !loading && !error) {
-      const promises = data.childContractCreateds;
-      setSearchOptions(
-        promises.map((promise) => ({
-          value: promise.agreementName,
-        })),
-      );
+      const promisesNames = data.childContractCreateds.map((promise) => ({
+        value: promise.agreementName,
+      }));
+      setSearchOptions(promisesNames);
     }
   }, [loading]);
 
@@ -73,7 +80,7 @@ export default function explorePromises({ setActivePage }) {
           <AutoComplete
             options={searchOptions}
             style={{ width: '100%' }}
-            placeholder='Search'
+            placeholder='Search an address (ENS, Ethereum), a promise name, a Twitter handle...'
             filterOption={(inputValue, option) =>
               option.value.toLowerCase().indexOf(inputValue.toLowerCase()) !==
               -1
@@ -90,12 +97,6 @@ export default function explorePromises({ setActivePage }) {
                 ),
               )
             }
-            // suffix={
-            //   <Tooltip title="This field is just for information purposes. It can't be longer than 70 characters.">
-            //     {/* <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} /> */}
-            //     aa
-            //   </Tooltip>
-            // }
           />
         </div>
         <div className='promises-list'>
