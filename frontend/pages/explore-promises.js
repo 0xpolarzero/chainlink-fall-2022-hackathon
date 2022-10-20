@@ -1,7 +1,7 @@
 import styles from '../styles/Home.module.css';
 import ContractCard from '../components/ContractCard';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
-import { Collapse } from 'antd';
+import { Collapse, Skeleton } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
 import { useEffect } from 'react';
@@ -16,10 +16,38 @@ export default function explorePromises({ setActivePage }) {
   }, []);
 
   if (loading) {
-    console.log('loading');
     return (
       <main className={styles.main}>
-        <section className='section section-explore'>LOADING</section>
+        <section className='section section-explore'>
+          <div className='header'>Recent promises</div>
+          <div className='promises-list'>
+            <Collapse
+              accordion={true}
+              bordered={false}
+              className='site-collapse-custom-collapse'
+            >
+              {Array(10)
+                .fill(true)
+                .map((_, i) => {
+                  return (
+                    <Panel
+                      key={i}
+                      header={
+                        <Skeleton
+                          className='section-explore-skeleton'
+                          active
+                          paragraph={{ rows: 1 }}
+                          title={false}
+                        />
+                      }
+                      className='site-collapse-custom-panel'
+                      collapsible='disabled'
+                    />
+                  );
+                })}
+            </Collapse>
+          </div>
+        </section>
       </main>
     );
   }
