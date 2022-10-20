@@ -1,5 +1,6 @@
 import styles from '../styles/Home.module.css';
-import PromisesCollapse from '../components/PromisesCollapse';
+import PromiseModal from '../components/PromiseModal';
+import PromisesList from '../components/PromisesList';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
 import { useAccount } from 'wagmi';
@@ -7,6 +8,7 @@ import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 
 export default function userPromises({ setActivePage }) {
+  const [modalOpen, setModalOpen] = useState(false);
   const [userCreatedPromises, setUserCreatedPromises] = useState([]);
   const [userInvolvedPromises, setUserInvolvedPromises] = useState([]);
   const { address: userAddress, isDisconnected } = useAccount();
@@ -22,11 +24,16 @@ export default function userPromises({ setActivePage }) {
       const createdPromises = promises.filter(
         (promise) => promise.owner.toLowerCase() === userAddress.toLowerCase(),
       );
-      const involvedPromises = promises.filter((promise) =>
-        promise.partyAddresses
-          .map((address) => address.toLowerCase())
-          .includes(userAddress.toLowerCase()),
+      // The user should be a party but not the owner
+      const involvedPromises = promises.filter(
+        (promise) =>
+          promise.owner.toLowerCase() !== userAddress.toLowerCase() &&
+          promise.partyAddresses.some(
+            (participant) =>
+              participant.toLowerCase() === userAddress.toLowerCase(),
+          ),
       );
+
       setUserCreatedPromises(createdPromises);
       setUserInvolvedPromises(involvedPromises);
     }
@@ -48,15 +55,6 @@ export default function userPromises({ setActivePage }) {
     );
   }
 
-  if (loading) {
-    console.log('loading');
-    return (
-      <main className={styles.main}>
-        <section className='section section-user'>LOADING</section>
-      </main>
-    );
-  }
-
   if (error) {
     console.log(error);
     return (
@@ -66,25 +64,57 @@ export default function userPromises({ setActivePage }) {
     );
   }
 
-  if (!!data) {
-    return (
-      <main className={styles.user}>
-        <section className='section section-user'>
-          <div className='user-promises owner'>
-            <div className='header'>Promises you created</div>
-            <div className='promises-list'>
-              {userCreatedPromises.length > 0 ? (
-                <PromisesCollapse promises={userCreatedPromises} />
+  return (
+    <main className={styles.user}>
+      <section className='section section-user'>
+        <div className='header'>
+          <div className='title'>Your promises</div>
+          <button
+            className='action-btn styled'
+            onClick={() => setModalOpen(true)}
+          >
+            New Promise
+          </button>
+        </div>
+        <div className='user-promises owner'>
+          <div className='header-sub'>You created:</div>
+          <div className='promises-list'>
+            {loading ? (
+              <PromisesCollapseSkeleton arraySize={3} />
+            ) : !!data ? (
+              userCreatedPromises.length > 0 ? (
+                <PromisesList promises={userCreatedPromises} />
               ) : (
                 <div className='no-promises'>
                   You haven't created any promises yet.
                 </div>
-              )}
-            </div>
+              )
+            ) : (
+              'Seems like there was an error loading this section... Please try refreshing.'
+            )}
           </div>
-          <div className='user-promises involved'></div>
-        </section>
-      </main>
-    );
-  }
+        </div>
+
+        <div className='user-promises involved'>
+          <div className='header-sub'>You're involved with:</div>
+          <div className='promises-list'>
+            {loading ? (
+              <PromisesCollapseSkeleton arraySize={3} />
+            ) : !!data ? (
+              userInvolvedPromises.length > 0 ? (
+                <PromisesList promises={userInvolvedPromises} />
+              ) : (
+                <div className='no-promises'>
+                  You haven't created any promises yet.
+                </div>
+              )
+            ) : (
+              'Seems like there was an error loading this section... Please try refreshing.'
+            )}
+          </div>
+        </div>
+        <PromiseModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+      </section>
+    </main>
+  );
 }

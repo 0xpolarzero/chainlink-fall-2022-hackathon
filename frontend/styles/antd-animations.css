@@ -1,3 +1,35 @@
+.anticon {
+  display: inline-block;
+  color: inherit;
+  font-style: normal;
+  line-height: 0;
+  text-align: center;
+  text-transform: none;
+  vertical-align: -0.125em;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.anticon > * {
+  line-height: 1;
+}
+.anticon svg {
+  display: inline-block;
+}
+.anticon::before {
+  display: none;
+}
+.anticon .anticon-icon {
+  display: block;
+}
+.anticon > .anticon {
+  line-height: 0;
+  vertical-align: 0;
+}
+.anticon[tabindex] {
+  cursor: pointer;
+}
+
 .anticon-spin,
 .anticon-spin::before {
   display: inline-block;

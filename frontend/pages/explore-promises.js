@@ -12,19 +12,6 @@ export default function explorePromises({ setActivePage }) {
     setActivePage(1);
   }, []);
 
-  if (loading) {
-    return (
-      <main className={styles.main}>
-        <section className='section section-explore'>
-          <div className='header'>Recent promises</div>
-          <div className='promises-list'>
-            <PromisesCollapseSkeleton arraySize={5} />
-          </div>
-        </section>
-      </main>
-    );
-  }
-
   if (error) {
     console.log(error);
     return (
@@ -34,24 +21,19 @@ export default function explorePromises({ setActivePage }) {
     );
   }
 
-  if (!!data) {
-    return (
-      <main className={styles.explore}>
-        <section className='section section-explore'>
-          <div className='header'>Recent promises</div>
-          <div className='promises-list'>
-            <PromisesCollapse promises={data.childContractCreateds} />
-          </div>
-        </section>
-      </main>
-    );
-  }
-
   return (
-    <main className={styles.main}>
+    <main className={styles.explore}>
       <section className='section section-explore'>
-        Seems like there was an error loading this page... Please try
-        refreshing.
+        <div className='header'>Recent promises</div>
+        <div className='promises-list'>
+          {loading ? (
+            <PromisesCollapseSkeleton arraySize={3} />
+          ) : !!data ? (
+            <PromisesCollapse promises={data.childContractCreateds} />
+          ) : (
+            'Seems like there was an error loading this page... Please try refreshing.'
+          )}
+        </div>
       </section>
     </main>
   );

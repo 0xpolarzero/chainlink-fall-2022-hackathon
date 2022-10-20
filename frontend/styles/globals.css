@@ -16,10 +16,11 @@
     sans-serif;
 
   --twilight-lavender: #8b4562ff;
-  --dark-purple: #3e1035ff;
+  --dark-purple: rgb(44, 12, 37);
   --crimson-ua: #96202eff;
   --liberty: #555e99ff;
   --popstar: #c35764ff;
+  --popstar-dark: rgb(60, 26, 31);
   --gradient-color-main: linear-gradient(
     90deg,
     var(--crimson-ua) 0%,
@@ -46,20 +47,28 @@
   --background-color-medium: #131923;
   --background-color-dark: #0b111b;
   --background-color-purple: #211d34;
-  /* --primary-color-pink: #fe3dce;
-  --primary-color-blue: #26afe6; */
-  /* --gradient-color-main: linear-gradient(90deg, #26afe6 0%, #fe3dce 100%); */
-  /* --gradient-color-light: linear-gradient(90deg, #bff2ff 0%, #f15ad9 100%); */
-  /* --gradient-color-warm: linear-gradient(90deg, #faaef2 0%, #9989ff 100%); */
   --tab-nav-items: 4;
   --tab-nav-current-item: 0;
 
+  /* Override Toastify */
   --toastify-color-info: var(--liberty) !important;
   --toastify-color-success: #58ad8b !important;
   --toastify-color-warning: #d5a87a !important;
   --toastify-color-error: #c95966 !important;
   --toastify-spinner-color: #616161;
   --toastify-spinner-color-empty-area: #e0e0e0;
+
+  /* Override Antd */
+  /* #177ddc */
+  --ant-blue-override: #555e99ff;
+  /* #165996 */
+  --ant-darkblue-override: rgba(67, 73, 112, 0.3);
+  /* rgba(23, 125, 220, 0.2) */
+  --ant-darkblue-shadow-override: #555e99ff;
+  /* rgba(255, 255, 255, 0.3) */
+  --ant-grey-disabled-override: #fff;
+  /* #434343 */
+  --ant-lightgrey-disabled-override: rgba(255, 255, 255, 0.3);
 }
 
 html,
@@ -95,14 +104,16 @@ a:not(.header) {
 .action-btn {
   all: unset;
   color: #fff;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.1rem;
   text-transform: uppercase;
-  /* border-width: 3px;
-  border-style: solid; */
+  border-width: 3px;
+  border-style: solid;
   border-radius: 6px;
-  /* border-image: linear-gradient(to bottom, #fe3dce, rgba(254, 61, 206, 0)) 1
-    100%; */
+  border-image: linear-gradient(to bottom, #fe3dce, rgba(254, 61, 206, 0)) 1
+    100%;
+  padding: 0 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -119,6 +130,10 @@ a:not(.header) {
 .action-btn.styled:hover {
   box-shadow: none;
   transform: scale(1.02);
+}
+
+.action-btn.styled:active {
+  transform: scale(0.98);
 }
 
 .action-btn a {
@@ -206,7 +221,9 @@ a:not(.header) {
 
 .ant-popover-inner,
 .ant-popover-arrow-content,
-.ant-popuver:after {
+.ant-popuver:after,
+.ant-tooltip-inner,
+.ant-tooltip-arrow-content::before {
   background: var(--popstar) !important;
 }
 
@@ -225,6 +242,77 @@ a:not(.header) {
 .ant-skeleton-content .ant-skeleton-paragraph > li {
   width: 100% !important;
   background: var(--gradient-high-transparent) !important;
+}
+
+.ant-modal-content,
+.ant-modal-header {
+  background: var(--popstar-dark) !important;
+  /* box-shadow: rgba(50, 45, 71, 0.5) 2px 1000px 1px inset !important; */
+  backdrop-filter: blur(10px) !important;
+}
+
+.ant-btn-primary,
+.ant-btn-default {
+  color: #fff !important;
+  border-radius: 2px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease !important;
+}
+
+.ant-btn-primary {
+  background: var(--popstar) !important;
+  border: 0 !important;
+}
+
+.ant-btn-primary:hover {
+  background: var(--crimson-ua) !important;
+}
+
+.ant-btn-primary:disabled {
+  /* background: var(--popstar-dark) !important; */
+  color: rgb(208, 208, 208) !important;
+  cursor: not-allowed !important;
+}
+
+.ant-btn-primary:disabled:hover {
+  background: var(--popstar) !important;
+}
+
+.ant-btn-default {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.ant-btn-primary:active,
+.ant-btn-default:active {
+  transform: scale(0.98) !important;
+}
+
+.ant-btn-default:hover {
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.ant-btn-loading .ant-btn-loading-icon + span {
+  margin-left: 0.5rem !important;
+}
+
+.anticon {
+  color: #fff !important;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.anticon:hover {
+  opacity: 1;
+}
+
+.ant-input:hover {
+  vertical-align: baseline !important;
+}
+
+.ant-input-prefix {
+  margin-right: 1rem !important;
 }
 
 /* Font Awesome icons */
