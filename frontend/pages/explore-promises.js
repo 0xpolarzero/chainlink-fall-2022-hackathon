@@ -4,16 +4,48 @@ import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { Pagination } from 'antd';
+import { AutoComplete, Pagination, Tooltip } from 'antd';
 
 export default function explorePromises({ setActivePage }) {
   const [shownPage, setShownPage] = useState(1);
   const [shownPromises, setShownPromises] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [searchOptions, setSearchOptions] = useState([]);
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
   const { data, loading, error } = useQuery(GET_CHILD_CONTRACT_CREATED);
+
+  const handleSearch = (e) => {
+    if (e.type === 'keydown' && e.key !== 'Enter') return;
+
+    // Show the promises corresponding to the search value
+    if (!!data && searchValue !== '') {
+      const filteredPromises = data.childContractCreateds.filter((promise) =>
+        promise.agreementName
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase()),
+      );
+      setShownPromises(filteredPromises);
+      // ... but get it back if the user deletes the search
+    } else if (!!data) {
+      setShownPromises(
+        data.childContractCreateds.slice((shownPage - 1) * 10, shownPage * 10),
+      );
+    }
+  };
 
   useEffect(() => {
     setActivePage(1);
-  }, []);
+
+    // Put all the promises names in the search options
+    if (!!data && !loading && !error) {
+      const promises = data.childContractCreateds;
+      setSearchOptions(
+        promises.map((promise) => ({
+          value: promise.agreementName,
+        })),
+      );
+    }
+  }, [loading]);
 
   useEffect(() => {
     // Get the shown page and show relevant set of promises, 10 per page
@@ -36,7 +68,36 @@ export default function explorePromises({ setActivePage }) {
   return (
     <main className={styles.explore}>
       <section className='section section-explore'>
-        <div className='header'>Recent promises</div>
+        <div className='header'>
+          <div className='title'> Recent promises</div>
+          <AutoComplete
+            options={searchOptions}
+            style={{ width: '100%' }}
+            placeholder='Search'
+            filterOption={(inputValue, option) =>
+              option.value.toLowerCase().indexOf(inputValue.toLowerCase()) !==
+              -1
+            }
+            onChange={(e) => setSearchValue(e)}
+            onKeyDown={handleSearch}
+            allowClear={true}
+            clearIcon={<i className='fa-solid fa-trash'></i>}
+            onClear={() =>
+              setShownPromises(
+                data.childContractCreateds.slice(
+                  (shownPage - 1) * 10,
+                  shownPage * 10,
+                ),
+              )
+            }
+            // suffix={
+            //   <Tooltip title="This field is just for information purposes. It can't be longer than 70 characters.">
+            //     {/* <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} /> */}
+            //     aa
+            //   </Tooltip>
+            // }
+          />
+        </div>
         <div className='promises-list'>
           {loading ? (
             <PromisesCollapseSkeleton arraySize={3} />

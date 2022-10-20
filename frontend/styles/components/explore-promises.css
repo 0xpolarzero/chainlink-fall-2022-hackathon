@@ -13,6 +13,14 @@
   font-weight: 600;
 }
 
+.section-explore .header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: flex-end;
+  gap: 3rem;
+  width: 100%;
+}
+
 /* ---------- CARD ---------- */
 
 .promises-list {
