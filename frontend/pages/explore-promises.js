@@ -34,7 +34,6 @@ export default function explorePromises({ setActivePage }) {
   }
 
   if (!!data) {
-    console.log(data);
     return (
       <main className={styles.explore}>
         <section className='section section-explore'>

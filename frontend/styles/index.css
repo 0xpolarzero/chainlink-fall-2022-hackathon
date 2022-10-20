@@ -1,6 +1,7 @@
 @import './globals.css';
 @import './components/home.css';
 @import './components/explore-promises.css';
+@import './components/user-promises.css';
 
 /* Dependencies */
 @import '@rainbow-me/rainbowkit/styles.css';
