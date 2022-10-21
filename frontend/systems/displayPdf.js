@@ -1,7 +1,9 @@
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
+import { useEffect, useState } from 'react';
 
 const displayPdf = (pdfUri) => {
+  const [availableHeight, setAvailableHeight] = useState(0);
   const toolbarPluginInstance = toolbarPlugin();
   const { renderDefaultToolbar, Toolbar } = toolbarPluginInstance;
 
@@ -10,6 +12,13 @@ const displayPdf = (pdfUri) => {
     SwitchTheme: () => <></>,
     Open: () => <></>,
   });
+
+  useEffect(() => {
+    // We want the PDF to take all the available height
+    // but keep seing the Panel content and the other Collapsible headers
+    const nowAvailableHeight = getAvailableHeightForPdf();
+    setAvailableHeight(nowAvailableHeight < 350 ? 350 : nowAvailableHeight);
+  }, []);
 
   // In the frontend & in the Smart Contract we make sure it can only start with ipfs://
   if (!pdfUri.startsWith('ipfs://')) {
@@ -27,7 +36,8 @@ const displayPdf = (pdfUri) => {
             border: '1px solid rgba(0, 0, 0, 0.3)',
             display: 'flex',
             flexDirection: 'column',
-            height: '600px',
+            // Fill the available space in the parent but don't overflow
+            height: `${availableHeight}px`,
           }}
         >
           <div
@@ -67,6 +77,51 @@ const formatUri = (uri) => {
   const formattedUri = uri.replace('ipfs://', 'https://ipfs.io/ipfs/');
 
   return formattedUri;
+};
+
+const getAvailableHeightForPdf = () => {
+  const navbarHeight = document
+    .querySelector('header')
+    .getBoundingClientRect().height;
+
+  const panelHeaderHeight = document
+    .querySelector('.ant-collapse-header')
+    .getBoundingClientRect().height;
+  const combinedPanelHeadersHeight =
+    document.querySelectorAll('.ant-collapse-item').length * panelHeaderHeight;
+
+  const contentHLeftHeight = document
+    .querySelector('.ant-collapse-item-active .card-item.contract-identity')
+    .getBoundingClientRect().height;
+  const contentRightHeight = document
+    .querySelector('.ant-collapse-item-active .card-item.parties')
+    .getBoundingClientRect().height;
+  const highestContentHeight = Math.max(contentHLeftHeight, contentRightHeight);
+
+  const titleHeight = document
+    .querySelector('.header')
+    .getBoundingClientRect().height;
+
+  const paginationHeight = document
+    .querySelector('.ant-pagination')
+    .getBoundingClientRect().height;
+
+  // Main padding (7rem + 4rem)
+  const paddingHeight = 11 * 16;
+  // Gaps: Header -> Content = 2rem ; Content -> Pagination = 1rem
+  const gapHeight = 3 * 16;
+
+  const nowAvailableHeight =
+    window.innerHeight -
+    navbarHeight -
+    combinedPanelHeadersHeight -
+    highestContentHeight -
+    titleHeight -
+    paginationHeight -
+    paddingHeight -
+    gapHeight;
+
+  return nowAvailableHeight;
 };
 
 export { displayPdf };

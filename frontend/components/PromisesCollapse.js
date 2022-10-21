@@ -1,10 +1,12 @@
 import FormattedAddress from './FormattedAddress';
 import { displayPdf } from '../systems/displayPdf.js';
-import { Collapse } from 'antd';
+import { Collapse, Table } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
 
 export default function PromisesCollapse({ promises }) {
   const { Panel } = Collapse;
+
   return (
     <Collapse
       accordion={true}
@@ -31,7 +33,7 @@ export default function PromisesCollapse({ promises }) {
                 </div>
               </div>
             }
-            key={promise.id}
+            key={promise.contractAddress}
             className='site-collapse-custom-panel'
           >
             <ContractCard key={promise.id} contractAttributes={promise} />
@@ -43,6 +45,38 @@ export default function PromisesCollapse({ promises }) {
 }
 
 function ContractCard({ contractAttributes }) {
+  const [partiesData, setPartiesData] = useState([]);
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 5,
+      position: ['topRight'],
+    },
+  });
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+    },
+    {
+      title: 'Twitter Handle',
+      dataIndex: 'twitterHandle',
+      key: 'twitterHandle',
+    },
+    {
+      title: 'Twitter verified',
+      dataIndex: 'twitterVerified',
+      key: 'twitterVerified',
+    },
+  ];
+
   const {
     agreementName: promiseName,
     owner,
@@ -52,6 +86,54 @@ function ContractCard({ contractAttributes }) {
     partyTwitterHandles,
     partyAddresses,
   } = contractAttributes;
+
+  const handleTableChange = (pagination) => {
+    setTableParams({
+      pagination,
+    });
+  };
+
+  useEffect(() => {
+    const partiesData = [];
+
+    for (let i = 0; i < partyNames.length; i++) {
+      // ! FOR TESTING PURPOSES
+      const isVerified = Math.floor(Math.random() * 2) === 0;
+      partiesData.push({
+        key: i,
+        name: partyNames[i],
+        address: (
+          <FormattedAddress
+            address={partyAddresses[i]}
+            isShrinked='responsive'
+          />
+        ),
+        twitterHandle: (
+          <a
+            href={`https://twitter.com/${partyTwitterHandles[i]}`}
+            target='_blank'
+          >
+            @{partyTwitterHandles[i]}
+          </a>
+        ),
+        // TODO Link to the Tx verification
+        twitterVerified: isVerified ? (
+          <a className='verified' href='some-tx-link' target='_blank'>
+            <i className='fas fa-check'></i>
+            <span>
+              Tx <i className='fa-solid fa-chain'></i>
+            </span>
+          </a>
+        ) : (
+          <div className='not-verified'>
+            <i className='fas fa-times'></i>
+            <span>Not verified</span>
+          </div>
+        ),
+      });
+    }
+    setPartiesData(partiesData);
+  }, []);
 
   return (
     <div className='promise-card'>
@@ -67,8 +149,14 @@ function ContractCard({ contractAttributes }) {
       </div>
       <div key='parties' className='card-item parties'>
         <div className='title'>Involved parties</div>
-        <div className='parties-list'>
-          {partyNames.map((partyName, index) => {
+        {/* <div className='parties-list'> */}
+        <Table
+          dataSource={partiesData}
+          columns={columns}
+          pagination={tableParams.pagination}
+          onChange={handleTableChange}
+        />
+        {/* {partyNames.map((partyName, index) => {
             return (
               <div key={index} className='party'>
                 <div className='party-identity'>
@@ -99,13 +187,13 @@ function ContractCard({ contractAttributes }) {
                 </div>
               </div>
             );
-          })}
-        </div>
+          })} */}
+        {/* </div> */}
       </div>
       <div key='viewer' className='card-item pdf-viewer'>
         {/* {displayPdf(pdfUri)} */}
         {displayPdf(
-          'https://ipfs.io/ipfs/QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX/ipfs.draft3.pdf',
+          'ipfs:///QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX/ipfs.draft3.pdf',
         )}
       </div>
     </div>

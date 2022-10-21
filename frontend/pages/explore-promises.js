@@ -37,7 +37,7 @@ export default function explorePromises({ setActivePage }) {
       // ... but get it back if the user deletes the search
     } else if (!!data) {
       setShownPromises(
-        data.childContractCreateds.slice((shownPage - 1) * 10, shownPage * 10),
+        data.childContractCreateds.slice((shownPage - 1) * 5, shownPage * 5),
       );
     }
   };
@@ -55,10 +55,10 @@ export default function explorePromises({ setActivePage }) {
   }, [loading]);
 
   useEffect(() => {
-    // Get the shown page and show relevant set of promises, 10 per page
+    // Get the shown page and show relevant set of promises, 5 per page
     if (!!data && !loading && !error) {
       setShownPromises(
-        data.childContractCreateds.slice((shownPage - 1) * 10, shownPage * 10),
+        data.childContractCreateds.slice((shownPage - 1) * 5, shownPage * 5),
       );
     }
   }, [shownPage, loading]);
@@ -92,8 +92,8 @@ export default function explorePromises({ setActivePage }) {
             onClear={() =>
               setShownPromises(
                 data.childContractCreateds.slice(
-                  (shownPage - 1) * 10,
-                  shownPage * 10,
+                  (shownPage - 1) * 5,
+                  shownPage * 5,
                 ),
               )
             }
@@ -105,11 +105,14 @@ export default function explorePromises({ setActivePage }) {
           ) : !!data ? (
             <div className='promises-list-wrapper'>
               <PromisesCollapse promises={shownPromises} />
+              {/* TODO Need to figure out how to tell the component there are
+              only 5 per page & not 10 */}
               <Pagination
                 simple
                 defaultCurrent={1}
                 total={data.childContractCreateds.length}
                 onChange={(e) => setShownPage(e)}
+                pageSize={5}
               />
             </div>
           ) : (

@@ -3,7 +3,7 @@ import { displayPdf } from '../systems/displayPdf.js';
 import { Collapse } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 
-export default function PromisesList({ promises }) {
+export default function PromisesCollapseModifiable({ promises }) {
   const { Panel } = Collapse;
   return (
     <Collapse

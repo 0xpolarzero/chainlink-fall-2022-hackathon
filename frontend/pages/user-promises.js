@@ -1,6 +1,6 @@
 import styles from '../styles/Home.module.css';
 import PromiseDrawer from '../components/PromiseDrawer';
-import PromisesList from '../components/PromisesList';
+import PromisesCollapseModifiable from '../components/PromisesCollapseModifiable';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
 import { useAccount } from 'wagmi';
@@ -83,7 +83,7 @@ export default function userPromises({ setActivePage }) {
               <PromisesCollapseSkeleton arraySize={3} />
             ) : !!data ? (
               userCreatedPromises.length > 0 ? (
-                <PromisesList promises={userCreatedPromises} />
+                <PromisesCollapseModifiable promises={userCreatedPromises} />
               ) : (
                 <div className='no-promises'>
                   You haven't created any promises yet.
@@ -102,7 +102,7 @@ export default function userPromises({ setActivePage }) {
               <PromisesCollapseSkeleton arraySize={3} />
             ) : !!data ? (
               userInvolvedPromises.length > 0 ? (
-                <PromisesList promises={userInvolvedPromises} />
+                <PromisesCollapseModifiable promises={userInvolvedPromises} />
               ) : (
                 <div className='no-promises'>
                   You haven't created any promises yet.
