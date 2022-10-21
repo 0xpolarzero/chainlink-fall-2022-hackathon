@@ -11,10 +11,8 @@ const displayPdf = (pdfUri) => {
     Open: () => <></>,
   });
 
-  if (
-    !pdfUri.startsWith('ipfs://') &&
-    !pdfUri.startsWith('https://ipfs.io/ipfs/')
-  ) {
+  // In the frontend & in the Smart Contract we make sure it can only start with ipfs://
+  if (!pdfUri.startsWith('ipfs://')) {
     return <div>Invalid PDF URI. It was not uploaded to IPFS.</div>;
   }
 
