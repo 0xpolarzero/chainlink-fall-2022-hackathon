@@ -3,6 +3,7 @@ import PromiseDrawer from '../components/PromiseDrawer';
 import PromisesCollapseModifiable from '../components/PromisesCollapseModifiable';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
+import { Pagination } from 'antd';
 import { useAccount } from 'wagmi';
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
@@ -10,7 +11,13 @@ import { useEffect, useState } from 'react';
 export default function userPromises({ setActivePage }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userCreatedPromises, setUserCreatedPromises] = useState([]);
+  const [userShownCreatedPromises, setUserShownCreatedPromises] = useState([]);
   const [userInvolvedPromises, setUserInvolvedPromises] = useState([]);
+  const [userShownInvolvedPromises, setUserShownInvolvedPromises] = useState(
+    [],
+  );
+  const [shownCreatedPage, setShownCreatedPage] = useState(1);
+  const [shownInvolvedPage, setShownInvolvedPage] = useState(1);
   const { address: userAddress, isDisconnected } = useAccount();
   const { data, loading, error } = useQuery(GET_CHILD_CONTRACT_CREATED);
 
@@ -39,6 +46,30 @@ export default function userPromises({ setActivePage }) {
     }
     // We're adding userAddress so it filters again if the user changes wallet
   }, [data, userAddress]);
+
+  useEffect(() => {
+    if (!!data && !loading && !error) {
+      console.log(userCreatedPromises);
+      setUserShownCreatedPromises(
+        userCreatedPromises.slice(
+          (shownCreatedPage - 1) * 5,
+          shownCreatedPage * 5,
+        ),
+      );
+
+      setUserShownInvolvedPromises(
+        userInvolvedPromises.slice(
+          (shownInvolvedPage - 1) * 5,
+          shownInvolvedPage * 5,
+        ),
+      );
+    }
+  }, [
+    shownCreatedPage,
+    shownInvolvedPage,
+    userCreatedPromises,
+    userInvolvedPromises,
+  ]);
 
   if (isDisconnected) {
     return (
@@ -83,7 +114,18 @@ export default function userPromises({ setActivePage }) {
               <PromisesCollapseSkeleton arraySize={3} />
             ) : !!data ? (
               userCreatedPromises.length > 0 ? (
-                <PromisesCollapseModifiable promises={userCreatedPromises} />
+                <div className='promises-list-wrapper'>
+                  <PromisesCollapseModifiable
+                    promises={userShownCreatedPromises}
+                  />
+                  <Pagination
+                    simple
+                    defaultCurrent={1}
+                    total={userCreatedPromises.length}
+                    onChange={(e) => setShownCreatedPage(e)}
+                    pageSize={5}
+                  />
+                </div>
               ) : (
                 <div className='no-promises'>
                   You haven't created any promises yet.
@@ -102,7 +144,18 @@ export default function userPromises({ setActivePage }) {
               <PromisesCollapseSkeleton arraySize={3} />
             ) : !!data ? (
               userInvolvedPromises.length > 0 ? (
-                <PromisesCollapseModifiable promises={userInvolvedPromises} />
+                <div className='promises-list-wrapper'>
+                  <PromisesCollapseModifiable
+                    promises={userShownInvolvedPromises}
+                  />
+                  <Pagination
+                    simple
+                    defaultCurrent={1}
+                    total={userInvolvedPromises.length}
+                    onChange={(e) => setShownInvolvedPage(e)}
+                    pageSize={5}
+                  />
+                </div>
               ) : (
                 <div className='no-promises'>
                   You haven't created any promises yet.

@@ -105,8 +105,6 @@ export default function explorePromises({ setActivePage }) {
           ) : !!data ? (
             <div className='promises-list-wrapper'>
               <PromisesCollapse promises={shownPromises} />
-              {/* TODO Need to figure out how to tell the component there are
-              only 5 per page & not 10 */}
               <Pagination
                 simple
                 defaultCurrent={1}

@@ -156,6 +156,8 @@ export default function PromiseDrawer({ drawerOpen, setDrawerOpen }) {
                       {...field}
                       name={[field.name, 'partyName']}
                       key={[field.key, 'partyName']}
+                      // Put a label only if it's the first field
+                      label={i === 0 ? 'Name' : null}
                       rules={[
                         {
                           required: true,
@@ -176,7 +178,7 @@ export default function PromiseDrawer({ drawerOpen, setDrawerOpen }) {
                       ]}
                     >
                       <Input
-                        placeholder='Name'
+                        placeholder='John'
                         prefix={<i className='fa-solid fa-user-tag'></i>}
                         suffix={
                           <Tooltip title='The name of the participant must be between 2 and 30 characters long.'>
@@ -192,6 +194,7 @@ export default function PromiseDrawer({ drawerOpen, setDrawerOpen }) {
                       {...field}
                       name={[field.name, 'partyAddress']}
                       key={[field.key, 'partyAddress']}
+                      label={i === 0 ? 'Ethereum address' : null}
                       rules={[
                         {
                           required: true,
@@ -219,7 +222,7 @@ export default function PromiseDrawer({ drawerOpen, setDrawerOpen }) {
                       ]}
                     >
                       <Input
-                        placeholder='Ethereum address'
+                        placeholder='0xc06...EF'
                         prefix={<i className='fa-brands fa-ethereum'></i>}
                         suffix={
                           <Tooltip title='The address of the participant must be a valid ethereum address.'>
@@ -235,6 +238,7 @@ export default function PromiseDrawer({ drawerOpen, setDrawerOpen }) {
                       {...field}
                       name={[field.name, 'partyTwitterHandle']}
                       key={[field.key, 'partyTwitterHandle']}
+                      label={i === 0 ? 'Twitter username' : null}
                       rules={[
                         {
                           pattern: /^@?[a-zA-Z0-9_]{1,15}$/,
@@ -253,7 +257,7 @@ export default function PromiseDrawer({ drawerOpen, setDrawerOpen }) {
                       ]}
                     >
                       <Input
-                        placeholder='Twitter username'
+                        placeholder='username'
                         prefix={
                           <span className='icon-double'>
                             <i className='fa-brands fa-twitter'></i>

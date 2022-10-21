@@ -156,39 +156,6 @@ function ContractCard({ contractAttributes }) {
           pagination={tableParams.pagination}
           onChange={handleTableChange}
         />
-        {/* {partyNames.map((partyName, index) => {
-            return (
-              <div key={index} className='party'>
-                <div className='party-identity'>
-                  <div className='party-name-twitter'>
-                    <div className='party-name'>{partyName}</div>
-                    <div className='party-twitter'>
-                      <i className='fa-brands fa-twitter'></i>
-                      <a
-                        href={`https://twitter.com/${partyTwitterHandles[index]}`}
-                        target='_blank'
-                      >
-                        @{partyTwitterHandles[index]}
-                      </a>
-                    </div>
-                  </div>
-                  <div className='party-twitter-verified'>
-                    ✅{' '}
-                    <a href='link-to-tx-verifications' target='_blank'>
-                      Twitter verified
-                    </a>
-                  </div>
-                </div>
-                <div className='party-address'>
-                  <FormattedAddress
-                    address={partyAddresses[index]}
-                    isShrinked='responsive'
-                  />
-                </div>
-              </div>
-            );
-          })} */}
-        {/* </div> */}
       </div>
       <div key='viewer' className='card-item pdf-viewer'>
         {/* {displayPdf(pdfUri)} */}
