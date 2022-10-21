@@ -1,5 +1,5 @@
 import styles from '../styles/Home.module.css';
-import PromiseModal from '../components/PromiseModal';
+import PromiseDrawer from '../components/PromiseDrawer';
 import PromisesList from '../components/PromisesList';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 
 export default function userPromises({ setActivePage }) {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [userCreatedPromises, setUserCreatedPromises] = useState([]);
   const [userInvolvedPromises, setUserInvolvedPromises] = useState([]);
   const { address: userAddress, isDisconnected } = useAccount();
@@ -71,7 +71,7 @@ export default function userPromises({ setActivePage }) {
           <div className='title'>Your promises</div>
           <button
             className='action-btn styled'
-            onClick={() => setModalOpen(true)}
+            onClick={() => setDrawerOpen(true)}
           >
             New Promise
           </button>
@@ -113,7 +113,7 @@ export default function userPromises({ setActivePage }) {
             )}
           </div>
         </div>
-        <PromiseModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+        <PromiseDrawer drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
       </section>
     </main>
   );

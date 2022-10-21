@@ -203,6 +203,21 @@ a:not(.header) {
   }
 }
 
+.error-message,
+.warning-message {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.error-message {
+  color: var(--toastify-color-error);
+}
+
+.warning-message {
+  color: var(--toastify-color-warning);
+}
+
 /* Override Rainbow wallet CSS */
 
 .iekbcc0.ju367va.ju367v1n:not(.ju367vz) {
@@ -242,13 +257,6 @@ a:not(.header) {
 .ant-skeleton-content .ant-skeleton-paragraph > li {
   width: 100% !important;
   background: var(--gradient-high-transparent) !important;
-}
-
-.ant-modal-content,
-.ant-modal-header {
-  background: var(--popstar-dark) !important;
-  /* box-shadow: rgba(50, 45, 71, 0.5) 2px 1000px 1px inset !important; */
-  backdrop-filter: blur(10px) !important;
 }
 
 .ant-btn-primary,
@@ -297,6 +305,10 @@ a:not(.header) {
   margin-left: 0.5rem !important;
 }
 
+.ant-btn-loading-icon span:not(.ant-btn-loading-icon-motion-enter-active) {
+  position: absolute !important;
+}
+
 .anticon {
   color: #fff !important;
   opacity: 0.7;
@@ -326,6 +338,15 @@ a:not(.header) {
 
 .ant-select-clear:hover {
   color: rgba(255, 255, 255, 1) !important;
+}
+
+.ant-drawer-header {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+}
+
+.ant-drawer .ant-space-item {
+  align-self: baseline;
 }
 
 /* Font Awesome icons */
