@@ -97,6 +97,21 @@ const { deployments, network, ethers } = require('hardhat');
           );
         });
 
+        it('Should revert if the promise name is more than 70 characters', async () => {
+          const name = 'a'.repeat(71);
+          await expect(
+            promiseFactory.createContract(
+              name,
+              args.uri,
+              args.partyNames,
+              args.partyTwitters,
+              args.partyAddresses,
+            ),
+          ).to.be.revertedWith(
+            'PromiseFactory__createContract__INCORRECT_FIELD_LENGTH()',
+          );
+        });
+
         it('Should create a new PromiseContract', async () => {
           const { txReceipt } = await createCorrectPromiseContract();
           const promiseContractAddress = txReceipt.events[1].address;

@@ -64,7 +64,6 @@ contract PromiseFactory {
                 _partyAddresses.length == _partyNames.length)
         ) revert PromiseFactory__createContract__INCORRECT_FIELD_LENGTH();
 
-        // TODO TEST THIS, ADDED TWITTER HANDLE & CHANGE ERROR NAME
         // Revert if the same address or twitter handle is used twice
         for (uint256 i = 0; i < _partyAddresses.length; i++) {
             for (uint256 j = i + 1; j < _partyAddresses.length; j++) {
@@ -76,7 +75,10 @@ contract PromiseFactory {
             }
         }
 
-        // TODO TEST THIS
+        // We could test the validity of the Twitter handles here, but it would not really matter
+        // since it won't have any value without being verified, and the verification already
+        // needs it to be valid
+
         // Revert if the name of the promise is longer than 70 characters
         if (bytes(_promiseName).length > 70) {
             revert PromiseFactory__createContract__INCORRECT_FIELD_LENGTH();
