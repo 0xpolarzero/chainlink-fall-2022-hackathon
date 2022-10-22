@@ -8,18 +8,12 @@ export function handleChildContractCreated(
   // It should never happen that the same contract is created twice
   // But we can't ever be sure enough, so we check if the entity already exists anyway
   let childContractCreated = ChildContractCreated.load(
-    getIdFromEventParams(
-      event.params._promiseName,
-      event.params._contractAddress,
-    ),
+    getIdFromEventParams(event.params._owner, event.params._contractAddress),
   );
 
   if (!childContractCreated) {
     childContractCreated = new ChildContractCreated(
-      getIdFromEventParams(
-        event.params._promiseName,
-        event.params._contractAddress,
-      ),
+      getIdFromEventParams(event.params._owner, event.params._contractAddress),
     );
   }
 
@@ -37,8 +31,8 @@ export function handleChildContractCreated(
 }
 
 function getIdFromEventParams(
-  promiseName: String,
+  owner: Address,
   contractAddress: Address,
 ): string {
-  return promiseName + '-' + contractAddress.toHexString();
+  return owner.toHexString() + '-' + contractAddress.toHexString();
 }
