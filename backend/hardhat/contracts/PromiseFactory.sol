@@ -86,22 +86,22 @@ contract PromiseFactory {
         // Check if the provided URI is a valid IPFS URI
         bytes memory pdfUriBytes = bytes(_pdfUri);
         // Check if it starts with "ipfs://"
-        if (
-            pdfUriBytes[0] != "i" ||
-            pdfUriBytes[1] != "p" ||
-            pdfUriBytes[2] != "f" ||
-            pdfUriBytes[3] != "s" ||
-            pdfUriBytes[4] != ":" ||
-            pdfUriBytes[5] != "/" ||
-            pdfUriBytes[6] != "/"
-        ) revert PromiseFactory__createContract__INVALID_URI();
+        // if (
+        //     pdfUriBytes[0] != "i" ||
+        //     pdfUriBytes[1] != "p" ||
+        //     pdfUriBytes[2] != "f" ||
+        //     pdfUriBytes[3] != "s" ||
+        //     pdfUriBytes[4] != ":" ||
+        //     pdfUriBytes[5] != "/" ||
+        //     pdfUriBytes[6] != "/"
+        // ) revert PromiseFactory__createContract__INVALID_URI();
         // ... and if it ends with ".pdf"
-        if (
-            pdfUriBytes[pdfUriBytes.length - 4] != "." ||
-            pdfUriBytes[pdfUriBytes.length - 3] != "p" ||
-            pdfUriBytes[pdfUriBytes.length - 2] != "d" ||
-            pdfUriBytes[pdfUriBytes.length - 1] != "f"
-        ) revert PromiseFactory__createContract__INVALID_URI();
+        // if (
+        //     pdfUriBytes[pdfUriBytes.length - 4] != "." ||
+        //     pdfUriBytes[pdfUriBytes.length - 3] != "p" ||
+        //     pdfUriBytes[pdfUriBytes.length - 2] != "d" ||
+        //     pdfUriBytes[pdfUriBytes.length - 1] != "f"
+        // ) revert PromiseFactory__createContract__INVALID_URI();
 
         // // Minimum 5 bytes encoded in Base58 -> minimum 7 characters
         // if (!(pdfUriBytes.length > 6))
