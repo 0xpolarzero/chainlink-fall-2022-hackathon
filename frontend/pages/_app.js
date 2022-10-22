@@ -13,7 +13,6 @@ import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { UploadProvider } from '@w3ui/react-uploader';
 import { ToastContainer } from 'react-toastify';
 import { useState } from 'react';
 
@@ -73,7 +72,6 @@ function MyApp({ Component, pageProps }) {
           })}
         >
           <ApolloProvider client={client}>
-            {/* <UploadProvider  */}
             <Header activePage={activePage} setActivePage={setActivePage} />
             <Component {...pageProps} setActivePage={setActivePage} />
             {/* <Footer /> */}
