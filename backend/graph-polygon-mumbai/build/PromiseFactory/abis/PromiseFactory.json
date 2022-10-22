@@ -1,7 +1,7 @@
 [
   {
     "inputs": [],
-    "name": "PromiseFactory__createContract__DUPLICATE_ADDRESS",
+    "name": "PromiseFactory__createContract__DUPLICATE_FIELD",
     "type": "error"
   },
   {
@@ -12,6 +12,11 @@
   {
     "inputs": [],
     "name": "PromiseFactory__createContract__INCORRECT_FIELD_LENGTH",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PromiseFactory__createContract__INVALID_URI",
     "type": "error"
   },
   {
@@ -62,30 +67,6 @@
     ],
     "name": "PromiseContractCreated",
     "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "promiseContracts",
-    "outputs": [
-      {
-        "internalType": "contract PromiseContract",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
   },
   {
     "inputs": [
@@ -159,6 +140,30 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "promiseContracts",
+    "outputs": [
+      {
+        "internalType": "contract PromiseContract",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

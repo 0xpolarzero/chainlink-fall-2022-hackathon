@@ -7,8 +7,8 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt,
-} from '@graphprotocol/graph-ts';
+  BigInt
+} from "@graphprotocol/graph-ts";
 
 export class PromiseContractCreated extends ethereum.Event {
   get params(): PromiseContractCreated__Params {
@@ -54,39 +54,7 @@ export class PromiseContractCreated__Params {
 
 export class PromiseFactory extends ethereum.SmartContract {
   static bind(address: Address): PromiseFactory {
-    return new PromiseFactory('PromiseFactory', address);
-  }
-
-  promiseContracts(param0: Address, param1: BigInt): Address {
-    let result = super.call(
-      'promiseContracts',
-      'promiseContracts(address,uint256):(address)',
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1),
-      ],
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_promiseContracts(
-    param0: Address,
-    param1: BigInt,
-  ): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      'promiseContracts',
-      'promiseContracts(address,uint256):(address)',
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1),
-      ],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
+    return new PromiseFactory("PromiseFactory", address);
   }
 
   createContract(
@@ -94,18 +62,18 @@ export class PromiseFactory extends ethereum.SmartContract {
     _pdfUri: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
-    _partyAddresses: Array<Address>,
+    _partyAddresses: Array<Address>
   ): Address {
     let result = super.call(
-      'createContract',
-      'createContract(string,string,string[],string[],address[]):(address)',
+      "createContract",
+      "createContract(string,string,string[],string[],address[]):(address)",
       [
         ethereum.Value.fromString(_promiseName),
         ethereum.Value.fromString(_pdfUri),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
-        ethereum.Value.fromAddressArray(_partyAddresses),
-      ],
+        ethereum.Value.fromAddressArray(_partyAddresses)
+      ]
     );
 
     return result[0].toAddress();
@@ -116,18 +84,18 @@ export class PromiseFactory extends ethereum.SmartContract {
     _pdfUri: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
-    _partyAddresses: Array<Address>,
+    _partyAddresses: Array<Address>
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      'createContract',
-      'createContract(string,string,string[],string[],address[]):(address)',
+      "createContract",
+      "createContract(string,string,string[],string[],address[]):(address)",
       [
         ethereum.Value.fromString(_promiseName),
         ethereum.Value.fromString(_pdfUri),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
-        ethereum.Value.fromAddressArray(_partyAddresses),
-      ],
+        ethereum.Value.fromAddressArray(_partyAddresses)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -138,21 +106,21 @@ export class PromiseFactory extends ethereum.SmartContract {
 
   getPromiseContractAddresses(_owner: Address): Array<Address> {
     let result = super.call(
-      'getPromiseContractAddresses',
-      'getPromiseContractAddresses(address):(address[])',
-      [ethereum.Value.fromAddress(_owner)],
+      "getPromiseContractAddresses",
+      "getPromiseContractAddresses(address):(address[])",
+      [ethereum.Value.fromAddress(_owner)]
     );
 
     return result[0].toAddressArray();
   }
 
   try_getPromiseContractAddresses(
-    _owner: Address,
+    _owner: Address
   ): ethereum.CallResult<Array<Address>> {
     let result = super.tryCall(
-      'getPromiseContractAddresses',
-      'getPromiseContractAddresses(address):(address[])',
-      [ethereum.Value.fromAddress(_owner)],
+      "getPromiseContractAddresses",
+      "getPromiseContractAddresses(address):(address[])",
+      [ethereum.Value.fromAddress(_owner)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -163,27 +131,59 @@ export class PromiseFactory extends ethereum.SmartContract {
 
   getPromiseContractCount(_userAddress: Address): BigInt {
     let result = super.call(
-      'getPromiseContractCount',
-      'getPromiseContractCount(address):(uint256)',
-      [ethereum.Value.fromAddress(_userAddress)],
+      "getPromiseContractCount",
+      "getPromiseContractCount(address):(uint256)",
+      [ethereum.Value.fromAddress(_userAddress)]
     );
 
     return result[0].toBigInt();
   }
 
   try_getPromiseContractCount(
-    _userAddress: Address,
+    _userAddress: Address
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      'getPromiseContractCount',
-      'getPromiseContractCount(address):(uint256)',
-      [ethereum.Value.fromAddress(_userAddress)],
+      "getPromiseContractCount",
+      "getPromiseContractCount(address):(uint256)",
+      [ethereum.Value.fromAddress(_userAddress)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  promiseContracts(param0: Address, param1: BigInt): Address {
+    let result = super.call(
+      "promiseContracts",
+      "promiseContracts(address,uint256):(address)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_promiseContracts(
+    param0: Address,
+    param1: BigInt
+  ): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "promiseContracts",
+      "promiseContracts(address,uint256):(address)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 }
 
