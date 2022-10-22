@@ -73,6 +73,7 @@ function MyApp({ Component, pageProps }) {
           })}
         >
           <ApolloProvider client={client}>
+            {/* <UploadProvider  */}
             <Header activePage={activePage} setActivePage={setActivePage} />
             <Component {...pageProps} setActivePage={setActivePage} />
             {/* <Footer /> */}

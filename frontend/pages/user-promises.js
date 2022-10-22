@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 
 export default function userPromises({ setActivePage }) {
+  const [isDefinitelyConnected, setIsDefinitelyConnected] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userCreatedPromises, setUserCreatedPromises] = useState([]);
   const [userShownCreatedPromises, setUserShownCreatedPromises] = useState([]);
@@ -26,7 +27,15 @@ export default function userPromises({ setActivePage }) {
   }, []);
 
   useEffect(() => {
-    if (isConnected && !!data) {
+    if (isConnected) {
+      setIsDefinitelyConnected(true);
+    } else {
+      setIsDefinitelyConnected(false);
+    }
+  }, [userAddress]);
+
+  useEffect(() => {
+    if (isDefinitelyConnected && !!data) {
       const promises = data.childContractCreateds;
       const createdPromises = promises.filter(
         (promise) => promise.owner.toLowerCase() === userAddress.toLowerCase(),
@@ -70,7 +79,7 @@ export default function userPromises({ setActivePage }) {
     userInvolvedPromises,
   ]);
 
-  if (!isConnected) {
+  if (!isDefinitelyConnected) {
     return (
       <main className={styles.main}>
         <section className='section section-user'>
