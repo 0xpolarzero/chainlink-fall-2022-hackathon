@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [form] = Form.useForm();
+  const [pdfURI, setPdfURI] = useState('');
   const [submitLoading, setSubmitLoading] = useState(false);
   const { address: userAddress } = useAccount();
 
@@ -52,13 +53,16 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       }
 
       // The PDF URI verification has already been done
-      // But we need to transform the URI into a raw IPFS hash
+      // We make sure something has been uploaded
+      if (!pdfURI) {
+        toast.error('Please upload a PDF file.');
+        return;
+      }
+      // We also need to transform the URI into a raw IPFS hash
       // So we replace the IPFS gateway URL OR ipfs:// with the raw IPFS hash
       const formattedPdfUri = formValues.pdfUri
         .replace('https://ipfs.io/ipfs/', '')
         .replace('ipfs://', '');
-
-      console.log(partyNameArray, partyAddressArray, partyTwitterHandleArray);
 
       console.log(formValues);
       setSubmitLoading(true);
@@ -111,7 +115,6 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
           form={form}
           submitLoading={submitLoading}
         />
-        upload pdf
       </div>
     </Drawer>
   );
@@ -308,6 +311,8 @@ const NewPromiseForm = ({ userAddress, form, submitLoading }) => {
           </>
         )}
       </Form.List>
+
+      <PDFUploader />
     </Form>
   );
 };

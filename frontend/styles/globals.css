@@ -219,11 +219,11 @@ a:not(.header) {
 }
 
 .error-message {
-  color: var(--toastify-color-error);
+  color: var(--toastify-color-error) !important;
 }
 
 .warning-message {
-  color: var(--toastify-color-warning);
+  color: var(--toastify-color-warning) !important;
 }
 
 /* Override Rainbow wallet CSS */
