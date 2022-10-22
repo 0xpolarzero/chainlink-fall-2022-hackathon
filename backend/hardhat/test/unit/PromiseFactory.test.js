@@ -112,6 +112,30 @@ const { deployments, network, ethers } = require('hardhat');
           );
         });
 
+        it.only('Should revert if the PDF URI is not a valid IPFS URI', async () => {
+          // It should revert if it's less than 5 bytes
+          await expect(
+            promiseFactory.createContract(
+              args.name,
+              'bafybe',
+              args.partyNames,
+              args.partyTwitters,
+              args.partyAddresses,
+            ),
+          ).to.be.revertedWith('PromiseFactory__createContract__INVALID_URI()');
+
+          // It should revert if it doesn't match the allowed characters in Base58
+          await expect(
+            promiseFactory.createContract(
+              args.name,
+              'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq!',
+              args.partyNames,
+              args.partyTwitters,
+              args.partyAddresses,
+            ),
+          ).to.be.revertedWith('PromiseFactory__createContract__INVALID_URI()');
+        });
+
         it('Should create a new PromiseContract', async () => {
           const { txReceipt } = await createCorrectPromiseContract();
           const promiseContractAddress = txReceipt.events[1].address;
