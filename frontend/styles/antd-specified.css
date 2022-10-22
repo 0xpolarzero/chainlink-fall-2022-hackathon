@@ -150,8 +150,8 @@
 }
 .ant-collapse .ant-collapse-item-disabled > .ant-collapse-header,
 .ant-collapse .ant-collapse-item-disabled > .ant-collapse-header > .arrow {
-  color: var(--ant-grey-disabled-override);
-  cursor: not-allowed;
+  /* color: var(--ant-grey-disabled-override); */
+  /* cursor: not-allowed; */
 }
 .ant-collapse-rtl {
   direction: rtl;

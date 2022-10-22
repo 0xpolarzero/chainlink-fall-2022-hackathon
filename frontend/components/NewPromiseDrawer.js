@@ -4,7 +4,7 @@ import { useAccount } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function PromiseDrawer({ drawerOpen, setDrawerOpen }) {
+export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [form] = Form.useForm();
   const [submitLoading, setSubmitLoading] = useState(false);
   const { address: userAddress } = useAccount();

@@ -1,6 +1,6 @@
 import styles from '../styles/Home.module.css';
-import PromiseDrawer from '../components/PromiseDrawer';
-import PromisesCollapseModifiable from '../components/PromisesCollapseModifiable';
+import NewPromiseDrawer from '../components/NewPromiseDrawer';
+import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
 import { Pagination } from 'antd';
@@ -18,7 +18,7 @@ export default function userPromises({ setActivePage }) {
   );
   const [shownCreatedPage, setShownCreatedPage] = useState(1);
   const [shownInvolvedPage, setShownInvolvedPage] = useState(1);
-  const { address: userAddress, isDisconnected } = useAccount();
+  const { address: userAddress, isConnected } = useAccount();
   const { data, loading, error } = useQuery(GET_CHILD_CONTRACT_CREATED);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function userPromises({ setActivePage }) {
   }, []);
 
   useEffect(() => {
-    if (!isDisconnected && !!data) {
+    if (isConnected && !!data) {
       const promises = data.childContractCreateds;
       const createdPromises = promises.filter(
         (promise) => promise.owner.toLowerCase() === userAddress.toLowerCase(),
@@ -49,7 +49,6 @@ export default function userPromises({ setActivePage }) {
 
   useEffect(() => {
     if (!!data && !loading && !error) {
-      console.log(userCreatedPromises);
       setUserShownCreatedPromises(
         userCreatedPromises.slice(
           (shownCreatedPage - 1) * 5,
@@ -71,7 +70,7 @@ export default function userPromises({ setActivePage }) {
     userInvolvedPromises,
   ]);
 
-  if (isDisconnected) {
+  if (!isConnected) {
     return (
       <main className={styles.main}>
         <section className='section section-user'>
@@ -115,8 +114,9 @@ export default function userPromises({ setActivePage }) {
             ) : !!data ? (
               userCreatedPromises.length > 0 ? (
                 <div className='promises-list-wrapper'>
-                  <PromisesCollapseModifiable
+                  <PromisesCollapse
                     promises={userShownCreatedPromises}
+                    context='modifiable'
                   />
                   <Pagination
                     simple
@@ -145,8 +145,9 @@ export default function userPromises({ setActivePage }) {
             ) : !!data ? (
               userInvolvedPromises.length > 0 ? (
                 <div className='promises-list-wrapper'>
-                  <PromisesCollapseModifiable
+                  <PromisesCollapse
                     promises={userShownInvolvedPromises}
+                    context='modifiable'
                   />
                   <Pagination
                     simple
@@ -166,7 +167,10 @@ export default function userPromises({ setActivePage }) {
             )}
           </div>
         </div>
-        <PromiseDrawer drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+        <NewPromiseDrawer
+          drawerOpen={drawerOpen}
+          setDrawerOpen={setDrawerOpen}
+        />
       </section>
     </main>
   );

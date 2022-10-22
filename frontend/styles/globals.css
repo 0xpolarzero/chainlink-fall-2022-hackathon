@@ -149,10 +149,11 @@ a:not(.header) {
 
 .error-container {
   background: var(--gradient-high-transparent);
-  backdrop-filter: blur(10px);
+  align-self: center;
   text-align: center;
   border-radius: 6px;
   padding: 1rem 2rem;
+  backdrop-filter: blur(10px);
   cursor: pointer;
   transition: all 0.3s ease;
 }

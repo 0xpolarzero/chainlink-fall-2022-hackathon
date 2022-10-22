@@ -17,12 +17,6 @@
   font-weight: 500;
 }
 
-.drawer-content {
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* gap: 1rem; */
-}
-
 .drawer-content label {
   font-size: 1rem !important;
 }
@@ -30,6 +24,10 @@
 .ant-drawer .form-btns {
   display: flex;
   gap: 1rem;
+}
+
+.ant-drawer .ant-space-item {
+  align-items: center !important;
 }
 
 .ant-drawer .ant-space-item i {
@@ -49,4 +47,12 @@
 
 .ant-drawer .ant-space .ant-space-item:nth-child(3) .ant-input-prefix {
   margin-right: 0.3rem !important;
+}
+
+.user-promises .ant-collapse-header i {
+  transition: all 0.3s ease;
+}
+
+.user-promises .ant-collapse-header:hover i {
+  transform: rotate(-90deg);
 }

@@ -16663,7 +16663,7 @@ span.ant-radio + * {
 .ant-collapse .ant-collapse-item-disabled > .ant-collapse-header,
 .ant-collapse .ant-collapse-item-disabled > .ant-collapse-header > .arrow {
   color: rgba(255, 255, 255, 0.3);
-  cursor: not-allowed;
+  /* cursor: not-allowed; */
 }
 .ant-collapse-rtl {
   direction: rtl;

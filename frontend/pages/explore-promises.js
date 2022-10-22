@@ -104,7 +104,7 @@ export default function explorePromises({ setActivePage }) {
             <PromisesCollapseSkeleton arraySize={3} />
           ) : !!data ? (
             <div className='promises-list-wrapper'>
-              <PromisesCollapse promises={shownPromises} />
+              <PromisesCollapse promises={shownPromises} context='explore' />
               <Pagination
                 simple
                 defaultCurrent={1}

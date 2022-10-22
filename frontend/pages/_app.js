@@ -13,8 +13,9 @@ import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { useState } from 'react';
+import { UploadProvider } from '@w3ui/react-uploader';
 import { ToastContainer } from 'react-toastify';
+import { useState } from 'react';
 
 // Rainbowkit & Wagmi config
 const { chains, provider, webSocketProvider } = configureChains(
