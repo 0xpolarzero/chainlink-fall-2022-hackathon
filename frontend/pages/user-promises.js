@@ -55,7 +55,7 @@ export default function userPromises({ setActivePage }) {
       setUserInvolvedPromises(involvedPromises);
     }
     // We're adding userAddress so it filters again if the user changes wallet
-  }, [data, isDefinitelyConnected]);
+  }, [data, isDefinitelyConnected, userAddress]);
 
   useEffect(() => {
     if (!!data && !loading && !error) {
