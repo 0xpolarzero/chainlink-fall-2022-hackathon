@@ -9,8 +9,8 @@ import {
 import { Address } from '@graphprotocol/graph-ts';
 import { ExampleEntity } from '../generated/schema';
 import { PromiseContractCreated } from '../generated/PromiseFactory/PromiseFactory';
-import { handlePromiseContractCreated } from '../src/master-contract';
-import { createPromiseContractCreatedEvent } from './master-contract-utils';
+import { handlePromiseContractCreated } from '../src/promise-factory';
+import { createPromiseContractCreatedEvent } from './promise-factory-utils';
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0

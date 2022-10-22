@@ -22,4 +22,4 @@ module.exports = async function({ getNamedAccounts, deployments }) {
   }
 };
 
-module.exports.tags = ['all', 'master-contract', 'main'];
+module.exports.tags = ['all', 'promise-factory', 'main'];

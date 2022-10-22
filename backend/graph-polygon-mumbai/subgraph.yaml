@@ -21,4 +21,4 @@ dataSources:
       eventHandlers:
         - event: PromiseContractCreated(indexed address,indexed address,string,string,string[],string[],address[])
           handler: handlePromiseContractCreated
-      file: ./src/master-contract.ts
+      file: ./src/promise-factory.ts
