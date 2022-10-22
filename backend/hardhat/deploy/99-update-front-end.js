@@ -13,7 +13,7 @@ module.exports = async () => {
 };
 
 async function updateContractAddresses() {
-  const masterContract = await ethers.getContract('MasterContract');
+  const promiseFactory = await ethers.getContract('PromiseFactory');
   const chainId = network.config.chainId;
 
   const contractAddresses = JSON.parse(
@@ -21,15 +21,15 @@ async function updateContractAddresses() {
   );
   if (chainId in contractAddresses) {
     if (
-      !contractAddresses[chainId]['MasterContract'].includes(
-        masterContract.address,
+      !contractAddresses[chainId]['PromiseFactory'].includes(
+        promiseFactory.address,
       )
     ) {
-      contractAddresses[chainId]['MasterContract'].push(masterContract.address);
+      contractAddresses[chainId]['PromiseFactory'].push(promiseFactory.address);
     }
   } else {
     contractAddresses[chainId] = {
-      MasterContract: [masterContract.address],
+      PromiseFactory: [promiseFactory.address],
     };
   }
 
@@ -39,10 +39,10 @@ async function updateContractAddresses() {
 }
 
 async function updateAbi() {
-  const masterContract = await ethers.getContract('MasterContract');
+  const promiseFactory = await ethers.getContract('PromiseFactory');
   fs.writeFileSync(
-    `${frontEndAbiFolder}MasterContract.json`,
-    masterContract.interface.format(ethers.utils.FormatTypes.json),
+    `${frontEndAbiFolder}PromiseFactory.json`,
+    promiseFactory.interface.format(ethers.utils.FormatTypes.json),
   );
 }
 

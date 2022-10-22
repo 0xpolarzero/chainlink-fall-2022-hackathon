@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import "./ChildContract.sol";
+import "./PromiseContract.sol";
 import "hardhat/console.sol";
 
 /**
@@ -10,18 +10,18 @@ import "hardhat/console.sol";
  * @notice This is the master contract initializing & referencing all child contracts
  */
 
-contract MasterContract {
+contract PromiseFactory {
     /// Errors
-    error MasterContract__createContract__EMPTY_FIELD();
-    error MasterContract__createContract__INCORRECT_FIELD_LENGTH();
-    error MasterContract__createContract__DUPLICATE_FIELD();
-    error MasterContract__createContract__INVALID_URI();
+    error PromiseFactory__createContract__EMPTY_FIELD();
+    error PromiseFactory__createContract__INCORRECT_FIELD_LENGTH();
+    error PromiseFactory__createContract__DUPLICATE_FIELD();
+    error PromiseFactory__createContract__INVALID_URI();
 
     // Map the owner addresses to the child contracts they created
-    mapping(address => ChildContract[]) public childContracts;
+    mapping(address => PromiseContract[]) public promiseContracts;
 
     /// Events
-    event ChildContractCreated(
+    event PromiseContractCreated(
         address indexed _owner,
         address indexed _contractAddress,
         string _promiseName,
@@ -48,21 +48,21 @@ contract MasterContract {
         string[] memory _partyNames,
         string[] memory _partyTwitterHandles,
         address[] memory _partyAddresses
-    ) public returns (address childContractAddress) {
+    ) public returns (address promiseContractAddress) {
         // Revert if one of the fields is empty
         if (
             !(bytes(_promiseName).length > 0 &&
                 bytes(_pdfUri).length > 0 &&
                 _partyNames.length > 0 &&
                 _partyAddresses.length > 0)
-        ) revert MasterContract__createContract__EMPTY_FIELD();
+        ) revert PromiseFactory__createContract__EMPTY_FIELD();
 
         // Revert if the number of names, Twitter and addresses are not equal
         // If Twitter handles are not provided, it will pass an empty string
         if (
             !(_partyAddresses.length == _partyTwitterHandles.length &&
                 _partyAddresses.length == _partyNames.length)
-        ) revert MasterContract__createContract__INCORRECT_FIELD_LENGTH();
+        ) revert PromiseFactory__createContract__INCORRECT_FIELD_LENGTH();
 
         // TODO TEST THIS, ADDED TWITTER HANDLE & CHANGE ERROR NAME
         // Revert if the same address or twitter handle is used twice
@@ -72,14 +72,14 @@ contract MasterContract {
                     _partyAddresses[i] == _partyAddresses[j] ||
                     keccak256(abi.encodePacked(_partyTwitterHandles[i])) ==
                     keccak256(abi.encodePacked(_partyTwitterHandles[j]))
-                ) revert MasterContract__createContract__DUPLICATE_FIELD();
+                ) revert PromiseFactory__createContract__DUPLICATE_FIELD();
             }
         }
 
         // TODO TEST THIS
         // Revert if the name of the promise is longer than 70 characters
         if (bytes(_promiseName).length > 70) {
-            revert MasterContract__createContract__INCORRECT_FIELD_LENGTH();
+            revert PromiseFactory__createContract__INCORRECT_FIELD_LENGTH();
         }
 
         // TODO TEST THIS
@@ -94,18 +94,18 @@ contract MasterContract {
             pdfUriBytes[4] != ":" ||
             pdfUriBytes[5] != "/" ||
             pdfUriBytes[6] != "/"
-        ) revert MasterContract__createContract__INVALID_URI();
+        ) revert PromiseFactory__createContract__INVALID_URI();
         // ... and if it ends with ".pdf"
         if (
             pdfUriBytes[pdfUriBytes.length - 4] != "." ||
             pdfUriBytes[pdfUriBytes.length - 3] != "p" ||
             pdfUriBytes[pdfUriBytes.length - 2] != "d" ||
             pdfUriBytes[pdfUriBytes.length - 1] != "f"
-        ) revert MasterContract__createContract__INVALID_URI();
+        ) revert PromiseFactory__createContract__INVALID_URI();
 
         // // Minimum 5 bytes encoded in Base58 -> minimum 7 characters
         // if (!(pdfUriBytes.length > 6))
-        //     revert MasterContract__createContract__INVALID_URI();
+        //     revert PromiseFactory__createContract__INVALID_URI();
 
         // // It should match the allowed characters in Base58
         // for (uint i = 0; i < pdfUriBytes.length; i++) {
@@ -114,12 +114,12 @@ contract MasterContract {
         //             (uint(1) << uint8(pdfUriBytes[i])) >
         //             0)
         //     ) {
-        //         revert MasterContract__createContract__INVALID_URI();
+        //         revert PromiseFactory__createContract__INVALID_URI();
         //     }
         // }
 
         // Create a new contract for this letter of intent
-        ChildContract childContract = new ChildContract(
+        PromiseContract promiseContract = new PromiseContract(
             msg.sender,
             _promiseName,
             _pdfUri,
@@ -127,11 +127,11 @@ contract MasterContract {
             _partyTwitterHandles,
             _partyAddresses
         );
-        childContracts[msg.sender].push(childContract);
+        promiseContracts[msg.sender].push(promiseContract);
 
-        emit ChildContractCreated(
+        emit PromiseContractCreated(
             msg.sender,
-            address(childContract),
+            address(promiseContract),
             _promiseName,
             _pdfUri,
             _partyNames,
@@ -139,23 +139,23 @@ contract MasterContract {
             _partyAddresses
         );
 
-        return address(childContract);
+        return address(promiseContract);
     }
 
     /// Getters
-    function getChildContractAddresses(address _owner)
+    function getPromiseContractAddresses(address _owner)
         public
         view
-        returns (ChildContract[] memory)
+        returns (PromiseContract[] memory)
     {
-        return childContracts[_owner];
+        return promiseContracts[_owner];
     }
 
-    function getChildContractCount(address _userAddress)
+    function getPromiseContractCount(address _userAddress)
         public
         view
         returns (uint256)
     {
-        return childContracts[_userAddress].length;
+        return promiseContracts[_userAddress].length;
     }
 }

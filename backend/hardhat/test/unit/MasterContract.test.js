@@ -4,15 +4,15 @@ const { deployments, network, ethers } = require('hardhat');
 
 !developmentChains.includes(network.name)
   ? describe.skip
-  : describe('MasterContract unit tests', function() {
+  : describe('PromiseFactory unit tests', function() {
       let deployer;
       let user;
-      let masterContractDeploy;
-      let masterContract;
+      let promiseFactoryDeploy;
+      let promiseFactory;
       let args = {};
 
-      const createCorrectChildContract = async () => {
-        const tx = await masterContract.createContract(
+      const createCorrectPromiseContract = async () => {
+        const tx = await promiseFactory.createContract(
           args.name,
           args.uri,
           args.partyNames,
@@ -29,8 +29,8 @@ const { deployments, network, ethers } = require('hardhat');
         deployer = accounts[0];
         user = accounts[1];
         await deployments.fixture('main');
-        masterContractDeploy = await ethers.getContract('MasterContract');
-        masterContract = masterContractDeploy.connect(deployer);
+        promiseFactoryDeploy = await ethers.getContract('PromiseFactory');
+        promiseFactory = promiseFactoryDeploy.connect(deployer);
         args = {
           name: 'Test Agreement',
           uri: 'ipfs://mockURI',
@@ -43,23 +43,23 @@ const { deployments, network, ethers } = require('hardhat');
       describe('createContract', function() {
         it('Should revert if one of the required fields is empty', async () => {
           await expect(
-            masterContract.createContract(args.name, args.uri, [], [], []),
-          ).to.be.revertedWith('MasterContract__createContract__EMPTY_FIELD()');
+            promiseFactory.createContract(args.name, args.uri, [], [], []),
+          ).to.be.revertedWith('PromiseFactory__createContract__EMPTY_FIELD()');
 
           await expect(
-            masterContract.createContract(
+            promiseFactory.createContract(
               '',
               args.uri,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
             ),
-          ).to.be.revertedWith('MasterContract__createContract__EMPTY_FIELD()');
+          ).to.be.revertedWith('PromiseFactory__createContract__EMPTY_FIELD()');
         });
 
         it('Should revert if there is a mismatch between names and addresses length', async () => {
           await expect(
-            masterContract.createContract(
+            promiseFactory.createContract(
               args.name,
               args.uri,
               args.partyNames,
@@ -67,13 +67,13 @@ const { deployments, network, ethers } = require('hardhat');
               [deployer.address],
             ),
           ).to.be.revertedWith(
-            'MasterContract__createContract__INCORRECT_FIELD_LENGTH()',
+            'PromiseFactory__createContract__INCORRECT_FIELD_LENGTH()',
           );
         });
 
         it('Should revert if the same address is used twice', async () => {
           await expect(
-            masterContract.createContract(
+            promiseFactory.createContract(
               args.name,
               args.uri,
               args.partyNames,
@@ -81,45 +81,45 @@ const { deployments, network, ethers } = require('hardhat');
               [deployer.address, deployer.address],
             ),
           ).to.be.revertedWith(
-            'MasterContract__createContract__DUPLICATE_ADDRESS()',
+            'PromiseFactory__createContract__DUPLICATE_ADDRESS()',
           );
         });
 
-        it('Should create a new ChildContract', async () => {
-          const { txReceipt } = await createCorrectChildContract();
-          const childContractAddress = txReceipt.events[1].address;
-          const childContract = await ethers.getContractAt(
-            'ChildContract',
-            childContractAddress,
+        it('Should create a new PromiseContract', async () => {
+          const { txReceipt } = await createCorrectPromiseContract();
+          const promiseContractAddress = txReceipt.events[1].address;
+          const promiseContract = await ethers.getContractAt(
+            'PromiseContract',
+            promiseContractAddress,
           );
-          const childContractOwner = await childContract.getOwner();
+          const promiseContractOwner = await promiseContract.getOwner();
 
-          assert.equal(childContractOwner, deployer.address);
+          assert.equal(promiseContractOwner, deployer.address);
         });
 
         it('Should create a mapping between the sender and the child contract addresses', async () => {
-          const { txReceipt } = await createCorrectChildContract();
-          const expectedChildContractAddress = txReceipt.events[1].address;
+          const { txReceipt } = await createCorrectPromiseContract();
+          const expectedPromiseContractAddress = txReceipt.events[1].address;
 
-          const receivedChildContractAddresses = await masterContract.getChildContractAddresses(
+          const receivedPromiseContractAddresses = await promiseFactory.getPromiseContractAddresses(
             deployer.address,
           );
 
           assert.equal(
-            receivedChildContractAddresses[0],
-            expectedChildContractAddress,
+            receivedPromiseContractAddresses[0],
+            expectedPromiseContractAddress,
           );
         });
 
-        it('Should emit a ChildContractCreated event with the right arguments', async () => {
-          const { tx, txReceipt } = await createCorrectChildContract();
-          const childContractAddress = txReceipt.events[1].address;
+        it('Should emit a PromiseContractCreated event with the right arguments', async () => {
+          const { tx, txReceipt } = await createCorrectPromiseContract();
+          const promiseContractAddress = txReceipt.events[1].address;
 
           expect(tx)
-            .to.emit(masterContract, 'ChildContractCreated')
+            .to.emit(promiseFactory, 'PromiseContractCreated')
             .withArgs(
               deployer.address,
-              childContractAddress,
+              promiseContractAddress,
               args.name,
               args.uri,
               args.partyNames,
@@ -129,13 +129,13 @@ const { deployments, network, ethers } = require('hardhat');
         });
 
         it('Should return the correct number of child contracts for a user', async () => {
-          await createCorrectChildContract();
-          await createCorrectChildContract();
+          await createCorrectPromiseContract();
+          await createCorrectPromiseContract();
 
-          const childContractsLength = await masterContract.getChildContractCount(
+          const promiseContractsLength = await promiseFactory.getPromiseContractCount(
             deployer.address,
           );
-          assert.equal(childContractsLength, 2);
+          assert.equal(promiseContractsLength, 2);
         });
       });
     });

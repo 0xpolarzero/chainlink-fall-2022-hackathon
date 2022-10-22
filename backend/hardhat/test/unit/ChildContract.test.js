@@ -4,13 +4,13 @@ const { deployments, network, ethers } = require('hardhat');
 
 !developmentChains.includes(network.name)
   ? describe.skip
-  : describe('MasterContract unit tests', function() {
+  : describe('PromiseFactory unit tests', function() {
       let deployer;
       let userFirst;
       let userSecond;
       let userForbidden;
-      let childContractDeploy;
-      let childContract;
+      let promiseContractDeploy;
+      let promiseContract;
       let deployTxReceipt;
 
       beforeEach(async () => {
@@ -20,11 +20,11 @@ const { deployments, network, ethers } = require('hardhat');
         userSecond = accounts[2];
         userForbidden = accounts[3];
         await deployments.fixture('main');
-        const masterContract = (
-          await ethers.getContract('MasterContract')
+        const promiseFactory = (
+          await ethers.getContract('PromiseFactory')
         ).connect(userFirst);
 
-        const deployTx = await masterContract.createContract(
+        const deployTx = await promiseFactory.createContract(
           'Test Agreement',
           'ipfs://mockURI',
           ['Bob', 'Alice'],
@@ -32,21 +32,21 @@ const { deployments, network, ethers } = require('hardhat');
           [userFirst.address, userSecond.address],
         );
         deployTxReceipt = await deployTx.wait(1);
-        const childContractAddress = deployTxReceipt.events[1].address;
+        const promiseContractAddress = deployTxReceipt.events[1].address;
 
-        childContractDeploy = await ethers.getContractAt(
-          'ChildContract',
-          childContractAddress,
+        promiseContractDeploy = await ethers.getContractAt(
+          'PromiseContract',
+          promiseContractAddress,
         );
-        childContract = childContractDeploy.connect(userFirst);
+        promiseContract = promiseContractDeploy.connect(userFirst);
       });
 
       describe('constructor', function() {
         it('Should initialize the variables with the right value', async () => {
-          const owner = await childContract.getOwner();
-          const name = await childContract.getName();
-          const uri = await childContract.getPdfUri();
-          const participantCount = await childContract.getParticipantCount();
+          const owner = await promiseContract.getOwner();
+          const name = await promiseContract.getName();
+          const uri = await promiseContract.getPdfUri();
+          const participantCount = await promiseContract.getParticipantCount();
 
           assert.equal(owner, userFirst.address);
           assert.equal(name, 'Test Agreement');
@@ -57,7 +57,7 @@ const { deployments, network, ethers } = require('hardhat');
 
       describe('createParticipant', function() {
         it('Should create a mapping between the participants addresses and a struct Participant', async () => {
-          const participant = await childContract.getParticipant(
+          const participant = await promiseContract.getParticipant(
             userFirst.address,
           );
 
@@ -69,8 +69,8 @@ const { deployments, network, ethers } = require('hardhat');
         it('Should emit an event ParticipantCreated with the right arguments', async () => {
           // Here the child contract will emit and event once created by the master contract
           // So we need to access the events from the child contract
-          const filter = childContract.filters.ParticipantCreated();
-          const logs = await childContract.queryFilter(filter);
+          const filter = promiseContract.filters.ParticipantCreated();
+          const logs = await promiseContract.queryFilter(filter);
 
           const participantFirst = {
             name: logs[0].args.participantName,
@@ -99,7 +99,7 @@ const { deployments, network, ethers } = require('hardhat');
         });
 
         it('Should be able to get a list of addresses and get a participant only if the address is in the list', async () => {
-          const participantAddresses = await childContract.getParticipantAddresses();
+          const participantAddresses = await promiseContract.getParticipantAddresses();
           const firstParticipantAddress = participantAddresses[0];
           const secondParticipantAddress = participantAddresses[1];
 
@@ -107,8 +107,8 @@ const { deployments, network, ethers } = require('hardhat');
           assert.equal(secondParticipantAddress, userSecond.address);
 
           await expect(
-            childContract.getParticipant(userForbidden.address),
-          ).to.be.revertedWith('ChildContract__NOT_PARTICIPANT');
+            promiseContract.getParticipant(userForbidden.address),
+          ).to.be.revertedWith('PromiseContract__NOT_PARTICIPANT');
         });
       });
 
@@ -116,12 +116,12 @@ const { deployments, network, ethers } = require('hardhat');
         let txReceipt;
 
         beforeEach(async () => {
-          const tx = await childContract.approveAgreement();
+          const tx = await promiseContract.approveAgreement();
           txReceipt = await tx.wait(1);
         });
 
         it('Should approve the agreement for the user', async () => {
-          const isApproved = await childContract.getIsAgreementApproved(
+          const isApproved = await promiseContract.getIsAgreementApproved(
             userFirst.address,
           );
 
@@ -139,21 +139,21 @@ const { deployments, network, ethers } = require('hardhat');
 
         it('Should revert if the user is not a participant', async () => {
           await expect(
-            childContract.connect(userForbidden).approveAgreement(),
-          ).to.be.revertedWith('ChildContract__NOT_PARTICIPANT()');
+            promiseContract.connect(userForbidden).approveAgreement(),
+          ).to.be.revertedWith('PromiseContract__NOT_PARTICIPANT()');
         });
 
         it('Should revert if the user has already approved the agreement', async () => {
-          await expect(childContract.approveAgreement()).to.be.revertedWith(
-            'ChildContract__approveAgreement__ALREADY_APPROVED()',
+          await expect(promiseContract.approveAgreement()).to.be.revertedWith(
+            'PromiseContract__approveAgreement__ALREADY_APPROVED()',
           );
         });
 
         it('Should revert if the agreement is locked', async () => {
-          await childContract.connect(userSecond).approveAgreement();
-          await childContract.lockAgreement();
-          await expect(childContract.approveAgreement()).to.be.revertedWith(
-            'ChildContract__AGREEMENT_LOCKED()',
+          await promiseContract.connect(userSecond).approveAgreement();
+          await promiseContract.lockAgreement();
+          await expect(promiseContract.approveAgreement()).to.be.revertedWith(
+            'PromiseContract__AGREEMENT_LOCKED()',
           );
         });
       });
@@ -162,44 +162,44 @@ const { deployments, network, ethers } = require('hardhat');
         let txReceipt;
 
         beforeEach(async () => {
-          await childContract.approveAgreement();
+          await promiseContract.approveAgreement();
         });
 
         it('Should not allow to lock the agreement if not all participants have approved', async () => {
-          await expect(childContract.lockAgreement()).to.be.revertedWith(
-            'ChildContract__lockAgreement__PARTICIPANT_NOT_APPROVED()',
+          await expect(promiseContract.lockAgreement()).to.be.revertedWith(
+            'PromiseContract__lockAgreement__PARTICIPANT_NOT_APPROVED()',
           );
         });
 
         it('Should lock the agreement if all users have approved', async () => {
-          await childContract.connect(userSecond).approveAgreement();
-          await childContract.lockAgreement();
-          const isLocked = await childContract.getIsAgreementLocked();
+          await promiseContract.connect(userSecond).approveAgreement();
+          await promiseContract.lockAgreement();
+          const isLocked = await promiseContract.getIsAgreementLocked();
 
           assert.equal(isLocked, true);
         });
 
         it('Should emit an event AgreementLocked with the right arguments', async () => {
-          await childContract.connect(userSecond).approveAgreement();
+          await promiseContract.connect(userSecond).approveAgreement();
 
-          expect(await childContract.lockAgreement()).to.emit(
-            childContract,
+          expect(await promiseContract.lockAgreement()).to.emit(
+            promiseContract,
             'AgreementLocked',
           );
         });
 
         it('Should revert if the user is not a participant', async () => {
           await expect(
-            childContract.connect(userForbidden).lockAgreement(),
-          ).to.be.revertedWith('ChildContract__NOT_PARTICIPANT()');
+            promiseContract.connect(userForbidden).lockAgreement(),
+          ).to.be.revertedWith('PromiseContract__NOT_PARTICIPANT()');
         });
 
         it('Should revert if the agreement is already locked', async () => {
-          await childContract.connect(userSecond).approveAgreement();
-          await childContract.lockAgreement();
+          await promiseContract.connect(userSecond).approveAgreement();
+          await promiseContract.lockAgreement();
 
-          await expect(childContract.lockAgreement()).to.be.revertedWith(
-            'ChildContract__AGREEMENT_LOCKED()',
+          await expect(promiseContract.lockAgreement()).to.be.revertedWith(
+            'PromiseContract__AGREEMENT_LOCKED()',
           );
         });
       });

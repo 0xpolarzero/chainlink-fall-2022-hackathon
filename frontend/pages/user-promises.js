@@ -36,7 +36,7 @@ export default function userPromises({ setActivePage }) {
 
   useEffect(() => {
     if (isDefinitelyConnected && !!data) {
-      const promises = data.childContractCreateds;
+      const promises = data.promiseContractCreateds;
       const createdPromises = promises.filter(
         (promise) => promise.owner.toLowerCase() === userAddress.toLowerCase(),
       );

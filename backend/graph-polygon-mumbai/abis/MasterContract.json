@@ -1,17 +1,17 @@
 [
   {
     "inputs": [],
-    "name": "MasterContract__createContract__DUPLICATE_ADDRESS",
+    "name": "PromiseFactory__createContract__DUPLICATE_ADDRESS",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "MasterContract__createContract__EMPTY_FIELD",
+    "name": "PromiseFactory__createContract__EMPTY_FIELD",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "MasterContract__createContract__INCORRECT_FIELD_LENGTH",
+    "name": "PromiseFactory__createContract__INCORRECT_FIELD_LENGTH",
     "type": "error"
   },
   {
@@ -60,7 +60,7 @@
         "type": "address[]"
       }
     ],
-    "name": "ChildContractCreated",
+    "name": "PromiseContractCreated",
     "type": "event"
   },
   {
@@ -68,10 +68,10 @@
       { "internalType": "address", "name": "", "type": "address" },
       { "internalType": "uint256", "name": "", "type": "uint256" }
     ],
-    "name": "childContracts",
+    "name": "promiseContracts",
     "outputs": [
       {
-        "internalType": "contract ChildContract",
+        "internalType": "contract PromiseContract",
         "name": "",
         "type": "address"
       }
@@ -99,7 +99,7 @@
     "outputs": [
       {
         "internalType": "address",
-        "name": "childContractAddress",
+        "name": "promiseContractAddress",
         "type": "address"
       }
     ],
@@ -110,10 +110,10 @@
     "inputs": [
       { "internalType": "address", "name": "_owner", "type": "address" }
     ],
-    "name": "getChildContractAddresses",
+    "name": "getPromiseContractAddresses",
     "outputs": [
       {
-        "internalType": "contract ChildContract[]",
+        "internalType": "contract PromiseContract[]",
         "name": "",
         "type": "address[]"
       }
@@ -125,7 +125,7 @@
     "inputs": [
       { "internalType": "address", "name": "_userAddress", "type": "address" }
     ],
-    "name": "getChildContractCount",
+    "name": "getPromiseContractCount",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"

@@ -1,33 +1,34 @@
 import { Address, Bytes } from '@graphprotocol/graph-ts';
-import { ChildContractCreated as ChildContractCreatedEvent } from '../generated/MasterContract/MasterContract';
-import { ChildContractCreated } from '../generated/schema';
+import { PromiseContractCreated as PromiseContractCreatedEvent } from '../generated/PromiseFactory/PromiseFactory';
+import { PromiseContractCreated } from '../generated/schema';
 
-export function handleChildContractCreated(
-  event: ChildContractCreatedEvent,
+export function handlePromiseContractCreated(
+  event: PromiseContractCreatedEvent,
 ): void {
   // It should never happen that the same contract is created twice
   // But we can't ever be sure enough, so we check if the entity already exists anyway
-  let childContractCreated = ChildContractCreated.load(
+  let promiseContractCreated = PromiseContractCreated.load(
     getIdFromEventParams(event.params._owner, event.params._contractAddress),
   );
 
-  if (!childContractCreated) {
-    childContractCreated = new ChildContractCreated(
+  if (!promiseContractCreated) {
+    promiseContractCreated = new PromiseContractCreated(
       getIdFromEventParams(event.params._owner, event.params._contractAddress),
     );
   }
 
-  childContractCreated.owner = event.params._owner;
-  childContractCreated.contractAddress = event.params._contractAddress;
-  childContractCreated.promiseName = event.params._promiseName;
-  childContractCreated.pdfUri = event.params._pdfUri;
-  childContractCreated.partyNames = event.params._partyNames;
-  childContractCreated.partyTwitterHandles = event.params._partyTwitterHandles;
-  childContractCreated.partyAddresses = event.params._partyAddresses.map<Bytes>(
-    (e: Bytes) => e,
-  );
+  promiseContractCreated.owner = event.params._owner;
+  promiseContractCreated.contractAddress = event.params._contractAddress;
+  promiseContractCreated.promiseName = event.params._promiseName;
+  promiseContractCreated.pdfUri = event.params._pdfUri;
+  promiseContractCreated.partyNames = event.params._partyNames;
+  promiseContractCreated.partyTwitterHandles =
+    event.params._partyTwitterHandles;
+  promiseContractCreated.partyAddresses = event.params._partyAddresses.map<
+    Bytes
+  >((e: Bytes) => e);
 
-  childContractCreated.save();
+  promiseContractCreated.save();
 }
 
 function getIdFromEventParams(

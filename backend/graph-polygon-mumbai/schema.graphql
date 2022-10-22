@@ -1,4 +1,4 @@
-type ChildContractCreated @entity {
+type PromiseContractCreated @entity {
   id: ID!
   owner: Bytes!
   contractAddress: Bytes!

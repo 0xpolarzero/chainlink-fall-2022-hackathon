@@ -1,58 +1,58 @@
-import { newMockEvent } from "matchstick-as"
-import { ethereum, Address } from "@graphprotocol/graph-ts"
-import { ChildContractCreated } from "../generated/MasterContract/MasterContract"
+import { newMockEvent } from 'matchstick-as';
+import { ethereum, Address } from '@graphprotocol/graph-ts';
+import { PromiseContractCreated } from '../generated/PromiseFactory/PromiseFactory';
 
-export function createChildContractCreatedEvent(
+export function createPromiseContractCreatedEvent(
   _owner: Address,
   _contractAddress: Address,
   _agreementName: string,
   _pdfUri: string,
   _partyNames: Array<string>,
   _partyTwitterHandles: Array<string>,
-  _partyAddresses: Array<Address>
-): ChildContractCreated {
-  let childContractCreatedEvent = changetype<ChildContractCreated>(
-    newMockEvent()
-  )
+  _partyAddresses: Array<Address>,
+): PromiseContractCreated {
+  let promiseContractCreatedEvent = changetype<PromiseContractCreated>(
+    newMockEvent(),
+  );
 
-  childContractCreatedEvent.parameters = new Array()
+  promiseContractCreatedEvent.parameters = new Array();
 
-  childContractCreatedEvent.parameters.push(
-    new ethereum.EventParam("_owner", ethereum.Value.fromAddress(_owner))
-  )
-  childContractCreatedEvent.parameters.push(
+  promiseContractCreatedEvent.parameters.push(
+    new ethereum.EventParam('_owner', ethereum.Value.fromAddress(_owner)),
+  );
+  promiseContractCreatedEvent.parameters.push(
     new ethereum.EventParam(
-      "_contractAddress",
-      ethereum.Value.fromAddress(_contractAddress)
-    )
-  )
-  childContractCreatedEvent.parameters.push(
+      '_contractAddress',
+      ethereum.Value.fromAddress(_contractAddress),
+    ),
+  );
+  promiseContractCreatedEvent.parameters.push(
     new ethereum.EventParam(
-      "_agreementName",
-      ethereum.Value.fromString(_agreementName)
-    )
-  )
-  childContractCreatedEvent.parameters.push(
-    new ethereum.EventParam("_pdfUri", ethereum.Value.fromString(_pdfUri))
-  )
-  childContractCreatedEvent.parameters.push(
+      '_agreementName',
+      ethereum.Value.fromString(_agreementName),
+    ),
+  );
+  promiseContractCreatedEvent.parameters.push(
+    new ethereum.EventParam('_pdfUri', ethereum.Value.fromString(_pdfUri)),
+  );
+  promiseContractCreatedEvent.parameters.push(
     new ethereum.EventParam(
-      "_partyNames",
-      ethereum.Value.fromStringArray(_partyNames)
-    )
-  )
-  childContractCreatedEvent.parameters.push(
+      '_partyNames',
+      ethereum.Value.fromStringArray(_partyNames),
+    ),
+  );
+  promiseContractCreatedEvent.parameters.push(
     new ethereum.EventParam(
-      "_partyTwitterHandles",
-      ethereum.Value.fromStringArray(_partyTwitterHandles)
-    )
-  )
-  childContractCreatedEvent.parameters.push(
+      '_partyTwitterHandles',
+      ethereum.Value.fromStringArray(_partyTwitterHandles),
+    ),
+  );
+  promiseContractCreatedEvent.parameters.push(
     new ethereum.EventParam(
-      "_partyAddresses",
-      ethereum.Value.fromAddressArray(_partyAddresses)
-    )
-  )
+      '_partyAddresses',
+      ethereum.Value.fromAddressArray(_partyAddresses),
+    ),
+  );
 
-  return childContractCreatedEvent
+  return promiseContractCreatedEvent;
 }

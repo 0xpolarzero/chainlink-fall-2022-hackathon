@@ -18,7 +18,7 @@ export default function explorePromises({ setActivePage }) {
 
     // Show the promises corresponding to the search value
     if (!!data && searchValue !== '') {
-      const filteredPromises = data.childContractCreateds.filter(
+      const filteredPromises = data.promiseContractCreateds.filter(
         (promise) =>
           promise.agreementName
             .toLowerCase()
@@ -37,7 +37,7 @@ export default function explorePromises({ setActivePage }) {
       // ... but get it back if the user deletes the search
     } else if (!!data) {
       setShownPromises(
-        data.childContractCreateds.slice((shownPage - 1) * 5, shownPage * 5),
+        data.promiseContractCreateds.slice((shownPage - 1) * 5, shownPage * 5),
       );
     }
   };
@@ -47,7 +47,7 @@ export default function explorePromises({ setActivePage }) {
 
     // Put all the promises names in the search options with a unique key
     if (!!data && !loading && !error) {
-      const promisesNames = data.childContractCreateds.map((promise) => ({
+      const promisesNames = data.promiseContractCreateds.map((promise) => ({
         value: promise.agreementName,
       }));
       setSearchOptions(promisesNames);
@@ -58,7 +58,7 @@ export default function explorePromises({ setActivePage }) {
     // Get the shown page and show relevant set of promises, 5 per page
     if (!!data && !loading && !error) {
       setShownPromises(
-        data.childContractCreateds.slice((shownPage - 1) * 5, shownPage * 5),
+        data.promiseContractCreateds.slice((shownPage - 1) * 5, shownPage * 5),
       );
     }
   }, [shownPage, loading]);
@@ -91,7 +91,7 @@ export default function explorePromises({ setActivePage }) {
             clearIcon={<i className='fas fa-trash'></i>}
             onClear={() =>
               setShownPromises(
-                data.childContractCreateds.slice(
+                data.promiseContractCreateds.slice(
                   (shownPage - 1) * 5,
                   shownPage * 5,
                 ),
@@ -108,7 +108,7 @@ export default function explorePromises({ setActivePage }) {
               <Pagination
                 simple
                 defaultCurrent={1}
-                total={data.childContractCreateds.length}
+                total={data.promiseContractCreateds.length}
                 onChange={(e) => setShownPage(e)}
                 pageSize={5}
               />

@@ -1,1 +1,3 @@
-{"80001":{"MasterContract":["0x912eee6E194358d57997cC9CD66f1bF62aadcE25"]}}
+{
+  "80001": { "PromiseFactory": ["0x912eee6E194358d57997cC9CD66f1bF62aadcE25"] }
+}

@@ -7,19 +7,19 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt
-} from "@graphprotocol/graph-ts";
+  BigInt,
+} from '@graphprotocol/graph-ts';
 
-export class ChildContractCreated extends ethereum.Event {
-  get params(): ChildContractCreated__Params {
-    return new ChildContractCreated__Params(this);
+export class PromiseContractCreated extends ethereum.Event {
+  get params(): PromiseContractCreated__Params {
+    return new PromiseContractCreated__Params(this);
   }
 }
 
-export class ChildContractCreated__Params {
-  _event: ChildContractCreated;
+export class PromiseContractCreated__Params {
+  _event: PromiseContractCreated;
 
-  constructor(event: ChildContractCreated) {
+  constructor(event: PromiseContractCreated) {
     this._event = event;
   }
 
@@ -52,35 +52,35 @@ export class ChildContractCreated__Params {
   }
 }
 
-export class MasterContract extends ethereum.SmartContract {
-  static bind(address: Address): MasterContract {
-    return new MasterContract("MasterContract", address);
+export class PromiseFactory extends ethereum.SmartContract {
+  static bind(address: Address): PromiseFactory {
+    return new PromiseFactory('PromiseFactory', address);
   }
 
-  childContracts(param0: Address, param1: BigInt): Address {
+  promiseContracts(param0: Address, param1: BigInt): Address {
     let result = super.call(
-      "childContracts",
-      "childContracts(address,uint256):(address)",
+      'promiseContracts',
+      'promiseContracts(address,uint256):(address)',
       [
         ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
+        ethereum.Value.fromUnsignedBigInt(param1),
+      ],
     );
 
     return result[0].toAddress();
   }
 
-  try_childContracts(
+  try_promiseContracts(
     param0: Address,
-    param1: BigInt
+    param1: BigInt,
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      "childContracts",
-      "childContracts(address,uint256):(address)",
+      'promiseContracts',
+      'promiseContracts(address,uint256):(address)',
       [
         ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
+        ethereum.Value.fromUnsignedBigInt(param1),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -94,18 +94,18 @@ export class MasterContract extends ethereum.SmartContract {
     _pdfUri: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
-    _partyAddresses: Array<Address>
+    _partyAddresses: Array<Address>,
   ): Address {
     let result = super.call(
-      "createContract",
-      "createContract(string,string,string[],string[],address[]):(address)",
+      'createContract',
+      'createContract(string,string,string[],string[],address[]):(address)',
       [
         ethereum.Value.fromString(_agreementName),
         ethereum.Value.fromString(_pdfUri),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
-        ethereum.Value.fromAddressArray(_partyAddresses)
-      ]
+        ethereum.Value.fromAddressArray(_partyAddresses),
+      ],
     );
 
     return result[0].toAddress();
@@ -116,18 +116,18 @@ export class MasterContract extends ethereum.SmartContract {
     _pdfUri: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
-    _partyAddresses: Array<Address>
+    _partyAddresses: Array<Address>,
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      "createContract",
-      "createContract(string,string,string[],string[],address[]):(address)",
+      'createContract',
+      'createContract(string,string,string[],string[],address[]):(address)',
       [
         ethereum.Value.fromString(_agreementName),
         ethereum.Value.fromString(_pdfUri),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
-        ethereum.Value.fromAddressArray(_partyAddresses)
-      ]
+        ethereum.Value.fromAddressArray(_partyAddresses),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -136,23 +136,23 @@ export class MasterContract extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getChildContractAddresses(_owner: Address): Array<Address> {
+  getPromiseContractAddresses(_owner: Address): Array<Address> {
     let result = super.call(
-      "getChildContractAddresses",
-      "getChildContractAddresses(address):(address[])",
-      [ethereum.Value.fromAddress(_owner)]
+      'getPromiseContractAddresses',
+      'getPromiseContractAddresses(address):(address[])',
+      [ethereum.Value.fromAddress(_owner)],
     );
 
     return result[0].toAddressArray();
   }
 
-  try_getChildContractAddresses(
-    _owner: Address
+  try_getPromiseContractAddresses(
+    _owner: Address,
   ): ethereum.CallResult<Array<Address>> {
     let result = super.tryCall(
-      "getChildContractAddresses",
-      "getChildContractAddresses(address):(address[])",
-      [ethereum.Value.fromAddress(_owner)]
+      'getPromiseContractAddresses',
+      'getPromiseContractAddresses(address):(address[])',
+      [ethereum.Value.fromAddress(_owner)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -161,23 +161,23 @@ export class MasterContract extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddressArray());
   }
 
-  getChildContractCount(_userAddress: Address): BigInt {
+  getPromiseContractCount(_userAddress: Address): BigInt {
     let result = super.call(
-      "getChildContractCount",
-      "getChildContractCount(address):(uint256)",
-      [ethereum.Value.fromAddress(_userAddress)]
+      'getPromiseContractCount',
+      'getPromiseContractCount(address):(uint256)',
+      [ethereum.Value.fromAddress(_userAddress)],
     );
 
     return result[0].toBigInt();
   }
 
-  try_getChildContractCount(
-    _userAddress: Address
+  try_getPromiseContractCount(
+    _userAddress: Address,
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "getChildContractCount",
-      "getChildContractCount(address):(uint256)",
-      [ethereum.Value.fromAddress(_userAddress)]
+      'getPromiseContractCount',
+      'getPromiseContractCount(address):(uint256)',
+      [ethereum.Value.fromAddress(_userAddress)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -232,7 +232,7 @@ export class CreateContractCall__Outputs {
     this._call = call;
   }
 
-  get childContractAddress(): Address {
+  get promiseContractAddress(): Address {
     return this._call.outputValues[0].value.toAddress();
   }
 }

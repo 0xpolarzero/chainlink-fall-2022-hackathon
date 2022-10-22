@@ -10,12 +10,12 @@ import "hardhat/console.sol";
  * once a user creates a new agreement
  */
 
-contract ChildContract {
+contract PromiseContract {
     /// Errors
-    error ChildContract__NOT_PARTICIPANT();
-    error ChildContract__AGREEMENT_LOCKED();
-    error ChildContract__approveAgreement__ALREADY_APPROVED();
-    error ChildContract__lockAgreement__PARTICIPANT_NOT_APPROVED();
+    error PromiseContract__NOT_PARTICIPANT();
+    error PromiseContract__AGREEMENT_LOCKED();
+    error PromiseContract__approveAgreement__ALREADY_APPROVED();
+    error PromiseContract__lockAgreement__PARTICIPANT_NOT_APPROVED();
 
     /// Types
     struct Participant {
@@ -71,12 +71,12 @@ contract ChildContract {
             }
         }
 
-        if (!isParticipant) revert ChildContract__NOT_PARTICIPANT();
+        if (!isParticipant) revert PromiseContract__NOT_PARTICIPANT();
         _;
     }
 
     modifier onlyUnlocked() {
-        if (s_agreementLocked) revert ChildContract__AGREEMENT_LOCKED();
+        if (s_agreementLocked) revert PromiseContract__AGREEMENT_LOCKED();
         _;
     }
 
@@ -113,7 +113,7 @@ contract ChildContract {
 
     function approveAgreement() public onlyParticipant onlyUnlocked {
         if (s_approvedParties[msg.sender] == true) {
-            revert ChildContract__approveAgreement__ALREADY_APPROVED();
+            revert PromiseContract__approveAgreement__ALREADY_APPROVED();
         }
 
         s_approvedParties[msg.sender] = true;
@@ -136,7 +136,7 @@ contract ChildContract {
         for (uint256 i = 0; i < s_participantCount; i++) {
             if (s_approvedParties[participantAddresses[i]] == false) {
                 console.log(participantAddresses[i]);
-                revert ChildContract__lockAgreement__PARTICIPANT_NOT_APPROVED();
+                revert PromiseContract__lockAgreement__PARTICIPANT_NOT_APPROVED();
             }
         }
 
@@ -191,7 +191,7 @@ contract ChildContract {
         returns (Participant memory)
     {
         if (s_parties[_participantAddress].participantAddress == address(0)) {
-            revert ChildContract__NOT_PARTICIPANT();
+            revert PromiseContract__NOT_PARTICIPANT();
         }
 
         return s_parties[_participantAddress];

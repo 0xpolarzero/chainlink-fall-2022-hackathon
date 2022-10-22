@@ -6,7 +6,7 @@ module.exports = async function({ getNamedAccounts, deployments }) {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const masterContract = await deploy('MasterContract', {
+  const promiseFactory = await deploy('PromiseFactory', {
     from: deployer,
     args: [],
     log: true,
@@ -18,7 +18,7 @@ module.exports = async function({ getNamedAccounts, deployments }) {
     process.env.ETHERSCAN_API_KEY
   ) {
     console.log('Verifying contract...');
-    await verify(masterContract.address, []);
+    await verify(promiseFactory.address, []);
   }
 };
 
