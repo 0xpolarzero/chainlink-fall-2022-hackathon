@@ -34,7 +34,7 @@ export default function FormattedAddress({ address, isShrinked }) {
       content={
         <div className='popover-address'>
           <div>{address}</div>
-          <i className='fa-solid fa-copy' onClick={copyAddress}></i>
+          <i className='fas fa-copy' onClick={copyAddress}></i>
         </div>
       }
     >

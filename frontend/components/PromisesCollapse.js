@@ -16,7 +16,7 @@ export default function PromisesCollapse({ promises, context }) {
       expandIcon={({ isActive }) =>
         context === 'modifiable' ? (
           <i
-            className='fa-solid fa-ellipsis'
+            className='fas fa-ellipsis'
             onClick={(e) => e.stopPropagation()}
           ></i>
         ) : (

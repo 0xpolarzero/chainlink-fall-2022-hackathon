@@ -146,7 +146,7 @@ const NewPromiseForm = ({ userAddress, form, submitLoading }) => {
         <Input
           id='promise-name'
           placeholder='Enter the name of your promise'
-          prefix={<i className='fa-solid fa-address-card'></i>}
+          prefix={<i className='fas fa-address-card'></i>}
           suffix={
             <Tooltip title="This field is just for information purposes. It can't be longer than 70 characters.">
               <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
@@ -191,7 +191,7 @@ const NewPromiseForm = ({ userAddress, form, submitLoading }) => {
                 >
                   <Input
                     placeholder='John'
-                    prefix={<i className='fa-solid fa-user-tag'></i>}
+                    prefix={<i className='fas fa-user-tag'></i>}
                     suffix={
                       <Tooltip title='The name of the participant must be between 2 and 30 characters long.'>
                         <InfoCircleOutlined
@@ -270,7 +270,7 @@ const NewPromiseForm = ({ userAddress, form, submitLoading }) => {
                     prefix={
                       <span className='icon-double'>
                         <i className='fa-brands fa-twitter'></i>
-                        <i className='fa-solid fa-at'></i>
+                        <i className='fas fa-at'></i>
                       </span>
                     }
                     suffix={
@@ -284,7 +284,7 @@ const NewPromiseForm = ({ userAddress, form, submitLoading }) => {
                 </Form.Item>
 
                 <i
-                  className='fa-solid fa-trash'
+                  className='fas fa-trash'
                   onClick={() => {
                     // Prevent the user from removing the field if there is only one left
                     if (fields.length > 1) {
@@ -305,7 +305,7 @@ const NewPromiseForm = ({ userAddress, form, submitLoading }) => {
                 }}
                 block
               >
-                <i className='fa-solid fa-plus'></i> Add participant
+                <i className='fas fa-plus'></i> Add participant
               </Button>
             </Form.Item>
           </>

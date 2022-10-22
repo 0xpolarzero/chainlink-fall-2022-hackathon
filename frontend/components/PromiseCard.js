@@ -80,7 +80,7 @@ export default function PromiseCard({ contractAttributes }) {
           <a className='verified' href='some-tx-link' target='_blank'>
             <i className='fas fa-check'></i>
             <span>
-              Tx <i className='fa-solid fa-chain'></i>
+              Tx <i className='fas fa-chain'></i>
             </span>
           </a>
         ) : (

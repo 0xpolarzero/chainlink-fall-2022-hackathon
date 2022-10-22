@@ -88,7 +88,7 @@ export default function explorePromises({ setActivePage }) {
             onChange={(e) => setSearchValue(e)}
             onKeyDown={handleSearch}
             allowClear={true}
-            clearIcon={<i className='fa-solid fa-trash'></i>}
+            clearIcon={<i className='fas fa-trash'></i>}
             onClear={() =>
               setShownPromises(
                 data.childContractCreateds.slice(
