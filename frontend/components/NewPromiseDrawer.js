@@ -106,14 +106,18 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       }
     >
       <div className='drawer-content'>
-        <NewPromiseForm userAddress={userAddress} />
+        <NewPromiseForm
+          userAddress={userAddress}
+          form={form}
+          submitLoading={submitLoading}
+        />
         upload pdf
       </div>
     </Drawer>
   );
 }
 
-const NewPromiseForm = ({ userAddress }) => {
+const NewPromiseForm = ({ userAddress, form, submitLoading }) => {
   return (
     <Form form={form} layout='vertical' requiredMark={true}>
       <Form.Item

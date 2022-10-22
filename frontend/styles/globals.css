@@ -356,8 +356,13 @@ a:not(.header) {
   grid-template-columns: 1fr auto !important;
 }
 
-.ant-drawer .ant-space-item {
-  align-self: baseline;
+/* Only for the first child of .ant-form-vertical */
+.ant-drawer .ant-form-vertical > div:nth-child(2) {
+  align-items: center;
+}
+
+.ant-drawer .ant-form .ant-space-horizontal > div:nth-child(4) {
+  margin-top: 0.3rem;
 }
 
 .ant-table {
