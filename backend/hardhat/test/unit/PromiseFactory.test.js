@@ -33,7 +33,7 @@ const { deployments, network, ethers } = require('hardhat');
         promiseFactory = promiseFactoryDeploy.connect(deployer);
         args = {
           name: 'Test Agreement',
-          uri: 'ipfs://mockURI',
+          uri: 'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
           partyNames: ['Bob', 'Alice'],
           partyTwitters: ['@bob', '@alice'],
           partyAddresses: [deployer.address, user.address],
@@ -71,7 +71,7 @@ const { deployments, network, ethers } = require('hardhat');
           );
         });
 
-        it('Should revert if the same address is used twice', async () => {
+        it('Should revert if the same address or Twitter handle is used twice', async () => {
           await expect(
             promiseFactory.createContract(
               args.name,
@@ -81,7 +81,19 @@ const { deployments, network, ethers } = require('hardhat');
               [deployer.address, deployer.address],
             ),
           ).to.be.revertedWith(
-            'PromiseFactory__createContract__DUPLICATE_ADDRESS()',
+            'PromiseFactory__createContract__DUPLICATE_FIELD()',
+          );
+
+          await expect(
+            promiseFactory.createContract(
+              args.name,
+              args.uri,
+              args.partyNames,
+              ['@bob', '@bob'],
+              args.partyAddresses,
+            ),
+          ).to.be.revertedWith(
+            'PromiseFactory__createContract__DUPLICATE_FIELD()',
           );
         });
 
