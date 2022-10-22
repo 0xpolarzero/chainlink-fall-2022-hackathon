@@ -36,6 +36,7 @@ export default function userPromises({ setActivePage }) {
 
   useEffect(() => {
     if (isDefinitelyConnected && !!data) {
+      console.log('should launch');
       const promises = data.promiseContractCreateds;
       const createdPromises = promises.filter(
         (promise) => promise.owner.toLowerCase() === userAddress.toLowerCase(),
@@ -54,7 +55,7 @@ export default function userPromises({ setActivePage }) {
       setUserInvolvedPromises(involvedPromises);
     }
     // We're adding userAddress so it filters again if the user changes wallet
-  }, [data, userAddress]);
+  }, [data, isDefinitelyConnected]);
 
   useEffect(() => {
     if (!!data && !loading && !error) {
@@ -98,7 +99,14 @@ export default function userPromises({ setActivePage }) {
     console.log(error);
     return (
       <main className={styles.main}>
-        <section className='section section-user'>ERROR</section>
+        <section className='section section-user'>
+          <div className='error-container'>
+            <div className='error'>
+              There was an error fetching data for this page. Please try to
+              reload.
+            </div>
+          </div>
+        </section>
       </main>
     );
   }

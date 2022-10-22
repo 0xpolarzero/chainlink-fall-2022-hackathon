@@ -67,7 +67,14 @@ export default function explorePromises({ setActivePage }) {
     console.log(error);
     return (
       <main className={styles.main}>
-        <section className='section section-explore'>ERROR</section>
+        <section className='section section-explore'>
+          <div className='error-container'>
+            <div className='error'>
+              There was an error fetching data for this page. Please try to
+              reload.
+            </div>
+          </div>
+        </section>
       </main>
     );
   }
