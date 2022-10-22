@@ -37,7 +37,7 @@ export default function PromiseCard({ contractAttributes }) {
   ];
 
   const {
-    agreementName: promiseName,
+    promiseName,
     owner,
     contractAddress,
     pdfUri,

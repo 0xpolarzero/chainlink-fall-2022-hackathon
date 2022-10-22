@@ -23,7 +23,7 @@ describe('Describe entity assertions', () => {
     let _contractAddress = Address.fromString(
       '0x0000000000000000000000000000000000000001',
     );
-    let _agreementName = 'Example string value';
+    let _promiseName = 'Example string value';
     let _pdfUri = 'Example string value';
     let _partyNames = ['Example string value'];
     let _partyTwitterHandles = ['Example string value'];
@@ -33,7 +33,7 @@ describe('Describe entity assertions', () => {
     let newPromiseContractCreatedEvent = createPromiseContractCreatedEvent(
       _owner,
       _contractAddress,
-      _agreementName,
+      _promiseName,
       _pdfUri,
       _partyNames,
       _partyTwitterHandles,
@@ -68,7 +68,7 @@ describe('Describe entity assertions', () => {
     assert.fieldEquals(
       'ExampleEntity',
       '0xa16081f360e3847006db660bae1c6d1b2e17ec2a',
-      '_agreementName',
+      '_promiseName',
       'Example string value',
     );
     assert.fieldEquals(

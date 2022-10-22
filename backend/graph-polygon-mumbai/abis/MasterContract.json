@@ -32,7 +32,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "_agreementName",
+        "name": "_promiseName",
         "type": "string"
       },
       {
@@ -81,7 +81,7 @@
   },
   {
     "inputs": [
-      { "internalType": "string", "name": "_agreementName", "type": "string" },
+      { "internalType": "string", "name": "_promiseName", "type": "string" },
       { "internalType": "string", "name": "_pdfUri", "type": "string" },
       { "internalType": "string[]", "name": "_partyNames", "type": "string[]" },
       {

@@ -31,7 +31,7 @@ export class PromiseContractCreated__Params {
     return this._event.parameters[1].value.toAddress();
   }
 
-  get _agreementName(): string {
+  get _promiseName(): string {
     return this._event.parameters[2].value.toString();
   }
 
@@ -90,7 +90,7 @@ export class PromiseFactory extends ethereum.SmartContract {
   }
 
   createContract(
-    _agreementName: string,
+    _promiseName: string,
     _pdfUri: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
@@ -100,7 +100,7 @@ export class PromiseFactory extends ethereum.SmartContract {
       'createContract',
       'createContract(string,string,string[],string[],address[]):(address)',
       [
-        ethereum.Value.fromString(_agreementName),
+        ethereum.Value.fromString(_promiseName),
         ethereum.Value.fromString(_pdfUri),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
@@ -112,7 +112,7 @@ export class PromiseFactory extends ethereum.SmartContract {
   }
 
   try_createContract(
-    _agreementName: string,
+    _promiseName: string,
     _pdfUri: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
@@ -122,7 +122,7 @@ export class PromiseFactory extends ethereum.SmartContract {
       'createContract',
       'createContract(string,string,string[],string[],address[]):(address)',
       [
-        ethereum.Value.fromString(_agreementName),
+        ethereum.Value.fromString(_promiseName),
         ethereum.Value.fromString(_pdfUri),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
@@ -204,7 +204,7 @@ export class CreateContractCall__Inputs {
     this._call = call;
   }
 
-  get _agreementName(): string {
+  get _promiseName(): string {
     return this._call.inputValues[0].value.toString();
   }
 

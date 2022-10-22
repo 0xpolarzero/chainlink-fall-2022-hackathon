@@ -6,7 +6,7 @@ const GET_CHILD_CONTRACT_CREATED = gql`
       id
       owner
       contractAddress
-      agreementName
+      promiseName
       pdfUri
       partyNames
       partyTwitterHandles

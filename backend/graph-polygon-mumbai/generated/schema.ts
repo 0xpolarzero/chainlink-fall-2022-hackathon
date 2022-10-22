@@ -65,13 +65,13 @@ export class PromiseContractCreated extends Entity {
     this.set('contractAddress', Value.fromBytes(value));
   }
 
-  get agreementName(): string {
-    let value = this.get('agreementName');
+  get promiseName(): string {
+    let value = this.get('promiseName');
     return value!.toString();
   }
 
-  set agreementName(value: string) {
-    this.set('agreementName', Value.fromString(value));
+  set promiseName(value: string) {
+    this.set('promiseName', Value.fromString(value));
   }
 
   get pdfUri(): string {

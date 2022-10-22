@@ -5,7 +5,7 @@ import { PromiseContractCreated } from '../generated/PromiseFactory/PromiseFacto
 export function createPromiseContractCreatedEvent(
   _owner: Address,
   _contractAddress: Address,
-  _agreementName: string,
+  _promiseName: string,
   _pdfUri: string,
   _partyNames: Array<string>,
   _partyTwitterHandles: Array<string>,
@@ -28,8 +28,8 @@ export function createPromiseContractCreatedEvent(
   );
   promiseContractCreatedEvent.parameters.push(
     new ethereum.EventParam(
-      '_agreementName',
-      ethereum.Value.fromString(_agreementName),
+      '_promiseName',
+      ethereum.Value.fromString(_promiseName),
     ),
   );
   promiseContractCreatedEvent.parameters.push(

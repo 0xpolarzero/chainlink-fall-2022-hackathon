@@ -29,9 +29,7 @@ export default function PromisesCollapse({ promises, context }) {
           <Panel
             header={
               <div className='promise-header'>
-                <div className='promise-header-name'>
-                  {promise.agreementName}
-                </div>
+                <div className='promise-header-name'>{promise.promiseName}</div>
                 <div className='promise-header-address'>
                   Created by{' '}
                   <FormattedAddress

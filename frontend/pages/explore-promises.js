@@ -20,7 +20,7 @@ export default function explorePromises({ setActivePage }) {
     if (!!data && searchValue !== '') {
       const filteredPromises = data.promiseContractCreateds.filter(
         (promise) =>
-          promise.agreementName
+          promise.promiseName
             .toLowerCase()
             .includes(searchValue.toLowerCase()) ||
           promise.partyNames.some((name) =>
@@ -48,7 +48,7 @@ export default function explorePromises({ setActivePage }) {
     // Put all the promises names in the search options with a unique key
     if (!!data && !loading && !error) {
       const promisesNames = data.promiseContractCreateds.map((promise) => ({
-        value: promise.agreementName,
+        value: promise.promiseName,
       }));
       setSearchOptions(promisesNames);
     }

@@ -37,7 +37,7 @@ export default function PromiseModal({ contractAttributes }) {
   ];
 
   const {
-    agreementName: promiseName,
+    promiseName,
     owner,
     contractAddress,
     pdfUri,

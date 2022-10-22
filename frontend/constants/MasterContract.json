@@ -21,7 +21,7 @@
     "inputs": [
       { "type": "address", "name": "_owner", "indexed": true },
       { "type": "address", "name": "_contractAddress", "indexed": true },
-      { "type": "string", "name": "_agreementName", "indexed": false },
+      { "type": "string", "name": "_promiseName", "indexed": false },
       { "type": "string", "name": "_pdfUri", "indexed": false },
       { "type": "string[]", "name": "_partyNames", "indexed": false },
       { "type": "string[]", "name": "_partyTwitterHandles", "indexed": false },
@@ -43,7 +43,7 @@
     "constant": false,
     "payable": false,
     "inputs": [
-      { "type": "string", "name": "_agreementName" },
+      { "type": "string", "name": "_promiseName" },
       { "type": "string", "name": "_pdfUri" },
       { "type": "string[]", "name": "_partyNames" },
       { "type": "string[]", "name": "_partyTwitterHandles" },
