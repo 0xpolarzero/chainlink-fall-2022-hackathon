@@ -1,9 +1,16 @@
 import FormattedAddress from './FormattedAddress';
+import {
+  columns,
+  displayPartiesData,
+  getPartiesApprovedStatus,
+  getVerificationDiv,
+} from '../systems/displayPartiesData';
 import { displayPdf } from '../systems/displayPdf';
 import { Table } from 'antd';
+import { useProvider } from 'wagmi';
 import { useEffect, useState } from 'react';
 
-export default function PromiseCard({ contractAttributes }) {
+export default function PromisePanel({ contractAttributes }) {
   const [partiesData, setPartiesData] = useState([]);
   const [tableParams, setTableParams] = useState({
     pagination: {
@@ -12,29 +19,8 @@ export default function PromiseCard({ contractAttributes }) {
       position: ['topRight'],
     },
   });
-
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Twitter Handle',
-      dataIndex: 'twitterHandle',
-      key: 'twitterHandle',
-    },
-    {
-      title: 'Twitter verified',
-      dataIndex: 'twitterVerified',
-      key: 'twitterVerified',
-    },
-  ];
+  const [addressToApprovedStatus, setAddressToApprovedStatus] = useState([]);
+  const provider = useProvider();
 
   const {
     promiseName,
@@ -52,46 +38,28 @@ export default function PromiseCard({ contractAttributes }) {
     });
   };
 
-  useEffect(() => {
-    const partiesData = [];
+  const gatherPartiesData = async () => {
+    const dataToDisplay = displayPartiesData(
+      partyNames,
+      partyAddresses,
+      partyTwitterHandles,
+      addressToApprovedStatus,
+    );
+    setPartiesData(dataToDisplay);
 
-    for (let i = 0; i < partyNames.length; i++) {
-      // ! FOR TESTING PURPOSES
-      const isVerified = Math.floor(Math.random() * 2) === 0;
-      partiesData.push({
-        key: i,
-        name: partyNames[i],
-        address: (
-          <FormattedAddress
-            address={partyAddresses[i]}
-            isShrinked='responsive'
-          />
-        ),
-        twitterHandle: (
-          <a
-            href={`https://twitter.com/${partyTwitterHandles[i]}`}
-            target='_blank'
-          >
-            @{partyTwitterHandles[i]}
-          </a>
-        ),
-        // TODO Link to the Tx verification
-        twitterVerified: isVerified ? (
-          <a className='verified' href='some-tx-link' target='_blank'>
-            <i className='fas fa-check'></i>
-            <span>
-              Tx <i className='fas fa-chain'></i>
-            </span>
-          </a>
-        ) : (
-          <div className='not-verified'>
-            <i className='fas fa-times'></i>
-            <span>Not verified</span>
-          </div>
-        ),
-      });
-    }
-    setPartiesData(partiesData);
+    const partiesApprovedStatus = await getPartiesApprovedStatus(
+      contractAddress,
+      partyAddresses,
+      provider,
+    );
+    setAddressToApprovedStatus(partiesApprovedStatus);
+
+    // const partiesTwitterVerifiedStatus = await getPartiesTwitterVerifiedStatus();
+    // setPartiesTwitterVerifiedStatus(partiesTwitterVerifiedStatus);
+  };
+
+  useEffect(() => {
+    gatherPartiesData();
   }, []);
 
   return (
@@ -108,7 +76,6 @@ export default function PromiseCard({ contractAttributes }) {
       </div>
       <div key='parties' className='card-item parties'>
         <div className='title'>Involved parties</div>
-        {/* <div className='parties-list'> */}
         <Table
           dataSource={partiesData}
           columns={columns}

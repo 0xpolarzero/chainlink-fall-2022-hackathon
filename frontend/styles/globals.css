@@ -76,6 +76,8 @@
   --ant-black-table-override: rgba(0, 0, 0, 0.1);
   /* #262626 */
   --ant-hovergrey-table-override: rgba(0, 0, 0, 0.3);
+  /* --antd-wave-shadow-color */
+  --ant-wave-shadow-color-override: var(--popstar);
 }
 
 html,
@@ -169,6 +171,42 @@ a:not(.header) {
 
 .underline {
   text-decoration: underline;
+}
+
+.verified,
+.not-verified {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.verified i,
+.not-verified i {
+  font-size: 1rem;
+}
+
+.verified {
+  color: var(--toastify-color-success) !important;
+}
+
+.not-verified {
+  color: var(--toastify-color-error);
+  font-weight: 600;
+}
+
+.verified span {
+  /* font-size: 0.8rem; */
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.verified span:hover {
+  opacity: 1;
+}
+
+.verified span > i {
+  font-size: 0.8rem;
 }
 
 .popover-address {
@@ -373,7 +411,7 @@ a:not(.header) {
   border-radius: 6px !important;
 }
 
-.ant-table-pagination {
+.section-explore .ant-table-pagination {
   position: absolute !important;
   top: 0.5rem !important;
   right: 1rem !important;

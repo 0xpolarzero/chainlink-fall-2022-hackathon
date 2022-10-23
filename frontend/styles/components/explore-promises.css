@@ -89,12 +89,14 @@
   grid-template-rows: repeat(3, auto);
 }
 
-.card-item {
+.card-item,
+.drawer-item {
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0.5rem 1rem;
 }
 
-.card-item .title {
+.card-item .title,
+.drawer-item .title {
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 0.3rem;
@@ -112,46 +114,12 @@
   align-items: flex-end;
 }
 
-.card-item.parties {
+.card-item.parties,
+.drawer-item.parties {
   position: relative;
 }
 
-.card-item.parties .title {
+.card-item.parties .title,
+.drawer-item.parties .title {
   margin-bottom: 1rem;
-}
-
-.card-item.parties .verified,
-.card-item.parties .not-verified {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.card-item.parties .verified i,
-.card-item.parties .not-verified i {
-  font-size: 1rem;
-}
-
-.card-item.parties .verified {
-  color: var(--toastify-color-success);
-}
-
-.card-item.parties .not-verified {
-  color: var(--toastify-color-error);
-  font-weight: 600;
-}
-
-.card-item.parties .verified span {
-  /* font-size: 0.8rem; */
-  opacity: 0.7;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.card-item.parties .verified span:hover {
-  opacity: 1;
-}
-
-.card-item.parties .verified span > i {
-  font-size: 0.8rem;
 }

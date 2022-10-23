@@ -302,7 +302,7 @@
   position: relative;
 }
 html {
-  --antd-wave-shadow-color: #177ddc;
+  --antd-wave-shadow-color: var(--ant-wave-shadow-color-override);
   --scroll-bar: 0;
 }
 [ant-click-animating-without-extra-node='true']::after,

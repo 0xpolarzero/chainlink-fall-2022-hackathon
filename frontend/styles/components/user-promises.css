@@ -49,10 +49,42 @@
   margin-right: 0.3rem !important;
 }
 
+.ant-collapse-header {
+  position: relative; /* So we can add an invisible div to handle click events */
+}
+
+.invisible-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
 .user-promises .ant-collapse-header i {
   transition: all 0.3s ease;
 }
 
 .user-promises .ant-collapse-header:hover i {
   transform: rotate(-90deg);
+}
+
+.drawer-item.contract-identity {
+  flex-direction: column;
+}
+
+.drawer-item.contract-identity .pdf-link {
+  align-items: flex-start;
+}
+
+.drawer-item.interaction {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.drawer-item.interaction .ant-btn {
+  width: 100%;
 }
