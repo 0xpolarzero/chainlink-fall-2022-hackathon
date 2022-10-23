@@ -39,14 +39,6 @@ export default function PromisePanel({ contractAttributes }) {
   };
 
   const gatherPartiesData = async () => {
-    const dataToDisplay = displayPartiesData(
-      partyNames,
-      partyAddresses,
-      partyTwitterHandles,
-      addressToApprovedStatus,
-    );
-    setPartiesData(dataToDisplay);
-
     const partiesApprovedStatus = await getPartiesApprovedStatus(
       contractAddress,
       partyAddresses,
@@ -59,8 +51,22 @@ export default function PromisePanel({ contractAttributes }) {
   };
 
   useEffect(() => {
+    // Fetch contract data
     gatherPartiesData();
   }, []);
+
+  useEffect(() => {
+    // Update parties data already fetched
+    const dataToDisplay = displayPartiesData(
+      partyNames,
+      partyAddresses,
+      partyTwitterHandles,
+      addressToApprovedStatus,
+    );
+    setPartiesData(dataToDisplay);
+
+    // Contract data, once fetched, will update the table
+  }, [addressToApprovedStatus]);
 
   return (
     <div className='promise-card'>

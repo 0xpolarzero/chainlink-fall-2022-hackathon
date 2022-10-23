@@ -1,5 +1,6 @@
 import FormattedAddress from '../components/FormattedAddress';
 import promiseContractAbi from '../constants/PromiseContract.json';
+import { Skeleton } from 'antd';
 import { ethers } from 'ethers';
 
 const columns = [
@@ -50,7 +51,13 @@ const getPartiesApprovedStatus = async (
   }
   const result = await Promise.all(promises);
 
-  return result;
+  // Now map each address to its promise approved status
+  const addressToApprovedStatus = {};
+  for (let i = 0; i < result.length; i++) {
+    addressToApprovedStatus[result[i].address] = result[i].isPromiseApproved;
+  }
+
+  return addressToApprovedStatus;
 };
 
 const getPartiesTwitterVerifiedStatus = async () => {
@@ -109,6 +116,10 @@ const getVerificationDiv = (isTrue, message) => {
           Tx <i className='fas fa-chain'></i>
         </span>
       </a>
+    );
+  } else if (isTrue === undefined) {
+    return (
+      <Skeleton active paragraph={{ rows: 1 }} title={false} loading={true} />
     );
   } else {
     return (
