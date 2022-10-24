@@ -1,4 +1,6 @@
 import PDFUploader from './PDFUploader';
+import { validateNewPromiseForm } from '../systems/validateNewPromiseForm';
+import { uploadToIPFS } from '../systems/uploadToIPFS';
 import { Input, Tooltip, Form, Drawer, Space, Button } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useAccount } from 'wagmi';
@@ -7,7 +9,6 @@ import { toast } from 'react-toastify';
 
 export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [form] = Form.useForm();
-  const [pdfURI, setPdfURI] = useState('');
   const [submitLoading, setSubmitLoading] = useState(false);
   const { address: userAddress } = useAccount();
 
@@ -16,57 +17,29 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   };
 
   const handleSubmit = async () => {
-    const formValues = await form.validateFields().catch((err) => {
-      console.log(err);
-      toast.error('Please fill all the fields correctly.');
+    const {
+      promiseName,
+      partyNameArray,
+      partyAddressArray,
+      partyTwitterHandleArray,
+      pdfFile,
+    } = await validateNewPromiseForm(form);
+
+    // Everything is valid so we can start creating the promise
+    setSubmitLoading(true);
+
+    // Upload the PDF to IPFS
+    // We assume 'uploadToIPFS' returns a valid CID
+    // ... anyway, the smart contract will check it when creating the promise
+    const pdfCid = await toast.promise(uploadToIPFS(pdfFile), {
+      pending: 'Uploading file to IPFS...',
+      success: 'File uploaded successfully!',
+      error: 'File could not be uploaded.',
     });
 
-    if (formValues) {
-      // Gather names, addresses and Twitter usernames
-      const partyNameArray = Object.values(formValues.parties).map(
-        (field) => field.partyName,
-      );
-      const partyAddressArray = Object.values(formValues.parties).map(
-        (field) => field.partyAddress,
-      );
-      const partyTwitterHandleArray = Object.values(formValues.parties).map(
-        (field) => {
-          // Make sure to fill the array with empty strings if no Twitter handle is provided
-          if (field.partyTwitterHandle) {
-            return field.partyTwitterHandle.replace('@', '');
-          } else {
-            return '';
-          }
-        },
-      );
+    // Then create the promise
 
-      // Check if there is no dupplicate address or Twitter handle
-      const addressSet = new Set(partyAddressArray);
-      const twitterHandleSet = new Set(partyTwitterHandleArray);
-
-      if (addressSet.size !== partyAddressArray.length) {
-        toast.error('There are duplicate addresses.');
-        return;
-      } else if (twitterHandleSet.size !== partyTwitterHandleArray.length) {
-        toast.error('There are duplicate Twitter handles.');
-        return;
-      }
-
-      // The PDF URI verification has already been done
-      // We make sure something has been uploaded
-      if (!pdfURI) {
-        toast.error('Please upload a PDF file.');
-        return;
-      }
-      // We also need to transform the URI into a raw IPFS hash
-      // So we replace the IPFS gateway URL OR ipfs:// with the raw IPFS hash
-      const formattedPdfUri = formValues.pdfUri
-        .replace('https://ipfs.io/ipfs/', '')
-        .replace('ipfs://', '');
-
-      console.log(formValues);
-      setSubmitLoading(true);
-    }
+    // Then close the drawer
   };
 
   const handleSuccess = () => {
@@ -102,7 +75,6 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
             htmlType='submit'
             onClick={handleSubmit}
             loading={submitLoading}
-            // disabled={!isFormValid}
           >
             Create
           </Button>

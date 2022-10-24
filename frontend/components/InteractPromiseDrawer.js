@@ -1,4 +1,4 @@
-import FormattedAddress from './FormattedAddress';
+import FormattedAddress from './utils/FormattedAddress';
 import {
   columns,
   displayPartiesData,

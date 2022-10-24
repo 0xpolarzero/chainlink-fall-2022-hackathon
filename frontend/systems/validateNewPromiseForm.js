@@ -1,0 +1,61 @@
+const validateNewPromiseForm = async (form) => {
+  const formValues = await form.validateFields().catch((err) => {
+    console.log(err);
+    toast.error('Please fill all the fields correctly.');
+    return false;
+  });
+
+  if (formValues) {
+    // Gather names, addresses and Twitter usernames
+    const partyNameArray = Object.values(formValues.parties).map(
+      (field) => field.partyName,
+    );
+    const partyAddressArray = Object.values(formValues.parties).map((field) =>
+      field.partyAddress.toLowerCase(),
+    );
+    const partyTwitterHandleArray = Object.values(formValues.parties).map(
+      (field) => {
+        // Make sure to fill the array with empty strings if no Twitter handle is provided
+        if (field.partyTwitterHandle) {
+          return field.partyTwitterHandle.replace('@', '').toLowerCase();
+        } else {
+          return '';
+        }
+      },
+    );
+
+    // Check if there is no dupplicate address or Twitter handle
+    const addressSet = new Set(partyAddressArray);
+    const twitterHandleSet = new Set(partyTwitterHandleArray);
+
+    if (addressSet.size !== partyAddressArray.length) {
+      toast.error('There are duplicate addresses.');
+      return false;
+    } else if (twitterHandleSet.size !== partyTwitterHandleArray.length) {
+      toast.error('There are duplicate Twitter handles.');
+      return false;
+    }
+
+    // Make sure a PDF has been dropped
+    if (!formValues.upload || formValues.upload.length !== 1) {
+      toast.error('Please upload a PDF file.');
+      return false;
+    }
+
+    const promiseName = formValues.promiseName;
+    const pdfFile = formValues.upload[0].originFileObj;
+
+    return {
+      promiseName,
+      partyNameArray,
+      partyAddressArray,
+      partyTwitterHandleArray,
+      pdfFile,
+    };
+  } else {
+    toast.error('Please fill all the fields correctly.');
+    return false;
+  }
+};
+
+export { validateNewPromiseForm };

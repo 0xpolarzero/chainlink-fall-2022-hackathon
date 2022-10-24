@@ -1,4 +1,4 @@
-import FormattedAddress from '../components/FormattedAddress';
+import FormattedAddress from '../components/utils/FormattedAddress';
 import promiseContractAbi from '../constants/PromiseContract.json';
 import { Skeleton } from 'antd';
 import { ethers } from 'ethers';

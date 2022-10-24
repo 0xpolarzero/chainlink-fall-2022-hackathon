@@ -1,18 +1,12 @@
 import { formatSize } from '../systems/utils';
-import { Web3Storage } from 'web3.storage';
 import { Form, Modal, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
-import { useEffect, useState } from 'react';
-
-const web3StorageClient = new Web3Storage({
-  token: process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY,
-});
+import { useState } from 'react';
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024 - 1; // 100MB
 
 export default function PDFUploader() {
-  const [fileList, setFileList] = useState([]);
   const { Dragger } = Upload;
 
   const uploadProps = {
@@ -20,15 +14,7 @@ export default function PDFUploader() {
     accept: '.pdf',
     multiple: false,
     directory: false,
-    defaultFileList: [...fileList],
-    progress: {
-      strokeColor: {
-        '0%': '#108ee9',
-        '100%': '#87d068',
-      },
-      strokeWidth: 3,
-      format: (percent) => `${parseFloat(percent.toFixed(2))}%`,
-    },
+    // defaultFileList: [...fileList],
     maxCount: 1,
     maxFileSize: MAX_FILE_SIZE,
     beforeUpload: async (file) => {
@@ -42,10 +28,6 @@ export default function PDFUploader() {
         return Upload.LIST_IGNORE;
       }
     },
-    customRequest: async ({ file, onSuccess }) => {
-      const fileCID = await uploadToIPFS(file);
-      console.log(fileCID);
-    },
     onChange(info) {
       const { status } = info.file;
       console.log(info);
@@ -53,9 +35,9 @@ export default function PDFUploader() {
         console.log(info.file, info.fileList);
       }
       if (status === 'done') {
-        toast.success(`${info.file.name} file uploaded successfully.`);
+        toast.info(`${info.file.name} file dropped successfully.`);
       } else if (status === 'error') {
-        toast.error(`${info.file.name} file upload failed.`);
+        toast.error(`${info.file.name} file could not be added.`);
       }
     },
     onDrop(e) {
@@ -67,13 +49,6 @@ export default function PDFUploader() {
       // ... or not a PDF
       checkIsPDFCorrect(e.dataTransfer.items[0].getAsFile());
     },
-  };
-
-  const uploadToIPFS = async (file) => {
-    console.log('Received this file', file);
-
-    const cid = await web3StorageClient.put([file]);
-    return cid;
   };
 
   const checkIsPDFCorrect = (file) => {
@@ -103,12 +78,11 @@ export default function PDFUploader() {
               <b>File Size:</b> {formatSize(file.size)}
             </p>
             <p className='warning-message'>
-              <b>Warning:</b> Once you click 'Yes', this file will be uploaded
-              to IPFS and will be publicly available on the internet.
+              <b>Warning:</b> Once you create the promise, this file will be
+              uploaded to IPFS and will be publicly available on the internet.
             </p>
           </>
         ),
-        // content: `Are you sure you want to upload ${file.name}?`,
         okText: 'Yes',
         okType: 'primary',
         cancelText: 'No',
@@ -124,8 +98,24 @@ export default function PDFUploader() {
     return isUserConfirmed;
   };
 
+  const getFile = (e) => {
+    console.log(e);
+
+    if (Array.isArray(e)) {
+      return e;
+    }
+
+    return e?.fileList;
+  };
+
   return (
-    <Form.Item label='Upload PDF to IPFS' required>
+    <Form.Item
+      label='Upload PDF to IPFS'
+      required
+      name='upload'
+      valuePropName='fileList'
+      getValueFromEvent={getFile}
+    >
       <Dragger {...uploadProps}>
         <p className='ant-upload-drag-icon'>
           <InboxOutlined />

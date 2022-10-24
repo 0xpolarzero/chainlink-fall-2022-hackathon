@@ -1,6 +1,6 @@
 import PromisePanel from './PromisePanel';
 import InteractPromiseDrawer from './InteractPromiseDrawer';
-import FormattedAddress from './FormattedAddress';
+import FormattedAddress from './utils/FormattedAddress';
 import { Collapse, Drawer } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';

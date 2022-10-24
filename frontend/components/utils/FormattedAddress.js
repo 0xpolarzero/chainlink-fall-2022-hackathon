@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { Popover } from 'antd';
-import { useWidth } from '../systems/useWidth';
+import { useWidth } from '../../systems/useWidth';
 import { useEffect, useState } from 'react';
 
 export default function FormattedAddress({ address, isShrinked }) {
