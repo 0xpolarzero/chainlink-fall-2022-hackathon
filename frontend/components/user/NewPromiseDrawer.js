@@ -11,26 +11,31 @@ import {
   usePrepareContractWrite,
   useContractWrite,
 } from 'wagmi';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 
 export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [isFormDisabled, setIsFormDisabled] = useState(false);
   const [createPromiseArgs, setCreatePromiseArgs] = useState([]);
+  const isFirstRender = useRef(true);
   const [form] = Form.useForm();
   const { chain } = useNetwork();
   const { address: userAddress } = useAccount();
   const contractAddress = networkMapping[chain.id].PromiseFactory[0];
 
   // CREATING PROMISE
-  const { config: createPromiseConfig, error: createPromiseError } =
-    usePrepareContractWrite({
-      address: contractAddress,
-      abi: promiseFactoryAbi,
-      functionName: 'createPromiseContract',
-      args: createPromiseArgs,
-      enabled: !!userAddress && !!createPromiseArgs.length > 0,
-    });
+  const {
+    config: createPromiseConfig,
+    error: createPromiseError,
+    refetch: reloadCreatePromiseConfig,
+  } = usePrepareContractWrite({
+    address: contractAddress,
+    abi: promiseFactoryAbi,
+    functionName: 'createPromiseContract',
+    args: createPromiseArgs,
+    enabled: !!userAddress && !!createPromiseArgs.length > 0,
+  });
 
   const { write: createPromise } = useContractWrite({
     ...createPromiseConfig,
@@ -50,10 +55,6 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   });
   // ----------------
 
-  const showDrawer = () => {
-    setDrawerOpen(true);
-  };
-
   const handleSubmit = async () => {
     const formValues = await validateNewPromiseForm(form);
 
@@ -62,7 +63,9 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     }
 
     // Everything is valid so we can start creating the promise
-    setSubmitLoading(true);
+    // setSubmitLoading(true);
+    // Disable the form inputs while the promise is being created
+    setIsFormDisabled(true);
 
     // Upload the PDF to IPFS
     // We assume 'uploadToIPFS' returns a valid CID
@@ -73,9 +76,8 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       error: 'File could not be uploaded.',
     });
 
-    console.log('contract address', promiseFactoryAbi);
-
     // Then create the promise
+    // This will trigger the useEffect hook (to make sure the args are filled)
     setCreatePromiseArgs([
       formValues.promiseName,
       pdfCid,
@@ -83,15 +85,22 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       formValues.partyTwitterHandleArray,
       formValues.partyAddressArray,
     ]);
-    createPromise();
   };
 
   const handleCancel = () => {
     setDrawerOpen(false);
     setSubmitLoading(false);
     form.resetFields();
+    setIsFormDisabled(false);
     setCreatePromiseArgs([]);
   };
+
+  useEffect(() => {
+    // Don't fire on first render or when the args are reset
+    if (createPromiseArgs.length > 0) {
+      createPromise();
+    }
+  }, [createPromiseArgs]);
 
   return (
     <Drawer
@@ -110,6 +119,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
             htmlType='submit'
             onClick={handleSubmit}
             loading={submitLoading}
+            // disabled={!createPromise}
           >
             Create
           </Button>
@@ -121,6 +131,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
           userAddress={userAddress}
           form={form}
           submitLoading={submitLoading}
+          isFormDisabled={isFormDisabled}
         />
       </div>
     </Drawer>
@@ -129,9 +140,20 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
 
 // ----------------------------------------------------------------
 
-const NewPromiseForm = ({ userAddress, form, submitLoading }) => {
+const NewPromiseForm = ({
+  userAddress,
+  form,
+  submitLoading,
+  isFormDisabled,
+}) => {
+  console.log(isFormDisabled);
   return (
-    <Form form={form} layout='vertical' requiredMark={true}>
+    <Form
+      form={form}
+      layout='vertical'
+      requiredMark={true}
+      disabled={isFormDisabled}
+    >
       <Form.Item
         name='promiseName'
         label='Promise name'
