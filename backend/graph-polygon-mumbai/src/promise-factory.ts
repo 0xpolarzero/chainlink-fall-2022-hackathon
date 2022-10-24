@@ -1,4 +1,4 @@
-import { Address, Bytes } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { PromiseContractCreated as PromiseContractCreatedEvent } from '../generated/PromiseFactory/PromiseFactory';
 import { PromiseContractCreated } from '../generated/schema';
 
@@ -8,15 +8,16 @@ export function handlePromiseContractCreated(
   // It should never happen that the same contract is created twice
   // But we can't ever be sure enough, so we check if the entity already exists anyway
   let promiseContractCreated = PromiseContractCreated.load(
-    getIdFromEventParams(event.params._owner, event.params._contractAddress),
+    getIdFromEventParams(event.params._contractAddress, event.block.number),
   );
 
   if (!promiseContractCreated) {
     promiseContractCreated = new PromiseContractCreated(
-      getIdFromEventParams(event.params._owner, event.params._contractAddress),
+      getIdFromEventParams(event.params._contractAddress, event.block.number),
     );
   }
 
+  promiseContractCreated.blockNumber = event.block.number;
   promiseContractCreated.owner = event.params._owner;
   promiseContractCreated.contractAddress = event.params._contractAddress;
   promiseContractCreated.promiseName = event.params._promiseName;
@@ -32,8 +33,8 @@ export function handlePromiseContractCreated(
 }
 
 function getIdFromEventParams(
-  owner: Address,
   contractAddress: Address,
+  blockNumber: BigInt,
 ): string {
-  return owner.toHexString() + '-' + contractAddress.toHexString();
+  return contractAddress.toHexString() + '-' + blockNumber.toString();
 }
