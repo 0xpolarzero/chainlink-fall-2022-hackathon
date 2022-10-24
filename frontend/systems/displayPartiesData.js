@@ -18,11 +18,32 @@ const columns = [
     title: 'Twitter Handle',
     dataIndex: 'twitterHandle',
     key: 'twitterHandle',
+    // If a Twitter handle was not provided, this column will show 'Not provided'
+    // ... and span 2 columns
+    render: (text, record) =>
+      record.twitterHandle === null
+        ? {
+            children: getVerificationDiv(false, 'Not provided'),
+            props: {
+              colSpan: 2,
+            },
+          }
+        : text,
   },
   {
     title: 'Twitter verified',
     dataIndex: 'twitterVerifiedDiv',
     key: 'twitterVerifiedDiv',
+    // If the twitter handle was not provided, this column will not show
+    render: (text, record) =>
+      record.twitterHandle === null
+        ? {
+            children: null,
+            props: {
+              colSpan: 0,
+            },
+          }
+        : text,
   },
   {
     title: 'Promise approved',
@@ -84,9 +105,8 @@ const displayPartiesData = (
         <FormattedAddress address={partyAddresses[i]} isShrinked='responsive' />
       ),
       twitterHandle:
-        partyTwitterHandles[i] === '' ? (
-          'Not provided'
-        ) : (
+        partyTwitterHandles[i] === '' ? null : (
+          // 'Not provided'
           <a
             href={`https://twitter.com/${partyTwitterHandles[i]}`}
             target='_blank'

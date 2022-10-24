@@ -413,6 +413,10 @@ a:not(.header) {
   border-radius: 6px !important;
 }
 
+.ant-table-cell[colspan='2'] > div {
+  justify-content: center;
+}
+
 .section-explore .ant-table-pagination {
   position: absolute !important;
   top: 0.5rem !important;
