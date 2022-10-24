@@ -24,7 +24,7 @@ const { deployments, network, ethers } = require('hardhat');
           await ethers.getContract('PromiseFactory')
         ).connect(userFirst);
 
-        const deployTx = await promiseFactory.createContract(
+        const deployTx = await promiseFactory.createPromiseContract(
           'Test Agreement',
           'ipfs://mockURI',
           ['Bob', 'Alice'],

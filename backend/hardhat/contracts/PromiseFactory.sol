@@ -12,10 +12,10 @@ import "hardhat/console.sol";
 
 contract PromiseFactory {
     /// Errors
-    error PromiseFactory__createContract__EMPTY_FIELD();
-    error PromiseFactory__createContract__INCORRECT_FIELD_LENGTH();
-    error PromiseFactory__createContract__DUPLICATE_FIELD();
-    error PromiseFactory__createContract__INVALID_URI();
+    error PromiseFactory__createPromiseContract__EMPTY_FIELD();
+    error PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
+    error PromiseFactory__createPromiseContract__DUPLICATE_FIELD();
+    error PromiseFactory__createPromiseContract__INVALID_URI();
 
     // Map the owner addresses to the child contracts they created
     mapping(address => PromiseContract[]) public promiseContracts;
@@ -42,7 +42,7 @@ contract PromiseFactory {
      * with the contract
      */
 
-    function createContract(
+    function createPromiseContract(
         string memory _promiseName,
         string memory _pdfUri,
         string[] memory _partyNames,
@@ -55,14 +55,15 @@ contract PromiseFactory {
                 bytes(_pdfUri).length > 0 &&
                 _partyNames.length > 0 &&
                 _partyAddresses.length > 0)
-        ) revert PromiseFactory__createContract__EMPTY_FIELD();
+        ) revert PromiseFactory__createPromiseContract__EMPTY_FIELD();
 
         // Revert if the number of names, Twitter and addresses are not equal
         // If Twitter handles are not provided, it will pass an empty string
         if (
             !(_partyAddresses.length == _partyTwitterHandles.length &&
                 _partyAddresses.length == _partyNames.length)
-        ) revert PromiseFactory__createContract__INCORRECT_FIELD_LENGTH();
+        )
+            revert PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
 
         // Revert if the same address or twitter handle is used twice
         for (uint256 i = 0; i < _partyAddresses.length; i++) {
@@ -71,7 +72,8 @@ contract PromiseFactory {
                     _partyAddresses[i] == _partyAddresses[j] ||
                     keccak256(abi.encodePacked(_partyTwitterHandles[i])) ==
                     keccak256(abi.encodePacked(_partyTwitterHandles[j]))
-                ) revert PromiseFactory__createContract__DUPLICATE_FIELD();
+                )
+                    revert PromiseFactory__createPromiseContract__DUPLICATE_FIELD();
             }
         }
 
@@ -81,7 +83,7 @@ contract PromiseFactory {
 
         // Revert if the name of the promise is longer than 70 characters
         if (bytes(_promiseName).length > 70) {
-            revert PromiseFactory__createContract__INCORRECT_FIELD_LENGTH();
+            revert PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
         }
 
         // Check if the provided URI is a valid IPFS URI
@@ -89,7 +91,7 @@ contract PromiseFactory {
 
         // Minimum 5 bytes encoded in Base58 -> minimum 7 characters
         if (!(pdfUriBytes.length > 6))
-            revert PromiseFactory__createContract__INVALID_URI();
+            revert PromiseFactory__createPromiseContract__INVALID_URI();
 
         // It should match the allowed characters in Base58
         for (uint i = 0; i < pdfUriBytes.length; i++) {
@@ -98,7 +100,7 @@ contract PromiseFactory {
                     (uint(1) << uint8(pdfUriBytes[i])) >
                     0)
             ) {
-                revert PromiseFactory__createContract__INVALID_URI();
+                revert PromiseFactory__createPromiseContract__INVALID_URI();
             }
         }
 

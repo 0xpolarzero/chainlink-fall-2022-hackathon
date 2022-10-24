@@ -17,5 +17,6 @@
     "hardhat-shorthand": "^1.0.0",
     "solhint": "^3.3.7",
     "solidity-coverage": "^0.8.2"
-  }
+  },
+  "dependencies": {}
 }

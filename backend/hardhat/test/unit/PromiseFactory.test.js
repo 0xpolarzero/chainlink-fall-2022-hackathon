@@ -12,7 +12,7 @@ const { deployments, network, ethers } = require('hardhat');
       let args = {};
 
       const createCorrectPromiseContract = async () => {
-        const tx = await promiseFactory.createContract(
+        const tx = await promiseFactory.createPromiseContract(
           args.name,
           args.uri,
           args.partyNames,
@@ -40,26 +40,36 @@ const { deployments, network, ethers } = require('hardhat');
         };
       });
 
-      describe('createContract', function() {
+      describe('createPromiseContract', function() {
         it('Should revert if one of the required fields is empty', async () => {
           await expect(
-            promiseFactory.createContract(args.name, args.uri, [], [], []),
-          ).to.be.revertedWith('PromiseFactory__createContract__EMPTY_FIELD()');
+            promiseFactory.createPromiseContract(
+              args.name,
+              args.uri,
+              [],
+              [],
+              [],
+            ),
+          ).to.be.revertedWith(
+            'PromiseFactory__createPromiseContract__EMPTY_FIELD()',
+          );
 
           await expect(
-            promiseFactory.createContract(
+            promiseFactory.createPromiseContract(
               '',
               args.uri,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
             ),
-          ).to.be.revertedWith('PromiseFactory__createContract__EMPTY_FIELD()');
+          ).to.be.revertedWith(
+            'PromiseFactory__createPromiseContract__EMPTY_FIELD()',
+          );
         });
 
         it('Should revert if there is a mismatch between names and addresses length', async () => {
           await expect(
-            promiseFactory.createContract(
+            promiseFactory.createPromiseContract(
               args.name,
               args.uri,
               args.partyNames,
@@ -67,13 +77,13 @@ const { deployments, network, ethers } = require('hardhat');
               [deployer.address],
             ),
           ).to.be.revertedWith(
-            'PromiseFactory__createContract__INCORRECT_FIELD_LENGTH()',
+            'PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH()',
           );
         });
 
         it('Should revert if the same address or Twitter handle is used twice', async () => {
           await expect(
-            promiseFactory.createContract(
+            promiseFactory.createPromiseContract(
               args.name,
               args.uri,
               args.partyNames,
@@ -81,11 +91,11 @@ const { deployments, network, ethers } = require('hardhat');
               [deployer.address, deployer.address],
             ),
           ).to.be.revertedWith(
-            'PromiseFactory__createContract__DUPLICATE_FIELD()',
+            'PromiseFactory__createPromiseContract__DUPLICATE_FIELD()',
           );
 
           await expect(
-            promiseFactory.createContract(
+            promiseFactory.createPromiseContract(
               args.name,
               args.uri,
               args.partyNames,
@@ -93,14 +103,14 @@ const { deployments, network, ethers } = require('hardhat');
               args.partyAddresses,
             ),
           ).to.be.revertedWith(
-            'PromiseFactory__createContract__DUPLICATE_FIELD()',
+            'PromiseFactory__createPromiseContract__DUPLICATE_FIELD()',
           );
         });
 
         it('Should revert if the promise name is more than 70 characters', async () => {
           const name = 'a'.repeat(71);
           await expect(
-            promiseFactory.createContract(
+            promiseFactory.createPromiseContract(
               name,
               args.uri,
               args.partyNames,
@@ -108,32 +118,36 @@ const { deployments, network, ethers } = require('hardhat');
               args.partyAddresses,
             ),
           ).to.be.revertedWith(
-            'PromiseFactory__createContract__INCORRECT_FIELD_LENGTH()',
+            'PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH()',
           );
         });
 
         it.only('Should revert if the PDF URI is not a valid IPFS URI', async () => {
           // It should revert if it's less than 5 bytes
           await expect(
-            promiseFactory.createContract(
+            promiseFactory.createPromiseContract(
               args.name,
               'bafybe',
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
             ),
-          ).to.be.revertedWith('PromiseFactory__createContract__INVALID_URI()');
+          ).to.be.revertedWith(
+            'PromiseFactory__createPromiseContract__INVALID_URI()',
+          );
 
           // It should revert if it doesn't match the allowed characters in Base58
           await expect(
-            promiseFactory.createContract(
+            promiseFactory.createPromiseContract(
               args.name,
               'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq!',
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
             ),
-          ).to.be.revertedWith('PromiseFactory__createContract__INVALID_URI()');
+          ).to.be.revertedWith(
+            'PromiseFactory__createPromiseContract__INVALID_URI()',
+          );
         });
 
         it('Should create a new PromiseContract', async () => {
