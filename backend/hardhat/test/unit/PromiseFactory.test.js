@@ -122,7 +122,7 @@ const { deployments, network, ethers } = require('hardhat');
           );
         });
 
-        it.only('Should revert if the PDF URI is not a valid IPFS URI', async () => {
+        it('Should revert if the PDF URI is not a valid IPFS URI', async () => {
           // It should revert if it's less than 5 bytes
           await expect(
             promiseFactory.createPromiseContract(

@@ -204,22 +204,6 @@ contract PromiseContract {
         return s_participantAddresses;
     }
 
-    function getIsPromiseApprovedForEach()
-        public
-        view
-        returns (bool[] memory approvedStatuses)
-    {
-        // I guess it's the only way I can think of to return a mapping
-        // ... without having to loop through it in the frontend
-        address[] memory participantAddresses = s_participantAddresses;
-
-        for (uint256 i = 0; i < s_participantCount; i++) {
-            approvedStatuses[i] = s_approvedParties[participantAddresses[i]];
-        }
-
-        return approvedStatuses;
-    }
-
     function getIsPromiseApproved(address _participantAddress)
         public
         view

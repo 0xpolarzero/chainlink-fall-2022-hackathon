@@ -4,7 +4,7 @@ const { deployments, network, ethers } = require('hardhat');
 
 !developmentChains.includes(network.name)
   ? describe.skip
-  : describe('PromiseFactory unit tests', function() {
+  : describe('PromiseContract unit tests', function() {
       let deployer;
       let userFirst;
       let userSecond;
@@ -26,7 +26,7 @@ const { deployments, network, ethers } = require('hardhat');
 
         const deployTx = await promiseFactory.createPromiseContract(
           'Test Agreement',
-          'ipfs://mockURI',
+          'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
           ['Bob', 'Alice'],
           ['@bob', '@alice'],
           [userFirst.address, userSecond.address],
@@ -50,7 +50,10 @@ const { deployments, network, ethers } = require('hardhat');
 
           assert.equal(owner, userFirst.address);
           assert.equal(name, 'Test Agreement');
-          assert.equal(uri, 'ipfs://mockURI');
+          assert.equal(
+            uri,
+            'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
+          );
           assert.equal(participantCount, 2);
         });
       });
@@ -112,16 +115,16 @@ const { deployments, network, ethers } = require('hardhat');
         });
       });
 
-      describe('approveAgreement', function() {
+      describe('approvePromise', function() {
         let txReceipt;
 
         beforeEach(async () => {
-          const tx = await promiseContract.approveAgreement();
+          const tx = await promiseContract.approvePromise();
           txReceipt = await tx.wait(1);
         });
 
-        it('Should approve the agreement for the user', async () => {
-          const isApproved = await promiseContract.getIsAgreementApproved(
+        it('Should approve the promise for the user', async () => {
+          const isApproved = await promiseContract.getIsPromiseApproved(
             userFirst.address,
           );
 
@@ -139,50 +142,48 @@ const { deployments, network, ethers } = require('hardhat');
 
         it('Should revert if the user is not a participant', async () => {
           await expect(
-            promiseContract.connect(userForbidden).approveAgreement(),
+            promiseContract.connect(userForbidden).approvePromise(),
           ).to.be.revertedWith('PromiseContract__NOT_PARTICIPANT()');
         });
 
-        it('Should revert if the user has already approved the agreement', async () => {
-          await expect(promiseContract.approveAgreement()).to.be.revertedWith(
-            'PromiseContract__approveAgreement__ALREADY_APPROVED()',
+        it('Should revert if the user has already approved the promise', async () => {
+          await expect(promiseContract.approvePromise()).to.be.revertedWith(
+            'PromiseContract__approvePromise__ALREADY_APPROVED()',
           );
         });
 
-        it('Should revert if the agreement is locked', async () => {
-          await promiseContract.connect(userSecond).approveAgreement();
-          await promiseContract.lockAgreement();
-          await expect(promiseContract.approveAgreement()).to.be.revertedWith(
-            'PromiseContract__AGREEMENT_LOCKED()',
+        it('Should revert if the promise is locked', async () => {
+          await promiseContract.connect(userSecond).approvePromise();
+          await promiseContract.lockPromise();
+          await expect(promiseContract.approvePromise()).to.be.revertedWith(
+            'PromiseContract__PROMISE_LOCKED()',
           );
         });
       });
 
-      describe('lockAgreement', function() {
-        let txReceipt;
-
+      describe('lockPromise', function() {
         beforeEach(async () => {
-          await promiseContract.approveAgreement();
+          await promiseContract.approvePromise();
         });
 
-        it('Should not allow to lock the agreement if not all participants have approved', async () => {
-          await expect(promiseContract.lockAgreement()).to.be.revertedWith(
-            'PromiseContract__lockAgreement__PARTICIPANT_NOT_APPROVED()',
+        it('Should not allow to lock the promise if not all participants have approved', async () => {
+          await expect(promiseContract.lockPromise()).to.be.revertedWith(
+            'PromiseContract__lockPromise__PARTICIPANT_NOT_APPROVED()',
           );
         });
 
-        it('Should lock the agreement if all users have approved', async () => {
-          await promiseContract.connect(userSecond).approveAgreement();
-          await promiseContract.lockAgreement();
-          const isLocked = await promiseContract.getIsAgreementLocked();
+        it('Should lock the promise if all users have approved', async () => {
+          await promiseContract.connect(userSecond).approvePromise();
+          await promiseContract.lockPromise();
+          const isLocked = await promiseContract.getIsPromiseLocked();
 
           assert.equal(isLocked, true);
         });
 
         it('Should emit an event AgreementLocked with the right arguments', async () => {
-          await promiseContract.connect(userSecond).approveAgreement();
+          await promiseContract.connect(userSecond).approvePromise();
 
-          expect(await promiseContract.lockAgreement()).to.emit(
+          expect(await promiseContract.lockPromise()).to.emit(
             promiseContract,
             'AgreementLocked',
           );
@@ -190,16 +191,16 @@ const { deployments, network, ethers } = require('hardhat');
 
         it('Should revert if the user is not a participant', async () => {
           await expect(
-            promiseContract.connect(userForbidden).lockAgreement(),
+            promiseContract.connect(userForbidden).lockPromise(),
           ).to.be.revertedWith('PromiseContract__NOT_PARTICIPANT()');
         });
 
-        it('Should revert if the agreement is already locked', async () => {
-          await promiseContract.connect(userSecond).approveAgreement();
-          await promiseContract.lockAgreement();
+        it('Should revert if the promise is already locked', async () => {
+          await promiseContract.connect(userSecond).approvePromise();
+          await promiseContract.lockPromise();
 
-          await expect(promiseContract.lockAgreement()).to.be.revertedWith(
-            'PromiseContract__AGREEMENT_LOCKED()',
+          await expect(promiseContract.lockPromise()).to.be.revertedWith(
+            'PromiseContract__PROMISE_LOCKED()',
           );
         });
       });
