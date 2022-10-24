@@ -48,7 +48,10 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
       abi: promiseContractAbi,
       functionName: 'approvePromise',
       args: [],
-      enabled: !!userAddress,
+      enabled:
+        !!userAddress &&
+        addressToApprovedStatus[userAddress.toLowerCase()] !== undefined &&
+        !addressToApprovedStatus[userAddress.toLowerCase()],
     });
 
   const {
@@ -58,7 +61,6 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
   } = useContractWrite({
     ...approveConfig,
     onSuccess: async (tx) => {
-      console.log('pop');
       const txReceipt = await toast.promise(tx.wait(1), {
         pending: 'Approving promise...',
         success: 'Promise approved!',
