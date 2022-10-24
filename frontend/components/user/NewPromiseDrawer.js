@@ -5,12 +5,7 @@ import networkMapping from '../../constants/networkMapping';
 import promiseFactoryAbi from '../../constants/PromiseFactory.json';
 import { Input, Tooltip, Form, Drawer, Space, Button } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import {
-  useAccount,
-  useNetwork,
-  usePrepareContractWrite,
-  useContractWrite,
-} from 'wagmi';
+import { useAccount, useNetwork, useContractWrite } from 'wagmi';
 import { useEffect, useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 
@@ -24,21 +19,12 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const { address: userAddress } = useAccount();
   const contractAddress = networkMapping[chain.id].PromiseFactory[0];
 
-  // CREATING PROMISE
-  const {
-    config: createPromiseConfig,
-    error: createPromiseError,
-    refetch: reloadCreatePromiseConfig,
-  } = usePrepareContractWrite({
+  const { write: createPromise } = useContractWrite({
+    mode: 'recklesslyUnprepared',
     address: contractAddress,
     abi: promiseFactoryAbi,
     functionName: 'createPromiseContract',
     args: createPromiseArgs,
-    enabled: !!userAddress && !!createPromiseArgs.length > 0,
-  });
-
-  const { write: createPromise } = useContractWrite({
-    ...createPromiseConfig,
     onSuccess: async (tx) => {
       const txReceipt = await toast.promise(tx.wait(1), {
         pending: 'Creating promise...',
@@ -63,7 +49,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     }
 
     // Everything is valid so we can start creating the promise
-    // setSubmitLoading(true);
+    setSubmitLoading(true);
     // Disable the form inputs while the promise is being created
     setIsFormDisabled(true);
 
@@ -97,7 +83,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
 
   useEffect(() => {
     // Don't fire on first render or when the args are reset
-    if (createPromiseArgs.length > 0) {
+    if (createPromiseArgs.length === 5) {
       createPromise();
     }
   }, [createPromiseArgs]);
@@ -119,7 +105,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
             htmlType='submit'
             onClick={handleSubmit}
             loading={submitLoading}
-            // disabled={!createPromise}
+            disabled={submitLoading}
           >
             Create
           </Button>
@@ -146,7 +132,6 @@ const NewPromiseForm = ({
   submitLoading,
   isFormDisabled,
 }) => {
-  console.log(isFormDisabled);
   return (
     <Form
       form={form}
