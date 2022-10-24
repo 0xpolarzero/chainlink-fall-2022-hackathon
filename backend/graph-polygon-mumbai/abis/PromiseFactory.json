@@ -1,22 +1,22 @@
 [
   {
     "inputs": [],
-    "name": "PromiseFactory__createContract__DUPLICATE_FIELD",
+    "name": "PromiseFactory__createPromiseContract__DUPLICATE_FIELD",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "PromiseFactory__createContract__EMPTY_FIELD",
+    "name": "PromiseFactory__createPromiseContract__EMPTY_FIELD",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "PromiseFactory__createContract__INCORRECT_FIELD_LENGTH",
+    "name": "PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "PromiseFactory__createContract__INVALID_URI",
+    "name": "PromiseFactory__createPromiseContract__INVALID_URI",
     "type": "error"
   },
   {
@@ -84,7 +84,7 @@
         "type": "address[]"
       }
     ],
-    "name": "createContract",
+    "name": "createPromiseContract",
     "outputs": [
       {
         "internalType": "address",

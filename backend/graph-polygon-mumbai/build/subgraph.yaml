@@ -6,9 +6,9 @@ dataSources:
     name: PromiseFactory
     network: mumbai
     source:
-      address: "0xA29afEC04B4b99B3BE9101AC6aDEF52a6Fd137a8"
+      address: "0x9a26cA9509C6E2bBE7CcB59A1fbbfcf9DFf37f60"
       abi: PromiseFactory
-      startBlock: 28754598
+      startBlock: 28785251
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

@@ -57,7 +57,7 @@ export class PromiseFactory extends ethereum.SmartContract {
     return new PromiseFactory("PromiseFactory", address);
   }
 
-  createContract(
+  createPromiseContract(
     _promiseName: string,
     _pdfUri: string,
     _partyNames: Array<string>,
@@ -65,8 +65,8 @@ export class PromiseFactory extends ethereum.SmartContract {
     _partyAddresses: Array<Address>
   ): Address {
     let result = super.call(
-      "createContract",
-      "createContract(string,string,string[],string[],address[]):(address)",
+      "createPromiseContract",
+      "createPromiseContract(string,string,string[],string[],address[]):(address)",
       [
         ethereum.Value.fromString(_promiseName),
         ethereum.Value.fromString(_pdfUri),
@@ -79,7 +79,7 @@ export class PromiseFactory extends ethereum.SmartContract {
     return result[0].toAddress();
   }
 
-  try_createContract(
+  try_createPromiseContract(
     _promiseName: string,
     _pdfUri: string,
     _partyNames: Array<string>,
@@ -87,8 +87,8 @@ export class PromiseFactory extends ethereum.SmartContract {
     _partyAddresses: Array<Address>
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      "createContract",
-      "createContract(string,string,string[],string[],address[]):(address)",
+      "createPromiseContract",
+      "createPromiseContract(string,string,string[],string[],address[]):(address)",
       [
         ethereum.Value.fromString(_promiseName),
         ethereum.Value.fromString(_pdfUri),
@@ -187,20 +187,20 @@ export class PromiseFactory extends ethereum.SmartContract {
   }
 }
 
-export class CreateContractCall extends ethereum.Call {
-  get inputs(): CreateContractCall__Inputs {
-    return new CreateContractCall__Inputs(this);
+export class CreatePromiseContractCall extends ethereum.Call {
+  get inputs(): CreatePromiseContractCall__Inputs {
+    return new CreatePromiseContractCall__Inputs(this);
   }
 
-  get outputs(): CreateContractCall__Outputs {
-    return new CreateContractCall__Outputs(this);
+  get outputs(): CreatePromiseContractCall__Outputs {
+    return new CreatePromiseContractCall__Outputs(this);
   }
 }
 
-export class CreateContractCall__Inputs {
-  _call: CreateContractCall;
+export class CreatePromiseContractCall__Inputs {
+  _call: CreatePromiseContractCall;
 
-  constructor(call: CreateContractCall) {
+  constructor(call: CreatePromiseContractCall) {
     this._call = call;
   }
 
@@ -225,10 +225,10 @@ export class CreateContractCall__Inputs {
   }
 }
 
-export class CreateContractCall__Outputs {
-  _call: CreateContractCall;
+export class CreatePromiseContractCall__Outputs {
+  _call: CreatePromiseContractCall;
 
-  constructor(call: CreateContractCall) {
+  constructor(call: CreatePromiseContractCall) {
     this._call = call;
   }
 
