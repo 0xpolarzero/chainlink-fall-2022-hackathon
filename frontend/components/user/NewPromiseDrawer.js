@@ -6,14 +6,13 @@ import promiseFactoryAbi from '../../constants/PromiseFactory.json';
 import { Input, Tooltip, Form, Drawer, Space, Button } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useAccount, useNetwork, useContractWrite } from 'wagmi';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(false);
   const [createPromiseArgs, setCreatePromiseArgs] = useState([]);
-  const isFirstRender = useRef(true);
   const [form] = Form.useForm();
   const { chain } = useNetwork();
   const { address: userAddress } = useAccount();
