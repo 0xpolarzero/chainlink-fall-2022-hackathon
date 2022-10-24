@@ -139,19 +139,6 @@
   },
   {
     "inputs": [],
-    "name": "getIsPromiseApprovedForEach",
-    "outputs": [
-      {
-        "internalType": "bool[]",
-        "name": "approvedStatuses",
-        "type": "bool[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "getIsPromiseLocked",
     "outputs": [
       {

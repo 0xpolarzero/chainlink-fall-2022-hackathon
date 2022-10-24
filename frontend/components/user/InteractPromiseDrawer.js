@@ -78,16 +78,6 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
     hash: approvalData?.hash,
     confirmations: 1,
   });
-
-  const handleSuccess = async (tx) => {
-    console.log('pop');
-    const txReceipt = await toast.promise(tx.wait(1), {
-      pending: 'Approving promise...',
-      success: 'Promise approved!',
-      error: 'Error approving promise',
-    });
-    gatherPartiesData();
-  };
   // ----------------
 
   const handleTableChange = (pagination) => {

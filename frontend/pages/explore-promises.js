@@ -116,16 +116,22 @@ export default function explorePromises({ setActivePage }) {
           {loading ? (
             <PromisesCollapseSkeleton arraySize={3} />
           ) : !!data ? (
-            <div className='promises-list-wrapper'>
-              <PromisesCollapse promises={shownPromises} context='explore' />
-              <Pagination
-                simple
-                defaultCurrent={1}
-                total={data.promiseContractCreateds.length}
-                onChange={(e) => setShownPage(e)}
-                pageSize={5}
-              />
-            </div>
+            data.promiseContractCreateds.length === 0 ? (
+              <div className='error-container'>
+                There are no promises yet. Be the first to create one!
+              </div>
+            ) : (
+              <div className='promises-list-wrapper'>
+                <PromisesCollapse promises={shownPromises} context='explore' />
+                <Pagination
+                  simple
+                  defaultCurrent={1}
+                  total={data.promiseContractCreateds.length}
+                  onChange={(e) => setShownPage(e)}
+                  pageSize={5}
+                />
+              </div>
+            )
           ) : (
             'Seems like there was an error loading this page... Please try refreshing.'
           )}

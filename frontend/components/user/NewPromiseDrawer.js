@@ -1,29 +1,65 @@
 import PDFUploader from './PDFUploader';
 import { validateNewPromiseForm } from '../../systems/validateNewPromiseForm';
 import { uploadToIPFS } from '../../systems/uploadToIPFS';
+import networkMapping from '../../constants/networkMapping';
+import promiseFactoryAbi from '../../constants/PromiseFactory.json';
 import { Input, Tooltip, Form, Drawer, Space, Button } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { useAccount, usePrepareContractWrite, useContractWrite } from 'wagmi';
-import { useState } from 'react';
+import {
+  useAccount,
+  useNetwork,
+  usePrepareContractWrite,
+  useContractWrite,
+} from 'wagmi';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
-  const [form] = Form.useForm();
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [createPromiseArgs, setCreatePromiseArgs] = useState([]);
+  const [form] = Form.useForm();
+  const { chain } = useNetwork();
   const { address: userAddress } = useAccount();
+  const contractAddress = networkMapping[chain.id].PromiseFactory[0];
+
+  // CREATING PROMISE
+  const { config: createPromiseConfig, error: createPromiseError } =
+    usePrepareContractWrite({
+      address: contractAddress,
+      abi: promiseFactoryAbi,
+      functionName: 'createPromiseContract',
+      args: createPromiseArgs,
+      enabled: !!userAddress && !!createPromiseArgs.length > 0,
+    });
+
+  const { write: createPromise } = useContractWrite({
+    ...createPromiseConfig,
+    onSuccess: async (tx) => {
+      const txReceipt = await toast.promise(tx.wait(1), {
+        pending: 'Creating promise...',
+        success: 'Promise created!',
+        error: 'Error creating promise',
+      });
+      handleCancel();
+    },
+    onError: (err) => {
+      toast.error('Error creating promise');
+      console.log('error creating promise', err);
+      setSubmitLoading(false);
+    },
+  });
+  // ----------------
 
   const showDrawer = () => {
     setDrawerOpen(true);
   };
 
   const handleSubmit = async () => {
-    const {
-      promiseName,
-      partyNameArray,
-      partyAddressArray,
-      partyTwitterHandleArray,
-      pdfFile,
-    } = await validateNewPromiseForm(form);
+    const formValues = await validateNewPromiseForm(form);
+
+    if (!formValues) {
+      return;
+    }
 
     // Everything is valid so we can start creating the promise
     setSubmitLoading(true);
@@ -31,26 +67,30 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     // Upload the PDF to IPFS
     // We assume 'uploadToIPFS' returns a valid CID
     // ... anyway, the smart contract will check it when creating the promise
-    const pdfCid = await toast.promise(uploadToIPFS(pdfFile), {
+    const pdfCid = await toast.promise(uploadToIPFS(formValues.pdfFile), {
       pending: 'Uploading file to IPFS...',
       success: 'File uploaded successfully!',
       error: 'File could not be uploaded.',
     });
 
+    console.log('contract address', promiseFactoryAbi);
+
     // Then create the promise
-
-    // Then close the drawer
-  };
-
-  const handleSuccess = () => {
-    // Handle success...
-    handleCancel();
+    setCreatePromiseArgs([
+      formValues.promiseName,
+      pdfCid,
+      formValues.partyNameArray,
+      formValues.partyTwitterHandleArray,
+      formValues.partyAddressArray,
+    ]);
+    createPromise();
   };
 
   const handleCancel = () => {
     setDrawerOpen(false);
     setSubmitLoading(false);
     form.resetFields();
+    setCreatePromiseArgs([]);
   };
 
   return (

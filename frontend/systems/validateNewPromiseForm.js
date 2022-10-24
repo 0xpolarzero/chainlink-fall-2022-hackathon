@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 const validateNewPromiseForm = async (form) => {
   const formValues = await form.validateFields().catch((err) => {
     console.log(err);
@@ -53,7 +55,6 @@ const validateNewPromiseForm = async (form) => {
       pdfFile,
     };
   } else {
-    toast.error('Please fill all the fields correctly.');
     return false;
   }
 };
