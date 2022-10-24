@@ -1,11 +1,11 @@
-import FormattedAddress from './utils/FormattedAddress';
+import FormattedAddress from '../utils/FormattedAddress';
 import {
   columns,
   displayPartiesData,
   getPartiesApprovedStatus,
   getVerificationDiv,
-} from '../systems/displayPartiesData';
-import { displayPdf } from '../systems/displayPdf';
+} from '../../systems/displayPartiesData';
+import { displayPdf } from '../../systems/displayPdf';
 import { Table } from 'antd';
 import { useProvider } from 'wagmi';
 import { useEffect, useState } from 'react';

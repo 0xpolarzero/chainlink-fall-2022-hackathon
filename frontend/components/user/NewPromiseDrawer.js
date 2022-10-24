@@ -1,10 +1,10 @@
 import PDFUploader from './PDFUploader';
-import { validateNewPromiseForm } from '../systems/validateNewPromiseForm';
-import { uploadToIPFS } from '../systems/uploadToIPFS';
+import { validateNewPromiseForm } from '../../systems/validateNewPromiseForm';
+import { uploadToIPFS } from '../../systems/uploadToIPFS';
 import { Input, Tooltip, Form, Drawer, Space, Button } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { useAccount } from 'wagmi';
-import { useEffect, useState } from 'react';
+import { useAccount, usePrepareContractWrite, useContractWrite } from 'wagmi';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
@@ -53,11 +53,6 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     form.resetFields();
   };
 
-  useEffect(() => {
-    // Check if the form is valid
-    // The conditions are the same as in the smart contract
-  }, []);
-
   return (
     <Drawer
       title='Create a new promise'
@@ -91,6 +86,8 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     </Drawer>
   );
 }
+
+// ----------------------------------------------------------------
 
 const NewPromiseForm = ({ userAddress, form, submitLoading }) => {
   return (

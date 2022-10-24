@@ -1,5 +1,5 @@
 import styles from '../styles/Home.module.css';
-import NewPromiseDrawer from '../components/NewPromiseDrawer';
+import NewPromiseDrawer from '../components/user/NewPromiseDrawer';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';

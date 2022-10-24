@@ -1,5 +1,5 @@
-import PromisePanel from './PromisePanel';
-import InteractPromiseDrawer from './InteractPromiseDrawer';
+import PromisePanel from './explore/PromisePanel';
+import InteractPromiseDrawer from './user/InteractPromiseDrawer';
 import FormattedAddress from './utils/FormattedAddress';
 import { Collapse, Drawer } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';

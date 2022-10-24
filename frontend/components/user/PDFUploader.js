@@ -1,4 +1,4 @@
-import { formatSize } from '../systems/utils';
+import { formatSize } from '../../systems/utils';
 import { Form, Modal, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';

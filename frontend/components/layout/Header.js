@@ -1,4 +1,4 @@
-import styles from '../styles/Header.module.css';
+import styles from '../../styles/Header.module.css';
 import Link from 'next/link';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useState, useEffect } from 'react';

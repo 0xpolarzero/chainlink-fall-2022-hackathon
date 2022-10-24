@@ -1,11 +1,11 @@
-import FormattedAddress from './utils/FormattedAddress';
+import FormattedAddress from '../utils/FormattedAddress';
 import {
   columns,
   displayPartiesData,
   getPartiesApprovedStatus,
   getVerificationDiv,
-} from '../systems/displayPartiesData';
-import promiseContractAbi from '../constants/PromiseContract.json';
+} from '../../systems/displayPartiesData';
+import promiseContractAbi from '../../constants/PromiseContract.json';
 import { Button, Table } from 'antd';
 import {
   useAccount,
