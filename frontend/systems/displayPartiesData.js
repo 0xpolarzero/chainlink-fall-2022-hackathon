@@ -83,14 +83,17 @@ const displayPartiesData = (
       address: (
         <FormattedAddress address={partyAddresses[i]} isShrinked='responsive' />
       ),
-      twitterHandle: (
-        <a
-          href={`https://twitter.com/${partyTwitterHandles[i]}`}
-          target='_blank'
-        >
-          @{partyTwitterHandles[i]}
-        </a>
-      ),
+      twitterHandle:
+        partyTwitterHandles[i] === '' ? (
+          'Not provided'
+        ) : (
+          <a
+            href={`https://twitter.com/${partyTwitterHandles[i]}`}
+            target='_blank'
+          >
+            @{partyTwitterHandles[i]}
+          </a>
+        ),
       // TODO Link to the Tx verification
       twitterVerifiedDiv: getVerificationDiv(
         // addressToTwitterVerifiedStatus[partyAddresses[i]]

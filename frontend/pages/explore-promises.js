@@ -37,10 +37,7 @@ export default function explorePromises({ setActivePage }) {
       // ... but get it back if the user deletes the search
     } else if (!!data) {
       setShownPromises(
-        data.promiseContractCreateds
-          // Reverse so it shows the most recent promise first
-          .reverse()
-          .slice((shownPage - 1) * 5, shownPage * 5),
+        data.promiseContractCreateds.slice((shownPage - 1) * 5, shownPage * 5),
       );
     }
   };
@@ -61,10 +58,7 @@ export default function explorePromises({ setActivePage }) {
     // Get the shown page and show relevant set of promises, 5 per page
     if (!!data && !loading && !error) {
       setShownPromises(
-        data.promiseContractCreateds
-          // Reverse so it shows the most recent promise first
-          .reverse()
-          .slice((shownPage - 1) * 5, shownPage * 5),
+        data.promiseContractCreateds.slice((shownPage - 1) * 5, shownPage * 5),
       );
     }
   }, [shownPage, loading]);
