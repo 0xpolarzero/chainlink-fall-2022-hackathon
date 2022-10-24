@@ -6,9 +6,9 @@ import { CaretRightOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
 export default function PromisesCollapse({ promises, context }) {
-  const { Panel } = Collapse;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerPromise, setDrawerPromise] = useState(null);
+  const { Panel } = Collapse;
 
   const handlePanelClick = (e) => {
     for (const promise of promises) {

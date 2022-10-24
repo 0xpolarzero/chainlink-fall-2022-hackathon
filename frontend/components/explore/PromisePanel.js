@@ -5,8 +5,9 @@ import {
   getPartiesApprovedStatus,
   getVerificationDiv,
 } from '../../systems/displayPartiesData';
+import { promiseStatus } from '../../systems/promiseStatus';
 import { displayPdf } from '../../systems/displayPdf';
-import { Table } from 'antd';
+import { Badge, Popover, Table } from 'antd';
 import { useProvider } from 'wagmi';
 import { useEffect, useState } from 'react';
 
@@ -20,6 +21,8 @@ export default function PromisePanel({ contractAttributes }) {
     },
   });
   const [addressToApprovedStatus, setAddressToApprovedStatus] = useState([]);
+  const [isPromiseLocked, setIsPromiseLocked] = useState('');
+  const [showTooltip, setShowTooltip] = useState(true);
   const provider = useProvider();
 
   const {
@@ -50,9 +53,20 @@ export default function PromisePanel({ contractAttributes }) {
     // setPartiesTwitterVerifiedStatus(partiesTwitterVerifiedStatus);
   };
 
+  const getPromiseStatus = async () => {
+    const isLocked = await promiseStatus(
+      contractAddress,
+      provider,
+    ).getIsPromiseLocked();
+    setIsPromiseLocked(isLocked);
+  };
+
   useEffect(() => {
     // Fetch contract data
     gatherPartiesData();
+
+    // Get the locked status of the promise
+    getPromiseStatus();
   }, []);
 
   useEffect(() => {
@@ -69,7 +83,14 @@ export default function PromisePanel({ contractAttributes }) {
   }, [addressToApprovedStatus]);
 
   return (
+    // show a tooltip with the badge
     <div className='promise-card'>
+      <a href='#'>
+        <Badge.Ribbon
+          className={isPromiseLocked ? 'badge-locked' : 'badge-unlocked'}
+          text={isPromiseLocked ? 'Locked' : 'Unlocked'}
+        ></Badge.Ribbon>
+      </a>
       <div key='contract' className='card-item contract-identity'>
         <div className='contract-address'>
           <div className='title'>Contract address </div>

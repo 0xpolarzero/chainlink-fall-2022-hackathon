@@ -462,6 +462,10 @@ a:not(.header) {
   /* left: 0.3rem !important; */
 }
 
+.ant-badge-status-custom {
+  background: red;
+}
+
 /* Font Awesome icons */
 
 .fa-twitter {
