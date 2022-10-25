@@ -36,12 +36,14 @@ export default function userPromises({ setActivePage }) {
 
   useEffect(() => {
     if (isConnected && !!data) {
-      const promises = data.promiseContractCreateds;
-      const createdPromises = promises.filter(
+      const sortedPromises = data.promiseContractCreateds.sort(
+        (a, b) => b.blockNumber - a.blockNumber,
+      );
+      const createdPromises = sortedPromises.filter(
         (promise) => promise.owner.toLowerCase() === userAddress.toLowerCase(),
       );
       // The user should be a party but not the owner
-      const involvedPromises = promises.filter(
+      const involvedPromises = sortedPromises.filter(
         (promise) =>
           promise.owner.toLowerCase() !== userAddress.toLowerCase() &&
           promise.partyAddresses.some(
@@ -54,7 +56,7 @@ export default function userPromises({ setActivePage }) {
       setUserInvolvedPromises(involvedPromises);
     }
     // We're adding userAddress so it filters again if the user changes wallet
-  }, [data, isDefinitelyConnected, userAddress]);
+  }, [loading, isDefinitelyConnected, userAddress]);
 
   useEffect(() => {
     if (!!data && !loading && !error) {
