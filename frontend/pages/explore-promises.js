@@ -58,11 +58,12 @@ export default function explorePromises({ setActivePage }) {
   }, [sortedPromises]);
 
   useEffect(() => {
-    // Sort the promises by blockNumber
+    // Sort the promises by blockTimestamp
     if (!!data && !loading && !error) {
       const sorted = data.promiseContractCreateds.sort(
-        (a, b) => b.blockNumber - a.blockNumber,
+        (a, b) => b.blockTimestamp - a.blockTimestamp,
       );
+      console.log(sorted[0].blockTimestamp);
       setSortedPromises(sorted);
       setShownPromises(sorted.slice((shownPage - 1) * 5, shownPage * 5));
     }

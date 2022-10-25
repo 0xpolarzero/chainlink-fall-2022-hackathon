@@ -11,7 +11,7 @@ const GET_CHILD_CONTRACT_CREATED = gql`
       partyNames
       partyTwitterHandles
       partyAddresses
-      blockNumber
+      blockTimestamp
     }
   }
 `;

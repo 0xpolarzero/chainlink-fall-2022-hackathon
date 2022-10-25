@@ -37,7 +37,7 @@ export default function userPromises({ setActivePage }) {
   useEffect(() => {
     if (isConnected && !!data) {
       const sortedPromises = data.promiseContractCreateds.sort(
-        (a, b) => b.blockNumber - a.blockNumber,
+        (a, b) => b.blockTimestamp - a.blockTimestamp,
       );
       const createdPromises = sortedPromises.filter(
         (promise) => promise.owner.toLowerCase() === userAddress.toLowerCase(),
