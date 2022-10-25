@@ -7,5 +7,5 @@ type PromiseContractCreated @entity {
   partyNames: [String!]!
   partyTwitterHandles: [String!]
   partyAddresses: [Bytes!]!
-  blockNumber: BigInt!
+  blockTimestamp: BigInt!
 }

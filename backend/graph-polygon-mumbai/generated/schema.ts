@@ -121,12 +121,12 @@ export class PromiseContractCreated extends Entity {
     this.set("partyAddresses", Value.fromBytesArray(value));
   }
 
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
+  get blockTimestamp(): BigInt {
+    let value = this.get("blockTimestamp");
     return value!.toBigInt();
   }
 
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
+  set blockTimestamp(value: BigInt) {
+    this.set("blockTimestamp", Value.fromBigInt(value));
   }
 }
