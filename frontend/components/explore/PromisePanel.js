@@ -1,47 +1,28 @@
-import FormattedAddress from '../utils/FormattedAddress';
-import {
-  columns,
-  displayPartiesData,
-  getPartiesApprovedStatus,
-  getVerificationDiv,
-} from '../../systems/displayPartiesData';
+import PromiseTable from '../PromiseTable';
 import { promiseStatus } from '../../systems/promiseStatus';
+import { getPartiesApprovedStatus } from '../../systems/promisePartiesData';
 import { displayPdf } from '../../systems/displayPdf';
-import { Badge, Popover, Table } from 'antd';
 import { useProvider } from 'wagmi';
 import { useEffect, useState } from 'react';
 
 export default function PromisePanel({ contractAttributes }) {
-  const [partiesData, setPartiesData] = useState([]);
-  const [tableParams, setTableParams] = useState({
-    pagination: {
-      current: 1,
-      pageSize: 5,
-      position: ['topRight'],
-    },
-  });
+  const [isPromiseLocked, setIsPromiseLocked] = useState(null);
   const [addressToApprovedStatus, setAddressToApprovedStatus] = useState([]);
-  const [isPromiseLocked, setIsPromiseLocked] = useState('');
-  const [showTooltip, setShowTooltip] = useState(true);
   const provider = useProvider();
 
-  const {
-    promiseName,
-    owner,
-    contractAddress,
-    pdfUri,
-    partyNames,
-    partyTwitterHandles,
-    partyAddresses,
-  } = contractAttributes;
+  const { contractAddress, partyAddresses } = contractAttributes;
 
-  const handleTableChange = (pagination) => {
-    setTableParams({
-      pagination,
-    });
+  const getPromiseStatus = async () => {
+    const isLocked = await promiseStatus().getIsPromiseLocked(
+      contractAddress,
+      provider,
+    );
+    setIsPromiseLocked(isLocked);
   };
 
   const gatherPartiesData = async () => {
+    getPromiseStatus();
+
     const partiesApprovedStatus = await getPartiesApprovedStatus(
       contractAddress,
       partyAddresses,
@@ -53,63 +34,17 @@ export default function PromisePanel({ contractAttributes }) {
     // setPartiesTwitterVerifiedStatus(partiesTwitterVerifiedStatus);
   };
 
-  const getPromiseStatus = async () => {
-    const isLocked = await promiseStatus(
-      contractAddress,
-      provider,
-    ).getIsPromiseLocked();
-    setIsPromiseLocked(isLocked);
-  };
-
   useEffect(() => {
-    // Fetch contract data
     gatherPartiesData();
-
-    // Get the locked status of the promise
-    getPromiseStatus();
   }, []);
 
-  useEffect(() => {
-    // Update parties data already fetched
-    const dataToDisplay = displayPartiesData(
-      partyNames,
-      partyAddresses,
-      partyTwitterHandles,
-      addressToApprovedStatus,
-    );
-    setPartiesData(dataToDisplay);
-
-    // Contract data, once fetched, will update the table
-  }, [addressToApprovedStatus]);
-
   return (
-    // show a tooltip with the badge
     <div className='promise-card'>
-      <a href='#'>
-        <Badge.Ribbon
-          className={isPromiseLocked ? 'badge-locked' : 'badge-unlocked'}
-          text={isPromiseLocked ? 'Locked' : 'Unlocked'}
-        ></Badge.Ribbon>
-      </a>
-      <div key='contract' className='card-item contract-identity'>
-        <div className='contract-address'>
-          <div className='title'>Contract address </div>
-          <FormattedAddress address={contractAddress} isShrinked='responsive' />
-        </div>
-        <div className='pdf-link'>
-          <div className='title'>PDF link</div>
-          {pdfUri}
-        </div>
-      </div>
-      <div key='parties' className='card-item parties'>
-        <div className='title'>Involved parties</div>
-        <Table
-          dataSource={partiesData}
-          columns={columns}
-          pagination={tableParams.pagination}
-          onChange={handleTableChange}
-        />
-      </div>
+      <PromiseTable
+        contractAttributes={contractAttributes}
+        isPromiseLocked={isPromiseLocked}
+        addressToApprovedStatus={addressToApprovedStatus}
+      />
       <div key='viewer' className='card-item pdf-viewer'>
         {/* {displayPdf(pdfUri)} */}
         {displayPdf(

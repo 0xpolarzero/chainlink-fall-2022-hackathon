@@ -1,92 +1,34 @@
-import FormattedAddress from '../utils/FormattedAddress';
-import {
-  columns,
-  displayPartiesData,
-  getPartiesApprovedStatus,
-  getVerificationDiv,
-} from '../../systems/displayPartiesData';
-import promiseContractAbi from '../../constants/PromiseContract.json';
-import { Button, Table } from 'antd';
-import {
-  useAccount,
-  useProvider,
-  usePrepareContractWrite,
-  useContractWrite,
-  useWaitForTransaction,
-} from 'wagmi';
+import { getPartiesApprovedStatus } from '../../systems/promisePartiesData';
+import { getVerificationDiv } from '../../systems/promisePartiesData';
+import { promiseStatus } from '../../systems/promiseStatus';
+import { Button } from 'antd';
+import { useAccount, useProvider } from 'wagmi';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import PromiseTable from '../PromiseTable';
+import RowPromiseApproval from './RowPromiseApproval';
+import RowPromiseLock from './RowPromiseLock';
 
 export default function InteractPromiseDrawer({ contractAttributes }) {
-  const [partiesData, setPartiesData] = useState([]);
-  const [tableParams, setTableParams] = useState({
-    pagination: {
-      current: 1,
-      pageSize: 5,
-      position: ['bottomRight'],
-    },
-  });
+  const [isPromiseLocked, setIsPromiseLocked] = useState(null);
   const [addressToApprovedStatus, setAddressToApprovedStatus] = useState([]);
+  const [allPartiesApproved, setAllPartiesApproved] = useState(false);
   const [interactingUser, setInteractingUser] = useState({});
   const provider = useProvider();
   const { address: userAddress } = useAccount();
 
-  const {
-    promiseName,
-    owner,
-    contractAddress,
-    pdfUri,
-    partyNames,
-    partyTwitterHandles,
-    partyAddresses,
-  } = contractAttributes;
+  const { contractAddress, partyAddresses } = contractAttributes;
 
-  // PROMISE APPROVAL
-  const { config: approveConfig, error: approveError } =
-    usePrepareContractWrite({
-      address: contractAddress,
-      abi: promiseContractAbi,
-      functionName: 'approvePromise',
-      args: [],
-      enabled:
-        !!userAddress &&
-        addressToApprovedStatus[userAddress.toLowerCase()] !== undefined &&
-        !addressToApprovedStatus[userAddress.toLowerCase()],
-    });
-
-  const {
-    data: approvalData,
-    write: approvePromise,
-    isLoading: isApprovingPromise,
-  } = useContractWrite({
-    ...approveConfig,
-    onSuccess: async (tx) => {
-      const txReceipt = await toast.promise(tx.wait(1), {
-        pending: 'Approving promise...',
-        success: 'Promise approved!',
-        error: 'Error approving promise',
-      });
-      gatherPartiesData();
-    },
-    onError: (err) => {
-      toast.error('Error approving promise');
-      console.log('error approving promise', err);
-    },
-  });
-
-  const { isLoading: isWaitingForApproval } = useWaitForTransaction({
-    hash: approvalData?.hash,
-    confirmations: 1,
-  });
-  // ----------------
-
-  const handleTableChange = (pagination) => {
-    setTableParams({
-      pagination,
-    });
+  const getPromiseStatus = async () => {
+    const isLocked = await promiseStatus().getIsPromiseLocked(
+      contractAddress,
+      provider,
+    );
+    setIsPromiseLocked(isLocked);
   };
 
   const gatherPartiesData = async () => {
+    getPromiseStatus();
+
     const partiesApprovedStatus = await getPartiesApprovedStatus(
       contractAddress,
       partyAddresses,
@@ -99,37 +41,14 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
   };
 
   useEffect(() => {
-    // Fetched contract data
     gatherPartiesData();
-
-    // Make sure it doesn't show old data
-    return () => {
-      setPartiesData([]);
-      setAddressToApprovedStatus([]);
-    };
-
-    // Make sure it doesn't keep the same data between differents panels
-    // Both if the user changes account or if the panels are in the same collapse
-  }, [userAddress, contractAddress]);
+  }, []);
 
   useEffect(() => {
-    // Display already fetched data
-    const dataToDisplay = displayPartiesData(
-      partyNames,
-      partyAddresses,
-      partyTwitterHandles,
-      addressToApprovedStatus,
-    );
-    setPartiesData(dataToDisplay);
-
     // Display data for the interacting user
     const interactingUser = {
       address: userAddress,
       promiseApprovedStatus: addressToApprovedStatus[userAddress.toLowerCase()],
-      promiseApprovedDiv: getVerificationDiv(
-        addressToApprovedStatus[userAddress.toLowerCase()],
-        'You did not approve the promise',
-      ),
       // twitterVerifiedStatus: partiesTwitterVerifiedStatus[userAddress],
       twitterVerifiedStatus: false,
       twitterVerifiedDiv: getVerificationDiv(
@@ -140,48 +59,32 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
     };
     setInteractingUser(interactingUser);
 
+    // Go through all the parties to know if everyone has approved
+    const allApproved = Object.values(addressToApprovedStatus).every(
+      (partyApprovedStatus) => partyApprovedStatus === true,
+    );
+    setAllPartiesApproved(allApproved);
+
     // Contract data, once fetched, will update the table
   }, [addressToApprovedStatus]);
 
   return (
     <div className='promise-drawer'>
-      <div key='contract' className='drawer-item contract-identity'>
-        <div className='contract-address'>
-          <div className='title'>Contract address </div>
-          <FormattedAddress address={contractAddress} isShrinked='responsive' />
-        </div>
-        <div className='pdf-link'>
-          <div className='title'>PDF link</div>
-          {pdfUri}
-        </div>
-      </div>
-      <div key='parties' className='drawer-item parties'>
-        <div className='title'>Involved parties</div>
-        {/* <div className='parties-list'> */}
-        <Table
-          dataSource={partiesData}
-          columns={columns}
-          pagination={tableParams.pagination}
-          onChange={handleTableChange}
-        />
-      </div>
+      <PromiseTable
+        contractAttributes={contractAttributes}
+        isPromiseLocked={isPromiseLocked}
+        addressToApprovedStatus={addressToApprovedStatus}
+      />
+
       <div className='drawer-item interaction'>
-        <div className='promise-approve-status'>
-          {interactingUser.promiseApprovedDiv}
-        </div>
-        {interactingUser.promiseApprovedStatus ? (
-          <div className='verified'>Promise approved</div>
-        ) : (
-          <div className='promise-approve-interact'>
-            <Button
-              type='primary'
-              onClick={approvePromise}
-              loading={isApprovingPromise || isWaitingForApproval}
-            >
-              Approve promise
-            </Button>
-          </div>
-        )}
+        <RowPromiseApproval
+          key='approval'
+          interactingUser={interactingUser}
+          contractAddress={contractAddress}
+          userAddress={userAddress}
+          addressToApprovedStatus={addressToApprovedStatus}
+          gatherPartiesData={gatherPartiesData}
+        />
 
         <div className='twitter-verify-status'>
           {interactingUser.twitterVerifiedDiv}
@@ -193,6 +96,17 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
             <Button type='primary'>Verify Twitter</Button>
           </div>
         )}
+
+        <RowPromiseLock
+          key='lock'
+          interactingUser={interactingUser}
+          contractAddress={contractAddress}
+          userAddress={userAddress}
+          isPromiseLocked={isPromiseLocked}
+          addressToApprovedStatus={addressToApprovedStatus}
+          getPromiseStatus={getPromiseStatus}
+          allPartiesApproved={allPartiesApproved}
+        />
       </div>
     </div>
   );

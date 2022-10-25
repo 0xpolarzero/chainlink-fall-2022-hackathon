@@ -93,7 +93,8 @@ export default function PromisesCollapse({ promises, context }) {
         title={drawerPromise?.promiseName}
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        width
+        width='85%'
+        destroyOnClose={true}
       >
         <InteractPromiseDrawer contractAttributes={drawerPromise} />
       </Drawer>
