@@ -3293,7 +3293,8 @@ textarea.ant-pagination-options-quick-jumper input {
   overflow: hidden;
   font-size: 14px;
   font-variant: initial;
-  background-color: var(--ant-drakgrey-table-override-2);
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
   border-radius: 2px;
   outline: none;
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.48),
@@ -6446,7 +6447,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
 }
 .ant-modal-content {
   position: relative;
-  background-color: var(--ant-drakgrey-table-override-2);
+  background-color: rgba(0, 0, 0, 0.8);
   background-clip: padding-box;
   border: 0;
   border-radius: 2px;

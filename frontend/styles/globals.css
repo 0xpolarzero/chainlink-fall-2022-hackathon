@@ -431,6 +431,10 @@ ant-select {
   backdrop-filter: blur(10px) !important;
 }
 
+.ant-modal-content {
+  /* backdrop-filter: blur(10px) !important; */
+}
+
 .ant-table-content {
   /* background: var(--popstar) !important; */
 }

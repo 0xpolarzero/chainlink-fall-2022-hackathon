@@ -59,6 +59,11 @@
   opacity: 0.8;
 }
 
+.promise-header-address > span::after {
+  content: '•';
+  margin: 0 0.4rem;
+}
+
 .ant-collapse {
   border-radius: 6px;
   padding: 1rem;

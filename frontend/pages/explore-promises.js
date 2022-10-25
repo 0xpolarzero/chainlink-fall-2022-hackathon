@@ -63,7 +63,6 @@ export default function explorePromises({ setActivePage }) {
       const sorted = data.promiseContractCreateds.sort(
         (a, b) => b.blockTimestamp - a.blockTimestamp,
       );
-      console.log(sorted[0].blockTimestamp);
       setSortedPromises(sorted);
       setShownPromises(sorted.slice((shownPage - 1) * 5, shownPage * 5));
     }
