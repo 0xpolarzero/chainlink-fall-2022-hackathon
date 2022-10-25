@@ -70,6 +70,12 @@
   transform: rotate(-90deg);
 }
 
+.promise-drawer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .drawer-item.contract-identity {
   flex-direction: column;
 }

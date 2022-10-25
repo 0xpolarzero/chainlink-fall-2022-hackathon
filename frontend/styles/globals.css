@@ -71,8 +71,13 @@
   --ant-grey-disabled-override: rgba(255, 255, 255, 0.4);
   /* #434343 */
   --ant-lightgrey-disabled-override: rgba(255, 255, 255, 0.3);
+  /* #272727 */
+  --ant-lightgrey-disabled-override-2: transparent;
   /* #1D1D1D */
   --ant-darkgrey-table-override: transparent;
+  /* #1F1F1F */
+  --ant-drakgrey-table-override-2: transparent;
+  /* --ant-drakgrey-table-override-2: rgba(0, 0, 0, 0.1); */
   /* #141414 */
   --ant-black-table-override: transparent;
   --ant-black-table-override: rgba(0, 0, 0, 0.1);
@@ -176,14 +181,16 @@ a:not(.header) {
 }
 
 .verified,
-.not-verified {
+.not-verified,
+.warning {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .verified i,
-.not-verified i {
+.not-verified i,
+.warning i {
   font-size: 1rem;
 }
 
@@ -193,6 +200,11 @@ a:not(.header) {
 
 .not-verified {
   color: var(--toastify-color-error);
+  font-weight: 600;
+}
+
+.warning {
+  color: var(--toastify-color-warning);
   font-weight: 600;
 }
 
@@ -316,6 +328,7 @@ a:not(.header) {
 
 .ant-btn-primary,
 .ant-btn-default {
+  font-family: var(--font-poppins);
   color: #fff !important;
   border-radius: 2px;
   padding: 0.4rem 1rem;
@@ -382,6 +395,10 @@ a:not(.header) {
   margin-right: 1rem !important;
 }
 
+ant-select {
+  position: sticky !important;
+}
+
 .ant-pagination-simple-pager input,
 .ant-select-selection-search-input {
   color: #fff !important;
@@ -409,6 +426,15 @@ a:not(.header) {
   margin-top: 0.3rem;
 }
 
+.ant-drawer-content {
+  background: var(--gradient-high-transparent) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.ant-table-content {
+  /* background: var(--popstar) !important; */
+}
+
 .ant-table {
   border-radius: 6px !important;
 }
@@ -417,11 +443,31 @@ a:not(.header) {
   justify-content: center;
 }
 
-.section-explore .ant-table-pagination {
+.ant-ribbon-wrapper {
+  z-index: 1;
+}
+
+.ant-ribbon.badge-locked {
+  background: rgba(88, 173, 139, 0.7) !important;
+}
+
+.ant-ribbon.badge-unlocked {
+  background: rgba(213, 168, 122, 0.7) !important;
+}
+
+.ant-ribbon-wrapper > span {
+  position: absolute !important;
+  right: 0 !important;
+  left: initial !important;
+}
+
+.section-explore .ant-table-pagination,
+.promise-drawer .ant-table-pagination {
   position: absolute !important;
   top: 0.5rem !important;
   right: 1rem !important;
   margin: 0 !important;
+  z-index: 1;
 }
 
 .ant-pagination-item a {
@@ -460,10 +506,6 @@ a:not(.header) {
 .ant-upload-list-item-progress {
   bottom: -1.1rem !important;
   /* left: 0.3rem !important; */
-}
-
-.ant-badge-status-custom {
-  background: red;
 }
 
 /* Font Awesome icons */
