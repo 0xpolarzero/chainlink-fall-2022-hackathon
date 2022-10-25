@@ -5,14 +5,14 @@ import { ethers } from 'ethers';
 
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
     title: 'Address',
     dataIndex: 'address',
     key: 'address',
+  },
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
   },
   {
     title: 'Twitter Handle',
@@ -140,7 +140,7 @@ const getVerificationDiv = (isTrue, message) => {
         </span>
       </a>
     );
-  } else if (isTrue === undefined) {
+  } else if (isTrue === undefined || isTrue === null) {
     return (
       <Skeleton active paragraph={{ rows: 1 }} title={false} loading={true} />
     );
