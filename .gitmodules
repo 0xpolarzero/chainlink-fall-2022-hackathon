@@ -1,3 +1,6 @@
 [submodule "backend/chainlink-ea-mumbai/backend/chainlink-ea-mumbai"]
 	path = backend/chainlink-ea-mumbai/backend/chainlink-ea-mumbai
 	url = git@github.com:zeuslawyer/cl-fall22-external-adapters.git
+[submodule "backend/chainlink-ea-mumbai/CL-EA-NodeJS-Template"]
+	path = backend/chainlink-ea-mumbai/CL-EA-NodeJS-Template
+	url = git@github.com:thodges-gh/CL-EA-NodeJS-Template.git
