@@ -1,5 +1,5 @@
 {
-  "name": "EA-NodeJS-Template",
+  "name": "chainlink-ea-twitter-verification",
   "version": "0.1.0",
   "author": "",
   "description": "",
@@ -9,11 +9,13 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "@chainlink/external-adapter": "^0.2.3"
+    "@chainlink/external-adapter": "^0.2.3",
+    "child_process": "^1.0.2"
   },
   "devDependencies": {
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
+    "dotenv": "^16.0.3",
     "eslint": "^7.0.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
