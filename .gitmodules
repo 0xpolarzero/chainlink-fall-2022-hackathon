@@ -1,0 +1,3 @@
+[submodule "backend/chainlink-ea-mumbai/backend/chainlink-ea-mumbai"]
+	path = backend/chainlink-ea-mumbai/backend/chainlink-ea-mumbai
+	url = git@github.com:zeuslawyer/cl-fall22-external-adapters.git
