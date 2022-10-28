@@ -1,8 +1,8 @@
 const { ethers, network } = require('hardhat');
 const fs = require('fs');
 
-const frontEndContractsFile = '../../frontend/constants/networkMapping.json';
-const frontEndAbiFolder = '../../frontend/constants/';
+const frontEndContractsFile = '../../../frontend/constants/networkMapping.json';
+const frontEndAbiFolder = '../../../frontend/constants/';
 
 module.exports = async () => {
   if (process.env.UPDATE_FRONT_END) {
