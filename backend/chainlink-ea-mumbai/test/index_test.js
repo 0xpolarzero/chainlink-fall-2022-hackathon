@@ -1,51 +1,86 @@
-const assert = require('chai').assert
-const createRequest = require('../index.js').createRequest
+const assert = require('chai').assert;
+const createRequest = require('../index.js').createRequest;
 
 describe('createRequest', () => {
-  const jobID = '1'
+  const jobID = '1';
 
-  context('successful calls', () => {
+  context('Successful calls', () => {
     const requests = [
-      { name: 'id not supplied', testData: { data: { base: 'ETH', quote: 'USD' } } },
-      { name: 'base/quote', testData: { id: jobID, data: { base: 'ETH', quote: 'USD' } } },
-      { name: 'from/to', testData: { id: jobID, data: { from: 'ETH', to: 'USD' } } },
-      { name: 'coin/market', testData: { id: jobID, data: { coin: 'ETH', market: 'USD' } } }
-    ]
+      {
+        name: 'id not supplied',
+        testData: { data: { username: 'TwitterDev' } },
+      },
+      {
+        name: 'regular username',
+        testData: { id: jobID, data: { username: 'TwitterDev' } },
+      },
+    ];
 
-    requests.forEach(req => {
+    requests.forEach((req) => {
       it(`${req.name}`, (done) => {
         createRequest(req.testData, (statusCode, data) => {
-          assert.equal(statusCode, 200)
-          assert.equal(data.jobRunID, jobID)
-          assert.isNotEmpty(data.data)
-          assert.isAbove(Number(data.result), 0)
-          assert.isAbove(Number(data.data.result), 0)
-          done()
-        })
-      })
-    })
-  })
+          assert.equal(statusCode, 200);
+          assert.equal(data.jobRunID, jobID);
+          assert.isNotEmpty(data.data);
+          assert.isNotEmpty(data.data.result);
+          assert.isNotEmpty(data.data.username);
+          assert.isNotEmpty(data.data.userId);
+          assert.isNotEmpty(data.data.name);
+          assert.isArray(data.data.result);
+          done();
+        });
+      });
+    });
+
+    // An empty data object should return the default username (TwitterDev)
+    it('empty data', (done) => {
+      createRequest({ data: {} }, (statusCode, data) => {
+        assert.equal(statusCode, 200);
+        assert.equal(data.jobRunID, jobID);
+        assert.equal(data.data.result.length, 10);
+        assert.equal(data.data.username, 'TwitterDev');
+        assert.equal(data.data.userId, '2244994945');
+        assert.equal(data.data.name, 'Twitter Dev');
+        done();
+      });
+    });
+  });
 
   context('error calls', () => {
     const requests = [
       { name: 'empty body', testData: {} },
-      { name: 'empty data', testData: { data: {} } },
-      { name: 'base not supplied', testData: { id: jobID, data: { quote: 'USD' } } },
-      { name: 'quote not supplied', testData: { id: jobID, data: { base: 'ETH' } } },
-      { name: 'unknown base', testData: { id: jobID, data: { base: 'not_real', quote: 'USD' } } },
-      { name: 'unknown quote', testData: { id: jobID, data: { base: 'ETH', quote: 'not_real' } } }
-    ]
+      // {
+      //   name: 'username not supplied',
+      //   testData: { id: jobID, data: {} },
+      // },
+      // {
+      //   name: 'username empty',
+      //   testData: { id: jobID, data: { username: '' } },
+      // },
+      // {
+      //   name: 'username not a string',
+      //   testData: { id: jobID, data: { username: 123 } },
+      // },
+      // {
+      //   name: 'username with spaces',
+      //   testData: { id: jobID, data: { username: 'Twitter Dev' } },
+      // },
+      // {
+      //   name: 'username with special characters',
+      //   testData: { id: jobID, data: { username: 'TwitterDev!' } },
+      // },
+    ];
 
-    requests.forEach(req => {
+    requests.forEach((req) => {
       it(`${req.name}`, (done) => {
         createRequest(req.testData, (statusCode, data) => {
-          assert.equal(statusCode, 500)
-          assert.equal(data.jobRunID, jobID)
-          assert.equal(data.status, 'errored')
-          assert.isNotEmpty(data.error)
-          done()
-        })
-      })
-    })
-  })
-})
+          assert.equal(statusCode, 500);
+          assert.equal(data.jobRunID, jobID);
+          assert.equal(data.status, 'errored');
+          assert.isNotEmpty(data.error);
+          done();
+        });
+      });
+    });
+  });
+});
