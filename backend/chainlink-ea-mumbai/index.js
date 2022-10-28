@@ -18,7 +18,8 @@ const roClient = client.readOnly;
 // with a Boolean value indicating whether or not they
 // should be required.
 const customParams = {
-  username: false,
+  username: true,
+  signature: true,
   endpoint: false,
 };
 
@@ -27,6 +28,9 @@ const createRequest = (input, callback) => {
   const validator = new Validator(callback, input, customParams);
   const jobRunID = validator.validated.id;
   const username = validator.validated.data.username || 'TwitterDev';
+  const signature =
+    validator.validated.data.signature ||
+    '0x0000000000000000000000000000000000000000000000000000000000000000';
 
   // Get the user's ID from their username
   roClient.v2
@@ -40,21 +44,26 @@ const createRequest = (input, callback) => {
           exclude: ['retweets', 'replies'],
         })
         // ----------------- //
-        // Then return the response data to the Chainlink node
+        // Then check if their 10 laters tweets include the signature
         .then((res) => {
+          const tweets = res.data.data.map((tweet) => tweet.text);
+          // In each one of the tweets, check if the signature is present
+          const result = tweets.some((tweet) => tweet.includes(signature));
+
+          // Gather the response data
           const response = {
             data: {
-              result: res.data.data.map((tweet) => {
-                return tweet.text;
-              }),
+              result,
               username: preRes.data.username,
               userId: preRes.data.id,
               name: preRes.data.name,
+              tweets,
             },
             jobRunID,
             status: 200,
           };
 
+          // Then return the response data to the Chainlink node
           callback(response.status, Requester.success(jobRunID, response));
         })
         .catch((error) => {
