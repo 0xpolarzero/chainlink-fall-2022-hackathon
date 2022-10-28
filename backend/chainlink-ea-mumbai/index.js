@@ -128,4 +128,4 @@ exports.handlerv2 = (event, context, callback) => {
 // or for running in express
 module.exports.createRequest = createRequest;
 
-// curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data": {"username":"0xpolarzero" }}'
+// curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data": {"username":"TwitterDev", "signature":"0x1234"} }'
