@@ -1,3 +1,4 @@
+const { mockTweets } = require('./test/mocks/mock-data');
 const { Requester, Validator } = require('@chainlink/external-adapter');
 const { TwitterApi } = require('twitter-api-v2');
 require('dotenv').config();
@@ -33,9 +34,7 @@ const createRequest = (input, callback) => {
   const validator = new Validator(callback, input, customParams);
   const jobRunID = validator.validated.id;
   const username = validator.validated.data.username || 'TwitterDev';
-  const signature =
-    validator.validated.data.signature ||
-    '0x0000000000000000000000000000000000000000000000000000000000000000';
+  const signature = validator.validated.data.signature || 'false';
 
   // Get the user's ID from their username
   roClient.v2
@@ -51,25 +50,40 @@ const createRequest = (input, callback) => {
         // ----------------- //
         // Then check if their 10 laters tweets include the signature
         .then((res) => {
-          const tweets = res.data.data.map((tweet) => tweet.text);
+          // Use mocks to get tweets with the signature for testing
+          // only in development
+          const tweets =
+            process.env.DEVELOPMENT === 'true' ? mockTweets : res.data.data;
+
           // In each one of the tweets, check if the signature is present
-          const result = tweets.some((tweet) => tweet.includes(signature));
+          const result =
+            isValidHex(signature) &&
+            // If in the array tweets there is a tweet that includes the signature
+            tweets.some((tweet) => tweet.text.includes(signature));
 
-          // Gather the response data
-          const response = {
-            data: {
-              result: result && isValidHex(signature),
-              username: preRes.data.username,
-              userId: preRes.data.id,
-              name: preRes.data.name,
-              tweets,
-            },
-            jobRunID,
-            status: 200,
-          };
+          // Return an error if it could not verify the signature
+          if (!result) {
+            callback(
+              500,
+              Requester.errored(jobRunID, 'Could not verify signature'),
+            );
+          } else {
+            // Gather the response data
+            const response = {
+              data: {
+                result: result,
+                username: preRes.data.username,
+                userId: preRes.data.id,
+                name: preRes.data.name,
+                tweets,
+              },
+              jobRunID,
+              status: 200,
+            };
 
-          // Then return the response data to the Chainlink node
-          callback(response.status, Requester.success(jobRunID, response));
+            // Then return the response data to the Chainlink node
+            callback(response.status, Requester.success(jobRunID, response));
+          }
         })
         .catch((error) => {
           console.log(error);

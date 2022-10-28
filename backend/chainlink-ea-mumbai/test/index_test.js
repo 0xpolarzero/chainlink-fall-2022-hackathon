@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const assert = require('chai').assert;
 const createRequest = require('../index.js').createRequest;
-const createMockRequest = require('./mocks/mock-index.js').createMockRequest;
+// const createMockRequest = require('./mocks/mock-index.js').createMockRequest;
 const {
   CORRECT_SIGNATURE,
   INCORRECT_SIGNATURE,
@@ -15,35 +15,26 @@ describe('createRequest', () => {
    */
 
   context('Successful calls', () => {
-    // Requests to the Twitter API
+    // Requests to the mock data to get fake tweets for the signature check
     const requests = [
       {
         name: 'id not supplied',
-        testData: { data: { username: 'TwitterDev', signature: '0x' } },
-      },
-      {
-        name: 'regular username',
         testData: {
-          id: jobID,
-          data: { username: 'TwitterDev', signature: '0x' },
-        },
-      },
-    ];
-
-    // Requests to the mock data to test the signature verification
-    const mockRequests = [
-      {
-        name: 'correct signature',
-        testData: {
-          id: jobID,
           data: { username: 'TwitterDev', signature: CORRECT_SIGNATURE },
         },
       },
       {
-        name: 'incorrect signature',
+        name: 'empty id',
+        testData: {
+          id: '',
+          data: { username: 'TwitterDev', signature: CORRECT_SIGNATURE },
+        },
+      },
+      {
+        name: 'regular username and correct signature',
         testData: {
           id: jobID,
-          data: { username: 'TwitterDev', signature: INCORRECT_SIGNATURE },
+          data: { username: 'TwitterDev', signature: CORRECT_SIGNATURE },
         },
       },
     ];
@@ -52,9 +43,9 @@ describe('createRequest', () => {
       it(`${req.name}`, (done) => {
         createRequest(req.testData, (statusCode, data) => {
           assert.equal(statusCode, 200);
-          assert.equal(data.jobRunID, jobID);
+          assert.equal(data.jobRunID, req.name === 'empty id' ? '' : jobID);
           assert.isNotEmpty(data.data);
-          assert.typeOf(data.data.result, 'boolean');
+          assert.equal(data.data.result, true);
           assert.isNotEmpty(data.data.username);
           assert.isNotEmpty(data.data.userId);
           assert.isNotEmpty(data.data.name);
@@ -63,29 +54,17 @@ describe('createRequest', () => {
       });
     });
 
-    mockRequests.forEach((req) => {
-      it(`${req.name}`, (done) => {
-        createMockRequest(req.testData, (statusCode, data) => {
-          assert.equal(statusCode, 200);
-          assert.equal(data.jobRunID, jobID);
-          assert.isNotEmpty(data.data);
-          assert.equal(data.data.result, req.name === 'correct signature');
-          assert.isNotEmpty(data.data.username);
-          assert.isNotEmpty(data.data.userId);
-          assert.isNotEmpty(data.data.name);
-          done();
-        });
-      });
-    });
-
-    // An empty ID should work
-    it('empty id', (done) => {
+    // An empty username should work - it will return the @TwitterDev account
+    it('empty username', (done) => {
       createRequest(
-        { id: '', data: { username: 'TwitterDev', signature: '0x' } },
+        {
+          id: jobID,
+          data: { username: '', signature: CORRECT_SIGNATURE },
+        },
         (statusCode, data) => {
           assert.equal(statusCode, 200);
-          assert.equal(data.jobRunID, '');
-          assert.typeOf(data.data.result, 'boolean');
+          assert.equal(data.jobRunID, jobID);
+          assert.equal(data.data.result, true);
           assert.equal(data.data.username, 'TwitterDev');
           assert.equal(data.data.userId, '2244994945');
           assert.equal(data.data.name, 'Twitter Dev');
@@ -104,18 +83,20 @@ describe('createRequest', () => {
       {
         name: 'username and signature not supplied',
         testData: { id: jobID, data: {} },
+        expectedError: 'Required parameter not supplied: username',
       },
       {
         name: 'username not supplied',
-        testData: { id: jobID, data: { signature: '0x' } },
+        testData: { id: jobID, data: { signature: CORRECT_SIGNATURE } },
+        expectedError: 'Required parameter not supplied: username',
       },
       {
         name: 'signature not supplied',
-        testData: { id: jobID, data: { username: 'TwitterDev' } },
-      },
-      {
-        name: 'username empty',
-        testData: { id: jobID, data: { username: '', signature: '0x' } },
+        testData: {
+          id: jobID,
+          data: { username: 'TwitterDev' },
+        },
+        expectedError: 'Required parameter not supplied: signature',
       },
       {
         name: 'signature empty',
@@ -123,28 +104,47 @@ describe('createRequest', () => {
           id: jobID,
           data: { username: 'TwitterDev', signature: '' },
         },
-      },
-      {
-        name: 'username not a string',
-        testData: { id: jobID, data: { username: 12345 } },
+        expectedError: 'Could not verify signature',
       },
       {
         name: 'username with spaces',
-        testData: { id: jobID, data: { username: 'Twitter Dev' } },
+        testData: {
+          id: jobID,
+          data: { username: 'Twitter Dev', signature: CORRECT_SIGNATURE },
+        },
+        expectedError:
+          'Invalid Request: One or more parameters to your request was invalid.',
       },
       {
         name: 'username with special characters',
-        testData: { id: jobID, data: { username: 'TwitterDev!' } },
+        testData: {
+          id: jobID,
+          data: { username: 'TwitterDev!', signature: CORRECT_SIGNATURE },
+        },
+        expectedError:
+          'Invalid Request: One or more parameters to your request was invalid.',
+      },
+      {
+        name: 'incorrect signature',
+        testData: {
+          id: jobID,
+          data: { username: 'TwitterDev', signature: INCORRECT_SIGNATURE },
+        },
+        expectedError: 'Could not verify signature',
       },
     ];
 
     requests.forEach((req) => {
       it(`${req.name}`, (done) => {
         createRequest(req.testData, (statusCode, data) => {
+          const errorMessage =
+            typeof data.error.message === 'string'
+              ? data.error.message
+              : data.error.message.message;
           assert.equal(statusCode, 500);
           assert.equal(data.jobRunID, jobID);
           assert.equal(data.status, 'errored');
-          assert.isNotEmpty(data.error);
+          assert.include(errorMessage, req.expectedError);
           done();
         });
       });
@@ -197,9 +197,9 @@ describe('createRequest', () => {
         assert.equal(statusCode, 500);
         assert.equal(data.jobRunID, jobID);
         assert.equal(data.status, 'errored');
-        assert.equal(
-          data.error,
-          'AdapterError: Error: Request failed with code 400 - Invalid Request: One or more parameters to your request was invalid. (see https://api.twitter.com/2/problems/invalid-request)',
+        assert.include(
+          data.error.message.message,
+          'Invalid Request: One or more parameters to your request was invalid.',
         );
         done();
       });
