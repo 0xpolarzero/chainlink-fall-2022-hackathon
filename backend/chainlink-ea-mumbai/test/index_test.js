@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const assert = require('chai').assert;
 const createRequest = require('../index.js').createRequest;
+const createMockRequest = require('./mocks/mock-index.js').createMockRequest;
 const {
   CORRECT_SIGNATURE,
   INCORRECT_SIGNATURE,
@@ -13,7 +14,8 @@ describe('createRequest', () => {
    * SUCCESSFUL CALLS
    */
 
-  context.only('Successful calls', () => {
+  context('Successful calls', () => {
+    // Requests to the Twitter API
     const requests = [
       {
         name: 'id not supplied',
@@ -28,10 +30,27 @@ describe('createRequest', () => {
       },
     ];
 
+    // Requests to the mock data to test the signature verification
+    const mockRequests = [
+      {
+        name: 'correct signature',
+        testData: {
+          id: jobID,
+          data: { username: 'TwitterDev', signature: CORRECT_SIGNATURE },
+        },
+      },
+      {
+        name: 'incorrect signature',
+        testData: {
+          id: jobID,
+          data: { username: 'TwitterDev', signature: INCORRECT_SIGNATURE },
+        },
+      },
+    ];
+
     requests.forEach((req) => {
       it(`${req.name}`, (done) => {
         createRequest(req.testData, (statusCode, data) => {
-          console.log(data);
           assert.equal(statusCode, 200);
           assert.equal(data.jobRunID, jobID);
           assert.isNotEmpty(data.data);
@@ -43,34 +62,80 @@ describe('createRequest', () => {
         });
       });
     });
+
+    mockRequests.forEach((req) => {
+      it(`${req.name}`, (done) => {
+        createMockRequest(req.testData, (statusCode, data) => {
+          assert.equal(statusCode, 200);
+          assert.equal(data.jobRunID, jobID);
+          assert.isNotEmpty(data.data);
+          assert.equal(data.data.result, req.name === 'correct signature');
+          assert.isNotEmpty(data.data.username);
+          assert.isNotEmpty(data.data.userId);
+          assert.isNotEmpty(data.data.name);
+          done();
+        });
+      });
+    });
+
+    // An empty ID should work
+    it('empty id', (done) => {
+      createRequest(
+        { id: '', data: { username: 'TwitterDev', signature: '0x' } },
+        (statusCode, data) => {
+          assert.equal(statusCode, 200);
+          assert.equal(data.jobRunID, '');
+          assert.typeOf(data.data.result, 'boolean');
+          assert.equal(data.data.username, 'TwitterDev');
+          assert.equal(data.data.userId, '2244994945');
+          assert.equal(data.data.name, 'Twitter Dev');
+          done();
+        },
+      );
+    });
   });
 
   /**
    * ERROR CALLS
    */
 
-  context('error calls', () => {
+  context('Error calls', () => {
     const requests = [
       {
-        name: 'username not supplied',
+        name: 'username and signature not supplied',
         testData: { id: jobID, data: {} },
       },
-      // {
-      //   name: 'username empty',
-      //   testData: { id: jobID, data: { username: '' } },
-      // },
-      // {
-      //   name: 'username not a string',
-      //   testData: { id: jobID, data: { username: 12345 } },
-      // },
-      // {
-      //   name: 'username with spaces',
-      //   testData: { id: jobID, data: { username: 'Twitter Dev' } },
-      // },
-      // {
-      //   name: 'username with special characters',
-      //   testData: { id: jobID, data: { username: 'TwitterDev!' } },
-      // },
+      {
+        name: 'username not supplied',
+        testData: { id: jobID, data: { signature: '0x' } },
+      },
+      {
+        name: 'signature not supplied',
+        testData: { id: jobID, data: { username: 'TwitterDev' } },
+      },
+      {
+        name: 'username empty',
+        testData: { id: jobID, data: { username: '', signature: '0x' } },
+      },
+      {
+        name: 'signature empty',
+        testData: {
+          id: jobID,
+          data: { username: 'TwitterDev', signature: '' },
+        },
+      },
+      {
+        name: 'username not a string',
+        testData: { id: jobID, data: { username: 12345 } },
+      },
+      {
+        name: 'username with spaces',
+        testData: { id: jobID, data: { username: 'Twitter Dev' } },
+      },
+      {
+        name: 'username with special characters',
+        testData: { id: jobID, data: { username: 'TwitterDev!' } },
+      },
     ];
 
     requests.forEach((req) => {
@@ -88,7 +153,7 @@ describe('createRequest', () => {
     it('username not found', (done) => {
       const req = {
         id: jobID,
-        data: { username: 'notarealuser' },
+        data: { username: 'notarealuser', signature: '0x' },
       };
       createRequest(req, (statusCode, data) => {
         assert.equal(statusCode, 500);
@@ -104,7 +169,7 @@ describe('createRequest', () => {
    * VALIDATION ERROR CALLS
    */
 
-  context('validation error calls', () => {
+  context('Validation error calls', () => {
     // An empty body should return a TypeError
     it('empty body', (done) => {
       createRequest({}, (statusCode, data) => {
@@ -123,7 +188,10 @@ describe('createRequest', () => {
     it('username too long to exist', (done) => {
       const req = {
         id: jobID,
-        data: { username: 'TwitterDevTwitterDevTwitterDevTwitterDev' },
+        data: {
+          username: 'TwitterDevTwitterDevTwitterDevTwitterDev',
+          signature: '0x',
+        },
       };
       createRequest(req, (statusCode, data) => {
         assert.equal(statusCode, 500);
@@ -135,48 +203,6 @@ describe('createRequest', () => {
         );
         done();
       });
-    });
-  });
-
-  /**
-   * SPECIAL CASES: SUCCESSFUL CALLS
-   */
-
-  context('special cases', () => {
-    // An empty ID should work
-    it('empty id', (done) => {
-      createRequest(
-        { id: '', data: { username: 'TwitterDev' } },
-        (statusCode, data) => {
-          assert.equal(statusCode, 200);
-          assert.equal(data.jobRunID, '');
-          assert.equal(data.data.result.length, 10);
-          assert.equal(data.data.username, 'TwitterDev');
-          assert.equal(data.data.userId, '2244994945');
-          assert.equal(data.data.name, 'Twitter Dev');
-          done();
-        },
-      );
-    });
-
-    // A username with less than 10 tweets should return the correct number of tweets
-    // This test is a bit flaky, as it depends on the user's activity
-    // We can assume @NoTweets is inactive since they haven't tweeted in 10 years
-    it('username with less than 10 tweets', (done) => {
-      createRequest(
-        { id: jobID, data: { username: 'NoTweets' } },
-        (statusCode, data) => {
-          assert.equal(statusCode, 200);
-          assert.equal(data.jobRunID, jobID);
-          assert.equal(data.data.result.length, 1);
-          assert.equal(data.data.username, 'NoTweets');
-          assert.equal(data.data.userId, '350442910');
-          assert.equal(data.data.name, 'no');
-          // We can use this one to check the tweet text
-          assert.equal(data.data.result[0], '108 characters left... what for?');
-          done();
-        },
-      );
     });
   });
 });

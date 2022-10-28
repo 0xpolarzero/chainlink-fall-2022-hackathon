@@ -5,10 +5,7 @@
  */
 
 const { Requester, Validator } = require('@chainlink/external-adapter');
-const {
-  mockResponseWithSignature,
-  mockResponseWithoutSignature,
-} = require('./mock-data');
+const { mockResponse, CORRECT_SIGNATURE } = require('./mock-data');
 
 // Define custom parameters to be used by the adapter.
 // Extra parameters can be stated in the extra object,
@@ -24,16 +21,10 @@ const createMockRequest = (input, callback) => {
   // The Validator helps you validate the Chainlink request data
   const validator = new Validator(callback, input, customParams);
   const jobRunID = validator.validated.id;
-  const username = validator.validated.data.username || 'TwitterDev';
-  const signature =
-    validator.validated.data.signature ||
-    '0x0000000000000000000000000000000000000000000000000000000000000000';
+  const signature = validator.validated.data.signature || 'false';
 
   // Get a same-shaped response from the mock data, with a tweet that includes the signature
-  mockResponseWithSignature(username, signature)
-    // new Promise((resolve) => {
-    //   resolve(mockResponseWithSignature);
-    // })
+  mockResponse()
     .then((res) => {
       const tweets = res.data.data.map((tweet) => tweet.text);
       // In each one of the tweets, check if the signature is present

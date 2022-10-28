@@ -9,6 +9,11 @@ const customError = (data) => {
   return false;
 };
 
+// Check if a signature is a valid hex string
+const isValidHex = (str) => {
+  return /^0x[0-9a-fA-F]+$/.test(str);
+};
+
 // Define the client for the API
 const client = new TwitterApi(process.env.BEARER_TOKEN);
 const roClient = client.readOnly;
@@ -53,7 +58,7 @@ const createRequest = (input, callback) => {
           // Gather the response data
           const response = {
             data: {
-              result,
+              result: result && isValidHex(signature),
               username: preRes.data.username,
               userId: preRes.data.id,
               name: preRes.data.name,

@@ -6,45 +6,28 @@ const userData = {
   name: 'Twitter Dev',
 };
 
-const mockResponseWithSignature = () => {
-  return {
-    data: {
-      data: [
-        {
-          text: 'This is a mock tweet',
-        },
-        {
-          text: CORRECT_SIGNATURE,
-        },
-      ],
-      username: userData.username,
-      id: userData.id,
-      name: userData.name,
-    },
-  };
-};
-
-const mockResponseWithoutSignature = () => {
-  return {
-    data: {
-      data: [
-        {
-          text: 'This is a mock tweet',
-        },
-        {
-          text: 'This is another mock tweet',
-        },
-      ],
-      username: userData.username,
-      id: userData.id,
-      name: userData.name,
-    },
-  };
+const mockResponse = () => {
+  return new Promise((resolve) => {
+    resolve({
+      data: {
+        data: [
+          {
+            text: 'This is a mock tweet',
+          },
+          {
+            text: `This is a mock tweet with the signature ${CORRECT_SIGNATURE}`,
+          },
+        ],
+        username: userData.username,
+        id: userData.id,
+        name: userData.name,
+      },
+    });
+  });
 };
 
 module.exports = {
   CORRECT_SIGNATURE,
   INCORRECT_SIGNATURE,
-  mockResponseWithSignature,
-  mockResponseWithoutSignature,
+  mockResponse,
 };
