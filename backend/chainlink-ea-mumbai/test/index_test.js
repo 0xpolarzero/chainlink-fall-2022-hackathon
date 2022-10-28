@@ -1,7 +1,13 @@
+/**
+ * For the successful tests to pass, the tweet results must be mocked
+ * in the development environment.
+ * @dev A variable `DEVELOPMENT` must be set to true in the .env file
+ */
+
 const { expect } = require('chai');
 const assert = require('chai').assert;
 const createRequest = require('../index.js').createRequest;
-// const createMockRequest = require('./mocks/mock-index.js').createMockRequest;
+
 const {
   CORRECT_SIGNATURE,
   INCORRECT_SIGNATURE,
