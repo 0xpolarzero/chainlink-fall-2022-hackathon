@@ -1,0 +1,27 @@
+type = "directrequest"
+schemaVersion = 1
+name = "TWITTER-EA"
+externalJobID = "dc27be6e-7c3b-4585-ac3a-c8ca962ef6e4"
+forwardingAllowed = false
+maxTaskDuration = "0s"
+contractAddress = "0x6012C68d0FFEc2a41E44aa728dAc7Df79bf6b563"
+minContractPaymentLinkJuels = "0"
+observationSource = """
+    decode_log   [type=ethabidecodelog
+                  abi="OracleRequest(bytes32 indexed specId, address requester, bytes32 requestId, uint256 payment, address callbackAddr, bytes4 callbackFunctionId, uint256 cancelExpiration, uint256 dataVersion, bytes data)"
+                  data="$(jobRun.logData)"
+                  topics="$(jobRun.logTopics)"]
+
+    decode_cbor  [type=cborparse data="$(decode_log.data)"]
+    fetch        [type=bridge name="twitter" requestData="{\\"id\\": $(jobSpec.externalJobID), \\"data\\": { \\"username\\": $(decode_cbor.username), \\"signature\\": $(decode_cbor.signature)}}"]
+    parse_result        [type=jsonparse path="data,result" data="$(fetch)"] 
+    parse_username       [type=jsonparse path="data,username" data="$(fetch)"]
+    encode_data  [type=ethabiencode abi="(bool result,string username)" data="{\\"result\\": $(parse_result), \\"username\\": $(parse_username)}"]
+    encode_tx    [type=ethabiencode
+                  abi="fulfillOracleRequest(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes32 data)"
+                  data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"
+                 ]
+    submit_tx    [type=ethtx to="0x6012C68d0FFEc2a41E44aa728dAc7Df79bf6b563" data="$(encode_tx)"]
+
+    decode_log -> decode_cbor -> fetch -> parse -> encode_data -> encode_tx -> submit_tx
+"""
