@@ -10,7 +10,10 @@ const networkConfig = {
 
 const developmentChains = ['hardhat', 'localhost'];
 
+const LINK_TOKEN_MUMBAI = '0x326C977E6efc84E512bB9C30f76E30c160eD06FB';
+
 module.exports = {
   networkConfig,
   developmentChains,
+  LINK_TOKEN_MUMBAI,
 };

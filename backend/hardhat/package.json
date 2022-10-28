@@ -18,5 +18,7 @@
     "solhint": "^3.3.7",
     "solidity-coverage": "^0.8.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@chainlink/contracts": "^0.5.1"
+  }
 }
