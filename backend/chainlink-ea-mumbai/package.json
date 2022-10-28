@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@chainlink/external-adapter": "^0.2.3",
-    "child_process": "^1.0.2",
     "twitter-api-v2": "^1.12.9"
   },
   "devDependencies": {
