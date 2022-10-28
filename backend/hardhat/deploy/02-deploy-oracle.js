@@ -19,7 +19,7 @@ module.exports = async function({ getNamedAccounts, deployments }) {
     process.env.ETHERSCAN_API_KEY
   ) {
     console.log('Verifying contract...');
-    await verify(oracle.address, []);
+    await verify(oracle.address, [LINK_TOKEN_MUMBAI]);
   }
 };
 
