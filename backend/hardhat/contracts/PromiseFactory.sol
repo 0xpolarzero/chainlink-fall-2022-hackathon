@@ -16,9 +16,17 @@ contract PromiseFactory {
     error PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
     error PromiseFactory__createPromiseContract__DUPLICATE_FIELD();
     error PromiseFactory__createPromiseContract__INVALID_URI();
+    error PromiseFactory__ONLY_OWNER();
+    error PromiseFactory__ONLY_OPERATOR();
+
+    /// Variables
+    address public s_operator;
 
     // Map the owner addresses to the child contracts they created
     mapping(address => PromiseContract[]) public promiseContracts;
+
+    // Map the user addresses to their verified Twitter account(s)
+    mapping(address => string[]) public twitterVerifiedUsers;
 
     /// Events
     event PromiseContractCreated(
@@ -31,7 +39,32 @@ contract PromiseFactory {
         address[] _partyAddresses
     );
 
+    /// Modifiers
+    modifier onlyOwner() {
+        if (msg.sender != tx.origin) {
+            revert PromiseFactory__ONLY_OWNER();
+        }
+        _;
+    }
+
+    modifier onlyOperator() {
+        if (msg.sender != s_operator) {
+            revert PromiseFactory__ONLY_OPERATOR();
+        }
+        _;
+    }
+
     /// Functions
+
+    /**
+     * @notice Initialize the contract
+     * @param _operator The operator address
+     */
+
+    constructor(address _operator) {
+        s_operator = _operator;
+    }
+
     /**
      * @notice Create a new contract and add it to the list of child contracts
      * @param _promiseName The name of the contract specified by the user
@@ -128,6 +161,34 @@ contract PromiseFactory {
         return address(promiseContract);
     }
 
+    /**
+     * @notice Add a verified Twitter account to the list of verified accounts
+     * @dev Only the operator contract can call this function, after the account
+     * has been verified with the Chainlink Node + External Adapter
+     * @param _userAddress The address of the user
+     * @param _twitterHandle The Twitter handle of the verified account
+     */
+
+    function addTwitterVerifiedUser(
+        address _userAddress,
+        string memory _twitterHandle
+    ) external onlyOperator {
+        // If the user address already has a verified account, add this one to the array
+        if (twitterVerifiedUsers[_userAddress].length > 0) {
+            twitterVerifiedUsers[_userAddress].push(_twitterHandle);
+        } else {
+            // If the user address doesn't have a verified account yet, create a new array
+            string[] memory usernames = new string[](1);
+            usernames[0] = _twitterHandle;
+            twitterVerifiedUsers[_userAddress] = usernames;
+        }
+    }
+
+    /// Setters
+    function setOperator(address _operator) external onlyOwner {
+        s_operator = _operator;
+    }
+
     /// Getters
     function getPromiseContractAddresses(address _owner)
         public
@@ -143,5 +204,20 @@ contract PromiseFactory {
         returns (uint256)
     {
         return promiseContracts[_userAddress].length;
+    }
+
+    function getTwitterVerifiedHandle(address _userAddress)
+        public
+        view
+        returns (string[] memory)
+    {
+        // Return the username if the user has a verified account
+        if (twitterVerifiedUsers[_userAddress].length > 0) {
+            return twitterVerifiedUsers[_userAddress];
+        } else {
+            // Return an empty array
+            string[] memory usernames = new string[](0);
+            return usernames;
+        }
     }
 }
