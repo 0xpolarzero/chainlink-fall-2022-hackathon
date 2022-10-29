@@ -1,17 +1,24 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+// Make sure it is compatible with all ^0.7.0, ^0.8.0 and ^0.8.16
+pragma solidity ^0.8.0;
 
-import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
-import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
+import "./tests/ChainlinkClientTestHelper.sol";
+import "./tests/ConfirmedOwnerTestHelper.sol";
 import "./IPromiseFactory.sol";
 
 /**
- * @notice Sends a request to the Chainlink oracle to verify a Twitter account
- * - The oracle will return the username, address, and verification status
- * - It uses a Chainlink node & an external adapter to interact with the Twitter API
+ * @notice This contract is used to test the VerifyTwitter contract
+ * Everything is exactly the same, except that it inherits from:
+ * - ChainlinkClientTestHelper
+ * - ConfirmedOwnerTestHelper
+ * ... instead of the original contracts.
+ * This allows us to mock the ChainlinkClient and ConfirmedOwner contracts
  */
 
-contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
+contract VerifyTwitterMock is
+    ChainlinkClientTestHelper,
+    ConfirmedOwnerTestHelper
+{
     using Chainlink for Chainlink.Request;
 
     // Chainlink variables
@@ -39,17 +46,22 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
 
     /**
      * @notice Initialize the link token and target oracle
-     * @param _linkTokenContract (Mumbai): 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
-     * @param _oracleContract (Mumbai): 0x2BB8Dd9C16edeF313eb9ccBd5F42A8b577cB1E3c
-     * @param _promiseFactoryContract: The address of the PromiseFactory contract
+     * Operator contract: 0x2BB8Dd9C16edeF313eb9ccBd5F42A8b577cB1E3c
+     * Link token: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
      * Job ID: 79bf989a-d076-48c0-a59b-d679f366592d
      */
 
+    // Another difference here: we don't need to pass the owner address to ConfirmedOwnerTestHelper
+    // We also need to pass the link token address and the oracle address to ChainlinkClientTestHelper
+    // Again, this is just needed for testing, to make sure it is correctly initialized
     constructor(
         address _linkTokenContract,
         address _oracleContract,
         address _promiseFactoryContract
-    ) ConfirmedOwner(msg.sender) {
+    )
+        ConfirmedOwnerTestHelper()
+        ChainlinkClientTestHelper(_linkTokenContract, _oracleContract)
+    {
         setChainlinkToken(_linkTokenContract);
         setChainlinkOracle(_oracleContract);
         setPromiseFactoryContract(_promiseFactoryContract);
@@ -173,5 +185,10 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
 
     function getOraclePayment() public pure returns (uint256) {
         return ORACLE_PAYMENT;
+    }
+
+    // Additional function for testing
+    function getJobId() public pure returns (bytes32) {
+        return ORACLE_JOB_ID;
     }
 }

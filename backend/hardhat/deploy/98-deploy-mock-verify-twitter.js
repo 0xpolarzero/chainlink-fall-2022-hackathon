@@ -10,9 +10,11 @@ module.exports = async function({ getNamedAccounts, deployments }) {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const chainlinkClientTestHelper = await deploy('ChainlinkClientTestHelper', {
+  const promiseFactory = await deployments.get('PromiseFactory');
+
+  const verifyTwitterMock = await deploy('VerifyTwitterMock', {
     from: deployer,
-    args: [LINK_TOKEN_MUMBAI, OPERATOR],
+    args: [LINK_TOKEN_MUMBAI, OPERATOR, promiseFactory.address],
     log: true,
     waitConfirmations: network.config.blockConfirmations || 1,
   });
@@ -22,9 +24,10 @@ module.exports = async function({ getNamedAccounts, deployments }) {
     process.env.ETHERSCAN_API_KEY
   ) {
     console.log('Verifying contract...');
-    await verify(chainlinkClientTestHelper.address, [
+    await verify(verifyTwitterMock.address, [
       LINK_TOKEN_MUMBAI,
       OPERATOR,
+      promiseFactory.address,
     ]);
   }
 };
