@@ -1,14 +1,18 @@
 const { network, ethers } = require('hardhat');
-const { developmentChains, OPERATOR } = require('../helper-hardhat-config');
+const {
+  developmentChains,
+  LINK_TOKEN_MUMBAI,
+  OPERATOR,
+} = require('../helper-hardhat-config');
 const { verify } = require('../utils/verify');
 
 module.exports = async function({ getNamedAccounts, deployments }) {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const promiseFactory = await deploy('PromiseFactory', {
+  const chainlinkClientTestHelper = await deploy('ChainlinkClientTestHelper', {
     from: deployer,
-    args: [OPERATOR],
+    args: [LINK_TOKEN_MUMBAI, OPERATOR],
     log: true,
     waitConfirmations: network.config.blockConfirmations || 1,
   });
@@ -18,8 +22,11 @@ module.exports = async function({ getNamedAccounts, deployments }) {
     process.env.ETHERSCAN_API_KEY
   ) {
     console.log('Verifying contract...');
-    await verify(promiseFactory.address, [OPERATOR]);
+    await verify(chainlinkClientTestHelper.address, [
+      LINK_TOKEN_MUMBAI,
+      OPERATOR,
+    ]);
   }
 };
 
-module.exports.tags = ['all', 'promise-factory', 'main'];
+module.exports.tags = ['all', 'mocks'];

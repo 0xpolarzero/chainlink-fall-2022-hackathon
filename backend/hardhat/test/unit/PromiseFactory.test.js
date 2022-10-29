@@ -203,4 +203,17 @@ const { deployments, network, ethers } = require('hardhat');
           assert.equal(promiseContractsLength, 2);
         });
       });
+
+      describe('addTwitterVerifiedUser', function() {
+        it('Should not allow anyone other than the operator contract to add a Twitter verified user', async () => {
+          await expect(
+            promiseFactory.addTwitterVerifiedUser(
+              deployer.address,
+              '@username',
+            ),
+          ).to.be.revertedWith('PromiseFactory__NOT_OPERATOR()');
+        });
+
+        // The rest of the tests are performed in ./VerifyTwitter.test.js
+      });
     });

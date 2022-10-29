@@ -16,8 +16,8 @@ contract PromiseFactory {
     error PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
     error PromiseFactory__createPromiseContract__DUPLICATE_FIELD();
     error PromiseFactory__createPromiseContract__INVALID_URI();
-    error PromiseFactory__ONLY_OWNER();
-    error PromiseFactory__ONLY_OPERATOR();
+    error PromiseFactory__NOT_OWNER();
+    error PromiseFactory__NOT_OPERATOR();
 
     /// Variables
     address public s_operator;
@@ -42,14 +42,14 @@ contract PromiseFactory {
     /// Modifiers
     modifier onlyOwner() {
         if (msg.sender != tx.origin) {
-            revert PromiseFactory__ONLY_OWNER();
+            revert PromiseFactory__NOT_OWNER();
         }
         _;
     }
 
     modifier onlyOperator() {
         if (msg.sender != s_operator) {
-            revert PromiseFactory__ONLY_OPERATOR();
+            revert PromiseFactory__NOT_OPERATOR();
         }
         _;
     }
