@@ -205,13 +205,23 @@ const { deployments, network, ethers } = require('hardhat');
       });
 
       describe('addTwitterVerifiedUser', function() {
-        it('Should not allow anyone other than the operator contract to add a Twitter verified user', async () => {
+        it('Should not allow anyone other than the TwitterVerification contract to add a Twitter verified user', async () => {
           await expect(
-            promiseFactory.addTwitterVerifiedUser(
-              deployer.address,
-              '@username',
-            ),
-          ).to.be.revertedWith('PromiseFactory__NOT_OPERATOR()');
+            promiseFactory.addTwitterVerifiedUser(deployer.address, 'username'),
+          ).to.be.revertedWith('PromiseFactory__NOT_VERIFIER()');
+        });
+
+        it('Should not allow anyone else than the owner to call `setOperator` or `setVerifier`', async () => {
+          await expect(promiseFactory.setOperator(ethers.constants.AddressZero))
+            .to.not.be.reverted;
+
+          await expect(
+            promiseFactory.connect(user).setOperator(user.address),
+          ).to.be.revertedWith('PromiseFactory__NOT_OWNER()');
+
+          await expect(
+            promiseFactory.connect(user).setVerifier(user.address),
+          ).to.be.revertedWith('PromiseFactory__NOT_OWNER()');
         });
 
         // The rest of the tests are performed in ./VerifyTwitter.test.js
