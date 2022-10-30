@@ -20,17 +20,17 @@ contract PromiseFactory {
     error PromiseFactory__NOT_VERIFIER();
 
     /// Variables
-    address public immutable i_owner;
+    address private immutable i_owner;
     // The Chainlink operator
-    address public s_operator;
+    address private s_operator;
     // The VerifyTwitter contract
-    address public s_verifier;
+    address private s_verifier;
 
     // Map the owner addresses to the child contracts they created
-    mapping(address => PromiseContract[]) public promiseContracts;
+    mapping(address => PromiseContract[]) private promiseContracts;
 
     // Map the user addresses to their verified Twitter account(s)
-    mapping(address => string[]) public twitterVerifiedUsers;
+    mapping(address => string[]) private twitterVerifiedUsers;
 
     /// Events
     event PromiseContractCreated(
@@ -243,5 +243,17 @@ contract PromiseFactory {
             string[] memory usernames = new string[](0);
             return usernames;
         }
+    }
+
+    function getOwner() public view returns (address) {
+        return i_owner;
+    }
+
+    function getOperator() public view returns (address) {
+        return s_operator;
+    }
+
+    function getVerifier() public view returns (address) {
+        return s_verifier;
     }
 }
