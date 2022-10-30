@@ -1,6 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from '../../styles/Header.module.css';
 import Link from 'next/link';
+import Image from 'next/image';
+import Logo from '../../asset/logo-colored-no-background.svg';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useWidth } from '../../systems/useWidth';
 import { useState, useEffect } from 'react';
 
 export const Header = ({ activePage, setActivePage }) => {
@@ -39,8 +43,9 @@ export const Header = ({ activePage, setActivePage }) => {
               smoothScrollTo('.section-home');
               handleNavItemClick(null, 0);
             }}
+            className={styles.logo}
           >
-            PROMISES_NETWORK
+            <img src={Logo.src} alt='logo' className='custom-img' />
           </a>
         </Link>
       </div>
