@@ -252,6 +252,15 @@ a:not(.header) {
   padding: 4rem;
 }
 
+.custom-img {
+  height: 40px;
+  transition: all 0.3s ease;
+}
+
+.custom-img:hover {
+  transform: scale(1.02);
+}
+
 @media (min-height: 30em) {
   main {
     overflow-y: scroll;

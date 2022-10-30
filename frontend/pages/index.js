@@ -8,8 +8,7 @@ export default function Home() {
         <div className='left'></div>
         <div className='right'>
           <div className='title'>
-            <div className='title-main'>PROMISES</div>
-            <div className='title-sub'>_NETWORK</div>
+            <div className='title-main'>promise</div>
           </div>
           <div className='caption'>
             <p>

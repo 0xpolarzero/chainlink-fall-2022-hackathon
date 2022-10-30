@@ -17,6 +17,15 @@
   font-size: 1.3rem;
 }
 
+.header .title a {
+  display: flex;
+}
+
+.header .title span {
+  width: 2.5rem;
+  margin-right: 0.5rem;
+}
+
 .header .links {
   position: relative;
   letter-spacing: 0.1rem;
