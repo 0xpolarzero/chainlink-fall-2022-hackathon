@@ -3,6 +3,7 @@ pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
+import "@chainlink/contracts/src/v0.7/interfaces/LinkTokenInterface.sol";
 import "./IPromiseFactory.sol";
 
 // TODO METTRE TOUT EN PRIVATE (OU INTERNAL) ET FAIRE DES GETTERS
@@ -23,7 +24,7 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
     bytes32 private s_oracleJobId = "2adee90f8a864ae1ab4138d06d99a80f";
 
     // Declare the PromiseFactory contract address and the interface
-    address private s_promiseFactoryAddress;
+    address private s_promiseFactoryContract;
     IPromiseFactory private s_promiseFactoryInterface;
 
     // Variables returned by the oracle
@@ -174,14 +175,24 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         return string(str);
     }
 
+    function withdrawLink() public onlyOwner {
+        LinkTokenInterface linkToken = LinkTokenInterface(
+            chainlinkTokenAddress()
+        );
+        (bool success, ) = address(this).call(
+            abi.encodeWithSelector(
+                linkToken.transfer.selector,
+                msg.sender,
+                linkToken.balanceOf(address(this))
+            )
+        );
+        require(success, "Unable to transfer");
+    }
+
     // Getters
 
     function getOracleJobId() public view returns (bytes32) {
         return s_oracleJobId;
-    }
-
-    function getOwner() public view returns (address) {
-        return owner();
     }
 
     function getPromiseFactoryContract() public view returns (address) {
@@ -190,5 +201,9 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
 
     function getOraclePayment() public pure returns (uint256) {
         return ORACLE_PAYMENT;
+    }
+
+    function getLinkBalance() public view returns (uint256) {
+        return LINK.balanceOf(address(this));
     }
 }
