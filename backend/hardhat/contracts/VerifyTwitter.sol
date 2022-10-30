@@ -3,10 +3,8 @@ pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
-import "@chainlink/contracts/src/v0.7/interfaces/LinkTokenInterface.sol";
 import "./IPromiseFactory.sol";
-
-// TODO METTRE TOUT EN PRIVATE (OU INTERNAL) ET FAIRE DES GETTERS
+import "./utils/AddressToString.sol";
 
 /**
  * @author polarzero
@@ -41,6 +39,7 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         address userAddress,
         bool verified
     );
+    event FundsWithdrawn(uint256 amount);
 
     /**
      * @notice Initialize the link token and target oracle
@@ -134,6 +133,28 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
     }
 
     /**
+     * @notice Withdraw LINK from this contract
+     */
+
+    function withdrawLink() public onlyOwner {
+        LinkTokenInterface linkToken = LinkTokenInterface(
+            chainlinkTokenAddress()
+        );
+        uint256 balance = linkToken.balanceOf(address(this));
+
+        (bool success, ) = address(this).call(
+            abi.encodeWithSelector(
+                linkToken.transfer.selector,
+                msg.sender,
+                linkToken.balanceOf(address(this))
+            )
+        );
+        require(success, "Unable to transfer");
+
+        emit FundsWithdrawn(balance);
+    }
+
+    /**
      * @notice Call the promise factory contract to verify a Twitter account
      * @dev It also sets the promise factory contract interface with this address
      * @param _promiseFactoryContract The address of the PromiseFactory contract
@@ -151,44 +172,6 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         s_oracleJobId = _oracleJobId;
     }
 
-    /**
-     * @notice Convert address to string
-     * @param _addr The address to convert
-     */
-
-    function addressToString(address _addr)
-        public
-        pure
-        returns (string memory)
-    {
-        bytes32 value = bytes32(uint256(uint160(_addr)));
-        bytes memory alphabet = "0123456789abcdef";
-        bytes memory str = new bytes(42);
-        str[0] = "0";
-        str[1] = "x";
-
-        for (uint256 i = 0; i < 20; i++) {
-            str[2 + i * 2] = alphabet[uint8(value[i + 12] >> 4)];
-            str[3 + i * 2] = alphabet[uint8(value[i + 12] & 0x0f)];
-        }
-
-        return string(str);
-    }
-
-    function withdrawLink() public onlyOwner {
-        LinkTokenInterface linkToken = LinkTokenInterface(
-            chainlinkTokenAddress()
-        );
-        (bool success, ) = address(this).call(
-            abi.encodeWithSelector(
-                linkToken.transfer.selector,
-                msg.sender,
-                linkToken.balanceOf(address(this))
-            )
-        );
-        require(success, "Unable to transfer");
-    }
-
     // Getters
 
     function getOracleJobId() public view returns (bytes32) {
@@ -204,6 +187,9 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
     }
 
     function getLinkBalance() public view returns (uint256) {
-        return LINK.balanceOf(address(this));
+        LinkTokenInterface linkToken = LinkTokenInterface(
+            chainlinkTokenAddress()
+        );
+        return linkToken.balanceOf(address(this));
     }
 }

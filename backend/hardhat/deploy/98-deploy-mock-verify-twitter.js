@@ -9,7 +9,6 @@ const { verify } = require('../utils/verify');
 module.exports = async function({ getNamedAccounts, deployments }) {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
-
   const promiseFactory = await deployments.get('PromiseFactory');
 
   const verifyTwitterMock = await deploy('VerifyTwitterMock', {
