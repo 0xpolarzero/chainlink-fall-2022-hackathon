@@ -5,7 +5,11 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "./IPromiseFactory.sol";
 
+// TODO METTRE TOUT EN PRIVATE (OU INTERNAL) ET FAIRE DES GETTERS
+
 /**
+ * @author polarzero
+ * @title VerifyTwitter
  * @notice Sends a request to the Chainlink oracle to verify a Twitter account
  * - The oracle will return the username, address, and verification status
  * - It uses a Chainlink node & an external adapter to interact with the Twitter API
@@ -15,22 +19,22 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
     using Chainlink for Chainlink.Request;
 
     // Chainlink variables
-    bytes32 private constant ORACLE_JOB_ID = "79bf989ad07648c0a59bd679f366592d";
     uint256 private constant ORACLE_PAYMENT = (1 * LINK_DIVISIBILITY) / 10; // 0.1 LINK
+    bytes32 private s_oracleJobId = "2adee90f8a864ae1ab4138d06d99a80f";
 
     // Declare the PromiseFactory contract address and the interface
-    address public s_promiseFactoryContract;
-    IPromiseFactory public s_promiseFactoryInterface;
+    address private s_promiseFactoryAddress;
+    IPromiseFactory private s_promiseFactoryInterface;
 
     // Variables returned by the oracle
-    string public s_username;
-    address public s_userAddress;
-    bool public s_verified = false;
+    string private s_username;
+    address private s_userAddress;
+    bool private s_verified = false;
 
     // Events
     event VerificationRequested(bytes32 indexed requestId, string username);
     event VerificationFailed(bytes32 indexed requestId, string username);
-    event VerificationFulfilled(
+    event VerificationSuccessful(
         bytes32 indexed requestId,
         string username,
         address userAddress,
@@ -42,7 +46,6 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
      * @param _linkTokenContract (Mumbai): 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
      * @param _oracleContract (Mumbai): 0x2BB8Dd9C16edeF313eb9ccBd5F42A8b577cB1E3c
      * @param _promiseFactoryContract: The address of the PromiseFactory contract
-     * Job ID: 79bf989a-d076-48c0-a59b-d679f366592d
      */
 
     constructor(
@@ -65,7 +68,7 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         returns (bytes32 requestId)
     {
         Chainlink.Request memory req = buildChainlinkRequest(
-            ORACLE_JOB_ID,
+            s_oracleJobId,
             address(this),
             this.fulfillVerification.selector
         );
@@ -81,7 +84,7 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
             )
         );
 
-        req.add("username", s_username);
+        req.add("username", _username);
         req.add("signature", signature);
         req.add("address", userAddress);
         // req.add("copyPath1", "data,username"); // username (string)
@@ -118,7 +121,7 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
                 _username
             );
 
-            emit VerificationFulfilled(
+            emit VerificationSuccessful(
                 _requestId,
                 _username,
                 _userAddress,
@@ -143,6 +146,10 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         s_promiseFactoryInterface = IPromiseFactory(_promiseFactoryContract);
     }
 
+    function setOracleJobId(bytes32 _oracleJobId) public onlyOwner {
+        s_oracleJobId = _oracleJobId;
+    }
+
     /**
      * @notice Convert address to string
      * @param _addr The address to convert
@@ -165,6 +172,16 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         }
 
         return string(str);
+    }
+
+    // Getters
+
+    function getOracleJobId() public view returns (bytes32) {
+        return s_oracleJobId;
+    }
+
+    function getOwner() public view returns (address) {
+        return owner();
     }
 
     function getPromiseFactoryContract() public view returns (address) {

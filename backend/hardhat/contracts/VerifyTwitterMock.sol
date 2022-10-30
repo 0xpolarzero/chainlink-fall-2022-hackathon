@@ -5,14 +5,14 @@ pragma solidity ^0.8.0;
 import "./tests/ChainlinkClientTestHelper.sol";
 import "./tests/ConfirmedOwnerTestHelper.sol";
 import "./IPromiseFactory.sol";
+import "./utils/AddressToString.sol";
 
 /**
  * @notice This contract is used to test the VerifyTwitter contract
- * Everything is exactly the same, except that it inherits from:
- * - ChainlinkClientTestHelper
- * - ConfirmedOwnerTestHelper
- * ... instead of the original contracts.
- * This allows us to mock the ChainlinkClient and ConfirmedOwner contracts
+ * The functions are the same, but they don't actually send data to the operator
+ * We make use of the ChainlinkClientTestHelper contract to mock the ChainlinkClient
+ * as well as the ConfirmedOwnerTestHelper contract to mock the ConfirmedOwner
+ * They provide additional functions to test that the contract is correctly initialized
  */
 
 contract VerifyTwitterMock is
@@ -37,7 +37,7 @@ contract VerifyTwitterMock is
     // Events
     event VerificationRequested(bytes32 indexed requestId, string username);
     event VerificationFailed(bytes32 indexed requestId, string username);
-    event VerificationFulfilled(
+    event VerificationSuccessful(
         bytes32 indexed requestId,
         string username,
         address userAddress,
@@ -56,6 +56,8 @@ contract VerifyTwitterMock is
     // Again, this is just needed for testing, to make sure it is correctly initialized
     constructor(
         address _linkTokenContract,
+        // In this mock, we're passing an address we own as the oracle address
+        // so we can test the fulfill function
         address _oracleContract,
         address _promiseFactoryContract
     )
@@ -76,31 +78,12 @@ contract VerifyTwitterMock is
         public
         returns (bytes32 requestId)
     {
-        Chainlink.Request memory req = buildChainlinkRequest(
-            ORACLE_JOB_ID,
-            address(this),
-            this.fulfillVerification.selector
-        );
-        string memory userAddress = addressToString(msg.sender);
-
-        // Generate a signature with
-        // "Verifying my Twitter account for ETH address <address>" as the message
-        // It will prevent the signature from being passed as a parameter
-        string memory signature = string(
-            abi.encodePacked(
-                "Verifying my Twitter account for ETH address ",
-                userAddress
-            )
-        );
-
-        req.add("username", s_username);
-        req.add("signature", signature);
-        req.add("address", userAddress);
-        // req.add("copyPath1", "data,username"); // username (string)
-        // req.add("copyPath2", "data,result"); // verified (bool)
-        // req.add("copyPath3", "data,userAddress"); // user address (msg.sender here) (address)
-        requestId = sendOperatorRequest(req, ORACLE_PAYMENT);
-
+        requestId = "0x1234567890";
+        // ! This should be called by Chainlink when building the request
+        // ! It would associate the requestId with the operator address
+        // ! ... which prevents anyone from calling the fulfill function
+        // ! We're doing it here only for testing purposes, so we can trigger it manually
+        publicAddExternalRequest(msg.sender, requestId);
         emit VerificationRequested(requestId, _username);
     }
 
@@ -130,7 +113,7 @@ contract VerifyTwitterMock is
                 _username
             );
 
-            emit VerificationFulfilled(
+            emit VerificationSuccessful(
                 _requestId,
                 _username,
                 _userAddress,
@@ -155,40 +138,11 @@ contract VerifyTwitterMock is
         s_promiseFactoryInterface = IPromiseFactory(_promiseFactoryContract);
     }
 
-    /**
-     * @notice Convert address to string
-     * @param _addr The address to convert
-     */
-
-    function addressToString(address _addr)
-        public
-        pure
-        returns (string memory)
-    {
-        bytes32 value = bytes32(uint256(uint160(_addr)));
-        bytes memory alphabet = "0123456789abcdef";
-        bytes memory str = new bytes(42);
-        str[0] = "0";
-        str[1] = "x";
-
-        for (uint256 i = 0; i < 20; i++) {
-            str[2 + i * 2] = alphabet[uint8(value[i + 12] >> 4)];
-            str[3 + i * 2] = alphabet[uint8(value[i + 12] & 0x0f)];
-        }
-
-        return string(str);
-    }
-
     function getPromiseFactoryContract() public view returns (address) {
         return s_promiseFactoryContract;
     }
 
     function getOraclePayment() public pure returns (uint256) {
         return ORACLE_PAYMENT;
-    }
-
-    // Additional function for testing
-    function getJobId() public pure returns (bytes32) {
-        return ORACLE_JOB_ID;
     }
 }
