@@ -5,6 +5,7 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "./IPromiseFactory.sol";
 import "./utils/AddressToString.sol";
+import "hardhat/console.sol";
 
 /**
  * @author polarzero
@@ -77,12 +78,14 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         // Generate a signature with
         // "Verifying my Twitter account for ETH address <address>" as the message
         // It will prevent the signature from being passed as a parameter
+        // It needs to be exactly the same as the one in the tweet
         string memory signature = string(
             abi.encodePacked(
                 "Verifying my Twitter account for ETH address ",
                 userAddress
             )
         );
+        console.log(signature);
 
         req.add("username", _username);
         req.add("signature", signature);
