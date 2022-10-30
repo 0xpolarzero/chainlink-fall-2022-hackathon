@@ -2,7 +2,6 @@
 pragma solidity ^0.8.16;
 
 import "./PromiseContract.sol";
-import "hardhat/console.sol";
 
 /**
  * @author polarzero
@@ -16,11 +15,16 @@ contract PromiseFactory {
     error PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
     error PromiseFactory__createPromiseContract__DUPLICATE_FIELD();
     error PromiseFactory__createPromiseContract__INVALID_URI();
+    error PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
     error PromiseFactory__NOT_OWNER();
-    error PromiseFactory__NOT_OPERATOR();
+    error PromiseFactory__NOT_VERIFIER();
 
     /// Variables
+    address public immutable i_owner;
+    // The Chainlink operator
     address public s_operator;
+    // The VerifyTwitter contract
+    address public s_verifier;
 
     // Map the owner addresses to the child contracts they created
     mapping(address => PromiseContract[]) public promiseContracts;
@@ -41,15 +45,16 @@ contract PromiseFactory {
 
     /// Modifiers
     modifier onlyOwner() {
-        if (msg.sender != tx.origin) {
+        // msg sender should be the deployer of the contract
+        if (msg.sender != i_owner) {
             revert PromiseFactory__NOT_OWNER();
         }
         _;
     }
 
-    modifier onlyOperator() {
-        if (msg.sender != s_operator) {
-            revert PromiseFactory__NOT_OPERATOR();
+    modifier onlyVerifier() {
+        if (msg.sender != s_verifier) {
+            revert PromiseFactory__NOT_VERIFIER();
         }
         _;
     }
@@ -62,6 +67,7 @@ contract PromiseFactory {
      */
 
     constructor(address _operator) {
+        i_owner = msg.sender;
         s_operator = _operator;
     }
 
@@ -172,21 +178,39 @@ contract PromiseFactory {
     function addTwitterVerifiedUser(
         address _userAddress,
         string memory _twitterHandle
-    ) external onlyOperator {
-        // If the user address already has a verified account, add this one to the array
-        if (twitterVerifiedUsers[_userAddress].length > 0) {
+    ) external onlyVerifier {
+        // If the user address doesn't have a verified account yet, create a new array
+        if (twitterVerifiedUsers[_userAddress].length == 0) {
+            twitterVerifiedUsers[_userAddress] = new string[](1);
+            // Add the verified account to the array
+            twitterVerifiedUsers[_userAddress][0] = _twitterHandle;
+        } else if (twitterVerifiedUsers[_userAddress].length > 0) {
+            for (
+                uint256 i = 0;
+                i < twitterVerifiedUsers[_userAddress].length;
+                i++
+            ) {
+                // If the user already verified this account, revert
+                if (
+                    keccak256(
+                        abi.encodePacked(twitterVerifiedUsers[_userAddress][i])
+                    ) == keccak256(abi.encodePacked(_twitterHandle))
+                ) {
+                    revert PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
+                }
+            }
+            // But if it is not included, add it
             twitterVerifiedUsers[_userAddress].push(_twitterHandle);
-        } else {
-            // If the user address doesn't have a verified account yet, create a new array
-            string[] memory usernames = new string[](1);
-            usernames[0] = _twitterHandle;
-            twitterVerifiedUsers[_userAddress] = usernames;
         }
     }
 
     /// Setters
     function setOperator(address _operator) external onlyOwner {
         s_operator = _operator;
+    }
+
+    function setVerifier(address _verifier) external onlyOwner {
+        s_verifier = _verifier;
     }
 
     /// Getters
