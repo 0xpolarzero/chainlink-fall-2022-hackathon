@@ -26,6 +26,7 @@ const roClient = client.readOnly;
 const customParams = {
   username: true,
   signature: true,
+  address: true,
   endpoint: false,
 };
 
@@ -35,6 +36,7 @@ const createRequest = (input, callback) => {
   const jobRunID = validator.validated.id;
   const username = validator.validated.data.username || 'TwitterDev';
   const signature = validator.validated.data.signature || 'false';
+  const address = validator.validated.data.address || 'false';
 
   // Get the user's ID from their username
   roClient.v2
@@ -62,28 +64,29 @@ const createRequest = (input, callback) => {
             tweets.some((tweet) => tweet.text.includes(signature));
 
           // Return an error if it could not verify the signature
-          if (!result) {
-            callback(
-              500,
-              Requester.errored(jobRunID, 'Could not verify signature'),
-            );
-          } else {
-            // Gather the response data
-            const response = {
-              data: {
-                result: result,
-                username: preRes.data.username,
-                userId: preRes.data.id,
-                name: preRes.data.name,
-                tweets,
-              },
-              jobRunID,
-              status: 200,
-            };
+          // if (!result) {
+          //   callback(
+          //     500,
+          //     Requester.errored(jobRunID, 'Could not verify signature'),
+          //   );
+          // } else {
+          // Gather the response data
+          const response = {
+            data: {
+              result: result,
+              username: preRes.data.username,
+              address,
+              userId: preRes.data.id,
+              name: preRes.data.name,
+              tweets,
+            },
+            jobRunID,
+            status: 200,
+          };
 
-            // Then return the response data to the Chainlink node
-            callback(response.status, Requester.success(jobRunID, response));
-          }
+          // Then return the response data to the Chainlink node
+          callback(response.status, Requester.success(jobRunID, response));
+          // }
         })
         .catch((error) => {
           console.log(error);

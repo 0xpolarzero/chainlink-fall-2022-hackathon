@@ -14,10 +14,10 @@ observationSource = """
     fetch           [type="bridge" name="twitter" requestData="{\\"id\\": $(jobSpec.externalJobID), \\"data\\": { \\"username\\": $(decode_cbor.username), \\"signature\\": $(decode_cbor.signature), \\"address\\": $(decode_cbor.address)}}"]
     parseResult     [type="jsonparse" path="data,result" data="$(fetch)"]
     parseUsername   [type="jsonparse" path="data,username" data="$(fetch)"]
-    parseAddress    [type="jsonparse" path="data,userAddress" data="$(fetch)"]
+    parseAddress    [type="jsonparse" path="data,address" data="$(fetch)"]
 
-    encode_data     [type="ethabiencode" abi="(bytes32 _requestId, bool _verified, string _username, address _userAddress)"
-                        data="{\\"_requestId\\": $(decode_log.requestId), \\"_verified\\": $(parseResult),\\"username\\": $(parseUsername),\\"userAddress\\": $(parseAddress)}"]
+    encode_data     [type="ethabiencode" abi="(bytes32 _requestId, string _username, bool _verified, address _userAddress)"
+                        data="{\\"_requestId\\": $(decode_log.requestId),\\"_username\\": $(parseUsername), \\"_verified\\": $(parseResult),\\"_userAddress\\": $(parseAddress)}"]
 
     encode_tx       [type="ethabiencode"
                         abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"

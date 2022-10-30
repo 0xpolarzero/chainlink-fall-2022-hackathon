@@ -11,6 +11,7 @@ const createRequest = require('../index.js').createRequest;
 const {
   CORRECT_SIGNATURE,
   INCORRECT_SIGNATURE,
+  ADDRESS,
 } = require('./mocks/mock-data.js');
 
 describe('createRequest', () => {
@@ -26,21 +27,33 @@ describe('createRequest', () => {
       {
         name: 'id not supplied',
         testData: {
-          data: { username: 'TwitterDev', signature: CORRECT_SIGNATURE },
+          data: {
+            username: 'TwitterDev',
+            signature: CORRECT_SIGNATURE,
+            address: ADDRESS,
+          },
         },
       },
       {
         name: 'empty id',
         testData: {
           id: '',
-          data: { username: 'TwitterDev', signature: CORRECT_SIGNATURE },
+          data: {
+            username: 'TwitterDev',
+            signature: CORRECT_SIGNATURE,
+            address: ADDRESS,
+          },
         },
       },
       {
-        name: 'regular username and correct signature',
+        name: 'regular username and address, correct signature',
         testData: {
           id: jobID,
-          data: { username: 'TwitterDev', signature: CORRECT_SIGNATURE },
+          data: {
+            username: 'TwitterDev',
+            signature: CORRECT_SIGNATURE,
+            address: ADDRESS,
+          },
         },
       },
     ];
@@ -65,7 +78,11 @@ describe('createRequest', () => {
       createRequest(
         {
           id: jobID,
-          data: { username: '', signature: CORRECT_SIGNATURE },
+          data: {
+            username: '',
+            signature: CORRECT_SIGNATURE,
+            address: ADDRESS,
+          },
         },
         (statusCode, data) => {
           assert.equal(statusCode, 200);
@@ -93,30 +110,56 @@ describe('createRequest', () => {
       },
       {
         name: 'username not supplied',
-        testData: { id: jobID, data: { signature: CORRECT_SIGNATURE } },
+        testData: {
+          id: jobID,
+          data: { signature: CORRECT_SIGNATURE, address: ADDRESS },
+        },
         expectedError: 'Required parameter not supplied: username',
       },
       {
         name: 'signature not supplied',
         testData: {
           id: jobID,
-          data: { username: 'TwitterDev' },
+          data: { username: 'TwitterDev', address: ADDRESS },
         },
         expectedError: 'Required parameter not supplied: signature',
+      },
+      {
+        name: 'address not supplied',
+        testData: {
+          id: jobID,
+          data: { username: 'TwitterDev', signature: CORRECT_SIGNATURE },
+        },
+        expectedError: 'Required parameter not supplied: address',
       },
       {
         name: 'signature empty',
         testData: {
           id: jobID,
-          data: { username: 'TwitterDev', signature: '' },
+          data: { username: 'TwitterDev', signature: '', address: ADDRESS },
         },
         expectedError: 'Could not verify signature',
+      },
+      {
+        name: 'address empty',
+        testData: {
+          id: jobID,
+          data: {
+            username: 'TwitterDev',
+            signature: CORRECT_SIGNATURE,
+            address: '',
+          },
+        },
       },
       {
         name: 'username with spaces',
         testData: {
           id: jobID,
-          data: { username: 'Twitter Dev', signature: CORRECT_SIGNATURE },
+          data: {
+            username: 'Twitter Dev',
+            signature: CORRECT_SIGNATURE,
+            address: ADDRESS,
+          },
         },
         expectedError:
           'Invalid Request: One or more parameters to your request was invalid.',
@@ -125,7 +168,11 @@ describe('createRequest', () => {
         name: 'username with special characters',
         testData: {
           id: jobID,
-          data: { username: 'TwitterDev!', signature: CORRECT_SIGNATURE },
+          data: {
+            username: 'TwitterDev!',
+            signature: CORRECT_SIGNATURE,
+            address: ADDRESS,
+          },
         },
         expectedError:
           'Invalid Request: One or more parameters to your request was invalid.',
@@ -134,7 +181,11 @@ describe('createRequest', () => {
         name: 'incorrect signature',
         testData: {
           id: jobID,
-          data: { username: 'TwitterDev', signature: INCORRECT_SIGNATURE },
+          data: {
+            username: 'TwitterDev',
+            signature: INCORRECT_SIGNATURE,
+            address: ADDRESS,
+          },
         },
         expectedError: 'Could not verify signature',
       },
@@ -159,7 +210,7 @@ describe('createRequest', () => {
     it('username not found', (done) => {
       const req = {
         id: jobID,
-        data: { username: 'notarealuser', signature: '0x' },
+        data: { username: 'notarealuser', signature: '0x', address: ADDRESS },
       };
       createRequest(req, (statusCode, data) => {
         assert.equal(statusCode, 500);
@@ -197,6 +248,7 @@ describe('createRequest', () => {
         data: {
           username: 'TwitterDevTwitterDevTwitterDevTwitterDev',
           signature: '0x',
+          address: ADDRESS,
         },
       };
       createRequest(req, (statusCode, data) => {

@@ -1,5 +1,6 @@
 const CORRECT_SIGNATURE = '0xc06d127E504a944f63Bc750D8F512556c576F3EF';
 const INCORRECT_SIGNATURE = '0X29F';
+const ADDRESS = '0xc06d127E504a944f63Bc750D8F512556c576F3EF';
 
 const mockTweets = [
   {
@@ -13,5 +14,6 @@ const mockTweets = [
 module.exports = {
   CORRECT_SIGNATURE,
   INCORRECT_SIGNATURE,
+  ADDRESS,
   mockTweets,
 };
