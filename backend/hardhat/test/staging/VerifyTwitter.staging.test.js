@@ -3,12 +3,12 @@ const {
   developmentChains,
   ORACLE_PAYMENT,
   LINK_TOKEN_MUMBAI,
-  OPERATOR,
 } = require('../../helper-hardhat-config');
 const { deployments, network, ethers } = require('hardhat');
 
 const VERIFIED_USERNAME = 'testAcc09617400';
 const UNVERIFIED_USERNAME = 'TwitterDev';
+const REQUIRED_LINK_AMOUNT_FOR_TESTS = ethers.utils.parseEther('0.2');
 
 developmentChains.includes(network.name)
   ? describe.skip
@@ -20,7 +20,7 @@ developmentChains.includes(network.name)
       let promiseFactory;
       let expectedRequestId;
 
-      beforeEach(async () => {
+      before(async () => {
         const accounts = await ethers.getSigners();
         deployer = accounts[0];
         user = accounts[1];
@@ -42,31 +42,39 @@ developmentChains.includes(network.name)
         console.log('Allowed verifier set.');
 
         // Fund the VerifyTwitter contract with LINK if the balance is < 0.2 LINK
-        console.log('Funding VerifyTwitter contract with LINK...');
         const linkBalance = await verifyTwitter.getLinkBalance();
-        if (linkBalance < ethers.utils.parseEther('0.2')) {
+
+        if (linkBalance < REQUIRED_LINK_AMOUNT_FOR_TESTS) {
+          console.log('Funding VerifyTwitter contract with LINK...');
           const linkToken = await ethers.getContractAt(
-            'LinkTokenInterface',
+            '@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol:LinkTokenInterface',
             LINK_TOKEN_MUMBAI,
+            deployer,
           );
-          await linkToken
-            .connect(deployer)
-            .transfer(verifyTwitter.address, ethers.utils.parseEther('0.2'));
+          await linkToken.transfer(
+            verifyTwitter.address,
+            REQUIRED_LINK_AMOUNT_FOR_TESTS,
+          );
+          console.log('Waiting for VerifyTwitter contract to receive LINK...');
+
+          // Wait for the VerifyTwitter contract to receive the LINK
+          let balance = await verifyTwitter.getLinkBalance();
+          while (balance < REQUIRED_LINK_AMOUNT_FOR_TESTS) {
+            console.log('Waiting...');
+            await new Promise((r) => setTimeout(r, 5000));
+            balance = await verifyTwitter.getLinkBalance();
+          }
+          console.log('Funding complete.');
         }
-        console.log('Funding complete.');
       });
 
       describe('constructor', function() {
         it('Should initialize the contract correctly', async () => {
           const promiseFactoryAddress = await verifyTwitter.getPromiseFactoryContract();
-          const linkTokenAddress = await verifyTwitter.chainlinkTokenAddress();
-          const oracleAddress = await verifyTwitter.chainlinkOracleAddress();
           // It is a constant not initialized in the constructor, so not really necessary to test
           const oraclePayment = await verifyTwitter.getOraclePayment();
 
           assert.equal(promiseFactoryAddress, promiseFactory.address);
-          assert.equal(linkTokenAddress, LINK_TOKEN_MUMBAI);
-          assert.equal(oracleAddress, OPERATOR);
           assert.equal(oraclePayment.toString(), ORACLE_PAYMENT);
         });
       });
@@ -77,22 +85,31 @@ developmentChains.includes(network.name)
             UNVERIFIED_USERNAME,
           );
           const txReceipt = await tx.wait(1);
-          const event = txReceipt.events[0];
+          const event = txReceipt.events[4];
 
           assert.equal(event.event, 'VerificationRequested');
           assert.equal(event.args.username, UNVERIFIED_USERNAME);
         });
       });
-      describe('fulfillVerification', function() {
+      describe.only('fulfillVerification', function() {
         it('Should revert if called by anyone other than the oracle', async () => {
           verifyTwitter = verifyTwitterDeploy.connect(user);
+          const userAddress = await user.getAddress();
 
+          // Request a verification
+          const tx = await verifyTwitter.requestVerification(
+            UNVERIFIED_USERNAME,
+          );
+          const txReceipt = await tx.wait(1);
+          const requestId = txReceipt.events[4].args.requestId;
+
+          // Try to fulfill the verification before the oracle does
           await expect(
             verifyTwitter.fulfillVerification(
-              REQUEST_ID,
+              requestId,
               UNVERIFIED_USERNAME,
               true,
-              user.address,
+              userAddress,
             ),
           ).to.be.revertedWith('Source must be the oracle of the request');
         });
@@ -101,23 +118,33 @@ developmentChains.includes(network.name)
           it('Should emit a failed event and not add the user to the verified users mapping', async () => {
             // Setup a listener for the VerificationFailed event
             await new Promise(async (resolve, reject) => {
+              console.log('Waiting for the oracle to fulfill the request...');
               verifyTwitter.once(
                 'VerificationFailed',
                 async (requestId, username) => {
                   console.log('VerificationFailed event emitted');
-                  assert.equal(username, UNVERIFIED_USERNAME);
-                  assert.equal(requestId, expectedRequestId);
-                  resolve();
+
+                  try {
+                    assert.equal(username, UNVERIFIED_USERNAME);
+                    assert.equal(requestId, expectedRequestId);
+                    resolve();
+                  } catch (err) {
+                    console.log(err);
+                    reject(err);
+                  }
                 },
               );
-            });
 
-            const tx = await verifyTwitter.requestVerification(
-              UNVERIFIED_USERNAME,
-            );
-            const txReceipt = await tx.wait(1);
-            const event = txReceipt.events[0];
-            expectedRequestId = event.args.requestId;
+              // Request a verification
+              console.log('Requesting a verification...');
+              const tx = await verifyTwitter.requestVerification(
+                VERIFIED_USERNAME,
+              );
+              const txReceipt = await tx.wait(1);
+              const event = txReceipt.events[0];
+              expectedRequestId = event.args.requestId;
+              console.log('Verification requested.');
+            });
           });
         });
 
