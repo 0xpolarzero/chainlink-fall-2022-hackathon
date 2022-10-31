@@ -91,7 +91,7 @@ developmentChains.includes(network.name)
         });
       });
 
-      describe.only('fulfillVerification', function() {
+      describe('fulfillVerification', function() {
         it('Should revert if called by anyone other than the oracle', async () => {
           // Request a verification without waiting for the oracle to fulfill it
           const tx = await verifyTwitter.requestVerification(
@@ -125,7 +125,10 @@ developmentChains.includes(network.name)
                   deployer.address,
                 );
 
-                assert.equal(username.toString(), UNVERIFIED_USERNAME);
+                const usernameString = ethers.utils.parseBytes32String(
+                  username,
+                );
+                assert.equal(usernameString, UNVERIFIED_USERNAME);
                 assert.equal(isVerifiedHandle, '');
 
                 resolve();
@@ -158,7 +161,11 @@ developmentChains.includes(network.name)
                 const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
                   deployer.address,
                 );
-                assert.equal(username.toString(), VERIFIED_USERNAME);
+
+                const usernameString = ethers.utils.parseBytes32String(
+                  username,
+                );
+                assert.equal(usernameString, VERIFIED_USERNAME);
                 assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
 
                 resolve();

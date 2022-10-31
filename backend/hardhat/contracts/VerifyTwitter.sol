@@ -75,24 +75,8 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         );
         string memory userAddress = addressToString(msg.sender);
 
-        // Generate a signature with
-        // "Verifying my Twitter account for ETH address <address>" as the message
-        // It will prevent the signature from being passed as a parameter
-        // It needs to be exactly the same as the one in the tweet
-        // string memory signature = string(
-        //     abi.encodePacked(
-        //         "Verifying my Twitter account for ETH address ",
-        //         userAddress
-        //     )
-        // );
-        // console.log(signature);
-
         req.add("username", _username);
-        // req.add("signature", signature);
         req.add("address", userAddress);
-        // req.add("copyPath1", "data,username"); // username (string)
-        // req.add("copyPath2", "data,result"); // verified (bool)
-        // req.add("copyPath3", "data,userAddress"); // user address (msg.sender here) (address)
         requestId = sendOperatorRequest(req, ORACLE_PAYMENT);
 
         emit VerificationRequested(requestId, _username);
