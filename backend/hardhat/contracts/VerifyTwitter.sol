@@ -20,7 +20,7 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
 
     // Chainlink variables
     uint256 private constant ORACLE_PAYMENT = (1 * LINK_DIVISIBILITY) / 10; // 0.1 LINK
-    bytes32 private s_oracleJobId = "2adee90f8a864ae1ab4138d06d99a80f";
+    bytes32 private s_oracleJobId = "459ca80806fd4ebc92f056bf015a26dc";
 
     // Declare the PromiseFactory contract address and the interface
     address private s_promiseFactoryContract;
@@ -79,16 +79,16 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         // "Verifying my Twitter account for ETH address <address>" as the message
         // It will prevent the signature from being passed as a parameter
         // It needs to be exactly the same as the one in the tweet
-        string memory signature = string(
-            abi.encodePacked(
-                "Verifying my Twitter account for ETH address ",
-                userAddress
-            )
-        );
-        console.log(signature);
+        // string memory signature = string(
+        //     abi.encodePacked(
+        //         "Verifying my Twitter account for ETH address ",
+        //         userAddress
+        //     )
+        // );
+        // console.log(signature);
 
         req.add("username", _username);
-        req.add("signature", signature);
+        // req.add("signature", signature);
         req.add("address", userAddress);
         // req.add("copyPath1", "data,username"); // username (string)
         // req.add("copyPath2", "data,result"); // verified (bool)
