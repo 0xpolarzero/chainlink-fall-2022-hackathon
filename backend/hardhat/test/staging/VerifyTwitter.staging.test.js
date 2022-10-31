@@ -1,4 +1,4 @@
-const { assert, expect } = require('chai');
+const { assert, expect, use } = require('chai');
 const {
   developmentChains,
   ORACLE_PAYMENT,
@@ -7,8 +7,9 @@ const {
 const { deployments, network, ethers } = require('hardhat');
 
 const VERIFIED_USERNAME = 'testAcc09617400';
+const VERIFIED_USERNAME_2 = 'testAcc09617401';
 const UNVERIFIED_USERNAME = 'TwitterDev';
-const REQUIRED_LINK_AMOUNT_FOR_TESTS = ethers.utils.parseEther('0.2');
+const REQUIRED_LINK_AMOUNT_FOR_TESTS = ethers.utils.parseEther('0.6');
 
 developmentChains.includes(network.name)
   ? describe.skip
@@ -112,82 +113,100 @@ developmentChains.includes(network.name)
         });
 
         it('Should emit a failed event and not add the user to the verified users mapping', async () => {
-          // Setup a listener for the VerificationFailed event
-          console.log('Setting up Listener...');
-          await new Promise(async (resolve, reject) => {
-            console.log('Waiting for the oracle to fulfill the request...');
-
-            verifyTwitter.once('VerificationFailed', async (username) => {
-              console.log('VerificationFailed event fired.');
-              try {
-                // Check the mapping in PromiseFactory
-                const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
-                  deployer.address,
-                );
-
-                const usernameString = ethers.utils.parseBytes32String(
-                  username,
-                );
-                assert.equal(usernameString, UNVERIFIED_USERNAME);
-                assert.equal(isVerifiedHandle, '');
-
-                resolve();
-              } catch (error) {
-                console.log(error);
-                reject(error);
-              }
-            });
-
-            // Request a verification
-            console.log('Requesting a verification...');
-            const tx = await verifyTwitter.requestVerification(
-              UNVERIFIED_USERNAME,
+          const verifications = async () => {
+            // Check the mapping in PromiseFactory
+            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
+              deployer.address,
             );
-            await tx.wait(1);
-            console.log('Verification requested.');
-          });
+
+            assert.equal(isVerifiedHandle, '');
+          };
+
+          await requestAVerification(
+            UNVERIFIED_USERNAME,
+            'VerificationFailed',
+            verifications,
+          );
         });
 
-        it.only('Should emit a successful event and add the user to the verified users mapping', async () => {
-          // Setup a listener for the VerificationSuccessful event
-          console.log('Setting up Listener...');
-          await new Promise(async (resolve, reject) => {
-            console.log('Waiting for the oracle to fulfill the request...');
-
-            verifyTwitter.once('VerificationSuccessful', async (username) => {
-              console.log('VerificationSuccessful event fired.');
-              try {
-                // Check the mapping in PromiseFactory
-                const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
-                  deployer.address,
-                );
-
-                const usernameString = ethers.utils.parseBytes32String(
-                  username,
-                );
-                assert.equal(usernameString, VERIFIED_USERNAME);
-                assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
-
-                resolve();
-              } catch (error) {
-                console.log(error);
-                reject(error);
-              }
-            });
-
-            // Request a verification
-            console.log('Requesting a verification...');
-            const tx = await verifyTwitter.requestVerification(
-              VERIFIED_USERNAME,
+        it('Should emit a successful event and add the user to the verified users mapping', async () => {
+          const verifications = async () => {
+            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
+              deployer.address,
             );
-            await tx.wait(1);
-            console.log('Verification requested.');
-          });
+
+            assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
+          };
+
+          await requestAVerification(
+            VERIFIED_USERNAME,
+            'VerificationSuccessful',
+            verifications,
+          );
         });
 
-        // Event failed and not add
-        // Event successful and add
-        // Allow to add again
-        // Reverts if same username
+        it('Should allow a user to verify an additional username with their address', async () => {
+          const verifications = async () => {
+            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
+              deployer.address,
+            );
+
+            assert.equal(isVerifiedHandle[1], VERIFIED_USERNAME_2);
+            assert.equal(isVerifiedHandle.length, 2);
+          };
+
+          await requestAVerification(
+            VERIFIED_USERNAME_2,
+            'VerificationSuccessful',
+            verifications,
+          );
+        });
+
+        it("Should not add the verified account if it's already been verified for this address", async () => {
+          const verifications = async () => {
+            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
+              deployer.address,
+            );
+
+            // The mapping should be left untouched
+            assert.equal(isVerifiedHandle[1], VERIFIED_USERNAME_2);
+            assert.equal(isVerifiedHandle.length, 2);
+          };
+
+          await requestAVerification(
+            VERIFIED_USERNAME_2,
+            'VerificationSuccessful',
+            verifications,
+          );
+        });
       });
+
+      const requestAVerification = async (
+        username,
+        event,
+        verificationsToPerform,
+      ) => {
+        // Setup a listener for the event
+        console.log('Setting up Listener...');
+        await new Promise(async (resolve, reject) => {
+          console.log('Waiting for the oracle to fulfill the request...');
+
+          verifyTwitter.once(event, async () => {
+            console.log(`${event} event fired.`);
+            try {
+              await verificationsToPerform();
+              resolve();
+            } catch (err) {
+              console.log(err);
+              reject(err);
+            }
+          });
+
+          // Request a verification
+          console.log('Requesting a verification...');
+          const tx = await verifyTwitter.requestVerification(username);
+          await tx.wait(1);
+          console.log('Verification requested.');
+        });
+      };
     });

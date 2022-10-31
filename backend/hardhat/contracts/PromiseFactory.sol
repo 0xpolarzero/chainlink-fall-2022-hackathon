@@ -27,10 +27,10 @@ contract PromiseFactory {
     address private s_verifier;
 
     // Map the owner addresses to the child contracts they created
-    mapping(address => PromiseContract[]) private promiseContracts;
+    mapping(address => PromiseContract[]) private s_promiseContracts;
 
     // Map the user addresses to their verified Twitter account(s)
-    mapping(address => string[]) private twitterVerifiedUsers;
+    mapping(address => string[]) private s_twitterVerifiedUsers;
 
     /// Events
     event PromiseContractCreated(
@@ -41,6 +41,11 @@ contract PromiseFactory {
         string[] _partyNames,
         string[] _partyTwitterHandles,
         address[] _partyAddresses
+    );
+
+    event TwitterVerifiedUserAdded(
+        address indexed _owner,
+        string _twitterHandle
     );
 
     /// Modifiers
@@ -152,7 +157,7 @@ contract PromiseFactory {
             _partyTwitterHandles,
             _partyAddresses
         );
-        promiseContracts[msg.sender].push(promiseContract);
+        s_promiseContracts[msg.sender].push(promiseContract);
 
         emit PromiseContractCreated(
             msg.sender,
@@ -180,27 +185,26 @@ contract PromiseFactory {
         string memory _twitterHandle
     ) external onlyVerifier {
         // If the user address doesn't have a verified account yet, create a new array
-        if (twitterVerifiedUsers[_userAddress].length == 0) {
-            twitterVerifiedUsers[_userAddress] = new string[](1);
+        if (s_twitterVerifiedUsers[_userAddress].length == 0) {
+            s_twitterVerifiedUsers[_userAddress] = new string[](1);
             // Add the verified account to the array
-            twitterVerifiedUsers[_userAddress][0] = _twitterHandle;
-        } else if (twitterVerifiedUsers[_userAddress].length > 0) {
-            for (
-                uint256 i = 0;
-                i < twitterVerifiedUsers[_userAddress].length;
-                i++
-            ) {
+            s_twitterVerifiedUsers[_userAddress][0] = _twitterHandle;
+        } else if (s_twitterVerifiedUsers[_userAddress].length > 0) {
+            string[] memory verifiedAccounts = s_twitterVerifiedUsers[
+                _userAddress
+            ];
+            for (uint256 i = 0; i < verifiedAccounts.length; i++) {
                 // If the user already verified this account, revert
                 if (
-                    keccak256(
-                        abi.encodePacked(twitterVerifiedUsers[_userAddress][i])
-                    ) == keccak256(abi.encodePacked(_twitterHandle))
+                    keccak256(abi.encodePacked(verifiedAccounts[i])) ==
+                    keccak256(abi.encodePacked(_twitterHandle))
                 ) {
                     revert PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
                 }
             }
             // But if it is not included, add it
-            twitterVerifiedUsers[_userAddress].push(_twitterHandle);
+            s_twitterVerifiedUsers[_userAddress].push(_twitterHandle);
+            emit TwitterVerifiedUserAdded(_userAddress, _twitterHandle);
         }
     }
 
@@ -219,7 +223,7 @@ contract PromiseFactory {
         view
         returns (PromiseContract[] memory)
     {
-        return promiseContracts[_owner];
+        return s_promiseContracts[_owner];
     }
 
     function getPromiseContractCount(address _userAddress)
@@ -227,7 +231,7 @@ contract PromiseFactory {
         view
         returns (uint256)
     {
-        return promiseContracts[_userAddress].length;
+        return s_promiseContracts[_userAddress].length;
     }
 
     function getTwitterVerifiedHandle(address _userAddress)
@@ -236,8 +240,8 @@ contract PromiseFactory {
         returns (string[] memory)
     {
         // Return the username if the user has a verified account
-        if (twitterVerifiedUsers[_userAddress].length > 0) {
-            return twitterVerifiedUsers[_userAddress];
+        if (s_twitterVerifiedUsers[_userAddress].length > 0) {
+            return s_twitterVerifiedUsers[_userAddress];
         } else {
             // Return an empty array
             string[] memory usernames = new string[](0);
