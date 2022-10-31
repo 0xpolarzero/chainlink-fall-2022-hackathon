@@ -11,7 +11,7 @@ observationSource = """
                         topics="$(jobRun.logTopics)"]
 
     decode_cbor     [type="cborparse" data="$(decode_log.data)"]
-    fetch           [type="bridge" name="twitter" requestData="{\\"id\\": $(jobSpec.externalJobID), \\"data\\": { \\"username\\": $(decode_cbor.username), \\"signature\\": $(decode_cbor.signature), \\"address\\": $(decode_cbor.address)}}"]
+    fetch           [type="bridge" name="twitter" requestData="{\\"id\\": $(jobSpec.externalJobID), \\"data\\": { \\"username\\": $(decode_cbor.username), \\"address\\": $(decode_cbor.address)}}"]
     parseResult     [type="jsonparse" path="data,result" data="$(fetch)"]
     parseUsername   [type="jsonparse" path="data,username" data="$(fetch)"]
     parseAddress    [type="jsonparse" path="data,address" data="$(fetch)"]

@@ -25,7 +25,6 @@ const roClient = client.readOnly;
 // should be required.
 const customParams = {
   username: true,
-  signature: true,
   address: true,
   endpoint: false,
 };
@@ -35,63 +34,72 @@ const createRequest = (input, callback) => {
   const validator = new Validator(callback, input, customParams);
   const jobRunID = validator.validated.id;
   const username = validator.validated.data.username || 'TwitterDev';
-  const signature = validator.validated.data.signature || 'false';
+  // const signature = validator.validated.data.signature || 'false';
   const address = validator.validated.data.address || 'false';
+
+  // Get the signature it should find in the tweet
+  const signature = `Verifying my Twitter account for ${address} with @usePromise!`;
 
   // Get the user's ID from their username
   roClient.v2
     .userByUsername(username)
     .then((preRes) => {
-      // ----------------- //
-      // Then get their 10 latest tweet
-      roClient.v2
-        .userTimeline(preRes.data.id, {
-          max_results: 10,
-          exclude: ['retweets', 'replies'],
-        })
+      // If the username doesn't exist, return early
+      if (preRes.errors && preRes.errors[0].title.includes('Not Found')) {
+        const response = {
+          data: {
+            username: username,
+            result: 'Not Found',
+            address,
+          },
+          jobRunID,
+          status: 200,
+        };
+        callback(response.status, Requester.success(jobRunID, response));
+      } else {
         // ----------------- //
-        // Then check if their 10 laters tweets include the signature
-        .then((res) => {
-          // Use mocks to get tweets with the signature for testing
-          // only in development
-          const tweets =
-            process.env.DEVELOPMENT === 'true' ? mockTweets : res.data.data;
+        // Then get their 10 latest tweet
+        roClient.v2
+          .userTimeline(preRes.data.id, {
+            max_results: 10,
+            exclude: ['retweets', 'replies'],
+          })
+          // ----------------- //
+          // Then check if their 10 laters tweets include the signature
+          .then((res) => {
+            // Use mocks to get tweets with the signature for testing
+            // only in development
+            const tweets =
+              process.env.DEVELOPMENT === 'true' ? mockTweets : res.data.data;
 
-          // In each one of the tweets, check if the signature is present
-          const result =
-            isValidHex(signature) &&
-            // If in the array tweets there is a tweet that includes the signature
-            tweets.some((tweet) => tweet.text.includes(signature));
+            // In each one of the tweets, check if the signature is present
+            const result =
+              // Make sure there is an address
+              isValidHex(address) &&
+              // If in the array tweets there is a tweet that includes the signature
+              tweets.some((tweet) => tweet.text.includes(signature));
 
-          // Return an error if it could not verify the signature
-          // if (!result) {
-          //   callback(
-          //     500,
-          //     Requester.errored(jobRunID, 'Could not verify signature'),
-          //   );
-          // } else {
-          // Gather the response data
-          const response = {
-            data: {
-              result: result,
-              username: preRes.data.username,
-              address,
-              userId: preRes.data.id,
-              name: preRes.data.name,
-              tweets,
-            },
-            jobRunID,
-            status: 200,
-          };
+            const response = {
+              data: {
+                result: result,
+                username: preRes.data.username,
+                address,
+                userId: preRes.data.id,
+                name: preRes.data.name,
+                tweets,
+              },
+              jobRunID,
+              status: 200,
+            };
 
-          // Then return the response data to the Chainlink node
-          callback(response.status, Requester.success(jobRunID, response));
-          // }
-        })
-        .catch((error) => {
-          console.log(error);
-          callback(500, Requester.errored(jobRunID, error));
-        });
+            // Then return the response data to the Chainlink node
+            callback(response.status, Requester.success(jobRunID, response));
+          })
+          .catch((error) => {
+            console.log(error);
+            callback(500, Requester.errored(jobRunID, error));
+          });
+      }
     })
     .catch((err) => {
       console.log(err);

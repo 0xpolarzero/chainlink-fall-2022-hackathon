@@ -9,9 +9,9 @@ const assert = require('chai').assert;
 const createRequest = require('../index.js').createRequest;
 
 const {
-  CORRECT_SIGNATURE,
-  INCORRECT_SIGNATURE,
-  ADDRESS,
+  CORRECT_ADDRESS,
+  INCORRECT_ADDRESS,
+  SIGNATURE,
 } = require('./mocks/mock-data.js');
 
 describe('createRequest', () => {
@@ -29,8 +29,7 @@ describe('createRequest', () => {
         testData: {
           data: {
             username: 'TwitterDev',
-            signature: CORRECT_SIGNATURE,
-            address: ADDRESS,
+            address: CORRECT_ADDRESS,
           },
         },
       },
@@ -40,19 +39,27 @@ describe('createRequest', () => {
           id: '',
           data: {
             username: 'TwitterDev',
-            signature: CORRECT_SIGNATURE,
-            address: ADDRESS,
+            address: CORRECT_ADDRESS,
           },
         },
       },
       {
-        name: 'regular username and address, correct signature',
+        name: 'address empty',
         testData: {
           id: jobID,
           data: {
             username: 'TwitterDev',
-            signature: CORRECT_SIGNATURE,
-            address: ADDRESS,
+            address: '',
+          },
+        },
+      },
+      {
+        name: 'regular username and address',
+        testData: {
+          id: jobID,
+          data: {
+            username: 'TwitterDev',
+            address: CORRECT_ADDRESS,
           },
         },
       },
@@ -64,7 +71,7 @@ describe('createRequest', () => {
           assert.equal(statusCode, 200);
           assert.equal(data.jobRunID, req.name === 'empty id' ? '' : jobID);
           assert.isNotEmpty(data.data);
-          assert.equal(data.data.result, true);
+          assert.equal(typeof data.data.result, 'boolean');
           assert.isNotEmpty(data.data.username);
           assert.isNotEmpty(data.data.userId);
           assert.isNotEmpty(data.data.name);
@@ -80,14 +87,13 @@ describe('createRequest', () => {
           id: jobID,
           data: {
             username: '',
-            signature: CORRECT_SIGNATURE,
-            address: ADDRESS,
+            address: INCORRECT_ADDRESS,
           },
         },
         (statusCode, data) => {
           assert.equal(statusCode, 200);
           assert.equal(data.jobRunID, jobID);
-          assert.equal(data.data.result, true);
+          assert.equal(typeof data.data.result, 'boolean');
           assert.equal(data.data.username, 'TwitterDev');
           assert.equal(data.data.userId, '2244994945');
           assert.equal(data.data.name, 'Twitter Dev');
@@ -104,7 +110,7 @@ describe('createRequest', () => {
   context('Error calls', () => {
     const requests = [
       {
-        name: 'username and signature not supplied',
+        name: 'username and address not supplied',
         testData: { id: jobID, data: {} },
         expectedError: 'Required parameter not supplied: username',
       },
@@ -112,44 +118,17 @@ describe('createRequest', () => {
         name: 'username not supplied',
         testData: {
           id: jobID,
-          data: { signature: CORRECT_SIGNATURE, address: ADDRESS },
+          data: { address: INCORRECT_ADDRESS },
         },
         expectedError: 'Required parameter not supplied: username',
-      },
-      {
-        name: 'signature not supplied',
-        testData: {
-          id: jobID,
-          data: { username: 'TwitterDev', address: ADDRESS },
-        },
-        expectedError: 'Required parameter not supplied: signature',
       },
       {
         name: 'address not supplied',
         testData: {
           id: jobID,
-          data: { username: 'TwitterDev', signature: CORRECT_SIGNATURE },
+          data: { username: 'TwitterDev' },
         },
         expectedError: 'Required parameter not supplied: address',
-      },
-      {
-        name: 'signature empty',
-        testData: {
-          id: jobID,
-          data: { username: 'TwitterDev', signature: '', address: ADDRESS },
-        },
-        expectedError: 'Could not verify signature',
-      },
-      {
-        name: 'address empty',
-        testData: {
-          id: jobID,
-          data: {
-            username: 'TwitterDev',
-            signature: CORRECT_SIGNATURE,
-            address: '',
-          },
-        },
       },
       {
         name: 'username with spaces',
@@ -157,8 +136,7 @@ describe('createRequest', () => {
           id: jobID,
           data: {
             username: 'Twitter Dev',
-            signature: CORRECT_SIGNATURE,
-            address: ADDRESS,
+            address: INCORRECT_ADDRESS,
           },
         },
         expectedError:
@@ -170,24 +148,11 @@ describe('createRequest', () => {
           id: jobID,
           data: {
             username: 'TwitterDev!',
-            signature: CORRECT_SIGNATURE,
-            address: ADDRESS,
+            address: INCORRECT_ADDRESS,
           },
         },
         expectedError:
           'Invalid Request: One or more parameters to your request was invalid.',
-      },
-      {
-        name: 'incorrect signature',
-        testData: {
-          id: jobID,
-          data: {
-            username: 'TwitterDev',
-            signature: INCORRECT_SIGNATURE,
-            address: ADDRESS,
-          },
-        },
-        expectedError: 'Could not verify signature',
       },
     ];
 
@@ -210,13 +175,13 @@ describe('createRequest', () => {
     it('username not found', (done) => {
       const req = {
         id: jobID,
-        data: { username: 'notarealuser', signature: '0x', address: ADDRESS },
+        // This is a bit of a hack, but it works
+        data: { username: 'cald02d238Aes08', address: INCORRECT_ADDRESS },
       };
       createRequest(req, (statusCode, data) => {
-        assert.equal(statusCode, 500);
+        assert.equal(statusCode, 200);
         assert.equal(data.jobRunID, jobID);
-        assert.equal(data.status, 'errored');
-        assert.isNotEmpty(data.error);
+        assert.equal(data.data.result, 'Not Found');
         done();
       });
     });
@@ -247,8 +212,7 @@ describe('createRequest', () => {
         id: jobID,
         data: {
           username: 'TwitterDevTwitterDevTwitterDevTwitterDev',
-          signature: '0x',
-          address: ADDRESS,
+          address: INCORRECT_ADDRESS,
         },
       };
       createRequest(req, (statusCode, data) => {
