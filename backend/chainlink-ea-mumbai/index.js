@@ -45,7 +45,10 @@ const createRequest = (input, callback) => {
     .userByUsername(username)
     .then((preRes) => {
       // If the username doesn't exist, return early
-      if (preRes.errors && preRes.errors[0].title.includes('Not Found')) {
+      if (
+        (preRes.errors && preRes.errors[0].title.includes('Not Found')) ||
+        !preRes.data.id
+      ) {
         const response = {
           data: {
             username: username,
