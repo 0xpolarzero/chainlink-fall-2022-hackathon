@@ -43,7 +43,12 @@ contract PromiseFactory {
         address[] _partyAddresses
     );
 
-    event TwitterVerifiedUserAdded(
+    event TwitterAddVerifiedSuccessful(
+        address indexed _owner,
+        string _twitterHandle
+    );
+
+    event TwitterAddVerifiedFailed(
         address indexed _owner,
         string _twitterHandle
     );
@@ -199,12 +204,13 @@ contract PromiseFactory {
                     keccak256(abi.encodePacked(verifiedAccounts[i])) ==
                     keccak256(abi.encodePacked(_twitterHandle))
                 ) {
+                    emit TwitterAddVerifiedFailed(_userAddress, _twitterHandle);
                     revert PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
                 }
             }
             // But if it is not included, add it
             s_twitterVerifiedUsers[_userAddress].push(_twitterHandle);
-            emit TwitterVerifiedUserAdded(_userAddress, _twitterHandle);
+            emit TwitterAddVerifiedSuccessful(_userAddress, _twitterHandle);
         }
     }
 
