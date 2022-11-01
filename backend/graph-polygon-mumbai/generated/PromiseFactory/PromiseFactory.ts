@@ -52,6 +52,50 @@ export class PromiseContractCreated__Params {
   }
 }
 
+export class TwitterAddVerifiedFailed extends ethereum.Event {
+  get params(): TwitterAddVerifiedFailed__Params {
+    return new TwitterAddVerifiedFailed__Params(this);
+  }
+}
+
+export class TwitterAddVerifiedFailed__Params {
+  _event: TwitterAddVerifiedFailed;
+
+  constructor(event: TwitterAddVerifiedFailed) {
+    this._event = event;
+  }
+
+  get _owner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get _twitterHandle(): string {
+    return this._event.parameters[1].value.toString();
+  }
+}
+
+export class TwitterAddVerifiedSuccessful extends ethereum.Event {
+  get params(): TwitterAddVerifiedSuccessful__Params {
+    return new TwitterAddVerifiedSuccessful__Params(this);
+  }
+}
+
+export class TwitterAddVerifiedSuccessful__Params {
+  _event: TwitterAddVerifiedSuccessful;
+
+  constructor(event: TwitterAddVerifiedSuccessful) {
+    this._event = event;
+  }
+
+  get _owner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get _twitterHandle(): string {
+    return this._event.parameters[1].value.toString();
+  }
+}
+
 export class PromiseFactory extends ethereum.SmartContract {
   static bind(address: Address): PromiseFactory {
     return new PromiseFactory("PromiseFactory", address);
@@ -97,6 +141,36 @@ export class PromiseFactory extends ethereum.SmartContract {
         ethereum.Value.fromAddressArray(_partyAddresses)
       ]
     );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getOperator(): Address {
+    let result = super.call("getOperator", "getOperator():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_getOperator(): ethereum.CallResult<Address> {
+    let result = super.tryCall("getOperator", "getOperator():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getOwner(): Address {
+    let result = super.call("getOwner", "getOwner():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_getOwner(): ethereum.CallResult<Address> {
+    let result = super.tryCall("getOwner", "getOwner():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -154,36 +228,108 @@ export class PromiseFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  promiseContracts(param0: Address, param1: BigInt): Address {
+  getTwitterVerifiedHandle(_userAddress: Address): Array<string> {
     let result = super.call(
-      "promiseContracts",
-      "promiseContracts(address,uint256):(address)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
+      "getTwitterVerifiedHandle",
+      "getTwitterVerifiedHandle(address):(string[])",
+      [ethereum.Value.fromAddress(_userAddress)]
     );
 
-    return result[0].toAddress();
+    return result[0].toStringArray();
   }
 
-  try_promiseContracts(
-    param0: Address,
-    param1: BigInt
-  ): ethereum.CallResult<Address> {
+  try_getTwitterVerifiedHandle(
+    _userAddress: Address
+  ): ethereum.CallResult<Array<string>> {
     let result = super.tryCall(
-      "promiseContracts",
-      "promiseContracts(address,uint256):(address)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
+      "getTwitterVerifiedHandle",
+      "getTwitterVerifiedHandle(address):(string[])",
+      [ethereum.Value.fromAddress(_userAddress)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toStringArray());
+  }
+
+  getVerifier(): Address {
+    let result = super.call("getVerifier", "getVerifier():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_getVerifier(): ethereum.CallResult<Address> {
+    let result = super.tryCall("getVerifier", "getVerifier():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+}
+
+export class ConstructorCall extends ethereum.Call {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
+  }
+
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
+  }
+}
+
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+
+  get _operator(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class AddTwitterVerifiedUserCall extends ethereum.Call {
+  get inputs(): AddTwitterVerifiedUserCall__Inputs {
+    return new AddTwitterVerifiedUserCall__Inputs(this);
+  }
+
+  get outputs(): AddTwitterVerifiedUserCall__Outputs {
+    return new AddTwitterVerifiedUserCall__Outputs(this);
+  }
+}
+
+export class AddTwitterVerifiedUserCall__Inputs {
+  _call: AddTwitterVerifiedUserCall;
+
+  constructor(call: AddTwitterVerifiedUserCall) {
+    this._call = call;
+  }
+
+  get _userAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _twitterHandle(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+}
+
+export class AddTwitterVerifiedUserCall__Outputs {
+  _call: AddTwitterVerifiedUserCall;
+
+  constructor(call: AddTwitterVerifiedUserCall) {
+    this._call = call;
   }
 }
 
@@ -234,5 +380,65 @@ export class CreatePromiseContractCall__Outputs {
 
   get promiseContractAddress(): Address {
     return this._call.outputValues[0].value.toAddress();
+  }
+}
+
+export class SetOperatorCall extends ethereum.Call {
+  get inputs(): SetOperatorCall__Inputs {
+    return new SetOperatorCall__Inputs(this);
+  }
+
+  get outputs(): SetOperatorCall__Outputs {
+    return new SetOperatorCall__Outputs(this);
+  }
+}
+
+export class SetOperatorCall__Inputs {
+  _call: SetOperatorCall;
+
+  constructor(call: SetOperatorCall) {
+    this._call = call;
+  }
+
+  get _operator(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetOperatorCall__Outputs {
+  _call: SetOperatorCall;
+
+  constructor(call: SetOperatorCall) {
+    this._call = call;
+  }
+}
+
+export class SetVerifierCall extends ethereum.Call {
+  get inputs(): SetVerifierCall__Inputs {
+    return new SetVerifierCall__Inputs(this);
+  }
+
+  get outputs(): SetVerifierCall__Outputs {
+    return new SetVerifierCall__Outputs(this);
+  }
+}
+
+export class SetVerifierCall__Inputs {
+  _call: SetVerifierCall;
+
+  constructor(call: SetVerifierCall) {
+    this._call = call;
+  }
+
+  get _verifier(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetVerifierCall__Outputs {
+  _call: SetVerifierCall;
+
+  constructor(call: SetVerifierCall) {
+    this._call = call;
   }
 }

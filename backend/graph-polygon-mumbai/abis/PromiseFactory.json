@@ -1,5 +1,14 @@
 [
   {
+    "inputs": [
+      { "internalType": "address", "name": "_operator", "type": "address" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  { "inputs": [], "name": "PromiseFactory__NOT_OWNER", "type": "error" },
+  { "inputs": [], "name": "PromiseFactory__NOT_VERIFIER", "type": "error" },
+  {
     "inputs": [],
     "name": "PromiseFactory__createPromiseContract__DUPLICATE_FIELD",
     "type": "error"
@@ -69,6 +78,54 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_twitterHandle",
+        "type": "string"
+      }
+    ],
+    "name": "TwitterAddVerifiedFailed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_twitterHandle",
+        "type": "string"
+      }
+    ],
+    "name": "TwitterAddVerifiedSuccessful",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_userAddress", "type": "address" },
+      { "internalType": "string", "name": "_twitterHandle", "type": "string" }
+    ],
+    "name": "addTwitterVerifiedUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "string", "name": "_promiseName", "type": "string" },
       { "internalType": "string", "name": "_pdfUri", "type": "string" },
@@ -93,6 +150,20 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getOperator",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getOwner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -121,18 +192,36 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
+      { "internalType": "address", "name": "_userAddress", "type": "address" }
     ],
-    "name": "promiseContracts",
-    "outputs": [
-      {
-        "internalType": "contract PromiseContract",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "name": "getTwitterVerifiedHandle",
+    "outputs": [{ "internalType": "string[]", "name": "", "type": "string[]" }],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getVerifier",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_operator", "type": "address" }
+    ],
+    "name": "setOperator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_verifier", "type": "address" }
+    ],
+    "name": "setVerifier",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
