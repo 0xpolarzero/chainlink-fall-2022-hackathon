@@ -47,12 +47,12 @@ const createRequest = (input, callback) => {
       // If the username doesn't exist, return early
       if (
         (preRes.errors && preRes.errors[0].title.includes('Not Found')) ||
-        !preRes.data.id
+        !preRes.data
       ) {
         const response = {
           data: {
             username: username,
-            result: 'Not Found',
+            result: false,
             address,
           },
           jobRunID,

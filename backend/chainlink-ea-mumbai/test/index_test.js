@@ -4,15 +4,10 @@
  * @dev A variable `DEVELOPMENT` must be set to true in the .env file
  */
 
-const { expect } = require('chai');
 const assert = require('chai').assert;
 const createRequest = require('../index.js').createRequest;
 
-const {
-  CORRECT_ADDRESS,
-  INCORRECT_ADDRESS,
-  SIGNATURE,
-} = require('./mocks/mock-data.js');
+const { CORRECT_ADDRESS, INCORRECT_ADDRESS } = require('./mocks/mock-data.js');
 
 describe('createRequest', () => {
   const jobID = '1';
@@ -68,6 +63,7 @@ describe('createRequest', () => {
     requests.forEach((req) => {
       it(`${req.name}`, (done) => {
         createRequest(req.testData, (statusCode, data) => {
+          console.log(data);
           assert.equal(statusCode, 200);
           assert.equal(data.jobRunID, req.name === 'empty id' ? '' : jobID);
           assert.isNotEmpty(data.data);
@@ -181,7 +177,7 @@ describe('createRequest', () => {
       createRequest(req, (statusCode, data) => {
         assert.equal(statusCode, 200);
         assert.equal(data.jobRunID, jobID);
-        assert.equal(data.data.result, 'Not Found');
+        assert.equal(data.data.result, false);
         done();
       });
     });
