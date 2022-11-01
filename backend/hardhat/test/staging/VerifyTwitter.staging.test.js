@@ -182,7 +182,7 @@ developmentChains.includes(network.name)
 
           await requestAVerification(
             promiseFactory,
-            VERIFIED_USERNAME_2,
+            VERIFIED_USERNAME,
             'TwitterAddVerifiedFailed',
             verifications,
           );
