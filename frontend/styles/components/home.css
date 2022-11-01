@@ -10,8 +10,13 @@
 }
 
 .section-home .title {
+  /* gradient text */
+  background: var(--gradient-color-pink);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: 3rem;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .section-home .caption {

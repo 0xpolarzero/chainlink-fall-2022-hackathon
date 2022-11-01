@@ -21,6 +21,9 @@
   --liberty: #555e99ff;
   --popstar: #c35764ff;
   --popstar-dark: rgb(60, 26, 31);
+  --pink-dark: #fe8dc6;
+  --pink-light: #fed1c7;
+
   --gradient-color-main: linear-gradient(
     90deg,
     var(--crimson-ua) 0%,
@@ -30,6 +33,11 @@
     90deg,
     var(--popstar) 0%,
     var(--liberty) 100%
+  );
+  --gradient-color-pink: linear-gradient(
+    90deg,
+    var(--popstar) 0%,
+    var(--pink-light) 100%
   );
   --gradient-high-transparent: linear-gradient(
     90deg,
@@ -386,6 +394,10 @@ a:not(.header) {
   position: absolute !important;
 }
 
+.ant-btn.no-btn {
+  background: transparent !important;
+}
+
 .anticon {
   color: #fff !important;
   opacity: 0.7;
@@ -438,14 +450,6 @@ ant-select {
 .ant-drawer-content {
   background: var(--gradient-high-transparent) !important;
   backdrop-filter: blur(10px) !important;
-}
-
-.ant-modal-content {
-  /* backdrop-filter: blur(10px) !important; */
-}
-
-.ant-table-content {
-  /* background: var(--popstar) !important; */
 }
 
 .ant-table {
@@ -525,4 +529,14 @@ ant-select {
 
 .fa-twitter {
   color: #50b0ec;
+}
+
+.fa-info-circle {
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.fa-info-circle:hover {
+  opacity: 1;
 }
