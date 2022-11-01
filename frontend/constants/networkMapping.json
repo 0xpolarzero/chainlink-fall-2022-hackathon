@@ -1,1 +1,6 @@
-{"80001":{"PromiseFactory":["0xaCB28c30B84a7F651Bfc7100169daEA02459c8CC"],"VerifyTwitter":["0x7474cE40AB18df22BAfFE7620b0314F69F2ae042"]}}
+{
+  "80001": {
+    "PromiseFactory": ["0xaCB28c30B84a7F651Bfc7100169daEA02459c8CC"],
+    "VerifyTwitter": ["0x7474cE40AB18df22BAfFE7620b0314F69F2ae042"]
+  }
+}

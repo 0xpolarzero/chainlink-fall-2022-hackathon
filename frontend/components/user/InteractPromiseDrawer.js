@@ -59,8 +59,15 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
 
   useEffect(() => {
     // Display data for the interacting user
+    // Get the index of this user's address in the partyAddresses array
+    const index = partyAddresses
+      .map((address) => address.toLowerCase())
+      .indexOf(userAddress.toLowerCase());
+    const interactingUserTwitterHandle = partyTwitterHandles[index] || '';
+
     const interactingUser = {
       address: userAddress,
+      twitterHandle: interactingUserTwitterHandle,
       promiseApprovedStatus: addressToApprovedStatus[userAddress.toLowerCase()],
       twitterVerifiedStatus:
         addressToTwitterVerifiedStatus[userAddress.toLowerCase()],
@@ -90,14 +97,16 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
       />
 
       <div className='drawer-item interaction'>
-        <RowPromiseApproval
-          key='approval'
-          interactingUser={interactingUser}
-          contractAddress={contractAddress}
-          userAddress={userAddress}
-          addressToApprovedStatus={addressToApprovedStatus}
-          gatherPartiesData={gatherPartiesData}
-        />
+        {interactingUser.twitterHandle === '' ? null : (
+          <RowPromiseApproval
+            key='approval'
+            interactingUser={interactingUser}
+            contractAddress={contractAddress}
+            userAddress={userAddress}
+            addressToApprovedStatus={addressToApprovedStatus}
+            gatherPartiesData={gatherPartiesData}
+          />
+        )}
 
         <RowPromiseVerification
           key='verification'

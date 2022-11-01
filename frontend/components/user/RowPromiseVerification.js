@@ -1,13 +1,16 @@
 import { getVerificationDiv } from '../../systems/promisePartiesData';
 import verifyTwitterAbi from '../../constants/VerifyTwitter.json';
-import { Button, Popover, Tooltip } from 'antd';
+import networkMapping from '../../constants/networkMapping';
+import { Button, Popover } from 'antd';
 import { toast } from 'react-toastify';
 import {
+  useNetwork,
   usePrepareContractWrite,
   useContractWrite,
-  useWaitForTransaction,
+  useProvider,
 } from 'wagmi';
 import { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
 
 export default function RowPromiseVerification({
   interactingUser,
@@ -16,22 +19,27 @@ export default function RowPromiseVerification({
   gatherPartiesData,
 }) {
   const [verificationDiv, setVerificationDiv] = useState(null);
+  const [isWaitingforVerification, setIsWaitingForVerification] =
+    useState(false);
+  const [verifyTwitterContract, setVerifyTwitterContract] = useState(
+    networkMapping['80001']['VerifyTwitter'][0],
+  );
+  const [requestId, setRequestId] = useState(null);
+  const { chain } = useNetwork();
+  const provider = useProvider();
+
   const { config: verifyConfig, error: verifyError } = usePrepareContractWrite({
-    //   address: contractAddress,
+    address: verifyTwitterContract,
     abi: verifyTwitterAbi,
     functionName: 'requestVerification',
-    args: [],
+    args: [interactingUser.twitterHandle],
     enabled:
       !!userAddress &&
       interactingUser.twitterVerifiedStatus !== undefined &&
       !interactingUser.twitterVerifiedStatus,
   });
 
-  const {
-    data: verificationData,
-    write: verifyTwitter,
-    isLoading: isVerifyingTwitter,
-  } = useContractWrite({
+  const { data: verificationData, write: verifyTwitter } = useContractWrite({
     ...verifyConfig,
     onSuccess: async (tx) => {
       const txReceipt = await toast.promise(tx.wait(1), {
@@ -40,25 +48,73 @@ export default function RowPromiseVerification({
           'Request sent! Please wait for the Operator to fulfill the request.',
         error: 'Error sending request',
       });
-      gatherPartiesData();
+      waitForFullfillment();
     },
     onError: (err) => {
       toast.error('Error sending request');
       console.log('error sending request', err);
+      setIsWaitingForVerification(false);
     },
   });
 
-  const { isLoading: isWaitingforVerification } = useWaitForTransaction({
-    hash: verificationData?.hash,
-    confirmations: 1,
-  });
-
-  const copyMessage = (e) => {
-    navigator.clipboard.writeText(
-      `Verifying my Twitter account for ${userAddress} with @usePromise!`,
+  const waitForFullfillment = async () => {
+    gatherPartiesData();
+    // Setup a listener for the event
+    const contract = new ethers.Contract(
+      verifyTwitterContract,
+      verifyTwitterAbi,
+      provider,
     );
-    toast.success('Tweet copied to clipboard.');
-    e.stopPropagation();
+
+    await toast.promise(
+      new Promise((resolve) => {
+        console.log('waiting for fulfillment');
+        // Setup a listener for the success event
+        contract.on('VerificationSuccessful', async (requestId, result) => {
+          console.log(result);
+          if (requestId === requestId) {
+            setIsWaitingForVerification(false);
+            gatherPartiesData();
+            console.log('fulfilled');
+            resolve();
+          }
+        });
+        // Or for the failure event
+        contract.on('VerificationFailed', async (requestId, result) => {
+          if (requestId === requestId) {
+            setIsWaitingForVerification(false);
+            gatherPartiesData();
+            console.log('fulfilled');
+            resolve();
+          }
+        });
+      }),
+      {
+        pending: 'Waiting for the Chainlink Node to fulfill the request...',
+        success: 'Verification successful!',
+        error: 'Error verifying Twitter account',
+      },
+    );
+  };
+
+  const requestVerification = async () => {
+    if (verifyTwitter) {
+      setIsWaitingForVerification(true);
+      verifyTwitter();
+    }
+
+    // Setup a listener in the VerifyTwitter contract
+    // for the VerificationSuccessful or VerificationFailed event
+    // await new Promise(async (resolve, reject) => {
+    // verifyTwitterContract.once(
+    //   'VerificationSuccessful',
+    //   (address, twitterHandle, event) => {
+    //     // Handle event
+    //   },
+    // );
+
+    // After the last handleSuccess:
+    // setIsWaitingForVerification(false);
   };
 
   const openTweet = (e) => {
@@ -66,6 +122,14 @@ export default function RowPromiseVerification({
       `https://twitter.com/intent/tweet?text=Verifying my Twitter account for ${userAddress} with @usePromise!`,
       '_blank',
     );
+    e.stopPropagation();
+  };
+
+  const copyMessage = (e) => {
+    navigator.clipboard.writeText(
+      `Verifying my Twitter account for ${userAddress} with @usePromise!`,
+    );
+    toast.success('Tweet copied to clipboard.');
     e.stopPropagation();
   };
 
@@ -78,6 +142,12 @@ export default function RowPromiseVerification({
     );
   }, [addressToTwitterVerifiedStatus, userAddress]);
 
+  useEffect(() => {
+    if (chain) {
+      setVerifyTwitterContract(networkMapping[chain.id]['VerifyTwitter'][0]);
+    }
+  }, [chain]);
+
   return (
     <>
       {/* Status */}
@@ -88,14 +158,19 @@ export default function RowPromiseVerification({
 
       {/* Tweet */}
       <div className='twitter-verify-tweet-instructions'>
-        1. Tweet the verification message containing your wallet address.
+        1. Tweet the verification message with your wallet address.
         <Popover
           title='You need to tweet the following:'
           content={
             <div className='popover-address'>
               <div>
-                {' '}
-                Verifying my Twitter account for {userAddress} with @usePromise!
+                <p>
+                  <i>
+                    Verifying my Twitter account for {userAddress} with
+                    @usePromise!
+                  </i>
+                </p>
+                <p>You can delete it after the verification is complete.</p>
               </div>
               <div>
                 <i className='fas fa-copy' onClick={copyMessage}></i>
@@ -114,12 +189,46 @@ export default function RowPromiseVerification({
 
       {/* Request for verification */}
       <div className='twitter-verify-request'>
-        <div className='instructions'>
-          1. Request a verification to the Chainlink Operator
-        </div>
-        <div className='caption'>It will send a</div>
+        2. Request a verification to the Chainlink Operator
+        <Popover
+          title='It will:'
+          content={
+            <>
+              <div>
+                <p>
+                  1. Trigger the 'requestVerification' in the contract, then to
+                  the <b>Chainlink Operator</b> contract.
+                </p>
+                <p>
+                  2. Pass the request with your username to the{' '}
+                  <b>Chainlink Node</b>, which uses{' '}
+                  <b>an External Adapter with the Twitter API</b> to verify your
+                  tweets.
+                </p>
+                <p>
+                  3. The Chainlink Node will return the result to the Chainlink
+                  Operator contract, and then to the contract.
+                </p>
+                <p>
+                  4. This will either return a success or a failure. The former
+                  will update the Promise Factory contract to add this handle to
+                  the verified accounts associated with your address.
+                </p>
+              </div>
+            </>
+          }
+        >
+          {' '}
+          <i className='fas fa-info-circle'></i>
+        </Popover>
       </div>
-      <Button type='primary'>2. Request verification</Button>
+      <Button
+        type='primary'
+        onClick={requestVerification}
+        loading={isWaitingforVerification}
+      >
+        2. Request verification
+      </Button>
     </>
   );
 }
