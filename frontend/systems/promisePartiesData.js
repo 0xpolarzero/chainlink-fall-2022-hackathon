@@ -1,5 +1,7 @@
 import FormattedAddress from '../components/utils/FormattedAddress';
 import promiseContractAbi from '../constants/PromiseContract.json';
+import promiseFactoryAbi from '../constants/PromiseFactory.json';
+import networkMapping from '../constants/networkMapping';
 import { Skeleton } from 'antd';
 import { ethers } from 'ethers';
 
@@ -63,27 +65,58 @@ const getPartiesApprovedStatus = async (
     promiseContractAbi,
     provider,
   );
+
   const promises = [];
-  for (let i = 0; i < partyAddresses.length; i++) {
+  for (const address of partyAddresses) {
     promises.push({
-      address: partyAddresses[i],
-      isPromiseApproved: await contract.getIsPromiseApproved(partyAddresses[i]),
+      address: address,
+      isPromiseApproved: await contract.getIsPromiseApproved(address),
     });
   }
   const result = await Promise.all(promises);
 
   // Now map each address to its promise approved status
   const addressToApprovedStatus = {};
-  for (let i = 0; i < result.length; i++) {
-    addressToApprovedStatus[result[i].address] = result[i].isPromiseApproved;
+  for (const res of result) {
+    addressToApprovedStatus[res.address] = res.isPromiseApproved;
   }
 
   return addressToApprovedStatus;
 };
 
-const getPartiesTwitterVerifiedStatus = async () => {
-  //
-  // setAddressToTwitterVerifiedStatus(result);
+const getPartiesTwitterVerifiedStatus = async (
+  partyTwitterHandles,
+  partyAddresses,
+  provider,
+  chain,
+) => {
+  const promiseFactoryAddress =
+    networkMapping[chain ? chain.id : '80001']['PromiseFactory'][0];
+  const contract = new ethers.Contract(
+    promiseFactoryAddress,
+    promiseFactoryAbi,
+    provider,
+  );
+
+  const mapping = [];
+  for (const address of partyAddresses) {
+    mapping.push({
+      address: address,
+      isTwitterVerified: await contract.getTwitterVerifiedHandle(address),
+    });
+  }
+  const result = await Promise.all(mapping);
+
+  const addressToTwitterVerifiedStatus = {};
+  for (let i = 0; i < result.length; i++) {
+    addressToTwitterVerifiedStatus[result[i].address] = result[
+      i
+    ].isTwitterVerified.some(
+      (handle) => handle.toLowerCase() === partyTwitterHandles[i].toLowerCase(),
+    );
+  }
+
+  return addressToTwitterVerifiedStatus;
 };
 
 const displayPartiesData = (
@@ -91,13 +124,11 @@ const displayPartiesData = (
   partyAddresses,
   partyTwitterHandles,
   addressToApprovedStatus,
-  //   addressToTwitterVerifiedStatus,
+  addressToTwitterVerifiedStatus,
 ) => {
   const dataToDisplay = [];
 
   for (let i = 0; i < partyNames.length; i++) {
-    // ! FOR TESTING PURPOSES
-    const isVerified = Math.floor(Math.random() * 2) === 0;
     dataToDisplay.push({
       key: i,
       name: partyNames[i],
@@ -116,8 +147,7 @@ const displayPartiesData = (
         ),
       // TODO Link to the Tx verification
       twitterVerifiedDiv: getVerificationDiv(
-        // addressToTwitterVerifiedStatus[partyAddresses[i]]
-        isVerified,
+        addressToTwitterVerifiedStatus[partyAddresses[i]],
         'Not verified',
       ),
       promiseApprovedDiv: getVerificationDiv(
@@ -158,5 +188,6 @@ export {
   columns,
   displayPartiesData,
   getPartiesApprovedStatus,
+  getPartiesTwitterVerifiedStatus,
   getVerificationDiv,
 };

@@ -1,8 +1,11 @@
-import { getPartiesApprovedStatus } from '../../systems/promisePartiesData';
+import {
+  getPartiesApprovedStatus,
+  getPartiesTwitterVerifiedStatus,
+} from '../../systems/promisePartiesData';
 import { getVerificationDiv } from '../../systems/promisePartiesData';
 import { promiseStatus } from '../../systems/promiseStatus';
 import { Button } from 'antd';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount, useProvider, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 import PromiseTable from '../PromiseTable';
 import RowPromiseApproval from './RowPromiseApproval';
@@ -11,12 +14,16 @@ import RowPromiseLock from './RowPromiseLock';
 export default function InteractPromiseDrawer({ contractAttributes }) {
   const [isPromiseLocked, setIsPromiseLocked] = useState(null);
   const [addressToApprovedStatus, setAddressToApprovedStatus] = useState([]);
+  const [addressToTwitterVerifiedStatus, setAddressToTwitterVerifiedStatus] =
+    useState([]);
   const [allPartiesApproved, setAllPartiesApproved] = useState(false);
   const [interactingUser, setInteractingUser] = useState({});
   const provider = useProvider();
+  const { chain } = useNetwork();
   const { address: userAddress } = useAccount();
 
-  const { contractAddress, partyAddresses } = contractAttributes;
+  const { contractAddress, partyAddresses, partyTwitterHandles } =
+    contractAttributes;
 
   const getPromiseStatus = async () => {
     const isLocked = await promiseStatus().getIsPromiseLocked(
@@ -36,8 +43,13 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
     );
     setAddressToApprovedStatus(partiesApprovedStatus);
 
-    // const partiesTwitterVerifiedStatus = await getPartiesTwitterVerifiedStatus();
-    // setPartiesTwitterVerifiedStatus(partiesTwitterVerifiedStatus);
+    const partiesTwitterVerifiedStatus = await getPartiesTwitterVerifiedStatus(
+      partyTwitterHandles,
+      partyAddresses,
+      provider,
+      chain,
+    );
+    setAddressToTwitterVerifiedStatus(partiesTwitterVerifiedStatus);
   };
 
   useEffect(() => {
@@ -49,11 +61,10 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
     const interactingUser = {
       address: userAddress,
       promiseApprovedStatus: addressToApprovedStatus[userAddress.toLowerCase()],
-      // twitterVerifiedStatus: partiesTwitterVerifiedStatus[userAddress],
-      twitterVerifiedStatus: false,
+      twitterVerifiedStatus:
+        addressToTwitterVerifiedStatus[userAddress.toLowerCase()],
       twitterVerifiedDiv: getVerificationDiv(
-        //   partiesTwitterVerifiedStatus[userAddress],
-        false,
+        addressToTwitterVerifiedStatus[userAddress.toLowerCase()],
         'Your Twitter account is not verified',
       ),
     };
@@ -66,7 +77,7 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
     setAllPartiesApproved(allApproved);
 
     // Contract data, once fetched, will update the table
-  }, [addressToApprovedStatus]);
+  }, [addressToApprovedStatus, addressToTwitterVerifiedStatus]);
 
   return (
     <div className='promise-drawer'>
@@ -74,6 +85,7 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
         contractAttributes={contractAttributes}
         isPromiseLocked={isPromiseLocked}
         addressToApprovedStatus={addressToApprovedStatus}
+        addressToTwitterVerifiedStatus={addressToTwitterVerifiedStatus}
       />
 
       <div className='drawer-item interaction'>

@@ -1,16 +1,23 @@
 import PromiseTable from '../PromiseTable';
 import { promiseStatus } from '../../systems/promiseStatus';
-import { getPartiesApprovedStatus } from '../../systems/promisePartiesData';
+import {
+  getPartiesApprovedStatus,
+  getPartiesTwitterVerifiedStatus,
+} from '../../systems/promisePartiesData';
 import { displayPdf } from '../../systems/displayPdf';
-import { useProvider } from 'wagmi';
+import { useProvider, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 
 export default function PromisePanel({ contractAttributes }) {
   const [isPromiseLocked, setIsPromiseLocked] = useState(null);
   const [addressToApprovedStatus, setAddressToApprovedStatus] = useState([]);
+  const [addressToTwitterVerifiedStatus, setAddressToTwitterVerifiedStatus] =
+    useState([]);
   const provider = useProvider();
+  const { chain } = useNetwork();
 
-  const { contractAddress, partyAddresses } = contractAttributes;
+  const { contractAddress, partyAddresses, partyTwitterHandles } =
+    contractAttributes;
 
   const getPromiseStatus = async () => {
     const isLocked = await promiseStatus().getIsPromiseLocked(
@@ -30,8 +37,13 @@ export default function PromisePanel({ contractAttributes }) {
     );
     setAddressToApprovedStatus(partiesApprovedStatus);
 
-    // const partiesTwitterVerifiedStatus = await getPartiesTwitterVerifiedStatus();
-    // setPartiesTwitterVerifiedStatus(partiesTwitterVerifiedStatus);
+    const partiesTwitterVerifiedStatus = await getPartiesTwitterVerifiedStatus(
+      partyTwitterHandles,
+      partyAddresses,
+      provider,
+      chain,
+    );
+    setAddressToTwitterVerifiedStatus(partiesTwitterVerifiedStatus);
   };
 
   useEffect(() => {
@@ -44,6 +56,7 @@ export default function PromisePanel({ contractAttributes }) {
         contractAttributes={contractAttributes}
         isPromiseLocked={isPromiseLocked}
         addressToApprovedStatus={addressToApprovedStatus}
+        addressToTwitterVerifiedStatus={addressToTwitterVerifiedStatus}
       />
       <div key='viewer' className='card-item pdf-viewer'>
         {/* {displayPdf(pdfUri)} */}

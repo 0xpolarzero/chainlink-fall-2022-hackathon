@@ -13,8 +13,9 @@ import { useEffect, useState } from 'react';
 
 export default function PromiseTable({
   contractAttributes,
-  addressToApprovedStatus,
   isPromiseLocked,
+  addressToApprovedStatus,
+  addressToTwitterVerifiedStatus,
 }) {
   const [partiesData, setPartiesData] = useState([]);
   const [tableParams, setTableParams] = useState({
@@ -52,11 +53,12 @@ export default function PromiseTable({
       partyAddresses,
       partyTwitterHandles,
       addressToApprovedStatus,
+      addressToTwitterVerifiedStatus,
     );
     setPartiesData(partiesDataToDisplay);
 
     // Contract data, once fetched, will update the table
-  }, [addressToApprovedStatus]);
+  }, [addressToApprovedStatus, addressToTwitterVerifiedStatus]);
 
   return (
     <div key='contract' className='card-item contract-identity'>
