@@ -83,7 +83,8 @@
   backdrop-filter: blur(10px);
 }
 
-.ant-collapse-item:not(.ant-collapse-item-active):hover {
+.ant-collapse-item:not(.ant-collapse-item-active):not(.twitter-verify-collapse
+    > div):hover {
   box-shadow: rgba(255, 255, 255, 0.1) 2px 1000px 1px inset;
 }
 

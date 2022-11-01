@@ -25,8 +25,8 @@ export default function RowPromiseApproval({
       args: [],
       enabled:
         !!userAddress &&
-        addressToApprovedStatus[userAddress.toLowerCase()] !== undefined &&
-        !addressToApprovedStatus[userAddress.toLowerCase()],
+        interactingUser.promiseApprovedStatus !== undefined &&
+        !interactingUser.promiseApprovedStatus,
     });
 
   const {

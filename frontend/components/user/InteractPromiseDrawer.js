@@ -9,6 +9,7 @@ import { useAccount, useProvider, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 import PromiseTable from '../PromiseTable';
 import RowPromiseApproval from './RowPromiseApproval';
+import RowPromiseVerification from './RowPromiseVerification';
 import RowPromiseLock from './RowPromiseLock';
 
 export default function InteractPromiseDrawer({ contractAttributes }) {
@@ -98,16 +99,13 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
           gatherPartiesData={gatherPartiesData}
         />
 
-        <div className='twitter-verify-status'>
-          {interactingUser.twitterVerifiedDiv}
-        </div>
-        {interactingUser.twitterVerifiedStatus ? (
-          <div className='verified'>Twitter verified</div>
-        ) : (
-          <div className='twitter-verify-interact'>
-            <Button type='primary'>Verify Twitter</Button>
-          </div>
-        )}
+        <RowPromiseVerification
+          key='verification'
+          interactingUser={interactingUser}
+          userAddress={userAddress}
+          addressToTwitterVerifiedStatus={addressToTwitterVerifiedStatus}
+          gatherPartiesData={gatherPartiesData}
+        />
 
         <RowPromiseLock
           key='lock'

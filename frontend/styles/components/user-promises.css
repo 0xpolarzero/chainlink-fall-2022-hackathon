@@ -87,7 +87,7 @@
 .drawer-item.interaction {
   display: grid;
   grid-template-columns: 1fr auto;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
 }
 
