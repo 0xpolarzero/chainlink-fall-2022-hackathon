@@ -1,13 +1,9 @@
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
-import { Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 
-export default function IpfsDisplay({ uri, link, setLink }) {
+export default function IpfsDisplayPdf({ link }) {
   const [availableHeight, setAvailableHeight] = useState(0);
-  const [isDisplayReady, setIsDisplayReady] = useState(false);
-  const [isDirectory, setIsDirectory] = useState(false);
-  const [isError, setIsError] = useState(false);
   const toolbarPluginInstance = toolbarPlugin();
   const { renderDefaultToolbar, Toolbar } = toolbarPluginInstance;
 
@@ -18,69 +14,11 @@ export default function IpfsDisplay({ uri, link, setLink }) {
   });
 
   useEffect(() => {
-    formatPdfLink();
     // We want the PDF to take all the available height
     // but keep seing the Panel content and the other Collapsible headers
     const nowAvailableHeight = getAvailableHeightForPdf();
     setAvailableHeight(nowAvailableHeight < 350 ? 350 : nowAvailableHeight);
   }, []);
-
-  const formatPdfLink = () => {
-    try {
-      // In case there is a prefix, keep just the CID
-      // If there is ipfs:/// or ipfs:// of ipfs.io/ipfs/ or ipfs.io/ipfs... remove it. If there is a / at the end, remove what's after
-      const cid =
-        uri.split('ipfs://').length > 1
-          ? uri.split('ipfs:///')[1].split('/')[0]
-          : uri.split('ipfs.io/ipfs/').length > 1
-          ? uri.split('ipfs.io/ipfs/')[1].split('/')[0]
-          : uri.split('ipfs.io/ipfs')[1].split('/')[0];
-
-      // List the content of the directory at the provided CID (URI)
-      const dir = 'https://ipfs.io/api/v0/ls?arg=' + cid;
-      fetch(dir)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          // If there is only one file in the directory, and it is a PDF, we can display it
-          if (data.Objects[0].Links.length === 1) {
-            const pdf = data.Objects[0].Links[0].Hash;
-            const pdfUrl = 'https://ipfs.io/ipfs/' + pdf;
-            setLink(pdfUrl);
-            setIsDisplayReady(true);
-            // If it contains multiple files, we can just display the directory
-          } else if (data.Objects[0].Links.length > 1) {
-            const pdfUrl = 'https://ipfs.io/ipfs/' + cid;
-            setLink(pdfUrl);
-            setIsDirectory(true);
-            setIsDisplayReady(true);
-          }
-        });
-    } catch (err) {
-      setIsError(true);
-      console.log(err);
-    }
-  };
-
-  if (isError) {
-    return 'There was an error displaying the PDF';
-  }
-
-  if (!isDisplayReady) {
-    return <Skeleton active />;
-  }
-
-  if (isDirectory) {
-    return (
-      <div className='pdf-display'>
-        <iframe
-          title='pdf'
-          src={link}
-          style={{ height: availableHeight, width: '100%' }}
-        />
-      </div>
-    );
-  }
 
   try {
     return (
@@ -123,7 +61,11 @@ export default function IpfsDisplay({ uri, link, setLink }) {
     );
   } catch (error) {
     console.log(error);
-    return 'There was an error loading the PDF. Please visit the provided link.';
+    return (
+      <div className='error-message'>
+        There was an error loading the PDF. Please visit the provided link.
+      </div>
+    );
   }
 }
 

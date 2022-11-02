@@ -286,6 +286,7 @@ a:not(.header) {
 
 .error-message,
 .warning-message {
+  text-align: center;
   font-size: 1rem;
   font-weight: 500;
   margin-top: 1rem;

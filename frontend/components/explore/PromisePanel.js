@@ -1,5 +1,5 @@
 import PromiseTable from '../PromiseTable';
-import IpfsDisplay from './IpfsDisplay';
+import IpfsResolver from './IpfsResolver';
 import { promiseStatus } from '../../systems/promiseStatus';
 import {
   getPartiesApprovedStatus,
@@ -13,7 +13,6 @@ export default function PromisePanel({ contractAttributes }) {
   const [addressToApprovedStatus, setAddressToApprovedStatus] = useState([]);
   const [addressToTwitterVerifiedStatus, setAddressToTwitterVerifiedStatus] =
     useState([]);
-  const [link, setLink] = useState('');
   const provider = useProvider();
   const { chain } = useNetwork();
 
@@ -60,13 +59,11 @@ export default function PromisePanel({ contractAttributes }) {
         addressToTwitterVerifiedStatus={addressToTwitterVerifiedStatus}
       />
       <div key='viewer' className='card-item pdf-viewer'>
-        {/* <PdfDisplay pdfUri={pdfUri} pdfLink={pdfLink} setPdfLink={setPdfLink} /> */}
-        <IpfsDisplay
+        {/* <IpfsResolver uri={pdfUri} /> */}
+        <IpfsResolver
           uri={
             'https://ipfs.io/ipfs/QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D'
           }
-          link={link}
-          setLink={setLink}
         />
       </div>
     </div>
