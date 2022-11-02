@@ -148,21 +148,6 @@ export class PromiseFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getOperator(): Address {
-    let result = super.call("getOperator", "getOperator():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_getOperator(): ethereum.CallResult<Address> {
-    let result = super.tryCall("getOperator", "getOperator():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   getOwner(): Address {
     let result = super.call("getOwner", "getOwner():(address)", []);
 
@@ -286,7 +271,7 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _operator(): Address {
+  get _verifier(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 }
@@ -380,36 +365,6 @@ export class CreatePromiseContractCall__Outputs {
 
   get promiseContractAddress(): Address {
     return this._call.outputValues[0].value.toAddress();
-  }
-}
-
-export class SetOperatorCall extends ethereum.Call {
-  get inputs(): SetOperatorCall__Inputs {
-    return new SetOperatorCall__Inputs(this);
-  }
-
-  get outputs(): SetOperatorCall__Outputs {
-    return new SetOperatorCall__Outputs(this);
-  }
-}
-
-export class SetOperatorCall__Inputs {
-  _call: SetOperatorCall;
-
-  constructor(call: SetOperatorCall) {
-    this._call = call;
-  }
-
-  get _operator(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class SetOperatorCall__Outputs {
-  _call: SetOperatorCall;
-
-  constructor(call: SetOperatorCall) {
-    this._call = call;
   }
 }
 
