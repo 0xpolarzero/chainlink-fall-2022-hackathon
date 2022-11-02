@@ -20,7 +20,7 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
 
     // Chainlink variables
     uint256 private constant ORACLE_PAYMENT = (1 * LINK_DIVISIBILITY) / 10; // 0.1 LINK
-    bytes32 private s_oracleJobId = "459ca80806fd4ebc92f056bf015a26dc";
+    bytes32 private s_oracleJobId = "b6ddd15e02e84e3cb8840f75c7658ba8";
 
     // Declare the PromiseFactory contract address and the interface
     address private s_promiseFactoryContract;

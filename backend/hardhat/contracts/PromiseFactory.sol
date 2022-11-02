@@ -21,8 +21,6 @@ contract PromiseFactory {
 
     /// Variables
     address private immutable i_owner;
-    // The Chainlink operator
-    address private s_operator;
     // The VerifyTwitter contract
     address private s_verifier;
 
@@ -73,12 +71,11 @@ contract PromiseFactory {
 
     /**
      * @notice Initialize the contract
-     * @param _operator The operator address
      */
 
-    constructor(address _operator) {
+    constructor(address _verifier) {
         i_owner = msg.sender;
-        s_operator = _operator;
+        s_verifier = _verifier;
     }
 
     /**
@@ -179,7 +176,7 @@ contract PromiseFactory {
 
     /**
      * @notice Add a verified Twitter account to the list of verified accounts
-     * @dev Only the operator contract can call this function, after the account
+     * @dev Only the verifier contract can call this function, after the account
      * has been verified with the Chainlink Node + External Adapter
      * @param _userAddress The address of the user
      * @param _twitterHandle The Twitter handle of the verified account
@@ -215,10 +212,6 @@ contract PromiseFactory {
     }
 
     /// Setters
-    function setOperator(address _operator) external onlyOwner {
-        s_operator = _operator;
-    }
-
     function setVerifier(address _verifier) external onlyOwner {
         s_verifier = _verifier;
     }
@@ -257,10 +250,6 @@ contract PromiseFactory {
 
     function getOwner() public view returns (address) {
         return i_owner;
-    }
-
-    function getOperator() public view returns (address) {
-        return s_operator;
     }
 
     function getVerifier() public view returns (address) {
