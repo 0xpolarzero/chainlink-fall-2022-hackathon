@@ -20,6 +20,7 @@ const displayContractData = (contractAddress, pdfUri) => {
         <FormattedAddress address={contractAddress} isShrinked='responsive' />
       ),
       pdfUri,
+      key: contractAddress,
     },
   ];
 

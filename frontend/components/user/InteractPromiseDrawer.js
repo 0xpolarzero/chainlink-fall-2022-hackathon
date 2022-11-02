@@ -4,7 +4,6 @@ import {
 } from '../../systems/promisePartiesData';
 import { getVerificationDiv } from '../../systems/promisePartiesData';
 import { promiseStatus } from '../../systems/promiseStatus';
-import { Button } from 'antd';
 import { useAccount, useProvider, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 import PromiseTable from '../PromiseTable';

@@ -130,7 +130,7 @@ const displayPartiesData = (
 
   for (let i = 0; i < partyNames.length; i++) {
     dataToDisplay.push({
-      key: i,
+      key: i + 1,
       name: partyNames[i],
       address: (
         <FormattedAddress address={partyAddresses[i]} isShrinked='responsive' />

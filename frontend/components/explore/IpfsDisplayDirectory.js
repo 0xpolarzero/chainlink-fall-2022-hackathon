@@ -25,6 +25,7 @@ export default function IpfsDisplaydirectory({ link, content }) {
           name: item.Name,
           hash: item.Hash,
           size: item.Type === 2 ? formatSize(item.Size) : 'Folder',
+          key: item.Hash,
         };
       }),
     );
