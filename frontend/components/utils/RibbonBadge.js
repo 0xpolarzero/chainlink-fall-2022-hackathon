@@ -35,11 +35,15 @@ export default function RibbonBadge({ isPromiseLocked }) {
               <p>
                 <b>Locked</b> - All parties have approved the promise, and it
                 has been validated. It can't be modified anymore, nor can it be
-                unlocked.
+                unlocked. The PDF can be backed up to a persistent storage. The
+                parties can still verify their Twitter accounts, but they won't
+                be able to revoke their approval nor remove their associated
+                Twitter accounts.
               </p>
               <p>
                 <b>Unlocked</b> - The promise is still being edited by the
-                parties. They can still approve it and verify their Twitter.
+                parties. They can still approve it, and the PDF only storage
+                location is the URI set by the creator.
               </p>
             </div>
           }

@@ -1,6 +1,6 @@
 import { promiseStatus } from '../../systems/promiseStatus';
 import promiseContractAbi from '../../constants/PromiseContract.json';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { toast } from 'react-toastify';
 import {
   usePrepareContractWrite,
@@ -66,14 +66,22 @@ export default function RowPromiseLock({
         <div className='verified'>Promise locked</div>
       ) : (
         <div className='promise-lock-interact'>
-          <Button
-            type='primary'
-            onClick={lockPromise}
-            loading={isLockingPromise || isWaitingForLock}
-            disabled={!allPartiesApproved}
+          <Tooltip
+            title={
+              !allPartiesApproved
+                ? 'All parties must approve the promise before it can be locked.'
+                : ''
+            }
           >
-            Lock promise
-          </Button>
+            <Button
+              type='primary'
+              onClick={lockPromise}
+              loading={isLockingPromise || isWaitingForLock}
+              disabled={!allPartiesApproved}
+            >
+              Lock promise
+            </Button>
+          </Tooltip>
         </div>
       )}
     </>

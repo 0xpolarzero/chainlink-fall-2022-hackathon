@@ -158,7 +158,7 @@ export default function RowPromiseVerification({
       <Button type='primary' className='no-btn'>
         <i className='fas fa-arrow-down'></i>
       </Button>
-      // Tweet
+      {/* Tweet */}
       <div className='twitter-verify-tweet-instructions'>
         1. Tweet the verification message with your wallet address.
         <Popover
@@ -187,7 +187,7 @@ export default function RowPromiseVerification({
       <Button type='primary' onClick={openTweet}>
         1. Send tweet
       </Button>
-      // Request for verification
+      {/* Request for verification */}
       <div className='twitter-verify-request'>
         2. Request a verification to the Chainlink Operator.
         <Popover
