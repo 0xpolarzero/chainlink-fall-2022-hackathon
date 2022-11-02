@@ -2,7 +2,7 @@ type = "directrequest"
 schemaVersion = 1
 name = "TWITTER-EA"
 maxTaskDuration = "0s"
-contractAddress = "0x2BB8Dd9C16edeF313eb9ccBd5F42A8b577cB1E3c"
+contractAddress = "0xD4D1fe6FF0A871Ccf37bCfbce3135f548E5f05B5"
 minIncomingConfirmations = 0
 observationSource = """
     decode_log      [type="ethabidecodelog"
@@ -23,7 +23,7 @@ observationSource = """
                         abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"
                         data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"]
 
-    submit_tx [type="ethtx" to="0x2BB8Dd9C16edeF313eb9ccBd5F42A8b577cB1E3c" data="$(encode_tx)"]
+    submit_tx [type="ethtx" to="0xD4D1fe6FF0A871Ccf37bCfbce3135f548E5f05B5" data="$(encode_tx)"]
 
     decode_log -> decode_cbor -> fetch -> parseResult -> parseUsername -> parseAddress -> encode_data -> encode_tx -> submit_tx
 """
