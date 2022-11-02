@@ -1,10 +1,10 @@
 import PromiseTable from '../PromiseTable';
+import IpfsDisplay from './IpfsDisplay';
 import { promiseStatus } from '../../systems/promiseStatus';
 import {
   getPartiesApprovedStatus,
   getPartiesTwitterVerifiedStatus,
 } from '../../systems/promisePartiesData';
-import { displayPdf } from '../../systems/displayPdf';
 import { useProvider, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 
@@ -13,10 +13,11 @@ export default function PromisePanel({ contractAttributes }) {
   const [addressToApprovedStatus, setAddressToApprovedStatus] = useState([]);
   const [addressToTwitterVerifiedStatus, setAddressToTwitterVerifiedStatus] =
     useState([]);
+  const [link, setLink] = useState('');
   const provider = useProvider();
   const { chain } = useNetwork();
 
-  const { contractAddress, partyAddresses, partyTwitterHandles } =
+  const { contractAddress, partyAddresses, partyTwitterHandles, pdfUri } =
     contractAttributes;
 
   const getPromiseStatus = async () => {
@@ -59,10 +60,14 @@ export default function PromisePanel({ contractAttributes }) {
         addressToTwitterVerifiedStatus={addressToTwitterVerifiedStatus}
       />
       <div key='viewer' className='card-item pdf-viewer'>
-        {/* {displayPdf(pdfUri)} */}
-        {displayPdf(
-          'ipfs:///QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX/ipfs.draft3.pdf',
-        )}
+        {/* <PdfDisplay pdfUri={pdfUri} pdfLink={pdfLink} setPdfLink={setPdfLink} /> */}
+        <IpfsDisplay
+          uri={
+            'https://ipfs.io/ipfs/QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D'
+          }
+          link={link}
+          setLink={setLink}
+        />
       </div>
     </div>
   );
