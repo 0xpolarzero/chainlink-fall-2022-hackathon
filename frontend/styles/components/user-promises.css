@@ -94,3 +94,7 @@
 .drawer-item.interaction .ant-btn {
   width: 100%;
 }
+
+.drawer-item.interaction .verified {
+  justify-self: center;
+}

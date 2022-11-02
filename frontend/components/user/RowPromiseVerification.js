@@ -57,9 +57,16 @@ export default function RowPromiseVerification({
     },
   });
 
+  // Request a verification to the Chainlink Node
+  const requestVerification = async () => {
+    if (verifyTwitter) {
+      setIsWaitingForVerification(true);
+      verifyTwitter();
+    }
+  };
+
+  // Once the request has been sent, wait for the Chainlink Node to fulfill it
   const waitForFullfillment = async () => {
-    gatherPartiesData();
-    // Setup a listener for the event
     const contract = new ethers.Contract(
       verifyTwitterContract,
       verifyTwitterAbi,
@@ -70,9 +77,11 @@ export default function RowPromiseVerification({
       new Promise((resolve) => {
         console.log('waiting for fulfillment');
         // Setup a listener for the success event
-        contract.on('VerificationSuccessful', async (requestId, result) => {
+        contract.on('VerificationSuccessful', async (result) => {
           console.log(result);
-          if (requestId === requestId) {
+          if (
+            result.toLowerCase() === interactingUser.twitterHandle.toLowerCase()
+          ) {
             setIsWaitingForVerification(false);
             gatherPartiesData();
             console.log('fulfilled');
@@ -80,41 +89,26 @@ export default function RowPromiseVerification({
           }
         });
         // Or for the failure event
-        contract.on('VerificationFailed', async (requestId, result) => {
-          if (requestId === requestId) {
+        contract.on('VerificationFailed', async (result) => {
+          if (
+            result.toLowerCase() === interactingUser.twitterHandle.toLowerCase()
+          ) {
             setIsWaitingForVerification(false);
             gatherPartiesData();
-            console.log('fulfilled');
+            console.log('failed');
             resolve();
           }
         });
       }),
       {
+        // TODO
+        // TODO HOW TO DISPLAY AN ERROR IF THE EVENT IS FAILED?
+        // TODO
         pending: 'Waiting for the Chainlink Node to fulfill the request...',
         success: 'Verification successful!',
         error: 'Error verifying Twitter account',
       },
     );
-  };
-
-  const requestVerification = async () => {
-    if (verifyTwitter) {
-      setIsWaitingForVerification(true);
-      verifyTwitter();
-    }
-
-    // Setup a listener in the VerifyTwitter contract
-    // for the VerificationSuccessful or VerificationFailed event
-    // await new Promise(async (resolve, reject) => {
-    // verifyTwitterContract.once(
-    //   'VerificationSuccessful',
-    //   (address, twitterHandle, event) => {
-    //     // Handle event
-    //   },
-    // );
-
-    // After the last handleSuccess:
-    // setIsWaitingForVerification(false);
   };
 
   const openTweet = (e) => {
@@ -148,6 +142,15 @@ export default function RowPromiseVerification({
     }
   }, [chain]);
 
+  if (interactingUser.twitterVerifiedStatus === true) {
+    return (
+      <>
+        <div className='twitter-verify-status'>{verificationDiv}</div>
+        <div className='verified'>Twitter verified</div>
+      </>
+    );
+  }
+
   return (
     <>
       {/* Status */}
@@ -155,8 +158,7 @@ export default function RowPromiseVerification({
       <Button type='primary' className='no-btn'>
         <i className='fas fa-arrow-down'></i>
       </Button>
-
-      {/* Tweet */}
+      // Tweet
       <div className='twitter-verify-tweet-instructions'>
         1. Tweet the verification message with your wallet address.
         <Popover
@@ -182,14 +184,12 @@ export default function RowPromiseVerification({
           <i className='fas fa-info-circle'></i>
         </Popover>
       </div>
-
       <Button type='primary' onClick={openTweet}>
         1. Send tweet
       </Button>
-
-      {/* Request for verification */}
+      // Request for verification
       <div className='twitter-verify-request'>
-        2. Request a verification to the Chainlink Operator
+        2. Request a verification to the Chainlink Operator.
         <Popover
           title='It will:'
           content={

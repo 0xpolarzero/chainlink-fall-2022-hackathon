@@ -97,24 +97,24 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
       />
 
       <div className='drawer-item interaction'>
+        <RowPromiseApproval
+          key='approval'
+          interactingUser={interactingUser}
+          contractAddress={contractAddress}
+          userAddress={userAddress}
+          addressToApprovedStatus={addressToApprovedStatus}
+          gatherPartiesData={gatherPartiesData}
+        />
+
         {interactingUser.twitterHandle === '' ? null : (
-          <RowPromiseApproval
-            key='approval'
+          <RowPromiseVerification
+            key='verification'
             interactingUser={interactingUser}
-            contractAddress={contractAddress}
             userAddress={userAddress}
-            addressToApprovedStatus={addressToApprovedStatus}
+            addressToTwitterVerifiedStatus={addressToTwitterVerifiedStatus}
             gatherPartiesData={gatherPartiesData}
           />
         )}
-
-        <RowPromiseVerification
-          key='verification'
-          interactingUser={interactingUser}
-          userAddress={userAddress}
-          addressToTwitterVerifiedStatus={addressToTwitterVerifiedStatus}
-          gatherPartiesData={gatherPartiesData}
-        />
 
         <RowPromiseLock
           key='lock'
