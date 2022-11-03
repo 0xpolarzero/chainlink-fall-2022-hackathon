@@ -98,3 +98,39 @@
 .drawer-item.interaction .verified {
   justify-self: center;
 }
+
+.ipfs-display {
+  position: relative;
+}
+
+.ipfs-display .action-directory {
+  position: absolute;
+  top: 1rem;
+  left: 10rem;
+  display: flex;
+  gap: 2rem;
+  z-index: 1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ipfs-display .action-directory::before {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  top: 0;
+  left: -1.5rem;
+  width: 1px;
+  height: 100%;
+}
+
+.ipfs-display .action-directory > div {
+  font-size: 1rem;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.ipfs-display .action-directory > div:hover {
+  opacity: 1;
+  transform: scale(1.02);
+}

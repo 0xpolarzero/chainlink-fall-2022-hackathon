@@ -469,6 +469,10 @@ ant-select {
   justify-content: center;
 }
 
+.ipfs-display .ant-table-tbody .ant-table-row {
+  cursor: pointer;
+}
+
 .ant-ribbon-wrapper {
   z-index: 1;
 }
