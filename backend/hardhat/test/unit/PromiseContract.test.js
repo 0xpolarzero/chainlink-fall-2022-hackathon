@@ -45,13 +45,13 @@ const { deployments, network, ethers } = require('hardhat');
         it('Should initialize the variables with the right value', async () => {
           const owner = await promiseContract.getOwner();
           const name = await promiseContract.getName();
-          const uri = await promiseContract.getPdfUri();
+          const cid = await promiseContract.getIpfsCid();
           const participantCount = await promiseContract.getParticipantCount();
 
           assert.equal(owner, userFirst.address);
           assert.equal(name, 'Test Agreement');
           assert.equal(
-            uri,
+            cid,
             'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
           );
           assert.equal(participantCount, 2);

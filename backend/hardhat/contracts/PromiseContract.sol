@@ -25,7 +25,7 @@ contract PromiseContract {
     /// Variables
     uint256 public s_participantCount;
     string public s_promiseName;
-    string public s_pdfUri;
+    string public s_ipfsCid;
     address public immutable i_owner;
     address[] public s_participantAddresses;
     bool public s_promiseLocked = false;
@@ -86,14 +86,14 @@ contract PromiseContract {
     constructor(
         address _owner,
         string memory _promiseName,
-        string memory _pdfUri,
+        string memory _ipfsCid,
         string[] memory _partyNames,
         string[] memory _partyTwitterHandles,
         address[] memory _partyAddresses
     ) {
         i_owner = _owner;
         s_promiseName = _promiseName;
-        s_pdfUri = _pdfUri;
+        s_ipfsCid = _ipfsCid;
         s_participantCount = _partyAddresses.length;
 
         for (uint256 i = 0; i < _partyAddresses.length; i++) {
@@ -178,8 +178,8 @@ contract PromiseContract {
         return s_promiseName;
     }
 
-    function getPdfUri() public view returns (string memory) {
-        return s_pdfUri;
+    function getIpfsCid() public view returns (string memory) {
+        return s_ipfsCid;
     }
 
     function getParticipant(address _participantAddress)

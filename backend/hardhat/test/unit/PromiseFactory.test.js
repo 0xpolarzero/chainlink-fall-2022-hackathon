@@ -14,7 +14,7 @@ const { deployments, network, ethers } = require('hardhat');
       const createCorrectPromiseContract = async () => {
         const tx = await promiseFactory.createPromiseContract(
           args.name,
-          args.uri,
+          args.cid,
           args.partyNames,
           args.partyTwitters,
           args.partyAddresses,
@@ -33,7 +33,7 @@ const { deployments, network, ethers } = require('hardhat');
         promiseFactory = promiseFactoryDeploy.connect(deployer);
         args = {
           name: 'Test Agreement',
-          uri: 'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
+          cid: 'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
           partyNames: ['Bob', 'Alice'],
           partyTwitters: ['@bob', '@alice'],
           partyAddresses: [deployer.address, user.address],
@@ -45,7 +45,7 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               args.name,
-              args.uri,
+              args.cid,
               [],
               [],
               [],
@@ -57,7 +57,7 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               '',
-              args.uri,
+              args.cid,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
@@ -71,7 +71,7 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               args.name,
-              args.uri,
+              args.cid,
               args.partyNames,
               args.partyTwitters,
               [deployer.address],
@@ -85,7 +85,7 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               args.name,
-              args.uri,
+              args.cid,
               args.partyNames,
               args.partyTwitters,
               [deployer.address, deployer.address],
@@ -97,7 +97,7 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               args.name,
-              args.uri,
+              args.cid,
               args.partyNames,
               ['@bob', '@bob'],
               args.partyAddresses,
@@ -112,41 +112,13 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               name,
-              args.uri,
+              args.cid,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
             ),
           ).to.be.revertedWith(
             'PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH()',
-          );
-        });
-
-        it('Should revert if the PDF URI is not a valid IPFS URI', async () => {
-          // It should revert if it's less than 5 bytes
-          await expect(
-            promiseFactory.createPromiseContract(
-              args.name,
-              'bafybe',
-              args.partyNames,
-              args.partyTwitters,
-              args.partyAddresses,
-            ),
-          ).to.be.revertedWith(
-            'PromiseFactory__createPromiseContract__INVALID_URI()',
-          );
-
-          // It should revert if it doesn't match the allowed characters in Base58
-          await expect(
-            promiseFactory.createPromiseContract(
-              args.name,
-              'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq!',
-              args.partyNames,
-              args.partyTwitters,
-              args.partyAddresses,
-            ),
-          ).to.be.revertedWith(
-            'PromiseFactory__createPromiseContract__INVALID_URI()',
           );
         });
 
@@ -186,7 +158,7 @@ const { deployments, network, ethers } = require('hardhat');
               deployer.address,
               promiseContractAddress,
               args.name,
-              args.uri,
+              args.cid,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
