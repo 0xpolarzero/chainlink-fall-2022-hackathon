@@ -3,7 +3,7 @@ import { Popover } from 'antd';
 import { useWidth } from '../../systems/useWidth';
 import { useEffect, useState } from 'react';
 
-export default function FormattedAddress({ address, isShrinked }) {
+export default function FormattedAddress({ address, isShrinked, prefix }) {
   const [shrinkedAddress, setShrinkedAddress] = useState('');
   const [isAddressHovered, setIsAddressHovered] = useState(false);
   const [shouldShrinkAddress, setShouldShrinkAddress] = useState(false);
@@ -39,7 +39,11 @@ export default function FormattedAddress({ address, isShrinked }) {
       }
     >
       <a
-        href={`https://mumbai.polygonscan.com/address/${address}`}
+        href={
+          prefix
+            ? `${prefix}${address}`
+            : `https://mumbai.polygonscan.com/address/${address}`
+        }
         target='_blank'
       >
         {shrinkedAddress}
