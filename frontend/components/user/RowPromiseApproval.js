@@ -1,6 +1,6 @@
 import { getVerificationDiv } from '../../systems/promisePartiesData';
 import promiseContractAbi from '../../constants/PromiseContract.json';
-import { Button } from 'antd';
+import { Button, Skeleton } from 'antd';
 import { toast } from 'react-toastify';
 import {
   usePrepareContractWrite,
@@ -62,6 +62,18 @@ export default function RowPromiseApproval({
       ),
     );
   }, [addressToApprovedStatus, userAddress]);
+
+  // If the users approved status is undefined, it's still loading
+  if (interactingUser.promiseApprovedStatus === undefined) {
+    return (
+      <Skeleton
+        className='span-double'
+        active
+        paragraph={{ rows: 1 }}
+        title={false}
+      />
+    );
+  }
 
   return (
     <>

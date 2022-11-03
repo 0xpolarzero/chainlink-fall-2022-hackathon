@@ -1,7 +1,7 @@
 import { getVerificationDiv } from '../../systems/promisePartiesData';
 import verifyTwitterAbi from '../../constants/VerifyTwitter.json';
 import networkMapping from '../../constants/networkMapping';
-import { Button, Popover } from 'antd';
+import { Button, Popover, Skeleton } from 'antd';
 import { toast } from 'react-toastify';
 import {
   useNetwork,
@@ -110,16 +110,6 @@ export default function RowPromiseVerification({
         }
       });
     });
-
-    //   pending: 'Waiting for the Chainlink Node to fulfill the request...',
-    //   success: {
-    //     render({ data }) {
-    //       console.log(data);
-    //       return `Verification ${data}!`;
-    //     },
-    //   },
-    //   error: 'Error verifying Twitter account',
-    // },
   };
 
   const openTweet = (e) => {
@@ -153,6 +143,19 @@ export default function RowPromiseVerification({
     }
   }, [chain]);
 
+  // If it's loading, set a skeleton
+  if (interactingUser.twitterVerifiedStatus === undefined) {
+    return (
+      <Skeleton
+        className='span-double'
+        active
+        paragraph={{ rows: 3 }}
+        title={false}
+      />
+    );
+  }
+
+  // If the user is verified, don't show the instructions and buttons
   if (interactingUser.twitterVerifiedStatus === true) {
     return (
       <>

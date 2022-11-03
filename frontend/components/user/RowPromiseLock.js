@@ -1,6 +1,6 @@
 import { promiseStatus } from '../../systems/promiseStatus';
 import promiseContractAbi from '../../constants/PromiseContract.json';
-import { Button, Tooltip } from 'antd';
+import { Button, Skeleton, Tooltip } from 'antd';
 import { toast } from 'react-toastify';
 import {
   usePrepareContractWrite,
@@ -26,8 +26,8 @@ export default function RowPromiseLock({
     args: [],
     enabled:
       !!userAddress &&
-      // At least make sure it's approved for the user, to avoid unnecessary errors
-      addressToApprovedStatus[userAddress.toLowerCase()] === true,
+      // Make sure it's approved for each user of the promise
+      allPartiesApproved,
   });
 
   const {
@@ -58,6 +58,18 @@ export default function RowPromiseLock({
   useEffect(() => {
     setLockDiv(promiseStatus().getLockDiv(isPromiseLocked, 'Promise unlocked'));
   }, [isPromiseLocked]);
+
+  // If the users approved status is null, it's still loading
+  if (allPartiesApproved === null) {
+    return (
+      <Skeleton
+        className='span-double'
+        active
+        paragraph={{ rows: 1 }}
+        title={false}
+      />
+    );
+  }
 
   return (
     <>

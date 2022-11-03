@@ -300,6 +300,10 @@ a:not(.header) {
   color: var(--toastify-color-warning) !important;
 }
 
+.span-double {
+  grid-column: span 2;
+}
+
 /* Override Rainbow wallet CSS */
 
 .iekbcc0.ju367va.ju367v1n:not(.ju367vz) {
