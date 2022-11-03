@@ -1,7 +1,7 @@
 const { ethers } = require('hardhat');
 const {
   LINK_TOKEN_MUMBAI,
-  VERIFY_TWITTER_ADDRESS_MUMBAI,
+  VERIFY_TWITTER_MUMBAI,
 } = require('../helper-hardhat-config');
 
 const FUND_VALUE = ethers.utils.parseEther('0.2');
@@ -11,7 +11,7 @@ const fundContract = async () => {
   const deployer = accounts[0];
   const verifyTwitter = await ethers.getContractAt(
     'VerifyTwitter',
-    VERIFY_TWITTER_ADDRESS_MUMBAI,
+    VERIFY_TWITTER_MUMBAI,
     deployer,
   );
 

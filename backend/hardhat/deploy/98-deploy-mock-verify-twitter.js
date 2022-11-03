@@ -2,7 +2,7 @@ const { network, ethers } = require('hardhat');
 const {
   developmentChains,
   LINK_TOKEN_MUMBAI,
-  OPERATOR,
+  OPERATOR_MUMBAI,
 } = require('../helper-hardhat-config');
 const { verify } = require('../utils/verify');
 
@@ -13,7 +13,7 @@ module.exports = async function({ getNamedAccounts, deployments }) {
 
   const verifyTwitterMock = await deploy('VerifyTwitterMock', {
     from: deployer,
-    args: [LINK_TOKEN_MUMBAI, OPERATOR, promiseFactory.address],
+    args: [LINK_TOKEN_MUMBAI, OPERATOR_MUMBAI, promiseFactory.address],
     log: true,
     waitConfirmations: network.config.blockConfirmations || 1,
   });
@@ -25,7 +25,7 @@ module.exports = async function({ getNamedAccounts, deployments }) {
     console.log('Verifying contract...');
     await verify(verifyTwitterMock.address, [
       LINK_TOKEN_MUMBAI,
-      OPERATOR,
+      OPERATOR_MUMBAI,
       promiseFactory.address,
     ]);
   }

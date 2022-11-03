@@ -1,13 +1,13 @@
 const { ethers } = require('hardhat');
 const { fundContract } = require('./fundContract');
-const { VERIFY_TWITTER_ADDRESS_MUMBAI } = require('../helper-hardhat-config');
+const { VERIFY_TWITTER_MUMBAI } = require('../helper-hardhat-config');
 
 const USERNAME = 'TwitterDev';
 
 const requestVerification = async () => {
   const verifyTwitter = await ethers.getContractAt(
     'VerifyTwitter',
-    VERIFY_TWITTER_ADDRESS_MUMBAI,
+    VERIFY_TWITTER_MUMBAI,
   );
 
   // If the contract is not funded with LINK, fund it
