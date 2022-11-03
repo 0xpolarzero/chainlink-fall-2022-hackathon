@@ -22,30 +22,30 @@ const columns = [
     key: 'twitterHandle',
     // If a Twitter handle was not provided, this column will show 'Not provided'
     // ... and span 2 columns
-    render: (text, record) =>
-      record.twitterHandle === null
-        ? {
-            children: getVerificationDiv(false, 'Not provided'),
-            props: {
-              colSpan: 2,
-            },
-          }
-        : text,
+    // render: (text, record) =>
+    //   record.twitterHandle === null
+    //     ? {
+    //         children: getVerificationDiv(false, 'Not provided'),
+    //         props: {
+    //           colSpan: 2,
+    //         },
+    //       }
+    //     : text,
   },
   {
     title: 'Twitter verified',
     dataIndex: 'twitterVerifiedDiv',
     key: 'twitterVerifiedDiv',
     // If the twitter handle was not provided, this column will not show
-    render: (text, record) =>
-      record.twitterHandle === null
-        ? {
-            children: null,
-            props: {
-              colSpan: 0,
-            },
-          }
-        : text,
+    // render: (text, record) =>
+    //   record.twitterHandle === null
+    //     ? {
+    //         children: null,
+    //         props: {
+    //           colSpan: 0,
+    //         },
+    //       }
+    //     : text,
   },
   {
     title: 'Promise approved',
@@ -136,7 +136,11 @@ const displayPartiesData = (
         <FormattedAddress address={partyAddresses[i]} isShrinked='responsive' />
       ),
       twitterHandle:
-        partyTwitterHandles[i] === '' ? null : (
+        partyTwitterHandles[i] === '' ? (
+          <div className='warning'>
+            <i className='fas fa-warning'></i> Not provided
+          </div>
+        ) : (
           // 'Not provided'
           <a
             href={`https://twitter.com/${partyTwitterHandles[i]}`}
@@ -146,10 +150,13 @@ const displayPartiesData = (
           </a>
         ),
       // TODO Link to the Tx verification
-      twitterVerifiedDiv: getVerificationDiv(
-        addressToTwitterVerifiedStatus[partyAddresses[i]],
-        'Not verified',
-      ),
+      twitterVerifiedDiv:
+        partyTwitterHandles[i] === ''
+          ? null
+          : getVerificationDiv(
+              addressToTwitterVerifiedStatus[partyAddresses[i]],
+              'Not verified',
+            ),
       promiseApprovedDiv: getVerificationDiv(
         addressToApprovedStatus[partyAddresses[i]],
         'Not approved',
@@ -160,8 +167,12 @@ const displayPartiesData = (
   return dataToDisplay;
 };
 
-const getVerificationDiv = (isTrue, message) => {
-  if (isTrue) {
+const getVerificationDiv = (isTrue, message, type) => {
+  if (isTrue === undefined || isTrue === null) {
+    return (
+      <Skeleton active paragraph={{ rows: 1 }} title={false} loading={true} />
+    );
+  } else if (isTrue) {
     return (
       <a className='verified' href='some-tx-link' target='_blank'>
         <i className='fas fa-check'></i>
@@ -169,10 +180,6 @@ const getVerificationDiv = (isTrue, message) => {
           Tx <i className='fas fa-chain'></i>
         </span>
       </a>
-    );
-  } else if (isTrue === undefined || isTrue === null) {
-    return (
-      <Skeleton active paragraph={{ rows: 1 }} title={false} loading={true} />
     );
   } else {
     return (
