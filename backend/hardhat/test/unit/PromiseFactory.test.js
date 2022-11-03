@@ -183,14 +183,7 @@ const { deployments, network, ethers } = require('hardhat');
           ).to.be.revertedWith('PromiseFactory__NOT_VERIFIER()');
         });
 
-        it('Should not allow anyone else than the owner to call `setOperator` or `setVerifier`', async () => {
-          await expect(promiseFactory.setOperator(ethers.constants.AddressZero))
-            .to.not.be.reverted;
-
-          await expect(
-            promiseFactory.connect(user).setOperator(user.address),
-          ).to.be.revertedWith('PromiseFactory__NOT_OWNER()');
-
+        it('Should not allow anyone else than the owner to call `setVerifier`', async () => {
           await expect(
             promiseFactory.connect(user).setVerifier(user.address),
           ).to.be.revertedWith('PromiseFactory__NOT_OWNER()');

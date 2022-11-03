@@ -2,7 +2,7 @@ const { assert, expect } = require('chai');
 const {
   developmentChains,
   LINK_TOKEN_MUMBAI,
-  OPERATOR,
+  OPERATOR_MUMBAI,
   ORACLE_PAYMENT,
 } = require('../../helper-hardhat-config');
 const { deployments, network, ethers } = require('hardhat');
@@ -42,7 +42,7 @@ const TEST_USERNAME_2 = 'john123';
 
           assert.equal(promiseFactoryAddress, promiseFactory.address);
           assert.equal(linkAddress, LINK_TOKEN_MUMBAI);
-          assert.equal(oracleAddress, OPERATOR);
+          assert.equal(oracleAddress, OPERATOR_MUMBAI);
           assert.equal(oraclePayment.toString(), ORACLE_PAYMENT);
 
           // Check that ConfirmedOwner is initialized correctly
