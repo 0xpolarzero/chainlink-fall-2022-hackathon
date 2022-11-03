@@ -16,7 +16,7 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
   const [addressToApprovedStatus, setAddressToApprovedStatus] = useState([]);
   const [addressToTwitterVerifiedStatus, setAddressToTwitterVerifiedStatus] =
     useState([]);
-  const [allPartiesApproved, setAllPartiesApproved] = useState(false);
+  const [allPartiesApproved, setAllPartiesApproved] = useState(null);
   const [interactingUser, setInteractingUser] = useState({});
   const provider = useProvider();
   const { chain } = useNetwork();
@@ -77,11 +77,16 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
     };
     setInteractingUser(interactingUser);
 
-    // Go through all the parties to know if everyone has approved
-    const allApproved = Object.values(addressToApprovedStatus).every(
-      (partyApprovedStatus) => partyApprovedStatus === true,
-    );
-    setAllPartiesApproved(allApproved);
+    // If the array has been set, check if all parties have approved
+    if (Object.keys(addressToApprovedStatus).length === partyAddresses.length) {
+      // If there are keys in the addressToApprovedStatus object that are undefined or false
+      // then set allPartiesApproved to false
+      const allApproved = Object.values(addressToApprovedStatus).every(
+        (status) => status,
+      );
+
+      setAllPartiesApproved(allApproved);
+    }
 
     // Contract data, once fetched, will update the table
   }, [addressToApprovedStatus, addressToTwitterVerifiedStatus]);
@@ -129,5 +134,3 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
     </div>
   );
 }
-
-// Move pagination to the bottom in user promises drawer
