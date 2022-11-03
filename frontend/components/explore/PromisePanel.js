@@ -16,7 +16,7 @@ export default function PromisePanel({ contractAttributes }) {
   const provider = useProvider();
   const { chain } = useNetwork();
 
-  const { contractAddress, partyAddresses, partyTwitterHandles, pdfUri } =
+  const { contractAddress, partyAddresses, partyTwitterHandles, ipfsCid } =
     contractAttributes;
 
   const getPromiseStatus = async () => {
@@ -59,8 +59,8 @@ export default function PromisePanel({ contractAttributes }) {
         addressToTwitterVerifiedStatus={addressToTwitterVerifiedStatus}
       />
       <div key='viewer' className='card-item pdf-viewer'>
-        {/* <IpfsResolver uri={pdfUri} /> */}
-        <IpfsResolver uri={'QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D'} />
+        <IpfsResolver uri={ipfsCid} />
+        {/* <IpfsResolver uri={'QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D'} /> */}
       </div>
     </div>
   );

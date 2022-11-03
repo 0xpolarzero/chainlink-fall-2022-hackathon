@@ -29,7 +29,7 @@ export default function PromiseTable({
 
   const {
     contractAddress,
-    pdfUri,
+    ipfsCid,
     partyNames,
     partyTwitterHandles,
     partyAddresses,
@@ -42,7 +42,7 @@ export default function PromiseTable({
   };
 
   useEffect(() => {
-    const contractDataToDisplay = displayContractData(contractAddress, pdfUri);
+    const contractDataToDisplay = displayContractData(contractAddress, ipfsCid);
     setContractData(contractDataToDisplay);
   }, []);
 

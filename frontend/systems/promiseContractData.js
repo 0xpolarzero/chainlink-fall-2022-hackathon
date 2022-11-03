@@ -7,19 +7,25 @@ const columns = [
     key: 'contractAddress',
   },
   {
-    title: 'PDF URI',
-    dataIndex: 'pdfUri',
-    key: 'pdfUri',
+    title: 'IPFS CID',
+    dataIndex: 'ipfsCid',
+    key: 'ipfsCid',
   },
 ];
 
-const displayContractData = (contractAddress, pdfUri) => {
+const displayContractData = (contractAddress, ipfsCid) => {
   const contractData = [
     {
       contractAddress: (
         <FormattedAddress address={contractAddress} isShrinked='responsive' />
       ),
-      pdfUri,
+      ipfsCid: (
+        <FormattedAddress
+          address={ipfsCid}
+          isShrinked='responsive'
+          prefix='https://dweb.link/ipfs/'
+        />
+      ),
       key: contractAddress,
     },
   ];

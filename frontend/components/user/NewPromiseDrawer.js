@@ -52,7 +52,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     // Disable the form inputs while the promise is being created
     setIsFormDisabled(true);
 
-    // Upload the PDF to IPFS
+    // Upload the files to IPFS
     // We assume 'uploadToIPFS' returns a valid CID
     // ... anyway, the smart contract will check it when creating the promise
     const pdfCid = await toast.promise(uploadToIPFS(formValues.pdfFile), {
