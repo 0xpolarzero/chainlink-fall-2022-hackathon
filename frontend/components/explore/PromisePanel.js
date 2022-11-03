@@ -60,11 +60,7 @@ export default function PromisePanel({ contractAttributes }) {
       />
       <div key='viewer' className='card-item pdf-viewer'>
         {/* <IpfsResolver uri={pdfUri} /> */}
-        <IpfsResolver
-          uri={
-            'https://ipfs.io/ipfs/QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D'
-          }
-        />
+        <IpfsResolver uri={'QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D'} />
       </div>
     </div>
   );
