@@ -18,7 +18,7 @@ export default function PDFUploader() {
     maxCount: 1,
     maxFileSize: MAX_FILE_SIZE,
     beforeUpload: async (file) => {
-      const isCorrectTypeAndSize = checkIsPDFCorrect(file);
+      const isCorrectTypeAndSize = checkIsUploadCorrect(file);
       // Wait for user to confirm the upload
       const isUserConfirmed = await confirmUpload(file);
 
@@ -46,22 +46,21 @@ export default function PDFUploader() {
         toast.error('You can only upload one file.');
       }
       // Inform the user if they are trying to upload a file that is too large
-      // ... or not a PDF
-      checkIsPDFCorrect(e.dataTransfer.items[0].getAsFile());
+      checkIsUploadCorrect(e.dataTransfer.items[0].getAsFile());
     },
   };
 
-  const checkIsPDFCorrect = (file) => {
-    const isPDF = file.type === 'application/pdf';
-    if (!isPDF) {
-      toast.error('You can only upload a PDF file!');
-    }
+  const checkIsUploadCorrect = (file) => {
+    // const isPDF = file.type === 'application/pdf';
+    // if (!isPDF) {
+    //   toast.error('You can only upload a PDF file!');
+    // }
     const isLt100MB = file.size < MAX_FILE_SIZE;
     if (!isLt100MB) {
       toast.error('File must be smaller than 100MB!');
     }
 
-    return isPDF && isLt100MB;
+    return isLt100MB;
   };
 
   const confirmUpload = async (file) => {
@@ -123,9 +122,7 @@ export default function PDFUploader() {
         <p className='ant-upload-text'>
           Click or drag file to this area to upload
         </p>
-        <p className='ant-upload-hint'>
-          Only accepts PDF files. Max file size is 100MB.
-        </p>
+        <p className='ant-upload-hint'>Max file size is 100MB.</p>
         <h1 className='ant-upload-hint warning-message'>
           <i className='fas fa-exclamation-triangle'></i>
         </h1>

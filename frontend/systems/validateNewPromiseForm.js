@@ -45,14 +45,14 @@ const validateNewPromiseForm = async (form) => {
     }
 
     const promiseName = formValues.promiseName;
-    const pdfFile = formValues.upload[0].originFileObj;
+    const file = formValues.upload[0].originFileObj;
 
     return {
       promiseName,
       partyNameArray,
       partyAddressArray,
       partyTwitterHandleArray,
-      pdfFile,
+      file,
     };
   } else {
     return false;

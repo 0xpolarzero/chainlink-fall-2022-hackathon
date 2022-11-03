@@ -55,7 +55,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     // Upload the files to IPFS
     // We assume 'uploadToIPFS' returns a valid CID
     // ... anyway, the smart contract will check it when creating the promise
-    const pdfCid = await toast.promise(uploadToIPFS(formValues.pdfFile), {
+    const pdfCid = await toast.promise(uploadToIPFS(formValues.file), {
       pending: 'Uploading file to IPFS...',
       success: 'File uploaded successfully!',
       error: 'File could not be uploaded.',
