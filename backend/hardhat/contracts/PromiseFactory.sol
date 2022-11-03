@@ -15,7 +15,7 @@ contract PromiseFactory {
     error PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
     error PromiseFactory__createPromiseContract__DUPLICATE_FIELD();
     error PromiseFactory__createPromiseContract__INVALID_URI();
-    // error PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
+    error PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
     error PromiseFactory__NOT_OWNER();
     error PromiseFactory__NOT_VERIFIER();
 
@@ -201,13 +201,11 @@ contract PromiseFactory {
                     keccak256(abi.encodePacked(verifiedAccounts[i])) ==
                     keccak256(abi.encodePacked(_twitterHandle))
                 ) {
-                    emit TwitterAddVerifiedFailed(_userAddress, _twitterHandle);
-                    return;
+                    revert PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
                 }
             }
             // But if it is not included, add it
             s_twitterVerifiedUsers[_userAddress].push(_twitterHandle);
-            emit TwitterAddVerifiedSuccessful(_userAddress, _twitterHandle);
         }
     }
 
