@@ -79,8 +79,8 @@ function MyApp({ Component, pageProps }) {
         </RainbowKitProvider>
       </WagmiConfig>
       <ToastContainer
-        theme='colored'
-        progressStyle={{ background: '#fff' }}
+        // theme='colored'
+        // progressStyle={{ background: '#fff' }}
         position={'bottom-right'}
       />
     </div>

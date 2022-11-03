@@ -63,7 +63,7 @@
   --toastify-color-success: #58ad8b !important;
   --toastify-color-warning: #d5a87a !important;
   --toastify-color-error: #c95966 !important;
-  --toastify-color-light: var(--twilight-lavender) !important;
+  --toastify-color-light: rgba(0, 0, 0, 0.7) !important;
   --toastify-text-color-light: #fff !important;
   --toastify-spinner-color: #616161;
   --toastify-spinner-color-empty-area: #e0e0e0;
@@ -322,6 +322,10 @@ a:not(.header) {
 .ant-tooltip-inner,
 .ant-tooltip-arrow-content::before {
   background: var(--popstar) !important;
+}
+
+.interaction .ant-tooltip-disabled-compatible-wrapper {
+  width: 100%;
 }
 
 .ant-popover-arrow-content {

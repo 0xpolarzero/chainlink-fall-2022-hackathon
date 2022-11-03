@@ -72,43 +72,54 @@ export default function RowPromiseVerification({
       verifyTwitterAbi,
       provider,
     );
-
-    await toast.promise(
-      new Promise((resolve) => {
-        console.log('waiting for fulfillment');
-        // Setup a listener for the success event
-        contract.on('VerificationSuccessful', async (result) => {
-          console.log(result);
-          if (
-            result.toLowerCase() === interactingUser.twitterHandle.toLowerCase()
-          ) {
-            setIsWaitingForVerification(false);
-            gatherPartiesData();
-            console.log('fulfilled');
-            resolve();
-          }
-        });
-        // Or for the failure event
-        contract.on('VerificationFailed', async (result) => {
-          if (
-            result.toLowerCase() === interactingUser.twitterHandle.toLowerCase()
-          ) {
-            setIsWaitingForVerification(false);
-            gatherPartiesData();
-            console.log('failed');
-            resolve();
-          }
-        });
-      }),
-      {
-        // TODO
-        // TODO HOW TO DISPLAY AN ERROR IF THE EVENT IS FAILED?
-        // TODO
-        pending: 'Waiting for the Chainlink Node to fulfill the request...',
-        success: 'Verification successful!',
-        error: 'Error verifying Twitter account',
-      },
+    const promiseWaiting = toast.loading(
+      'Waiting for the Chainlink Node to fulfill the request...',
     );
+
+    new Promise((resolve) => {
+      // Setup a listener for the success event
+      contract.on('VerificationSuccessful', async (requestId, result) => {
+        if (
+          result.toLowerCase() === interactingUser.twitterHandle.toLowerCase()
+        ) {
+          setIsWaitingForVerification(false);
+          gatherPartiesData();
+          toast.update(promiseWaiting, {
+            render: 'Verification successful!',
+            type: 'success',
+            isLoading: false,
+            autoClose: 5000,
+          });
+          resolve();
+        }
+      });
+      // Or for the failure event
+      contract.on('VerificationFailed', async (requestId, result) => {
+        if (
+          result.toLowerCase() === interactingUser.twitterHandle.toLowerCase()
+        ) {
+          setIsWaitingForVerification(false);
+          gatherPartiesData();
+          toast.update(promiseWaiting, {
+            render: 'Verification failed!',
+            type: 'error',
+            isLoading: false,
+            autoClose: 5000,
+          });
+          resolve();
+        }
+      });
+    });
+
+    //   pending: 'Waiting for the Chainlink Node to fulfill the request...',
+    //   success: {
+    //     render({ data }) {
+    //       console.log(data);
+    //       return `Verification ${data}!`;
+    //     },
+    //   },
+    //   error: 'Error verifying Twitter account',
+    // },
   };
 
   const openTweet = (e) => {
