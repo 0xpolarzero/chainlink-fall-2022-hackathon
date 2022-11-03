@@ -14,7 +14,6 @@ export default function RowPromiseLock({
   contractAddress,
   userAddress,
   isPromiseLocked,
-  addressToApprovedStatus,
   getPromiseStatus,
   allPartiesApproved,
 }) {
@@ -27,7 +26,8 @@ export default function RowPromiseLock({
     enabled:
       !!userAddress &&
       // Make sure it's approved for each user of the promise
-      allPartiesApproved,
+      allPartiesApproved &&
+      !isPromiseLocked,
   });
 
   const {
