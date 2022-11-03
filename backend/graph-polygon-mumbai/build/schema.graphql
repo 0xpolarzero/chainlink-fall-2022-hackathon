@@ -3,7 +3,7 @@ type PromiseContractCreated @entity {
   owner: Bytes!
   contractAddress: Bytes!
   promiseName: String!
-  pdfUri: String!
+  ipfsCid: String!
   partyNames: [String!]!
   partyTwitterHandles: [String!]
   partyAddresses: [Bytes!]!

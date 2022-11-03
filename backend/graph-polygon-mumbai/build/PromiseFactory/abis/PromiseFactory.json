@@ -22,6 +22,11 @@
   },
   {
     "inputs": [],
+    "name": "PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "PromiseFactory__createPromiseContract__DUPLICATE_FIELD",
     "type": "error"
   },
@@ -33,11 +38,6 @@
   {
     "inputs": [],
     "name": "PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "PromiseFactory__createPromiseContract__INVALID_URI",
     "type": "error"
   },
   {
@@ -64,7 +64,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "_pdfUri",
+        "name": "_ipfsCid",
         "type": "string"
       },
       {
@@ -154,7 +154,7 @@
       },
       {
         "internalType": "string",
-        "name": "_pdfUri",
+        "name": "_ipfsCid",
         "type": "string"
       },
       {

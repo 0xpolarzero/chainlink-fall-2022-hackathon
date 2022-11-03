@@ -35,7 +35,7 @@ export class PromiseContractCreated__Params {
     return this._event.parameters[2].value.toString();
   }
 
-  get _pdfUri(): string {
+  get _ipfsCid(): string {
     return this._event.parameters[3].value.toString();
   }
 
@@ -103,7 +103,7 @@ export class PromiseFactory extends ethereum.SmartContract {
 
   createPromiseContract(
     _promiseName: string,
-    _pdfUri: string,
+    _ipfsCid: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
     _partyAddresses: Array<Address>
@@ -113,7 +113,7 @@ export class PromiseFactory extends ethereum.SmartContract {
       "createPromiseContract(string,string,string[],string[],address[]):(address)",
       [
         ethereum.Value.fromString(_promiseName),
-        ethereum.Value.fromString(_pdfUri),
+        ethereum.Value.fromString(_ipfsCid),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
         ethereum.Value.fromAddressArray(_partyAddresses)
@@ -125,7 +125,7 @@ export class PromiseFactory extends ethereum.SmartContract {
 
   try_createPromiseContract(
     _promiseName: string,
-    _pdfUri: string,
+    _ipfsCid: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
     _partyAddresses: Array<Address>
@@ -135,7 +135,7 @@ export class PromiseFactory extends ethereum.SmartContract {
       "createPromiseContract(string,string,string[],string[],address[]):(address)",
       [
         ethereum.Value.fromString(_promiseName),
-        ethereum.Value.fromString(_pdfUri),
+        ethereum.Value.fromString(_ipfsCid),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
         ethereum.Value.fromAddressArray(_partyAddresses)
@@ -339,7 +339,7 @@ export class CreatePromiseContractCall__Inputs {
     return this._call.inputValues[0].value.toString();
   }
 
-  get _pdfUri(): string {
+  get _ipfsCid(): string {
     return this._call.inputValues[1].value.toString();
   }
 

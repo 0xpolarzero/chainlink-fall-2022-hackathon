@@ -21,7 +21,7 @@ export function handlePromiseContractCreated(
   promiseContractCreated.owner = event.params._owner;
   promiseContractCreated.contractAddress = event.params._contractAddress;
   promiseContractCreated.promiseName = event.params._promiseName;
-  promiseContractCreated.pdfUri = event.params._pdfUri;
+  promiseContractCreated.ipfsCid = event.params._ipfsCid;
   promiseContractCreated.partyNames = event.params._partyNames;
   promiseContractCreated.partyTwitterHandles =
     event.params._partyTwitterHandles;
