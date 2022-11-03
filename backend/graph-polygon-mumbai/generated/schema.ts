@@ -74,13 +74,13 @@ export class PromiseContractCreated extends Entity {
     this.set("promiseName", Value.fromString(value));
   }
 
-  get pdfUri(): string {
-    let value = this.get("pdfUri");
+  get ipfsCid(): string {
+    let value = this.get("ipfsCid");
     return value!.toString();
   }
 
-  set pdfUri(value: string) {
-    this.set("pdfUri", Value.fromString(value));
+  set ipfsCid(value: string) {
+    this.set("ipfsCid", Value.fromString(value));
   }
 
   get partyNames(): Array<string> {
