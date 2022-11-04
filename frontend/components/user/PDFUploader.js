@@ -4,7 +4,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 
-const MAX_SIZE = 100 * 1024 * 1024 - 1; // 100MB
+const MAX_SIZE = 10 * 1024 * 1024 - 1; // 10MB
 
 export default function PDFUploader() {
   const [fileList, setFileList] = useState([]);
@@ -105,7 +105,9 @@ export default function PDFUploader() {
         <p className='ant-upload-text'>
           Click or drag file to this area to upload
         </p>
-        <p className='ant-upload-hint'>{formatSize(totalSize)} / 100MB</p>
+        <p className='ant-upload-hint'>
+          {formatSize(totalSize)} / {formatSize(MAX_SIZE)}
+        </p>
         <h1 className='ant-upload-hint warning-message'>
           <i className='fas fa-exclamation-triangle'></i>
         </h1>
