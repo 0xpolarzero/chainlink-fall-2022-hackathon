@@ -24,7 +24,6 @@ export default function RowPromiseVerification({
   const [verifyTwitterContract, setVerifyTwitterContract] = useState(
     networkMapping['80001']['VerifyTwitter'][0],
   );
-  const [requestId, setRequestId] = useState(null);
   const { chain } = useNetwork();
   const provider = useProvider();
 
