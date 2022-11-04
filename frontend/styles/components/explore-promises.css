@@ -105,3 +105,13 @@
 .drawer-item.parties .title {
   margin-bottom: 1rem;
 }
+
+.ipfs-viewer {
+  position: relative;
+}
+
+.ipfs-viewer .security {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+}

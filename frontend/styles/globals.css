@@ -513,6 +513,11 @@ ant-select {
   left: initial !important;
 }
 
+.ant-badge {
+  cursor: pointer;
+  z-index: 2;
+}
+
 .section-explore .ant-table-pagination,
 .promise-drawer .ant-table-pagination {
   position: absolute !important;
