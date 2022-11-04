@@ -57,6 +57,7 @@
 
 .promise-header-address {
   opacity: 0.8;
+  z-index: 2;
 }
 
 .promise-header-address > span::after {
