@@ -38,21 +38,22 @@ const validateNewPromiseForm = async (form) => {
       return false;
     }
 
+    console.log(formValues.upload);
     // Make sure at least a file has been dropped
-    if (!formValues.upload || formValues.upload.length !== 1) {
+    if (!formValues.upload || formValues.upload.length < 1) {
       toast.error('Please upload at least a file.');
       return false;
     }
 
     const promiseName = formValues.promiseName;
-    const file = formValues.upload[0].originFileObj;
+    const files = formValues.upload;
 
     return {
       promiseName,
       partyNameArray,
       partyAddressArray,
       partyTwitterHandleArray,
-      file,
+      files,
     };
   } else {
     return false;

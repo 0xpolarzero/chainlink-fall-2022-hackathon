@@ -54,18 +54,25 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
 
     // Upload the files to IPFS
     // We assume 'uploadToIPFS' returns a valid CID
-    // ... anyway, the smart contract will check it when creating the promise
-    const pdfCid = await toast.promise(uploadToIPFS(formValues.file), {
-      pending: 'Uploading file to IPFS...',
-      success: 'File uploaded successfully!',
-      error: 'File could not be uploaded.',
-    });
+    // If it did not, it would be visible in the Promise UI
+    const ipfsCid = await toast
+      .promise(uploadToIPFS(formValues.files), {
+        pending: 'Uploading files to IPFS...',
+        success: 'Files uploaded successfully!',
+        error: 'Files could not be uploaded.',
+      })
+      .catch((err) => {
+        console.log('error uploading files to IPFS', err);
+        setSubmitLoading(false);
+        setIsFormDisabled(false);
+        return;
+      });
 
     // Then create the promise
     // This will trigger the useEffect hook (to make sure the args are filled)
     setCreatePromiseArgs([
       formValues.promiseName,
-      pdfCid,
+      ipfsCid,
       formValues.partyNameArray,
       formValues.partyTwitterHandleArray,
       formValues.partyAddressArray,

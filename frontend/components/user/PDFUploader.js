@@ -2,65 +2,50 @@ import { formatSize } from '../../systems/utils';
 import { Form, Modal, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const MAX_FILE_SIZE = 100 * 1024 * 1024 - 1; // 100MB
+const MAX_SIZE = 100 * 1024 * 1024 - 1; // 100MB
 
 export default function PDFUploader() {
+  const [fileList, setFileList] = useState([]);
+  const [totalSize, setTotalSize] = useState(0);
   const { Dragger } = Upload;
 
   const uploadProps = {
-    name: 'pdfFile',
-    accept: '.pdf',
+    name: 'file',
     multiple: false,
     directory: false,
-    // defaultFileList: [...fileList],
-    maxCount: 1,
-    maxFileSize: MAX_FILE_SIZE,
-    beforeUpload: async (file) => {
-      const isCorrectTypeAndSize = checkIsUploadCorrect(file);
-      // Wait for user to confirm the upload
-      const isUserConfirmed = await confirmUpload(file);
 
-      if (isCorrectTypeAndSize && isUserConfirmed) {
-        return true;
-      } else {
+    beforeUpload: async (file) => {
+      // Don't allow directories
+      if (file.type === '') {
+        toast.error('Please upload files one at a time');
         return Upload.LIST_IGNORE;
       }
+
+      let fileListSize = getTotalSize(fileList);
+      // If it exceeds the max size, don't add the last file
+      if (fileListSize + file.size > MAX_SIZE) {
+        toast.error(`Total size exceeds ${formatSize(MAX_SIZE)}`);
+        return Upload.LIST_IGNORE;
+      } else {
+        setTotalSize(fileListSize + file.size);
+        setFileList([...fileList, file]);
+        toast.info(`Added ${file.name}`);
+      }
+      console.log('fileList', file);
     },
-    onChange(info) {
-      const { status } = info.file;
-      console.log(info);
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (status === 'done') {
-        toast.info(`${info.file.name} file dropped successfully.`);
-      } else if (status === 'error') {
-        toast.error(`${info.file.name} file could not be added.`);
-      }
-    },
-    onDrop(e) {
-      // Inform the user if they are trying to upload more than one file
-      if (e.dataTransfer.items.length > 1) {
-        toast.error('You can only upload one file.');
-      }
-      // Inform the user if they are trying to upload a file that is too large
-      checkIsUploadCorrect(e.dataTransfer.items[0].getAsFile());
+
+    onRemove: (file) => {
+      setTotalSize(getTotalSize(fileList) - file.size);
+      setFileList(fileList.filter((f) => f.uid !== file.uid));
+      toast.info(`Removed ${file.name}`);
     },
   };
 
-  const checkIsUploadCorrect = (file) => {
-    // const isPDF = file.type === 'application/pdf';
-    // if (!isPDF) {
-    //   toast.error('You can only upload a PDF file!');
-    // }
-    const isLt100MB = file.size < MAX_FILE_SIZE;
-    if (!isLt100MB) {
-      toast.error('File must be smaller than 100MB!');
-    }
-
-    return isLt100MB;
+  const getTotalSize = (files) => {
+    if (files.length === 0) return 0;
+    return files.reduce((acc, file) => acc + file.size, 0);
   };
 
   const confirmUpload = async (file) => {
@@ -98,8 +83,6 @@ export default function PDFUploader() {
   };
 
   const getFile = (e) => {
-    console.log(e);
-
     if (Array.isArray(e)) {
       return e;
     }
@@ -115,14 +98,14 @@ export default function PDFUploader() {
       valuePropName='fileList'
       getValueFromEvent={getFile}
     >
-      <Dragger {...uploadProps}>
+      <Dragger {...uploadProps} fileList={fileList}>
         <p className='ant-upload-drag-icon'>
           <InboxOutlined />
         </p>
         <p className='ant-upload-text'>
           Click or drag file to this area to upload
         </p>
-        <p className='ant-upload-hint'>Max file size is 100MB.</p>
+        <p className='ant-upload-hint'>{formatSize(totalSize)} / 100MB</p>
         <h1 className='ant-upload-hint warning-message'>
           <i className='fas fa-exclamation-triangle'></i>
         </h1>
