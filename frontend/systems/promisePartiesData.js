@@ -2,7 +2,7 @@ import FormattedAddress from '../components/utils/FormattedAddress';
 import promiseContractAbi from '../constants/PromiseContract.json';
 import promiseFactoryAbi from '../constants/PromiseFactory.json';
 import networkMapping from '../constants/networkMapping';
-import { Skeleton } from 'antd';
+import { Skeleton, Tooltip } from 'antd';
 import { ethers } from 'ethers';
 
 const columns = [
@@ -20,35 +20,55 @@ const columns = [
     title: 'Twitter Handle',
     dataIndex: 'twitterHandle',
     key: 'twitterHandle',
-    // If a Twitter handle was not provided, this column will show 'Not provided'
-    // ... and span 2 columns
-    // render: (text, record) =>
-    //   record.twitterHandle === null
-    //     ? {
-    //         children: getVerificationDiv(false, 'Not provided'),
-    //         props: {
-    //           colSpan: 2,
-    //         },
-    //       }
-    //     : text,
   },
   {
-    title: 'Twitter verified',
+    title: () => {
+      return (
+        <>
+          Twitter verified{' '}
+          <Tooltip
+            title={
+              <span>
+                The verification is performed by a{' '}
+                <a
+                  href='https://docs.chain.link/chainlink-nodes/'
+                  target='_blank'
+                >
+                  Chainlink Node
+                </a>{' '}
+                & an External Adapter leveraging the Twitter API to verify the
+                ownership of the Twitter account. The user must tweet a
+                verification message containing their address with this account.
+              </span>
+            }
+          >
+            <i className='fas fa-question-circle' />
+          </Tooltip>
+        </>
+      );
+    },
     dataIndex: 'twitterVerifiedDiv',
     key: 'twitterVerifiedDiv',
-    // If the twitter handle was not provided, this column will not show
-    // render: (text, record) =>
-    //   record.twitterHandle === null
-    //     ? {
-    //         children: null,
-    //         props: {
-    //           colSpan: 0,
-    //         },
-    //       }
-    //     : text,
   },
   {
-    title: 'Promise approved',
+    title: () => {
+      return (
+        <>
+          Promise approved{' '}
+          <Tooltip
+            title={
+              <span>
+                The parties involved by the creator must approve the promise
+                with the address that has been provided. Only then the promise
+                can be locked and backed up.
+              </span>
+            }
+          >
+            <i className='fas fa-question-circle' />
+          </Tooltip>
+        </>
+      );
+    },
     dataIndex: 'promiseApprovedDiv',
     key: 'promiseApprovedDiv',
   },

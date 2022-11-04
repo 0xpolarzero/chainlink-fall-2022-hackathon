@@ -1,6 +1,6 @@
 import { getContentFromCid } from '../../systems/getContentFromCid';
 import { formatSize } from '../../systems/utils';
-import { Skeleton, Table } from 'antd';
+import { Skeleton, Table, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import FormattedAddress from '../utils/FormattedAddress';
@@ -145,7 +145,41 @@ export default function IpfsDisplaydirectory({
         />
       ) : (
         <Table
-          title={() => <b>IPFS directory</b>}
+          title={() => (
+            <b>
+              IPFS directory{' '}
+              <Tooltip
+                title={
+                  <span>
+                    <p>
+                      The content of the IPFS CID that was provided when
+                      creating the promise. If done through the UI, the storage
+                      is provided by{' '}
+                      <a
+                        href='https://blog.web3.storage/posts/say-hello-to-the-data-layer-1-3-intro-to-web3-storage'
+                        target='_blank'
+                      >
+                        Web3.Storage
+                      </a>
+                      , leveraging the Filecoin persistent long-term storage
+                      solution. If done directly through the Smart Contract, the
+                      user can provide any valid CID.
+                    </p>
+                    <p>
+                      <b>NOTE:</b> As soon as the promise is locked, the
+                      contract will try to perform a permanent backup to{' '}
+                      <a href='https://arwiki.wiki/#/en/main' target='_blank'>
+                        Arweave
+                      </a>
+                      , the result of which will be displayed on the badge.
+                    </p>
+                  </span>
+                }
+              >
+                <i className='fas fa-question-circle' />
+              </Tooltip>
+            </b>
+          )}
           dataSource={tableData}
           columns={columns}
           pagination={tableParams.pagination}

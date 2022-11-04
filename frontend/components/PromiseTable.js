@@ -7,8 +7,7 @@ import {
   columns as contractColumns,
   displayContractData,
 } from '../systems/promiseContractData';
-import { displayPromiseStatus } from '../systems/promiseStatus';
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 
 export default function PromiseTable({
@@ -71,7 +70,14 @@ export default function PromiseTable({
       {/* </div> */}
       <div key='parties' className='card-item parties'>
         <Table
-          title={() => <b>Involved parties</b>}
+          title={() => (
+            <b>
+              Involved parties{' '}
+              <Tooltip title='The parties added by the creator to the promise. The promise creator is the first party.'>
+                <i className='fas fa-question-circle' />
+              </Tooltip>
+            </b>
+          )}
           dataSource={partiesData}
           columns={partiesColumns}
           pagination={tableParams.pagination}

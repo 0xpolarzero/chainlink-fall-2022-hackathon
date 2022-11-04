@@ -1,13 +1,46 @@
+import { Tooltip } from 'antd';
 import FormattedAddress from '../components/utils/FormattedAddress';
 
 const columns = [
   {
-    title: 'Contract address',
+    // Add a title with a tooltip
+    title: () => {
+      return (
+        <>
+          Contract address{' '}
+          <Tooltip title='The address of the smart contract created to hold this promise data.'>
+            <i className='fas fa-question-circle' />
+          </Tooltip>
+        </>
+      );
+    },
+
     dataIndex: 'contractAddress',
     key: 'contractAddress',
   },
   {
-    title: 'IPFS CID',
+    title: () => {
+      return (
+        <>
+          IPFS CID{' '}
+          <Tooltip
+            title={
+              <span>
+                The unique identifier of the promise data stored on{' '}
+                <a
+                  href='https://docs.ipfs.tech/concepts/what-is-ipfs/'
+                  target='_blank'
+                >
+                  IPFS
+                </a>
+              </span>
+            }
+          >
+            <i className='fas fa-question-circle' />
+          </Tooltip>
+        </>
+      );
+    },
     dataIndex: 'ipfsCid',
     key: 'ipfsCid',
   },
