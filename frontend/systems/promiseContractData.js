@@ -50,13 +50,17 @@ const displayContractData = (contractAddress, ipfsCid) => {
   const contractData = [
     {
       contractAddress: (
-        <FormattedAddress address={contractAddress} isShrinked='responsive' />
+        <FormattedAddress
+          address={contractAddress}
+          isShrinked='responsive'
+          type='eth'
+        />
       ),
       ipfsCid: (
         <FormattedAddress
           address={ipfsCid}
           isShrinked='responsive'
-          prefix='https://dweb.link/ipfs/'
+          type='ipfs'
         />
       ),
       key: contractAddress,

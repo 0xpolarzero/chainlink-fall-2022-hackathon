@@ -3,10 +3,11 @@ import { Popover } from 'antd';
 import { useWidth } from '../../systems/useWidth';
 import { useEffect, useState } from 'react';
 
-export default function FormattedAddress({ address, isShrinked, prefix }) {
+export default function FormattedAddress({ address, isShrinked, type }) {
   const [shrinkedAddress, setShrinkedAddress] = useState('');
   const [isAddressHovered, setIsAddressHovered] = useState(false);
   const [shouldShrinkAddress, setShouldShrinkAddress] = useState(false);
+  const [prefix, setPrefix] = useState('');
   const width = useWidth();
 
   const copyAddress = (e) => {
@@ -29,6 +30,11 @@ export default function FormattedAddress({ address, isShrinked, prefix }) {
     if (isShrinked === 'responsive') setShouldShrinkAddress(width < 768);
   }, [width]);
 
+  useEffect(() => {
+    if (type === 'ipfs') setPrefix('https://dweb.link/ipfs/');
+    if (type === 'eth') setPrefix('https://mumbai.polygonscan.com/address/');
+  }, [type]);
+
   return (
     <Popover
       content={
@@ -38,14 +44,7 @@ export default function FormattedAddress({ address, isShrinked, prefix }) {
         </div>
       }
     >
-      <a
-        href={
-          prefix
-            ? `${prefix}${address}`
-            : `https://mumbai.polygonscan.com/address/${address}`
-        }
-        target='_blank'
-      >
+      <a href={`${prefix}${address}`} target='_blank'>
         {shrinkedAddress}
       </a>
       {isAddressHovered && <span className='hint'>{address}</span>}

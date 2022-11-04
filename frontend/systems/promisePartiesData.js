@@ -153,7 +153,11 @@ const displayPartiesData = (
       key: i + 1,
       name: partyNames[i],
       address: (
-        <FormattedAddress address={partyAddresses[i]} isShrinked='responsive' />
+        <FormattedAddress
+          address={partyAddresses[i]}
+          isShrinked='responsive'
+          type='eth'
+        />
       ),
       twitterHandle:
         partyTwitterHandles[i] === '' ? (

@@ -74,6 +74,7 @@ export default function PromisesCollapse({ promises, context }) {
                     <FormattedAddress
                       address={promise.owner}
                       isShrinked='responsive'
+                      type='eth'
                     />{' '}
                     <DateFromTimestamp timestamp={promise.blockTimestamp} />
                   </div>

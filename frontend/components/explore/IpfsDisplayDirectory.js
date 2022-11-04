@@ -38,7 +38,7 @@ export default function IpfsDisplaydirectory({
             <FormattedAddress
               address={item.Hash}
               isShrinked={true}
-              prefix='https://dweb.link/ipfs/'
+              type='ipfs'
             />
           ),
           size: item.Type === 2 ? formatSize(item.Size) : 'Directory',

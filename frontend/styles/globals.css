@@ -567,13 +567,15 @@ ant-select {
 }
 
 .fa-info-circle,
-.fa-question-circle {
+.fa-question-circle,
+.fa-copy {
   opacity: 0.7;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .fa-info-circle:hover,
-.fa-question-circle:hover {
+.fa-question-circle:hover,
+.fa-copy:hover {
   opacity: 1;
 }
