@@ -6,7 +6,6 @@ const getContentFromCid = async (inputUri) => {
     // List the content of the directory at the provided CID (URI)
     const dir = `https://dweb.link/api/v0/ls?arg=${cid}`;
 
-    // Fetch curl -X POST dir with headers=<value> with size=true
     const res = await fetch(dir, {
       method: 'POST',
     }).catch((err) => {
