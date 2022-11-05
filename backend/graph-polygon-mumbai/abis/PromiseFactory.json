@@ -6,8 +6,24 @@
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
+  { "inputs": [], "name": "PromiseFactory__EMPTY_FIELD", "type": "error" },
+  {
+    "inputs": [],
+    "name": "PromiseFactory__INCORRECT_FIELD_LENGTH",
+    "type": "error"
+  },
   { "inputs": [], "name": "PromiseFactory__NOT_OWNER", "type": "error" },
   { "inputs": [], "name": "PromiseFactory__NOT_VERIFIER", "type": "error" },
+  {
+    "inputs": [],
+    "name": "PromiseFactory__addParticipant__ALREADY_PARTICIPANT",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PromiseFactory__addParticipant__NOT_PARTICIPANT",
+    "type": "error"
+  },
   {
     "inputs": [],
     "name": "PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED",
@@ -19,14 +35,35 @@
     "type": "error"
   },
   {
-    "inputs": [],
-    "name": "PromiseFactory__createPromiseContract__EMPTY_FIELD",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH",
-    "type": "error"
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_contractAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_participantName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_participantTwitterHandle",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_participantAddress",
+        "type": "address"
+      }
+    ],
+    "name": "ParticipantAdded",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -114,6 +151,26 @@
     ],
     "name": "TwitterAddVerifiedSuccessful",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_promiseContractAddress",
+        "type": "address"
+      },
+      { "internalType": "string", "name": "_partyName", "type": "string" },
+      {
+        "internalType": "string",
+        "name": "_partyTwitterHandle",
+        "type": "string"
+      },
+      { "internalType": "address", "name": "_partyAddress", "type": "address" }
+    ],
+    "name": "addParticipant",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [

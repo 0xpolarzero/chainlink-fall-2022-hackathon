@@ -10,6 +10,36 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class ParticipantAdded extends ethereum.Event {
+  get params(): ParticipantAdded__Params {
+    return new ParticipantAdded__Params(this);
+  }
+}
+
+export class ParticipantAdded__Params {
+  _event: ParticipantAdded;
+
+  constructor(event: ParticipantAdded) {
+    this._event = event;
+  }
+
+  get _contractAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get _participantName(): string {
+    return this._event.parameters[1].value.toString();
+  }
+
+  get _participantTwitterHandle(): string {
+    return this._event.parameters[2].value.toString();
+  }
+
+  get _participantAddress(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+}
+
 export class PromiseContractCreated extends ethereum.Event {
   get params(): PromiseContractCreated__Params {
     return new PromiseContractCreated__Params(this);
@@ -280,6 +310,48 @@ export class ConstructorCall__Outputs {
   _call: ConstructorCall;
 
   constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class AddParticipantCall extends ethereum.Call {
+  get inputs(): AddParticipantCall__Inputs {
+    return new AddParticipantCall__Inputs(this);
+  }
+
+  get outputs(): AddParticipantCall__Outputs {
+    return new AddParticipantCall__Outputs(this);
+  }
+}
+
+export class AddParticipantCall__Inputs {
+  _call: AddParticipantCall;
+
+  constructor(call: AddParticipantCall) {
+    this._call = call;
+  }
+
+  get _promiseContractAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _partyName(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+
+  get _partyTwitterHandle(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+
+  get _partyAddress(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+}
+
+export class AddParticipantCall__Outputs {
+  _call: AddParticipantCall;
+
+  constructor(call: AddParticipantCall) {
     this._call = call;
   }
 }

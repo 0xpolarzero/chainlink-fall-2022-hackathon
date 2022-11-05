@@ -1,3 +1,16 @@
+type ActivePromise @entity {
+  id: ID!
+  owner: Bytes!
+  contractAddress: Bytes!
+  promiseName: String!
+  ipfsCid: String!
+  partyNames: [String!]!
+  partyTwitterHandles: [String!]!
+  partyAddresses: [Bytes!]!
+  createdAt: BigInt
+  updatedAt: BigInt
+}
+
 type PromiseContractCreated @entity {
   id: ID!
   owner: Bytes!
@@ -5,7 +18,15 @@ type PromiseContractCreated @entity {
   promiseName: String!
   ipfsCid: String!
   partyNames: [String!]!
-  partyTwitterHandles: [String!]
+  partyTwitterHandles: [String!]!
   partyAddresses: [Bytes!]!
-  blockTimestamp: BigInt!
+  blockTimestamp: BigInt
+}
+
+type ParticipantAdded @entity {
+  id: ID!
+  contractAddress: Bytes! # address
+  participantName: String! # string
+  participantTwitterHandle: String! # string
+  participantAddress: Bytes! # address
 }
