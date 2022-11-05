@@ -145,4 +145,13 @@ contract VerifyTwitterMock is
     function getOraclePayment() public pure returns (uint256) {
         return ORACLE_PAYMENT;
     }
+
+    // Additional function to test 'addressToString'
+    function testAddressToString(address _address)
+        public
+        pure
+        returns (string memory)
+    {
+        return addressToString(_address);
+    }
 }

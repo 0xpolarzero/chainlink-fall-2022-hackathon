@@ -264,7 +264,6 @@ contract PromiseFactory {
             _partyAddress
         );
 
-        // TODO: Should emit an event if successful / not if not successfult
         emit ParticipantAdded(
             _promiseContractAddress,
             _partyName,

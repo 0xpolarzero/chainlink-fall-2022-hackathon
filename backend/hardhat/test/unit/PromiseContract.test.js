@@ -8,7 +8,8 @@ const { deployments, network, ethers } = require('hardhat');
       let deployer;
       let userFirst;
       let userSecond;
-      let userForbidden;
+      let notUser;
+      let promiseFactory;
       let promiseContractDeploy;
       let promiseContract;
       let deployTxReceipt;
@@ -18,11 +19,11 @@ const { deployments, network, ethers } = require('hardhat');
         deployer = accounts[0];
         userFirst = accounts[1];
         userSecond = accounts[2];
-        userForbidden = accounts[3];
+        notUser = accounts[3];
         await deployments.fixture('main');
-        const promiseFactory = (
-          await ethers.getContract('PromiseFactory')
-        ).connect(userFirst);
+        promiseFactory = (await ethers.getContract('PromiseFactory')).connect(
+          userFirst,
+        );
 
         const deployTx = await promiseFactory.createPromiseContract(
           'Test Agreement',
@@ -59,13 +60,39 @@ const { deployments, network, ethers } = require('hardhat');
       });
 
       describe('createParticipant', function() {
+        it('Should not allow to create a participant if the caller is not the PromiseFactory', async () => {
+          await expect(
+            promiseContractDeploy.createParticipant(
+              'Bob',
+              '@bob',
+              userFirst.address,
+            ),
+          ).to.be.revertedWith('PromiseContract__NOT_FACTORY()');
+        });
+
+        it('Should not allow to create a participant if the promise is locked', async () => {
+          // Approve all participants
+          promiseContract.connect(userFirst).approvePromise();
+          promiseContract.connect(userSecond).approvePromise();
+          await promiseContract.lockPromise();
+
+          await expect(
+            promiseFactory.addParticipant(
+              promiseContract.address,
+              'Bob',
+              '@bob',
+              notUser.address,
+            ),
+          ).to.be.revertedWith('PromiseContract__PROMISE_LOCKED()');
+        });
+
         it('Should create a mapping between the participants addresses and a struct Participant', async () => {
           const participant = await promiseContract.getParticipant(
             userFirst.address,
           );
 
           const notParticipant = await promiseContract.getParticipant(
-            userForbidden.address,
+            notUser.address,
           );
 
           assert.equal(participant.participantName, 'Bob');
@@ -121,7 +148,7 @@ const { deployments, network, ethers } = require('hardhat');
           ).to.equal(true);
 
           expect(
-            await promiseContract.getIsParticipant(userForbidden.address),
+            await promiseContract.getIsParticipant(notUser.address),
           ).to.equal(false);
         });
       });
@@ -153,7 +180,7 @@ const { deployments, network, ethers } = require('hardhat');
 
         it('Should revert if the user is not a participant', async () => {
           await expect(
-            promiseContract.connect(userForbidden).approvePromise(),
+            promiseContract.connect(notUser).approvePromise(),
           ).to.be.revertedWith('PromiseContract__NOT_PARTICIPANT()');
         });
 
@@ -202,7 +229,7 @@ const { deployments, network, ethers } = require('hardhat');
 
         it('Should revert if the user is not a participant', async () => {
           await expect(
-            promiseContract.connect(userForbidden).lockPromise(),
+            promiseContract.connect(notUser).lockPromise(),
           ).to.be.revertedWith('PromiseContract__NOT_PARTICIPANT()');
         });
 

@@ -200,10 +200,6 @@ contract PromiseContract {
         return s_participantCount;
     }
 
-    function getParticipantAddresses() public view returns (address[] memory) {
-        return s_participantAddresses;
-    }
-
     function getIsPromiseApproved(address _participantAddress)
         public
         view

@@ -1,5 +1,8 @@
 const { assert, expect } = require('chai');
-const { developmentChains } = require('../../helper-hardhat-config');
+const {
+  developmentChains,
+  VERIFY_TWITTER_MUMBAI,
+} = require('../../helper-hardhat-config');
 const { deployments, network, ethers } = require('hardhat');
 
 !developmentChains.includes(network.name)
@@ -40,6 +43,16 @@ const { deployments, network, ethers } = require('hardhat');
           partyTwitters: ['@bob', '@alice'],
           partyAddresses: [deployer.address, user.address],
         };
+      });
+
+      describe('constructor', function() {
+        it('Should initialize the variables with the right value', async () => {
+          const owner = await promiseFactory.getOwner();
+          const verifier = await promiseFactory.getVerifier();
+
+          assert.equal(owner, deployer.address);
+          assert.equal(verifier, VERIFY_TWITTER_MUMBAI);
+        });
       });
 
       describe('createPromiseContract', function() {

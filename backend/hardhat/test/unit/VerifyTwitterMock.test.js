@@ -184,6 +184,20 @@ const TEST_USERNAME_2 = 'john123';
           );
         });
       });
+
+      describe('utils', function() {
+        it('addressToString', async () => {
+          const address = '0x0000000000000000000000000000000000000000';
+          const addressString = await verifyTwitterMock.testAddressToString(
+            address,
+          );
+
+          assert.equal(
+            addressString,
+            '0x0000000000000000000000000000000000000000',
+          );
+        });
+      });
     });
 
 // Same handle revert
