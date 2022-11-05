@@ -221,7 +221,6 @@ contract PromiseFactory {
      * @param _partyAddress The address of the party
      */
 
-    // TODO TEST THIS
     function addParticipant(
         address _promiseContractAddress,
         string memory _partyName,
