@@ -37,6 +37,11 @@
   },
   {
     "inputs": [],
+    "name": "PromiseContract__NOT_FACTORY",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "PromiseContract__NOT_PARTICIPANT",
     "type": "error"
   },
@@ -119,6 +124,29 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_participantName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_participantTwitterHandle",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "_participantAddress",
+        "type": "address"
+      }
+    ],
+    "name": "createParticipant",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "getIpfsCid",
     "outputs": [
@@ -126,6 +154,25 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_participantAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getIsParticipant",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -193,7 +240,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_participantAddress",
+        "name": "_address",
         "type": "address"
       }
     ],
@@ -227,19 +274,6 @@
   },
   {
     "inputs": [],
-    "name": "getParticipantAddresses",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "getParticipantCount",
     "outputs": [
       {
@@ -253,7 +287,7 @@
   },
   {
     "inputs": [],
-    "name": "i_owner",
+    "name": "getPromiseFactoryContract",
     "outputs": [
       {
         "internalType": "address",
@@ -269,125 +303,6 @@
     "name": "lockPromise",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "s_approvedParties",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_ipfsCid",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "s_participantAddresses",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_participantCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "s_parties",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "participantName",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "participantTwitterHandle",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "participantAddress",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_promiseLocked",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_promiseName",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]
