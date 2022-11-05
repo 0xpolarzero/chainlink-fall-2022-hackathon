@@ -30,3 +30,16 @@ type ParticipantAdded @entity {
   participantTwitterHandle: String! # string
   participantAddress: Bytes! # address
 }
+
+type TwitterVerifiedUser @entity {
+  id: ID!
+  address: Bytes!
+  twitterHandles: [String!]!
+  verifiedAt: BigInt
+}
+
+type TwitterAddVerifiedSuccessful @entity {
+  id: ID!
+  address: Bytes!
+  twitterHandle: String!
+}

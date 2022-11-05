@@ -6,7 +6,7 @@ dataSources:
     name: PromiseFactory
     network: mumbai
     source:
-      address: "0x5F2a21f954906Bdd3D9CC12c81116CdeDe6A30D7"
+      address: "0x4dcE3Dce26914222B386f966E14Fd7661933f827"
       abi: PromiseFactory
       startBlock: 28996406
     mapping:
@@ -24,4 +24,6 @@ dataSources:
           handler: handlePromiseContractCreated
         - event: ParticipantAdded(indexed address,string,string,address)
           handler: handleParticipantAdded
+        - event: TwitterAddVerifiedSuccessful(indexed address,string)
+          handler: handleTwitterAddVerifiedSuccessful
       file: PromiseFactory/PromiseFactory.wasm

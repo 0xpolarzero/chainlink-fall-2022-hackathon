@@ -326,3 +326,127 @@ export class ParticipantAdded extends Entity {
     this.set("participantAddress", Value.fromBytes(value));
   }
 }
+
+export class TwitterVerifiedUser extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save TwitterVerifiedUser entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type TwitterVerifiedUser must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("TwitterVerifiedUser", id.toString(), this);
+    }
+  }
+
+  static load(id: string): TwitterVerifiedUser | null {
+    return changetype<TwitterVerifiedUser | null>(
+      store.get("TwitterVerifiedUser", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value!.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get twitterHandles(): Array<string> {
+    let value = this.get("twitterHandles");
+    return value!.toStringArray();
+  }
+
+  set twitterHandles(value: Array<string>) {
+    this.set("twitterHandles", Value.fromStringArray(value));
+  }
+
+  get verifiedAt(): BigInt | null {
+    let value = this.get("verifiedAt");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set verifiedAt(value: BigInt | null) {
+    if (!value) {
+      this.unset("verifiedAt");
+    } else {
+      this.set("verifiedAt", Value.fromBigInt(<BigInt>value));
+    }
+  }
+}
+
+export class TwitterAddVerifiedSuccessful extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id != null,
+      "Cannot save TwitterAddVerifiedSuccessful entity without an ID"
+    );
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type TwitterAddVerifiedSuccessful must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("TwitterAddVerifiedSuccessful", id.toString(), this);
+    }
+  }
+
+  static load(id: string): TwitterAddVerifiedSuccessful | null {
+    return changetype<TwitterAddVerifiedSuccessful | null>(
+      store.get("TwitterAddVerifiedSuccessful", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value!.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get twitterHandle(): string {
+    let value = this.get("twitterHandle");
+    return value!.toString();
+  }
+
+  set twitterHandle(value: string) {
+    this.set("twitterHandle", Value.fromString(value));
+  }
+}
