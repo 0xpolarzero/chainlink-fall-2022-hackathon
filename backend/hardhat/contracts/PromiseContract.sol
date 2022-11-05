@@ -10,6 +10,7 @@ pragma solidity ^0.8.16;
 
 contract PromiseContract {
     /// Errors
+    error PromiseContract__NOT_FACTORY();
     error PromiseContract__NOT_PARTICIPANT();
     error PromiseContract__PROMISE_LOCKED();
     error PromiseContract__approvePromise__ALREADY_APPROVED();
@@ -27,6 +28,7 @@ contract PromiseContract {
     string public s_promiseName;
     string public s_ipfsCid;
     address public immutable i_owner;
+    address public immutable i_promiseFactoryContract;
     address[] public s_participantAddresses;
     bool public s_promiseLocked = false;
 
@@ -52,22 +54,7 @@ contract PromiseContract {
 
     /// Modifiers
     modifier onlyParticipant() {
-        address[] memory participantAddresses = s_participantAddresses;
-        bool isParticipant = false;
-
-        // The owner will probably interact more with the contract
-        // So we can save some gas by checking it first
-        if (i_owner == msg.sender) {
-            isParticipant = true;
-        } else {
-            // Loop through the parties and check if the sender is a party
-            for (uint256 i = 0; i < s_participantCount; i++) {
-                if (participantAddresses[i] == msg.sender) {
-                    isParticipant = true;
-                    break;
-                }
-            }
-        }
+        bool isParticipant = getIsParticipant(msg.sender);
 
         if (!isParticipant) revert PromiseContract__NOT_PARTICIPANT();
         _;
@@ -75,6 +62,12 @@ contract PromiseContract {
 
     modifier onlyUnlocked() {
         if (s_promiseLocked) revert PromiseContract__PROMISE_LOCKED();
+        _;
+    }
+
+    modifier onlyPromiseFactory() {
+        if (msg.sender != i_promiseFactoryContract)
+            revert PromiseContract__NOT_FACTORY();
         _;
     }
 
@@ -91,6 +84,7 @@ contract PromiseContract {
         string[] memory _partyTwitterHandles,
         address[] memory _partyAddresses
     ) {
+        i_promiseFactoryContract = msg.sender;
         i_owner = _owner;
         s_promiseName = _promiseName;
         s_ipfsCid = _ipfsCid;
@@ -143,17 +137,17 @@ contract PromiseContract {
 
     /**
      * @notice Create a new participant and add them to the mapping
-     * @dev This function can only be called during the contract creation
+     * @dev This function can only be called by the Promise Factory
      * @param _participantName The name of the participant
      * @param _participantTwitterHandle The twitter handle of the participant
      * @param _participantAddress The address of the participant
      */
 
-    function _createParticipant(
+    function createParticipant(
         string memory _participantName,
         string memory _participantTwitterHandle,
         address _participantAddress
-    ) private {
+    ) internal onlyPromiseFactory onlyUnlocked {
         Participant memory participant = Participant(
             _participantName,
             _participantTwitterHandle,
@@ -182,16 +176,16 @@ contract PromiseContract {
         return s_ipfsCid;
     }
 
-    function getParticipant(address _participantAddress)
+    function getIsParticipant(address _participantAddress)
         public
         view
-        returns (Participant memory)
+        returns (bool)
     {
         if (s_parties[_participantAddress].participantAddress == address(0)) {
-            revert PromiseContract__NOT_PARTICIPANT();
+            return false;
         }
 
-        return s_parties[_participantAddress];
+        return true;
     }
 
     function getParticipantCount() public view returns (uint256) {

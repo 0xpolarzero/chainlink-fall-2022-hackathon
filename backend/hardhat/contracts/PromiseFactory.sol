@@ -11,9 +11,11 @@ import "./PromiseContract.sol";
 
 contract PromiseFactory {
     /// Errors
-    error PromiseFactory__createPromiseContract__EMPTY_FIELD();
-    error PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
+    error PromiseFactory__EMPTY_FIELD();
+    error PromiseFactory__INCORRECT_FIELD_LENGTH();
     error PromiseFactory__createPromiseContract__DUPLICATE_FIELD();
+    error PromiseFactory__addParticipant__NOT_PARTICIPANT();
+    error PromiseFactory__addParticipant__ALREADY_PARTICIPANT();
     error PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
     error PromiseFactory__NOT_OWNER();
     error PromiseFactory__NOT_VERIFIER();
@@ -100,15 +102,14 @@ contract PromiseFactory {
                 bytes(_ipfsCid).length > 0 &&
                 _partyNames.length > 0 &&
                 _partyAddresses.length > 0)
-        ) revert PromiseFactory__createPromiseContract__EMPTY_FIELD();
+        ) revert PromiseFactory__EMPTY_FIELD();
 
         // Revert if the number of names, Twitter and addresses are not equal
         // If Twitter handles are not provided, it will pass an empty string
         if (
             !(_partyAddresses.length == _partyTwitterHandles.length &&
                 _partyAddresses.length == _partyNames.length)
-        )
-            revert PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
+        ) revert PromiseFactory__INCORRECT_FIELD_LENGTH();
 
         // Revert if the same address or twitter handle is used twice
         for (uint256 i = 0; i < _partyAddresses.length; i++) {
@@ -128,8 +129,17 @@ contract PromiseFactory {
 
         // Revert if the name of the promise is longer than 70 characters
         if (bytes(_promiseName).length > 70) {
-            revert PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH();
+            revert PromiseFactory__INCORRECT_FIELD_LENGTH();
         }
+        // TODO TEST THIS
+        // Same for any of the party names but 30 characters
+        for (uint256 i = 0; i < _partyNames.length; i++) {
+            if (bytes(_partyNames[i]).length > 30) {
+                revert PromiseFactory__INCORRECT_FIELD_LENGTH();
+            }
+        }
+        // We don't need to check the length of the Twitter handles
+        // If any were to be invalid, they would fail to get verified
 
         // We can't make sure the provided CID is valid,
         // because it could be provided either in a Base58 or Base32 format
@@ -192,6 +202,69 @@ contract PromiseFactory {
             // But if it is not included, add it
             s_twitterVerifiedUsers[_userAddress].push(_twitterHandle);
         }
+    }
+
+    /**
+     * @notice Add a participant to a promise contract
+     * @dev Only a participant of the contract can call this function
+     * @dev It can only be called if the contract is not locked (the child contract takes care of that)
+     * @param _promiseContractAddress The address of the promise contract
+     * @param _partyName The name of the party
+     * @param _partyTwitterHandle The Twitter handle of the party
+     * @param _partyAddress The address of the party
+     */
+
+    // TODO TEST THIS
+    function addParticipant(
+        address _promiseContractAddress,
+        string memory _partyName,
+        string memory _partyTwitterHandle,
+        address _partyAddress
+    ) public {
+        // Revert if one of the fields is empty
+        if (
+            !(bytes(_partyName).length > 0 &&
+                bytes(_partyTwitterHandle).length > 0 &&
+                _partyAddress != address(0))
+        ) revert PromiseFactory__EMPTY_FIELD();
+
+        // Revert if the sender is not a participant of the contract
+        if (
+            !PromiseContract(_promiseContractAddress).getIsParticipant(
+                msg.sender
+            )
+        ) {
+            revert PromiseFactory__addParticipant__NOT_PARTICIPANT();
+        }
+
+        // Revert if the user to add is already a participant of the contract
+        if (
+            PromiseContract(_promiseContractAddress).getIsParticipant(
+                _partyAddress
+            )
+        ) {
+            revert PromiseFactory__addParticipant__ALREADY_PARTICIPANT();
+        }
+
+        // Revert if the name of the party is longer than 30 characters
+        if (bytes(_partyName).length > 30) {
+            revert PromiseFactory__INCORRECT_FIELD_LENGTH();
+        }
+
+        // Add the participant to the contract and emit an event if successful
+        PromiseContract(_promiseContractAddress).addParticipant(
+            _partyName,
+            _partyTwitterHandle,
+            _partyAddress
+        );
+
+        // TODO: Should emit an event if successful / not if not successfult
+        emit ParticipantAdded(
+            _promiseContractAddress,
+            _partyName,
+            _partyTwitterHandle,
+            _partyAddress
+        );
     }
 
     /// Setters
