@@ -92,7 +92,7 @@ export default function explorePromises({ setActivePage }) {
           <AutoComplete
             options={searchOptions}
             style={{ width: '100%' }}
-            placeholder='Search an address (ENS, Ethereum), a promise name, a Twitter handle...'
+            placeholder='Search an address, a promise name, a Twitter handle...'
             filterOption={(inputValue, option) =>
               option.value.toLowerCase().indexOf(inputValue.toLowerCase()) !==
               -1
