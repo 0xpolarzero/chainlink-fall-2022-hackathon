@@ -24,18 +24,18 @@ contract PromiseContract {
     }
 
     /// Variables
-    uint256 public s_participantCount;
-    string public s_promiseName;
-    string public s_ipfsCid;
-    address public immutable i_owner;
-    address public immutable i_promiseFactoryContract;
-    address[] public s_participantAddresses;
-    bool public s_promiseLocked = false;
+    uint256 private s_participantCount;
+    string private s_promiseName;
+    string private s_ipfsCid;
+    address private immutable i_owner;
+    address private immutable i_promiseFactoryContract;
+    address[] private s_participantAddresses;
+    bool private s_promiseLocked = false;
 
     // Mapping of addresses to name & twitter handle
-    mapping(address => Participant) public s_parties;
+    mapping(address => Participant) private s_parties;
     // Mapping of addresses to whether or not they have approved the agreement
-    mapping(address => bool) public s_approvedParties;
+    mapping(address => bool) private s_approvedParties;
 
     /// Events
     event ParticipantCreated(
@@ -210,5 +210,9 @@ contract PromiseContract {
 
     function getIsPromiseLocked() public view returns (bool) {
         return s_promiseLocked;
+    }
+
+    function getPromiseFactoryContract() public view returns (address) {
+        return i_promiseFactoryContract;
     }
 }
