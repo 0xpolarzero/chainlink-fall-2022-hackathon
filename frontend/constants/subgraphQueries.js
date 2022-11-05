@@ -17,4 +17,15 @@ const GET_ACTIVE_PROMISE = gql`
   }
 `;
 
-export { GET_ACTIVE_PROMISE };
+const GET_TWITTER_VERIFIED_USER = gql`
+  {
+    twitterVerifiedUsers(first: 1000) {
+      id
+      address
+      twitterHandles
+      verifiedAt
+    }
+  }
+`;
+
+export { GET_ACTIVE_PROMISE, GET_TWITTER_VERIFIED_USER };
