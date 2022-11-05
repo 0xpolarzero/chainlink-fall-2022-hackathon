@@ -207,7 +207,7 @@ const NewPromiseForm = ({
                     },
                     {
                       max: 30,
-                      message: 'Role must be less than 15 characters',
+                      message: 'Name must be less than 30 characters',
                     },
                   ]}
                 >
