@@ -76,7 +76,7 @@ export default function PromisesCollapse({ promises, context }) {
                       isShrinked='responsive'
                       type='eth'
                     />{' '}
-                    <DateFromTimestamp timestamp={promise.blockTimestamp} />
+                    <DateFromTimestamp timestamp={promise.createdAt} />
                   </div>
                   <div
                     className='invisible-wrapper'
