@@ -208,6 +208,7 @@ contract PromiseFactory {
             }
             // But if it is not included, add it
             s_twitterVerifiedUsers[_userAddress].push(_twitterHandle);
+            emit TwitterAddVerifiedSuccessful(_userAddress, _twitterHandle);
         }
     }
 
