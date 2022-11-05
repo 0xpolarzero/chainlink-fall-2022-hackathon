@@ -1,7 +1,7 @@
 import styles from '../styles/Home.module.css';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
-import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
+import { GET_ACTIVE_PROMISE } from '../constants/subgraphQueries';
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { AutoComplete, Pagination, Tooltip } from 'antd';
@@ -12,7 +12,7 @@ export default function explorePromises({ setActivePage }) {
   const [sortedPromises, setSortedPromises] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [searchOptions, setSearchOptions] = useState([]);
-  const { data, loading, error } = useQuery(GET_CHILD_CONTRACT_CREATED);
+  const { data, loading, error } = useQuery(GET_ACTIVE_PROMISE);
 
   // SEARCHING ----------------------------------------------
   const handleSearch = (e) => {
@@ -60,7 +60,7 @@ export default function explorePromises({ setActivePage }) {
   useEffect(() => {
     // Sort the promises by blockTimestamp
     if (!!data && !loading && !error) {
-      const sorted = data.promiseContractCreateds.sort(
+      const sorted = data.activePromises.sort(
         (a, b) => b.blockTimestamp - a.blockTimestamp,
       );
       setSortedPromises(sorted);
@@ -112,7 +112,7 @@ export default function explorePromises({ setActivePage }) {
           {loading ? (
             <PromisesCollapseSkeleton arraySize={3} />
           ) : !!data ? (
-            data.promiseContractCreateds.length === 0 ? (
+            data.activePromises.length === 0 ? (
               <div className='error-container'>
                 There are no promises yet. Be the first to create one!
               </div>
@@ -122,7 +122,7 @@ export default function explorePromises({ setActivePage }) {
                 <Pagination
                   simple
                   defaultCurrent={1}
-                  total={data.promiseContractCreateds.length}
+                  total={data.activePromises.length}
                   onChange={(e) => setShownPage(e)}
                   pageSize={5}
                 />

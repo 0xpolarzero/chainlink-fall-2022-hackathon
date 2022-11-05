@@ -2,7 +2,7 @@ import styles from '../styles/Home.module.css';
 import NewPromiseDrawer from '../components/user/NewPromiseDrawer';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
-import { GET_CHILD_CONTRACT_CREATED } from '../constants/subgraphQueries';
+import { GET_ACTIVE_PROMISE } from '../constants/subgraphQueries';
 import { Pagination } from 'antd';
 import { useAccount } from 'wagmi';
 import { useQuery } from '@apollo/client';
@@ -20,7 +20,7 @@ export default function userPromises({ setActivePage }) {
   const [shownCreatedPage, setShownCreatedPage] = useState(1);
   const [shownInvolvedPage, setShownInvolvedPage] = useState(1);
   const { address: userAddress, isConnected } = useAccount();
-  const { data, loading, error } = useQuery(GET_CHILD_CONTRACT_CREATED);
+  const { data, loading, error } = useQuery(GET_ACTIVE_PROMISE);
 
   useEffect(() => {
     setActivePage(2);
@@ -36,7 +36,7 @@ export default function userPromises({ setActivePage }) {
 
   useEffect(() => {
     if (isConnected && !!data) {
-      const sortedPromises = data.promiseContractCreateds.sort(
+      const sortedPromises = data.activePromises.sort(
         (a, b) => b.blockTimestamp - a.blockTimestamp,
       );
       const createdPromises = sortedPromises.filter(

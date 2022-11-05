@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-const GET_CHILD_CONTRACT_CREATED = gql`
+const GET_ACTIVE_PROMISE = gql`
   {
-    promiseContractCreateds(first: 1000) {
+    activePromises(first: 1000) {
       id
       owner
       contractAddress
@@ -11,9 +11,10 @@ const GET_CHILD_CONTRACT_CREATED = gql`
       partyNames
       partyTwitterHandles
       partyAddresses
-      blockTimestamp
+      createdAt
+      updatedAt
     }
   }
 `;
 
-export { GET_CHILD_CONTRACT_CREATED };
+export { GET_ACTIVE_PROMISE };
