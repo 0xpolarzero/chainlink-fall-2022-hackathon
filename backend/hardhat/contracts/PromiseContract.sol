@@ -91,7 +91,7 @@ contract PromiseContract {
         s_participantCount = _partyAddresses.length;
 
         for (uint256 i = 0; i < _partyAddresses.length; i++) {
-            _createParticipant(
+            createParticipant(
                 _partyNames[i],
                 _partyTwitterHandles[i],
                 _partyAddresses[i]
@@ -147,7 +147,7 @@ contract PromiseContract {
         string memory _participantName,
         string memory _participantTwitterHandle,
         address _participantAddress
-    ) internal onlyPromiseFactory onlyUnlocked {
+    ) public onlyPromiseFactory onlyUnlocked {
         Participant memory participant = Participant(
             _participantName,
             _participantTwitterHandle,
@@ -174,6 +174,14 @@ contract PromiseContract {
 
     function getIpfsCid() public view returns (string memory) {
         return s_ipfsCid;
+    }
+
+    function getParticipant(address _address)
+        public
+        view
+        returns (Participant memory)
+    {
+        return s_parties[_address];
     }
 
     function getIsParticipant(address _participantAddress)

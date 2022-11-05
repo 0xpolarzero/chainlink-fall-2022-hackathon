@@ -64,9 +64,19 @@ const { deployments, network, ethers } = require('hardhat');
             userFirst.address,
           );
 
+          const notParticipant = await promiseContract.getParticipant(
+            userForbidden.address,
+          );
+
           assert.equal(participant.participantName, 'Bob');
           assert.equal(participant.participantTwitterHandle, '@bob');
           assert.equal(participant.participantAddress, userFirst.address);
+          assert.equal(notParticipant.participantName, '');
+          assert.equal(notParticipant.participantTwitterHandle, '');
+          assert.equal(
+            notParticipant.participantAddress,
+            '0x0000000000000000000000000000000000000000',
+          );
         });
 
         it('Should emit an event ParticipantCreated with the right arguments', async () => {
@@ -101,17 +111,18 @@ const { deployments, network, ethers } = require('hardhat');
           assert.equal(participantSecond.address, userSecond.address);
         });
 
-        it('Should be able to get a list of addresses and get a participant only if the address is in the list', async () => {
-          const participantAddresses = await promiseContract.getParticipantAddresses();
-          const firstParticipantAddress = participantAddresses[0];
-          const secondParticipantAddress = participantAddresses[1];
+        it('Should be able to tell if an address corresponds to a participant', async () => {
+          expect(
+            await promiseContract.getIsParticipant(userFirst.address),
+          ).to.equal(true);
 
-          assert.equal(firstParticipantAddress, userFirst.address);
-          assert.equal(secondParticipantAddress, userSecond.address);
+          expect(
+            await promiseContract.getIsParticipant(userSecond.address),
+          ).to.equal(true);
 
-          await expect(
-            promiseContract.getParticipant(userForbidden.address),
-          ).to.be.revertedWith('PromiseContract__NOT_PARTICIPANT');
+          expect(
+            await promiseContract.getIsParticipant(userForbidden.address),
+          ).to.equal(false);
         });
       });
 

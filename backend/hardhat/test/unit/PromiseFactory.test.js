@@ -7,6 +7,7 @@ const { deployments, network, ethers } = require('hardhat');
   : describe('PromiseFactory unit tests', function() {
       let deployer;
       let user;
+      let notUser;
       let promiseFactoryDeploy;
       let promiseFactory;
       let args = {};
@@ -28,6 +29,7 @@ const { deployments, network, ethers } = require('hardhat');
         const accounts = await ethers.getSigners();
         deployer = accounts[0];
         user = accounts[1];
+        notUser = accounts[2];
         await deployments.fixture('main');
         promiseFactoryDeploy = await ethers.getContract('PromiseFactory');
         promiseFactory = promiseFactoryDeploy.connect(deployer);
@@ -50,9 +52,7 @@ const { deployments, network, ethers } = require('hardhat');
               [],
               [],
             ),
-          ).to.be.revertedWith(
-            'PromiseFactory__createPromiseContract__EMPTY_FIELD()',
-          );
+          ).to.be.revertedWith('PromiseFactory__EMPTY_FIELD()');
 
           await expect(
             promiseFactory.createPromiseContract(
@@ -62,9 +62,7 @@ const { deployments, network, ethers } = require('hardhat');
               args.partyTwitters,
               args.partyAddresses,
             ),
-          ).to.be.revertedWith(
-            'PromiseFactory__createPromiseContract__EMPTY_FIELD()',
-          );
+          ).to.be.revertedWith('PromiseFactory__EMPTY_FIELD()');
         });
 
         it('Should revert if there is a mismatch between names and addresses length', async () => {
@@ -76,9 +74,7 @@ const { deployments, network, ethers } = require('hardhat');
               args.partyTwitters,
               [deployer.address],
             ),
-          ).to.be.revertedWith(
-            'PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH()',
-          );
+          ).to.be.revertedWith('PromiseFactory__INCORRECT_FIELD_LENGTH()');
         });
 
         it('Should revert if the same address or Twitter handle is used twice', async () => {
@@ -117,9 +113,20 @@ const { deployments, network, ethers } = require('hardhat');
               args.partyTwitters,
               args.partyAddresses,
             ),
-          ).to.be.revertedWith(
-            'PromiseFactory__createPromiseContract__INCORRECT_FIELD_LENGTH()',
-          );
+          ).to.be.revertedWith('PromiseFactory__INCORRECT_FIELD_LENGTH()');
+        });
+
+        it('Should revert if any of the participant name is more than 30 characters', async () => {
+          const partyNames = ['a'.repeat(31), 'b'.repeat(15)];
+          await expect(
+            promiseFactory.createPromiseContract(
+              args.name,
+              args.cid,
+              partyNames,
+              args.partyTwitters,
+              args.partyAddresses,
+            ),
+          ).to.be.revertedWith('PromiseFactory__INCORRECT_FIELD_LENGTH()');
         });
 
         it('Should create a new PromiseContract', async () => {
@@ -190,5 +197,115 @@ const { deployments, network, ethers } = require('hardhat');
         });
 
         // The rest of the tests are performed in ./VerifyTwitter.test.js
+      });
+
+      describe('addParticipant', function() {
+        beforeEach(async () => {
+          const { txReceipt } = await createCorrectPromiseContract();
+          promiseContractAddress = txReceipt.events[1].address;
+          promiseContract = await ethers.getContractAt(
+            'PromiseContract',
+            promiseContractAddress,
+          );
+        });
+
+        it('Should revert if one of the fields is empty', async () => {
+          // Here the error message is not the same as in the contract because
+          // the contract is not called directly but through the factory
+          await expect(
+            promiseFactory.addParticipant(
+              promiseContract.address,
+              '',
+              'handle',
+              deployer.address,
+            ),
+          ).to.be.revertedWith(
+            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__EMPTY_FIELD()",
+          );
+          await expect(
+            promiseFactory.addParticipant(
+              promiseContract.address,
+              'name',
+              '',
+              deployer.address,
+            ),
+          ).to.be.revertedWith(
+            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__EMPTY_FIELD()",
+          );
+        });
+
+        it('Should revert if the sender is not a participant the PromiseContract', async () => {
+          await expect(
+            promiseFactory
+              .connect(notUser)
+              .addParticipant(
+                promiseContract.address,
+                'name',
+                'handle',
+                user.address,
+              ),
+          ).to.be.revertedWith(
+            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__addParticipant__NOT_PARTICIPANT()'",
+          );
+        });
+
+        it('Should revert if the participant is already in the PromiseContract', async () => {
+          await expect(
+            promiseFactory.addParticipant(
+              promiseContract.address,
+              'name',
+              'handle',
+              deployer.address,
+            ),
+          ).to.be.revertedWith(
+            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__addParticipant__ALREADY_PARTICIPANT()'",
+          );
+        });
+
+        it('Should revert if the participant name is more than 30 characters', async () => {
+          const { txReceipt } = await createCorrectPromiseContract();
+          const promiseContractAddress = txReceipt.events[1].address;
+          const promiseContract = await ethers.getContractAt(
+            'PromiseContract',
+            promiseContractAddress,
+          );
+
+          await expect(
+            promiseFactory.addParticipant(
+              promiseContract.address,
+              'a'.repeat(31),
+              'handle',
+              notUser.address,
+            ),
+          ).to.be.revertedWith(
+            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__INCORRECT_FIELD_LENGTH()'",
+          );
+        });
+
+        it('Should add a participant to the PromiseContract and emit an event', async () => {
+          const tx = await promiseFactory.addParticipant(
+            promiseContract.address,
+            'Charlie',
+            'charlie',
+            notUser.address,
+          );
+
+          const participant = await promiseContract.getParticipant(
+            notUser.address,
+          );
+
+          assert.equal(participant.participantName, 'Charlie');
+          assert.equal(participant.participantTwitterHandle, 'charlie');
+          assert.equal(participant.participantAddress, notUser.address);
+
+          expect(tx)
+            .to.emit(promiseFactory, 'ParticipantAdded')
+            .withArgs(
+              promiseContract.address,
+              'Charlie',
+              'charlie',
+              notUser.address,
+            );
+        });
       });
     });

@@ -52,6 +52,13 @@ contract PromiseFactory {
         string _twitterHandle
     );
 
+    event ParticipantAdded(
+        address indexed _contractAddress,
+        string _participantName,
+        string _participantTwitterHandle,
+        address _participantAddress
+    );
+
     /// Modifiers
     modifier onlyOwner() {
         // msg sender should be the deployer of the contract
@@ -101,6 +108,7 @@ contract PromiseFactory {
             !(bytes(_promiseName).length > 0 &&
                 bytes(_ipfsCid).length > 0 &&
                 _partyNames.length > 0 &&
+                _partyTwitterHandles.length > 0 &&
                 _partyAddresses.length > 0)
         ) revert PromiseFactory__EMPTY_FIELD();
 
@@ -131,7 +139,6 @@ contract PromiseFactory {
         if (bytes(_promiseName).length > 70) {
             revert PromiseFactory__INCORRECT_FIELD_LENGTH();
         }
-        // TODO TEST THIS
         // Same for any of the party names but 30 characters
         for (uint256 i = 0; i < _partyNames.length; i++) {
             if (bytes(_partyNames[i]).length > 30) {
@@ -224,8 +231,7 @@ contract PromiseFactory {
         // Revert if one of the fields is empty
         if (
             !(bytes(_partyName).length > 0 &&
-                bytes(_partyTwitterHandle).length > 0 &&
-                _partyAddress != address(0))
+                bytes(_partyTwitterHandle).length > 0)
         ) revert PromiseFactory__EMPTY_FIELD();
 
         // Revert if the sender is not a participant of the contract
@@ -252,7 +258,7 @@ contract PromiseFactory {
         }
 
         // Add the participant to the contract and emit an event if successful
-        PromiseContract(_promiseContractAddress).addParticipant(
+        PromiseContract(_promiseContractAddress).createParticipant(
             _partyName,
             _partyTwitterHandle,
             _partyAddress
