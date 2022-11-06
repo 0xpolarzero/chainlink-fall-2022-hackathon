@@ -103,8 +103,10 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
 
       <div className='drawer-item interaction'>
         <RowPromiseAddParticipant
-          contractAttributes={contractAttributes}
+          partyAddresses={contractAttributes.partyAddresses}
+          contractAddress={contractAttributes.contractAddress}
           isPromiseLocked={isPromiseLocked}
+          gatherPartiesData={gatherPartiesData}
         />
 
         <div className='drawer-item-separator'></div>

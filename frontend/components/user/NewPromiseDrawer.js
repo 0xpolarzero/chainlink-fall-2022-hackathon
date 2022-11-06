@@ -16,7 +16,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [form] = Form.useForm();
   const { chain } = useNetwork();
   const { address: userAddress } = useAccount();
-  const contractAddress = networkMapping[chain.id].PromiseFactory[0];
+  const contractAddress = networkMapping[chain.id || '80001'].PromiseFactory[0];
 
   const { write: createPromise } = useContractWrite({
     mode: 'recklesslyUnprepared',

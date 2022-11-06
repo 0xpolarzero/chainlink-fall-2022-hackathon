@@ -1,24 +1,109 @@
+import networkMapping from '../../constants/networkMapping';
+import promiseFactoryAbi from '../../constants/PromiseFactory.json';
 import { Button, Form, Input, Modal, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { useContractWrite, useNetwork } from 'wagmi';
+import { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_ACTIVE_PROMISE } from '../../constants/subgraphQueries';
 
 export default function RowPromiseAddParticipant({
-  contractAttributes,
+  partyAddresses,
+  contractAddress: promiseAddress,
   isPromiseLocked,
+  gatherPartiesData,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(false);
+  const [addParticipantArgs, setAddParticipantArgs] = useState([]);
   const [form] = Form.useForm();
+  const { chain } = useNetwork();
+  const contractAddress = networkMapping[chain.id || '80001'].PromiseFactory[0];
+  const { refetch } = useQuery(GET_ACTIVE_PROMISE);
 
-  const handleSubmit = () => {
-    //
+  // It's easier this way to prevent any errors logging in the console
+  // + we are sure it will be called only when the args are valid
+  const { write: addParticipant } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: contractAddress,
+    abi: promiseFactoryAbi,
+    functionName: 'addParticipant',
+    args: addParticipantArgs,
+    onSuccess: async (tx) => {
+      const txReceipt = await toast.promise(tx.wait(1), {
+        pending: 'Adding participant...',
+        success: `Participant ${addParticipantArgs[1]} added!`,
+        error: 'Error adding participant',
+      });
+      handleCancel();
+      //   gatherPartiesData();
+      refetch();
+    },
+    onError: (err) => {
+      toast.error('Error adding participant');
+      console.log('error adding participant', err);
+      setSubmitLoading(false);
+      setIsFormDisabled(false);
+    },
+  });
+  // ----------------
+
+  const handleSubmit = async () => {
+    const formValues = await form.validateFields().catch((err) => {
+      console.log(err);
+      toast.error('Please fill all the fields correctly.');
+      return false;
+    });
+
+    if (!formValues) return;
+
+    // If the address is already owner by a participant, don't add it
+    if (
+      partyAddresses
+        .map((address) => address.toLowerCase())
+        .includes(formValues.participantAddress.toLowerCase())
+    ) {
+      toast.error('This address is already registered as a participant.');
+      return;
+    }
+
+    // Make sure it's not empty
+    if (formValues.partyTwitterHandle) {
+      // Remove the @ from the twitter handle if it exists
+      formValues.partyTwitterHandle = formValues.partyTwitterHandle
+        .replace('@', '')
+        .toLowerCase();
+    } else {
+      formValues.partyTwitterHandle = '';
+    }
+
+    // Now the participant can be added
+    setSubmitLoading(true);
+    setIsFormDisabled(true);
+    setAddParticipantArgs([
+      promiseAddress,
+      formValues.participantName,
+      formValues.participantTwitterHandle,
+      formValues.participantAddress,
+    ]);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setSubmitLoading(false);
+    setIsFormDisabled(false);
     form.resetFields();
+    setAddParticipantArgs([]);
   };
+
+  useEffect(() => {
+    if (addParticipantArgs.length === 4) {
+      console.log(addParticipantArgs);
+      addParticipant();
+    }
+  }, [addParticipantArgs]);
 
   return (
     <>
@@ -65,19 +150,20 @@ export default function RowPromiseAddParticipant({
         okText='Add'
         okButtonProps={{ disabled: submitLoading, loading: submitLoading }}
       >
-        <AddParticipantForm form={form} />
+        <AddParticipantForm form={form} isFormDisabled={isFormDisabled} />
       </Modal>
     </>
   );
 }
 
-const AddParticipantForm = ({ form }) => {
+const AddParticipantForm = ({ form, isFormDisabled }) => {
   return (
     <Form
       className='add-participant-form'
       form={form}
       layout='vertical'
       requiredMark={true}
+      disabled={isFormDisabled}
     >
       <Form.Item
         name='participantName'

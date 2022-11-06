@@ -89,19 +89,18 @@
   gap: 1rem;
 }
 
-.drawer-item.interaction .ant-btn {
-  width: 100%;
-}
-
 .drawer-item.interaction .verified {
   justify-self: center;
 }
 
 .drawer-item.interaction .ant-btn {
+  position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  overflow: hidden;
 }
 
 .drawer-item.interaction .ant-btn i {
@@ -109,7 +108,7 @@
 }
 
 .drawer-item.interaction .ant-btn:hover i {
-  transform: translateX(-5px);
+  transform: scale(1.2);
 }
 
 .ipfs-display {
