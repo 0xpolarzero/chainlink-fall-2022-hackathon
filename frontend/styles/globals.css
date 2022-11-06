@@ -237,7 +237,8 @@ a:not(.header) {
   font-size: 0.8rem;
 }
 
-.popover-address {
+.popover-address,
+.popover-address .add-space {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -571,7 +572,7 @@ ant-select {
   /* color: #50b0ec; */
 }
 
-.fa-info-circle,
+.fa-question-circle,
 .fa-question-circle,
 .fa-copy {
   opacity: 0.7;
@@ -579,7 +580,7 @@ ant-select {
   transition: all 0.3s ease;
 }
 
-.fa-info-circle:hover,
+.fa-question-circle:hover,
 .fa-question-circle:hover,
 .fa-copy:hover {
   opacity: 1;

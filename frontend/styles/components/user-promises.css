@@ -40,12 +40,13 @@
   opacity: 1;
 }
 
-.ant-drawer .icon-double {
+.icon-double {
   display: flex;
   gap: 0.5rem;
 }
 
-.ant-drawer .ant-space .ant-space-item:nth-child(3) .ant-input-prefix {
+.ant-drawer .ant-space .ant-space-item:nth-child(3) .ant-input-prefix,
+.add-participant-form .ant-form-item:nth-child(3) .ant-input-prefix {
   margin-right: 0.3rem !important;
 }
 

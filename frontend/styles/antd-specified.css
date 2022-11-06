@@ -6447,7 +6447,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
 }
 .ant-modal-content {
   position: relative;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   background-clip: padding-box;
   border: 0;
   border-radius: 2px;

@@ -180,22 +180,20 @@ export default function RowPromiseVerification({
           content={
             <div className='popover-address'>
               <div>
-                <p>
-                  <i>
+                <p className='add-space'>
+                  <em>
                     Verifying my Twitter account for {userAddress} with
                     @usePromise!
-                  </i>
+                  </em>
+                  <i className='fas fa-copy' onClick={copyMessage}></i>
                 </p>
                 <p>You can delete it after the verification is complete.</p>
-              </div>
-              <div>
-                <i className='fas fa-copy' onClick={copyMessage}></i>
               </div>
             </div>
           }
         >
           {' '}
-          <i className='fas fa-info-circle'></i>
+          <i className='fas fa-question-circle'></i>
         </Popover>
       </div>
       <Button type='primary' onClick={openTweet}>
@@ -233,7 +231,7 @@ export default function RowPromiseVerification({
           }
         >
           {' '}
-          <i className='fas fa-info-circle'></i>
+          <i className='fas fa-question-circle'></i>
         </Popover>
       </div>
       <Button
