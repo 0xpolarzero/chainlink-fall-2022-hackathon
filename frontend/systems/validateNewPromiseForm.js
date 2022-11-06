@@ -38,7 +38,6 @@ const validateNewPromiseForm = async (form) => {
       return false;
     }
 
-    console.log(formValues.upload);
     // Make sure at least a file has been dropped
     if (!formValues.upload || formValues.upload.length < 1) {
       toast.error('Please upload at least a file.');

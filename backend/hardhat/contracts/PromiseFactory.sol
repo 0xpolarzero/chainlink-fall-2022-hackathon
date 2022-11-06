@@ -47,11 +47,6 @@ contract PromiseFactory {
         string _twitterHandle
     );
 
-    event TwitterAddVerifiedFailed(
-        address indexed _owner,
-        string _twitterHandle
-    );
-
     event ParticipantAdded(
         address indexed _contractAddress,
         string _participantName,
@@ -208,8 +203,9 @@ contract PromiseFactory {
             }
             // But if it is not included, add it
             s_twitterVerifiedUsers[_userAddress].push(_twitterHandle);
-            emit TwitterAddVerifiedSuccessful(_userAddress, _twitterHandle);
         }
+
+        emit TwitterAddVerifiedSuccessful(_userAddress, _twitterHandle);
     }
 
     /**

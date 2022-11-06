@@ -17,19 +17,9 @@ export function handlePromiseContractCreated(
 ): void {
   // It should never happen that the same contract is created twice
   // But we can't ever be sure enough, so we check if the entity already exists anyway
-  // let promiseContractCreated = PromiseContractCreated.load(
-  //   getIdFromEventParams(event.params._contractAddress, event.params._owner),
-  // );
-
   let activePromise = ActivePromise.load(
     getIdFromEventParams(event.params._contractAddress),
   );
-
-  // if (!promiseContractCreated) {
-  //   promiseContractCreated = new PromiseContractCreated(
-  //     getIdFromEventParams(event.params._contractAddress, event.params._owner),
-  //   );
-  // }
 
   if (!activePromise) {
     activePromise = new ActivePromise(
@@ -37,20 +27,6 @@ export function handlePromiseContractCreated(
     );
   }
 
-  // promiseContractCreated
-  // promiseContractCreated.blockTimestamp = event.block.timestamp;
-  // promiseContractCreated.owner = event.params._owner;
-  // promiseContractCreated.contractAddress = event.params._contractAddress;
-  // promiseContractCreated.promiseName = event.params._promiseName;
-  // promiseContractCreated.ipfsCid = event.params._ipfsCid;
-  // promiseContractCreated.partyNames = event.params._partyNames;
-  // promiseContractCreated.partyTwitterHandles =
-  //   event.params._partyTwitterHandles;
-  // promiseContractCreated.partyAddresses = event.params._partyAddresses.map<
-  //   Bytes
-  // >((e: Bytes) => e);
-
-  // activePromise
   activePromise.owner = event.params._owner;
   activePromise.contractAddress = event.params._contractAddress;
   activePromise.promiseName = event.params._promiseName;
@@ -63,36 +39,13 @@ export function handlePromiseContractCreated(
   activePromise.createdAt = event.block.timestamp;
   activePromise.updatedAt = event.block.timestamp;
 
-  // promiseContractCreated.save();
   activePromise.save();
 }
 
 export function handleParticipantAdded(event: ParticipantAddedEvent): void {
-  // let participantAdded = ParticipantAdded.load(
-  //   getIdFromEventParams(
-  //     event.params._contractAddress,
-  //     event.params._participantAddress,
-  //   ),
-  // );
-
   let activePromise = ActivePromise.load(
     getIdFromEventParams(event.params._contractAddress),
   );
-
-  // if (!participantAdded) {
-  //   participantAdded = new ParticipantAdded(
-  //     getIdFromEventParams(
-  //       event.params._contractAddress,
-  //       event.params._participantAddress,
-  //     ),
-  //   );
-  // }
-
-  // participantAdded.contractAddress = event.params._contractAddress;
-  // participantAdded.participantName = event.params._participantName;
-  // participantAdded.participantTwitterHandle =
-  //   event.params._participantTwitterHandle;
-  // participantAdded.participantAddress = event.params._participantAddress;
 
   // We can't use the .push method here because it's not supported by AssemblyScript
   // So we have to do it 'manually'
@@ -111,33 +64,34 @@ export function handleParticipantAdded(event: ParticipantAddedEvent): void {
   activePromise!.partyAddresses = newAddressesArray;
   activePromise!.updatedAt = event.block.timestamp;
 
-  // participantAdded.save();
   activePromise!.save();
 }
 
 export function handleTwitterAddVerifiedSuccessful(
   event: TwitterAddVerifiedSuccessfulEvent,
 ): void {
-  // An event is emitted with the user address and their twitter handle
-  // An address can verify several twitter handles
-  // So their address will be linked to several twitter handles with TwitterVerifiedUser
-
   let twitterVerifiedUser = TwitterVerifiedUser.load(
     getIdFromEventParams(event.params._owner),
   );
+  // We can avoid interacting directly with twitterHandles that could be null
+  let twitterHandlesArray: string[] = [];
 
   if (!twitterVerifiedUser) {
     twitterVerifiedUser = new TwitterVerifiedUser(
       getIdFromEventParams(event.params._owner),
     );
+    // If the user has never been verified before, create a new array
+    twitterHandlesArray = new Array<string>();
+  } else {
+    // If the user has been verified before, get the array from the entity
+    twitterHandlesArray = twitterVerifiedUser.twitterHandles;
   }
 
-  const newTwitterHandlesArray = twitterVerifiedUser.twitterHandles.concat([
+  twitterVerifiedUser.address = event.params._owner;
+  // Set the twitterHandles without needing to check its content
+  twitterVerifiedUser.twitterHandles = twitterHandlesArray.concat([
     event.params._twitterHandle,
   ]);
-
-  twitterVerifiedUser.address = event.params._owner;
-  twitterVerifiedUser.twitterHandles = newTwitterHandlesArray;
   twitterVerifiedUser.verifiedAt = event.block.timestamp;
 
   twitterVerifiedUser.save();
