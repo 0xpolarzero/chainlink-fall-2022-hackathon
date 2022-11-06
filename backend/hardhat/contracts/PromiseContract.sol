@@ -24,7 +24,7 @@ contract PromiseContract {
     }
 
     /// Variables
-    uint256 private s_participantCount;
+    uint256 private s_participantCount = 0;
     string private s_promiseName;
     string private s_ipfsCid;
     address private immutable i_owner;
@@ -88,13 +88,13 @@ contract PromiseContract {
         i_owner = _owner;
         s_promiseName = _promiseName;
         s_ipfsCid = _ipfsCid;
-        s_participantCount = _partyAddresses.length;
 
         for (uint256 i = 0; i < _partyAddresses.length; i++) {
             createParticipant(
                 _partyNames[i],
                 _partyTwitterHandles[i],
-                _partyAddresses[i]
+                _partyAddresses[i],
+                false // The promise is being initialized, no need to reset approval status
             );
         }
     }
@@ -146,7 +146,8 @@ contract PromiseContract {
     function createParticipant(
         string memory _participantName,
         string memory _participantTwitterHandle,
-        address _participantAddress
+        address _participantAddress,
+        bool _checkApprovalStatus
     ) public onlyPromiseFactory onlyUnlocked {
         Participant memory participant = Participant(
             _participantName,
@@ -155,6 +156,21 @@ contract PromiseContract {
         );
         s_parties[_participantAddress] = participant;
         s_participantAddresses.push(_participantAddress);
+        s_participantCount++;
+
+        // Make sure the promise gets disapproved for every participants
+        // In case a new participant is added, they will need to approve it again
+        // We just need to do this if a participant is being added, not at the initialization
+        if (_checkApprovalStatus) {
+            address[] memory participantAddresses = s_participantAddresses;
+
+            for (uint256 i = 0; i < s_participantCount; i++) {
+                // Set the approval to false if it's been approved already
+                if (s_approvedParties[participantAddresses[i]] == true) {
+                    s_approvedParties[participantAddresses[i]] = false;
+                }
+            }
+        }
 
         emit ParticipantCreated(
             _participantName,

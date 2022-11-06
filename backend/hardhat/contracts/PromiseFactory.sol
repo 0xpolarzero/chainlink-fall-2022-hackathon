@@ -257,7 +257,8 @@ contract PromiseFactory {
         PromiseContract(_promiseContractAddress).createParticipant(
             _partyName,
             _partyTwitterHandle,
-            _partyAddress
+            _partyAddress,
+            true // Reset the approval status
         );
 
         emit ParticipantAdded(

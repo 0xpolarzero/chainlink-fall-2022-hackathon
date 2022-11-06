@@ -320,5 +320,25 @@ const { deployments, network, ethers } = require('hardhat');
               notUser.address,
             );
         });
+
+        it('Should disapprove the contract for each participant, so they can approve the new status', async () => {
+          await promiseContract.approvePromise();
+          assert.equal(
+            await promiseContract.getIsPromiseApproved(deployer.address),
+            true,
+          );
+
+          await promiseFactory.addParticipant(
+            promiseContract.address,
+            'Charlie',
+            'charlie',
+            notUser.address,
+          );
+
+          assert.equal(
+            await promiseContract.getIsPromiseApproved(deployer.address),
+            false,
+          );
+        });
       });
     });

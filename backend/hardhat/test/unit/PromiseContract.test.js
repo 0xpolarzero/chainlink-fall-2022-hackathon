@@ -48,6 +48,7 @@ const { deployments, network, ethers } = require('hardhat');
           const name = await promiseContract.getName();
           const cid = await promiseContract.getIpfsCid();
           const participantCount = await promiseContract.getParticipantCount();
+          const promiseFactoryAddress = await promiseContract.getPromiseFactoryContract();
 
           assert.equal(owner, userFirst.address);
           assert.equal(name, 'Test Agreement');
@@ -56,6 +57,7 @@ const { deployments, network, ethers } = require('hardhat');
             'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
           );
           assert.equal(participantCount, 2);
+          assert.equal(promiseFactoryAddress, promiseFactory.address);
         });
       });
 
@@ -66,6 +68,7 @@ const { deployments, network, ethers } = require('hardhat');
               'Bob',
               '@bob',
               userFirst.address,
+              false,
             ),
           ).to.be.revertedWith('PromiseContract__NOT_FACTORY()');
         });
