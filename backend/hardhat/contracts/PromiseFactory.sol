@@ -134,12 +134,7 @@ contract PromiseFactory {
         if (bytes(_promiseName).length > 70) {
             revert PromiseFactory__INCORRECT_FIELD_LENGTH();
         }
-        // Same for any of the party names but 30 characters
-        for (uint256 i = 0; i < _partyNames.length; i++) {
-            if (bytes(_partyNames[i]).length > 30) {
-                revert PromiseFactory__INCORRECT_FIELD_LENGTH();
-            }
-        }
+
         // We don't need to check the length of the Twitter handles
         // If any were to be invalid, they would fail to get verified
 
@@ -224,12 +219,6 @@ contract PromiseFactory {
         string memory _partyTwitterHandle,
         address _partyAddress
     ) public {
-        // Revert if one of the fields is empty
-        if (
-            !(bytes(_partyName).length > 0 &&
-                bytes(_partyTwitterHandle).length > 0)
-        ) revert PromiseFactory__EMPTY_FIELD();
-
         // Revert if the sender is not a participant of the contract
         if (
             !PromiseContract(_promiseContractAddress).getIsParticipant(

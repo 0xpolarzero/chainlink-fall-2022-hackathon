@@ -13,6 +13,7 @@ contract PromiseContract {
     error PromiseContract__NOT_FACTORY();
     error PromiseContract__NOT_PARTICIPANT();
     error PromiseContract__PROMISE_LOCKED();
+    error PromiseContract__createParticipant__INCORRECT_FIELD_LENGTH();
     error PromiseContract__approvePromise__ALREADY_APPROVED();
     error PromiseContract__lockPromise__PARTICIPANT_NOT_APPROVED();
 
@@ -149,6 +150,13 @@ contract PromiseContract {
         address _participantAddress,
         bool _checkApprovalStatus
     ) public onlyPromiseFactory onlyUnlocked {
+        // Revert if the name is not between 2 and 30 characters
+        if (
+            bytes(_participantName).length < 2 ||
+            bytes(_participantName).length > 30
+        ) {
+            revert PromiseContract__createParticipant__INCORRECT_FIELD_LENGTH();
+        }
         Participant memory participant = Participant(
             _participantName,
             _participantTwitterHandle,
