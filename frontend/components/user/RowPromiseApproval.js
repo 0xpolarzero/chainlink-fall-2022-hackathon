@@ -87,7 +87,7 @@ export default function RowPromiseApproval({
             onClick={approvePromise}
             loading={isApprovingPromise || isWaitingForApproval}
           >
-            Approve promise
+            <i className='fas fa-signature' /> Approve promise
           </Button>
         </div>
       )}

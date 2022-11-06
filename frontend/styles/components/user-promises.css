@@ -76,18 +76,15 @@
   gap: 1rem;
 }
 
-.drawer-item.contract-identity {
+.promise-drawer .contract-identity {
+  background: rgba(0, 0, 0, 0.2);
   flex-direction: column;
-}
-
-.drawer-item.contract-identity .pdf-link {
-  align-items: flex-start;
 }
 
 .drawer-item.interaction {
   display: grid;
   grid-template-columns: 1fr auto;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
 }
 
@@ -97,6 +94,21 @@
 
 .drawer-item.interaction .verified {
   justify-self: center;
+}
+
+.drawer-item.interaction .ant-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.drawer-item.interaction .ant-btn i {
+  transition: all 0.3s ease;
+}
+
+.drawer-item.interaction .ant-btn:hover i {
+  transform: translateX(-5px);
 }
 
 .ipfs-display {
@@ -133,4 +145,20 @@
 .ipfs-display .action-directory > div:hover {
   opacity: 1;
   transform: scale(1.02);
+}
+
+.promise-drawer .header {
+  font-weight: 500;
+  padding: 0.5rem 0;
+}
+
+.promise-add-participant-interaction {
+  grid-column: span 2;
+}
+
+.drawer-item-separator {
+  grid-column: span 2;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
 }

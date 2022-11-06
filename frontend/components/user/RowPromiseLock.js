@@ -91,7 +91,7 @@ export default function RowPromiseLock({
               loading={isLockingPromise || isWaitingForLock}
               disabled={!allPartiesApproved}
             >
-              Lock promise
+              <i className='fas fa-lock' /> Lock promise
             </Button>
           </Tooltip>
         </div>

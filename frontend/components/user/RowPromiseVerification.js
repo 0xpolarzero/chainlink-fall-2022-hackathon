@@ -168,9 +168,10 @@ export default function RowPromiseVerification({
     <>
       {/* Status */}
       <div className='twitter-verify-status'>{verificationDiv}</div>
-      <Button type='primary' className='no-btn'>
-        <i className='fas fa-arrow-down'></i>
-      </Button>
+      <div></div>
+      {/* <Button type='primary' className='no-btn'> */}
+      {/* <i className='fas fa-arrow-down'></i> */}
+      {/* </Button> */}
       {/* Tweet */}
       <div className='twitter-verify-tweet-instructions'>
         1. Tweet the verification message with your wallet address.
@@ -198,7 +199,7 @@ export default function RowPromiseVerification({
         </Popover>
       </div>
       <Button type='primary' onClick={openTweet}>
-        1. Send tweet
+        <i className='fab fa-twitter' /> Send tweet
       </Button>
       {/* Request for verification */}
       <div className='twitter-verify-request'>
@@ -240,7 +241,7 @@ export default function RowPromiseVerification({
         onClick={requestVerification}
         loading={isWaitingforVerification}
       >
-        2. Request verification
+        <i className='fas fa-circle-check' /> Request verification
       </Button>
     </>
   );

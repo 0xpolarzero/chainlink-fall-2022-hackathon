@@ -7,6 +7,7 @@ import { promiseStatus } from '../../systems/promiseStatus';
 import { useAccount, useProvider, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 import PromiseTable from '../PromiseTable';
+import RowPromiseAddParticipant from './RowPromiseAddParticipant';
 import RowPromiseApproval from './RowPromiseApproval';
 import RowPromiseVerification from './RowPromiseVerification';
 import RowPromiseLock from './RowPromiseLock';
@@ -101,6 +102,13 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
       />
 
       <div className='drawer-item interaction'>
+        <RowPromiseAddParticipant
+          contractAttributes={contractAttributes}
+          isPromiseLocked={isPromiseLocked}
+        />
+
+        <div className='drawer-item-separator'></div>
+
         <RowPromiseApproval
           key='approval'
           interactingUser={interactingUser}
@@ -119,6 +127,8 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
             gatherPartiesData={gatherPartiesData}
           />
         )}
+
+        <div className='drawer-item-separator'></div>
 
         <RowPromiseLock
           key='lock'
