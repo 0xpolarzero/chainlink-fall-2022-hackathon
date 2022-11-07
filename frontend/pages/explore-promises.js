@@ -52,14 +52,14 @@ export default function explorePromises({ setActivePage }) {
   }, []);
 
   useEffect(() => {
-    // Put all the promises names in the search options with a unique key
+    // Put all the promises names in the search options
     if (!!promises && !promisesError) {
-      const promisesNames = sortedPromises.map((promise) => ({
+      const promisesNames = promises.map((promise) => ({
         value: promise.promiseName,
       }));
       setSearchOptions(promisesNames);
     }
-  }, [sortedPromises]);
+  }, [promises]);
 
   useEffect(() => {
     // Sort the promises by createdAt
