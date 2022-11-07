@@ -44,7 +44,17 @@ export default function RowPromiseAddParticipant({
         error: 'Error adding participant',
       });
       handleCancel();
-      reFetchPromises();
+      // Wait for two more blocks to be mined before refetching
+      // to make sure TheGraph has time to catch up
+      await toast
+        .promise(tx.wait(3), {
+          pending: 'Please allow TheGraph a few seconds to update...',
+          success: `Promise updated!`,
+          error: 'Error updating promise. Please refresh the page.',
+        })
+        .then(() => {
+          reFetchPromises();
+        });
     },
     onError: (err) => {
       toast.error('Error adding participant');

@@ -6,39 +6,22 @@ const PromisesDataContext = createContext();
 
 export const PromisesDataProvider = ({ children }) => {
   const [promises, setPromises] = useState(null);
-  const [fetch, { error: promisesError, loading: promisesLoading, refetch }] =
-    useLazyQuery(GET_ACTIVE_PROMISE, {
-      onCompleted: (data) => {
-        console.log(
-          'FROM PROVIDER: ',
-          data.activePromises[0].partyNames.length,
-        );
-        setPromises(data.activePromises);
-      },
-      fetchPolicy: 'network-only',
-    });
+  const [
+    fetchPromises,
+    { error: promisesError, loading: promisesLoading, refetch },
+  ] = useLazyQuery(GET_ACTIVE_PROMISE, {
+    onCompleted: (data) => {
+      setPromises(data.activePromises);
+    },
+    fetchPolicy: 'network-only',
+  });
 
-  const fetchPromises = () => {
-    // Wait for 10s before fetching the data
-    fetch();
-    // .then((res) => {
-    //   console.log(res.data.activePromises);
-    //   setPromises(res.data.activePromises);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
-  };
-
-  const reFetchPromises = () => {
-    // Wait for 5s before fetching the data
-
-    // Return a promise when it's done so we can chain it after it's been updated
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        refetch();
+  const reFetchPromises = async () => {
+    await new Promise((resolve) => {
+      refetch().then((res) => {
         resolve();
-      }, 5000);
+        setPromises(res.data.activePromises);
+      });
     });
   };
 
