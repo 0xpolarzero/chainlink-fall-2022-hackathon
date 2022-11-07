@@ -1,4 +1,7 @@
-import { GET_ACTIVE_PROMISE } from '../constants/subgraphQueries';
+import {
+  GET_ACTIVE_PROMISE,
+  GET_TWITTER_VERIFIED_USER,
+} from '../constants/subgraphQueries';
 import { useLazyQuery } from '@apollo/client';
 import { createContext, useState } from 'react';
 
@@ -6,9 +9,15 @@ const PromisesDataContext = createContext();
 
 export const PromisesDataProvider = ({ children }) => {
   const [promises, setPromises] = useState(null);
+  const [twitterVerifiedUsers, setTwitterVerifiedUsers] = useState(null);
+
   const [
     fetchPromises,
-    { error: promisesError, loading: promisesLoading, refetch },
+    {
+      error: promisesError,
+      loading: promisesLoading,
+      refetch: refetchPromises,
+    },
   ] = useLazyQuery(GET_ACTIVE_PROMISE, {
     onCompleted: (data) => {
       setPromises(data.activePromises);
@@ -16,11 +25,34 @@ export const PromisesDataProvider = ({ children }) => {
     fetchPolicy: 'network-only',
   });
 
+  const [
+    fetchTwitterVerifiedUsers,
+    {
+      error: twitterVerifiedUsersError,
+      loading: twitterVerifiedUsersLoading,
+      refetch: refetchTwitterVerifiedUsers,
+    },
+  ] = useLazyQuery(GET_TWITTER_VERIFIED_USER, {
+    onCompleted: (data) => {
+      setTwitterVerifiedUsers(data.twitterVerifiedUsers);
+    },
+    fetchPolicy: 'network-only',
+  });
+
   const reFetchPromises = async () => {
     await new Promise((resolve) => {
-      refetch().then((res) => {
+      refetchPromises().then((res) => {
         resolve();
         setPromises(res.data.activePromises);
+      });
+    });
+  };
+
+  const reFetchTwitterVerifiedUsers = async () => {
+    await new Promise((resolve) => {
+      refetchTwitterVerifiedUsers().then((res) => {
+        resolve();
+        setTwitterVerifiedUsers(res.data.twitterVerifiedUsers);
       });
     });
   };
@@ -33,6 +65,11 @@ export const PromisesDataProvider = ({ children }) => {
         promises,
         promisesLoading,
         promisesError,
+        fetchTwitterVerifiedUsers,
+        reFetchTwitterVerifiedUsers,
+        twitterVerifiedUsers,
+        twitterVerifiedUsersLoading,
+        twitterVerifiedUsersError,
       }}
     >
       {children}
