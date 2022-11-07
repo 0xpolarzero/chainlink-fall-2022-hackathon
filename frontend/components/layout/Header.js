@@ -22,7 +22,7 @@ export const Header = ({ activePage, setActivePage }) => {
         </Link>
       </Menu.Item>
       <Menu.Item>
-        <Link href='/'>
+        <Link href='/twitter-verified'>
           <a>Verified Twitter accounts</a>
         </Link>
       </Menu.Item>
