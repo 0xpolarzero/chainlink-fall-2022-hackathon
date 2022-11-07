@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { Dropdown, Menu, Space, Typography } from 'antd';
 
 export const Header = ({ activePage, setActivePage }) => {
+  const [sliderPosition, setSliderPosition] = useState(0);
   const exploreMenu = (
     <Menu
       onClick={(e) => handleNavItemClick(e, 1)}
@@ -31,6 +32,7 @@ export const Header = ({ activePage, setActivePage }) => {
   const updateSlider = (i) => {
     const root = document.querySelector(':root');
     root.style.setProperty('--tab-nav-current-item', i);
+    setSliderPosition(i);
   };
 
   const handleNavItemClick = (e, i) => {
@@ -88,12 +90,18 @@ export const Header = ({ activePage, setActivePage }) => {
           trigger={['hover']}
         >
           <a
-            className={activePage === 1 ? 'active' : ''}
+            className={
+              activePage === 1
+                ? 'active dropdown-title'
+                : sliderPosition === 1
+                ? 'dropdown-title-hover'
+                : 'dropdown-title'
+            }
             onClick={(e) => handleNavItemClick(e, 1)}
             onMouseEnter={() => updateSlider(1)}
             onMouseLeave={() => updateSlider(activePage)}
           >
-            Explore
+            <span>Explore</span> <i className='fas fa-chevron-down' />
           </a>
         </Dropdown>
         <Link href='/user-promises'>

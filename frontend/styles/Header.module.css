@@ -50,7 +50,7 @@
   cursor: pointer;
 }
 
-.header .links a:not(:nth-child(2)):hover {
+.header .links a:hover {
   color: var(--popstar) !important;
 }
 

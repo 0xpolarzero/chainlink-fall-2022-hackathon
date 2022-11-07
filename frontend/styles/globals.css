@@ -580,6 +580,23 @@ ant-select {
   padding: 1rem 3rem !important;
 }
 
+.ant-dropdown-open {
+  color: var(--popstar) !important;
+}
+
+.dropdown-title {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dropdown-title i {
+  transition: all 0.3s ease;
+}
+
+.ant-dropdown-open i {
+  transform: translateY(0.1rem) !important;
+}
+
 /* Font Awesome icons */
 
 .fa-twitter {
