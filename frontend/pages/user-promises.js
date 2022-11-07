@@ -146,7 +146,7 @@ export default function userPromises({ setActivePage }) {
                 </div>
               ) : (
                 <div className='no-promises'>
-                  You haven't created any promises yet.
+                  You haven't created any promise yet.
                 </div>
               )
             ) : (
@@ -177,7 +177,7 @@ export default function userPromises({ setActivePage }) {
                 </div>
               ) : (
                 <div className='no-promises'>
-                  You haven't created any promises yet.
+                  You are not involved in any promise yet.
                 </div>
               )
             ) : (
