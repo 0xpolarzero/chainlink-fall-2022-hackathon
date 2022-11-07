@@ -563,7 +563,21 @@ ant-select {
 
 .ant-upload-list-item-progress {
   bottom: -1.1rem !important;
-  /* left: 0.3rem !important; */
+}
+
+.ant-dropdown {
+  top: 4.5rem !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.ant-dropdown-menu {
+  background: var(--gradient-medium-transparent) !important;
+  padding: 0 !important;
+}
+
+.ant-dropdown-menu-item {
+  font-size: 0.9rem !important;
+  padding: 1rem 3rem !important;
 }
 
 /* Font Awesome icons */

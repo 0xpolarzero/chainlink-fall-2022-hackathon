@@ -6,8 +6,28 @@ import Logo from '../../asset/logo-colored-no-background.svg';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useWidth } from '../../systems/useWidth';
 import { useState, useEffect } from 'react';
+import { Dropdown, Menu, Space, Typography } from 'antd';
 
 export const Header = ({ activePage, setActivePage }) => {
+  const exploreMenu = (
+    <Menu
+      onClick={(e) => handleNavItemClick(e, 1)}
+      onMouseEnter={() => updateSlider(1)}
+      onMouseLeave={() => updateSlider(activePage)}
+    >
+      <Menu.Item>
+        <Link href='/explore-promises'>
+          <a>Explore promises</a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link href='/'>
+          <a>Verified Twitter accounts</a>
+        </Link>
+      </Menu.Item>
+    </Menu>
+  );
+
   const updateSlider = (i) => {
     const root = document.querySelector(':root');
     root.style.setProperty('--tab-nav-current-item', i);
@@ -50,15 +70,6 @@ export const Header = ({ activePage, setActivePage }) => {
         </Link>
       </div>
       <TabNav>
-        {/* <Link href='/'>
-          <a
-            className={activePage === 0 ? 'active' : ''}
-            onClick={(e) => handleNavItemClick(e, 0)}
-            onMouseEnter={() => updateSlider(0)}
-            onMouseLeave={() => updateSlider(activePage)}
-            to='.section-home'
-          ></a>
-        </Link> */}
         <Link href='/'>
           <a
             className={activePage === 0 ? 'active' : ''}
@@ -70,7 +81,12 @@ export const Header = ({ activePage, setActivePage }) => {
             The project
           </a>
         </Link>
-        <Link href='/explore-promises'>
+        <Dropdown
+          overlay={exploreMenu}
+          selectable={true}
+          placement='bottomLeft'
+          trigger={['hover']}
+        >
           <a
             className={activePage === 1 ? 'active' : ''}
             onClick={(e) => handleNavItemClick(e, 1)}
@@ -79,7 +95,7 @@ export const Header = ({ activePage, setActivePage }) => {
           >
             Explore
           </a>
-        </Link>
+        </Dropdown>
         <Link href='/user-promises'>
           <a
             className={activePage === 2 ? 'active' : ''}

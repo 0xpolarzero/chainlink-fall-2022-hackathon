@@ -31,30 +31,37 @@
   letter-spacing: 0.1rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  justify-content: center;
-  align-items: center;
 }
 
 .header .links > * {
   text-align: center;
-  padding: 0 1rem;
 }
 
 .header .links > *:not(:nth-child(4)) {
   transition: all 0.3s ease;
 }
 
-.header .links > *:hover {
-  color: var(--popstar);
+.header .links a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 1rem 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.header .links a:not(:nth-child(2)):hover {
+  color: var(--popstar) !important;
 }
 
 .slider {
   position: absolute;
-  inset-block-end: -0.5rem;
+  inset-block-end: 0;
   block-size: 2px;
   inline-size: calc(100% / var(--tab-nav-items));
   background: var(--gradient-color-light);
   transition: inset-inline-start 0.3s ease;
+  z-index: -1;
 }
 
 .links > :global(*.active) ~ .slider {
