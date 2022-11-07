@@ -41,6 +41,20 @@ export default function PromisesCollapse({ promises, context }) {
     }
   }, [document.querySelectorAll('.ant-collapse-item')]);
 
+  useEffect(() => {
+    if (promises && drawerPromise) {
+      // If the promises have been updated, update the drawer promise
+      for (const promise of promises) {
+        if (
+          promise.contractAddress.toLowerCase() ===
+          drawerPromise.contractAddress.toLowerCase()
+        ) {
+          setDrawerPromise(promise);
+        }
+      }
+    }
+  }, [promises]);
+
   return (
     <>
       <Collapse

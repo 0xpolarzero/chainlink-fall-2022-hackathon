@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 
+import { PromisesDataProvider } from '../systems/PromisesDataContext';
 import {
   getDefaultWallets,
   RainbowKitProvider,
@@ -72,9 +73,11 @@ function MyApp({ Component, pageProps }) {
           })}
         >
           <ApolloProvider client={client}>
-            <Header activePage={activePage} setActivePage={setActivePage} />
-            <Component {...pageProps} setActivePage={setActivePage} />
-            {/* <Footer /> */}
+            <PromisesDataProvider>
+              <Header activePage={activePage} setActivePage={setActivePage} />
+              <Component {...pageProps} setActivePage={setActivePage} />
+              {/* <Footer /> */}
+            </PromisesDataProvider>
           </ApolloProvider>
         </RainbowKitProvider>
       </WagmiConfig>

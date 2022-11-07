@@ -2,11 +2,10 @@ import styles from '../styles/Home.module.css';
 import NewPromiseDrawer from '../components/user/NewPromiseDrawer';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
-import { GET_ACTIVE_PROMISE } from '../constants/subgraphQueries';
+import PromisesDataContext from '../systems/PromisesDataContext';
 import { Pagination } from 'antd';
 import { useAccount } from 'wagmi';
-import { useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 export default function userPromises({ setActivePage }) {
   const [isDefinitelyConnected, setIsDefinitelyConnected] = useState(false);
@@ -20,9 +19,11 @@ export default function userPromises({ setActivePage }) {
   const [shownCreatedPage, setShownCreatedPage] = useState(1);
   const [shownInvolvedPage, setShownInvolvedPage] = useState(1);
   const { address: userAddress, isConnected } = useAccount();
-  const { data, loading, error } = useQuery(GET_ACTIVE_PROMISE);
+  const { fetchPromises, promises, promisesLoading, promisesError } =
+    useContext(PromisesDataContext);
 
   useEffect(() => {
+    fetchPromises();
     setActivePage(2);
   }, []);
 
@@ -35,10 +36,8 @@ export default function userPromises({ setActivePage }) {
   }, [userAddress]);
 
   useEffect(() => {
-    if (isConnected && !!data) {
-      const sortedPromises = data.activePromises.sort(
-        (a, b) => b.createdAt - a.createdAt,
-      );
+    if (isConnected && !!promises) {
+      const sortedPromises = promises.sort((a, b) => b.createdAt - a.createdAt);
       const createdPromises = sortedPromises.filter(
         (promise) => promise.owner.toLowerCase() === userAddress.toLowerCase(),
       );
@@ -56,10 +55,11 @@ export default function userPromises({ setActivePage }) {
       setUserInvolvedPromises(involvedPromises);
     }
     // We're adding userAddress so it filters again if the user changes wallet
-  }, [loading, isDefinitelyConnected, userAddress]);
+  }, [promises, promisesLoading, isDefinitelyConnected, userAddress]);
 
   useEffect(() => {
-    if (!!data && !loading && !error) {
+    if (!!promises && !promisesError) {
+      // Show the promises corresponsing to the page
       setUserShownCreatedPromises(
         userCreatedPromises.slice(
           (shownCreatedPage - 1) * 5,
@@ -96,8 +96,8 @@ export default function userPromises({ setActivePage }) {
     );
   }
 
-  if (error) {
-    console.log(error);
+  if (promisesError) {
+    console.log(promisesError);
     return (
       <main className={styles.main}>
         <section className='section section-user'>
@@ -127,9 +127,9 @@ export default function userPromises({ setActivePage }) {
         <div className='user-promises owner'>
           <div className='header-sub'>You created:</div>
           <div className='promises-list'>
-            {loading ? (
+            {!promises ? (
               <PromisesCollapseSkeleton arraySize={3} />
-            ) : !!data ? (
+            ) : !!promises ? (
               userCreatedPromises.length > 0 ? (
                 <div className='promises-list-wrapper'>
                   <PromisesCollapse
@@ -158,9 +158,9 @@ export default function userPromises({ setActivePage }) {
         <div className='user-promises involved'>
           <div className='header-sub'>You're involved with:</div>
           <div className='promises-list'>
-            {loading ? (
+            {!promises ? (
               <PromisesCollapseSkeleton arraySize={3} />
-            ) : !!data ? (
+            ) : !!promises ? (
               userInvolvedPromises.length > 0 ? (
                 <div className='promises-list-wrapper'>
                   <PromisesCollapse

@@ -1,12 +1,11 @@
 import networkMapping from '../../constants/networkMapping';
 import promiseFactoryAbi from '../../constants/PromiseFactory.json';
+import PromisesDataContext from '../../systems/PromisesDataContext';
 import { Button, Form, Input, Modal, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 import { useContractWrite, useNetwork } from 'wagmi';
-import { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_ACTIVE_PROMISE } from '../../constants/subgraphQueries';
+import { useContext, useEffect, useState } from 'react';
 
 export default function RowPromiseAddParticipant({
   partyAddresses,
@@ -21,7 +20,14 @@ export default function RowPromiseAddParticipant({
   const [form] = Form.useForm();
   const { chain } = useNetwork();
   const contractAddress = networkMapping[chain.id || '80001'].PromiseFactory[0];
-  const { refetch } = useQuery(GET_ACTIVE_PROMISE);
+  const { reFetchPromises, promises, promisesError } =
+    useContext(PromisesDataContext);
+
+  useEffect(() => {
+    // When a new participant is added, promises get updated
+    // Only then, fetch the new parties data
+    // gatherPartiesData();
+  }, [promises]);
 
   // It's easier this way to prevent any errors logging in the console
   // + we are sure it will be called only when the args are valid
@@ -38,8 +44,7 @@ export default function RowPromiseAddParticipant({
         error: 'Error adding participant',
       });
       handleCancel();
-      //   gatherPartiesData();
-      refetch();
+      reFetchPromises();
     },
     onError: (err) => {
       toast.error('Error adding participant');
@@ -100,7 +105,6 @@ export default function RowPromiseAddParticipant({
 
   useEffect(() => {
     if (addParticipantArgs.length === 4) {
-      console.log(addParticipantArgs);
       addParticipant();
     }
   }, [addParticipantArgs]);

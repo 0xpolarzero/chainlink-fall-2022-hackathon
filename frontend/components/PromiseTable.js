@@ -57,7 +57,8 @@ export default function PromiseTable({
     setPartiesData(partiesDataToDisplay);
 
     // Contract data, once fetched, will update the table
-  }, [addressToApprovedStatus, addressToTwitterVerifiedStatus]);
+    // In case a participant is added, the table needs to be updated
+  }, [addressToApprovedStatus, addressToTwitterVerifiedStatus, partyAddresses]);
 
   return (
     <div key='contract' className='card-item contract-identity'>

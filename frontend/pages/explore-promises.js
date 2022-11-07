@@ -1,10 +1,9 @@
 import styles from '../styles/Home.module.css';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
-import { GET_ACTIVE_PROMISE } from '../constants/subgraphQueries';
-import { useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
-import { AutoComplete, Pagination, Tooltip } from 'antd';
+import PromisesDataContext from '../systems/PromisesDataContext';
+import { useContext, useEffect, useState } from 'react';
+import { AutoComplete, Pagination } from 'antd';
 
 export default function explorePromises({ setActivePage }) {
   const [shownPage, setShownPage] = useState(1);
@@ -12,14 +11,16 @@ export default function explorePromises({ setActivePage }) {
   const [sortedPromises, setSortedPromises] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [searchOptions, setSearchOptions] = useState([]);
-  const { data, loading, error } = useQuery(GET_ACTIVE_PROMISE);
+  // const { data, loading, error } = useQuery(GET_ACTIVE_PROMISE);
+  const { fetchPromises, promises, promisesError } =
+    useContext(PromisesDataContext);
 
   // SEARCHING ----------------------------------------------
   const handleSearch = (e) => {
     if (e.type === 'keydown' && e.key !== 'Enter') return;
 
     // Show the promises corresponding to the search value
-    if (!!data && searchValue !== '') {
+    if (!!promises && searchValue !== '') {
       const filteredPromises = sortedPromises.filter(
         (promise) =>
           promise.promiseName
@@ -37,7 +38,7 @@ export default function explorePromises({ setActivePage }) {
       );
       setShownPromises(filteredPromises);
       // ... but get it back if the user deletes the search
-    } else if (!!data) {
+    } else if (!!promises) {
       setShownPromises(
         sortedPromises.slice((shownPage - 1) * 5, shownPage * 5),
       );
@@ -47,9 +48,12 @@ export default function explorePromises({ setActivePage }) {
 
   useEffect(() => {
     setActivePage(1);
+    fetchPromises();
+  }, []);
 
+  useEffect(() => {
     // Put all the promises names in the search options with a unique key
-    if (!!data && !loading && !error) {
+    if (!!promises && !promisesError) {
       const promisesNames = sortedPromises.map((promise) => ({
         value: promise.promiseName,
       }));
@@ -59,17 +63,15 @@ export default function explorePromises({ setActivePage }) {
 
   useEffect(() => {
     // Sort the promises by createdAt
-    if (!!data && !loading && !error) {
-      const sorted = data.activePromises.sort(
-        (a, b) => b.createdAt - a.createdAt,
-      );
+    if (!!promises && !promisesError) {
+      const sorted = promises.sort((a, b) => b.createdAt - a.createdAt);
       setSortedPromises(sorted);
       setShownPromises(sorted.slice((shownPage - 1) * 5, shownPage * 5));
     }
-  }, [shownPage, loading]);
+  }, [shownPage, promises]);
 
-  if (error) {
-    console.log(error);
+  if (promisesError) {
+    console.log(promisesError);
     return (
       <main className={styles.main}>
         <section className='section section-explore'>
@@ -109,10 +111,10 @@ export default function explorePromises({ setActivePage }) {
           />
         </div>
         <div className='promises-list'>
-          {loading ? (
+          {!promises ? (
             <PromisesCollapseSkeleton arraySize={3} />
-          ) : !!data ? (
-            data.activePromises.length === 0 ? (
+          ) : !!promises ? (
+            promises.length === 0 ? (
               <div className='error-container'>
                 There are no promises yet. Be the first to create one!
               </div>
@@ -122,7 +124,7 @@ export default function explorePromises({ setActivePage }) {
                 <Pagination
                   simple
                   defaultCurrent={1}
-                  total={data.activePromises.length}
+                  total={promises.length}
                   onChange={(e) => setShownPage(e)}
                   pageSize={5}
                 />

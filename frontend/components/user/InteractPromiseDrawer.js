@@ -55,7 +55,8 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
 
   useEffect(() => {
     gatherPartiesData();
-  }, []);
+    // Any time the promise data is updated, the parties data needs to be updated as well
+  }, [partyAddresses]);
 
   useEffect(() => {
     // Display data for the interacting user
