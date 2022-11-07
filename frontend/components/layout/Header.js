@@ -4,12 +4,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '../../asset/logo-colored-no-background.svg';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useWidth } from '../../systems/useWidth';
-import { useState, useEffect } from 'react';
-import { Dropdown, Menu, Space, Typography } from 'antd';
+import { useEffect } from 'react';
+import { Dropdown, Menu } from 'antd';
 
 export const Header = ({ activePage, setActivePage }) => {
-  const [sliderPosition, setSliderPosition] = useState(0);
   const exploreMenu = (
     <Menu
       onClick={(e) => handleNavItemClick(e, 1)}
@@ -22,7 +20,7 @@ export const Header = ({ activePage, setActivePage }) => {
         </Link>
       </Menu.Item>
       <Menu.Item>
-        <Link href='/twitter-verified'>
+        <Link href='/explore-twitter-verified'>
           <a>Verified Twitter accounts</a>
         </Link>
       </Menu.Item>
@@ -32,7 +30,6 @@ export const Header = ({ activePage, setActivePage }) => {
   const updateSlider = (i) => {
     const root = document.querySelector(':root');
     root.style.setProperty('--tab-nav-current-item', i);
-    setSliderPosition(i);
   };
 
   const handleNavItemClick = (e, i) => {
@@ -91,11 +88,7 @@ export const Header = ({ activePage, setActivePage }) => {
         >
           <a
             className={
-              activePage === 1
-                ? 'active dropdown-title'
-                : sliderPosition === 1
-                ? 'dropdown-title-hover'
-                : 'dropdown-title'
+              activePage === 1 ? 'active dropdown-title' : 'dropdown-title'
             }
             onClick={(e) => handleNavItemClick(e, 1)}
             onMouseEnter={() => updateSlider(1)}
