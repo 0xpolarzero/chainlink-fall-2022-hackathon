@@ -585,8 +585,8 @@ ant-select {
 }
 
 .dropdown-title {
-  display: flex;
-  gap: 0.5rem;
+  display: flex !important;
+  gap: 0.5rem !important;
 }
 
 .dropdown-title i {
