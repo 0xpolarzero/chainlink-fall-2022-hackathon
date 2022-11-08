@@ -8,7 +8,7 @@ const waitForChainlinkFullfillment = async (
   provider,
   twitterHandle,
   setIsWaitingForVerification,
-  gatherPartiesData,
+  refreshData,
 ) => {
   const contract = new ethers.Contract(
     verifyTwitterContract,
@@ -19,12 +19,12 @@ const waitForChainlinkFullfillment = async (
     'Waiting for the Chainlink Node to fulfill the request...',
   );
 
-  new Promise((resolve) => {
+  return await new Promise((resolve) => {
     // Setup a listener for the success event
     contract.on('VerificationSuccessful', async (requestId, result) => {
       if (result.toLowerCase() === twitterHandle.toLowerCase()) {
         setIsWaitingForVerification(false);
-        gatherPartiesData();
+        if (refreshData) refreshData();
         toast.update(promiseWaiting, {
           render: 'Verification successful!',
           type: 'success',
@@ -36,11 +36,9 @@ const waitForChainlinkFullfillment = async (
     });
     // Or for the failure event
     contract.on('VerificationFailed', async (requestId, result) => {
-      if (
-        result.toLowerCase() === interactingUser.twitterHandle.toLowerCase()
-      ) {
+      if (result.toLowerCase() === twitterHandle.toLowerCase()) {
         setIsWaitingForVerification(false);
-        gatherPartiesData();
+        if (refreshData) refreshData();
         toast.update(promiseWaiting, {
           render: 'Verification failed!',
           type: 'error',
