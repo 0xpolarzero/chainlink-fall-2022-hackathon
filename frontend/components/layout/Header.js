@@ -14,12 +14,12 @@ export const Header = ({ activePage, setActivePage }) => {
       onMouseEnter={() => updateSlider(1)}
       onMouseLeave={() => updateSlider(activePage)}
     >
-      <Menu.Item>
+      <Menu.Item key='promises'>
         <Link href='/explore-promises'>
           <a>Explore promises</a>
         </Link>
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item key='twitterHandles'>
         <Link href='/explore-twitter-verified'>
           <a>Verified Twitter accounts</a>
         </Link>
