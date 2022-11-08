@@ -117,5 +117,26 @@
 }
 
 .twitter-verified-container {
+  position: relative;
   width: 100%;
+}
+
+.twitter-verified-container .ant-table {
+  background: rgba(0, 0, 0, 0.5) !important;
+  padding: 0 1rem;
+}
+
+.twitter-verified-container .ant-table tr > td:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-filter-container {
+  display: flex;
+}
+
+.search-filter-container .ant-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }

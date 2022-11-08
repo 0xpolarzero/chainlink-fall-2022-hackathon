@@ -430,7 +430,8 @@ a:not(.header) {
   background: transparent !important;
 }
 
-.anticon {
+.anticon-info-circle,
+.anticon-inbox {
   color: #fff !important;
   opacity: 0.7;
   transition: all 0.3s ease;
@@ -519,7 +520,7 @@ ant-select {
   z-index: 2;
 }
 
-.section-explore .ant-table-pagination,
+.section-explore .promises-list .ant-table-pagination,
 .promise-drawer .ant-table-pagination {
   position: absolute !important;
   top: 0.5rem !important;
@@ -566,13 +567,29 @@ ant-select {
 }
 
 .ant-dropdown {
-  top: 4.5rem !important;
   backdrop-filter: blur(10px) !important;
 }
 
-.ant-dropdown-menu {
+.ant-dropdown-placement-bottomLeft {
+  top: 4.5rem !important;
+}
+
+.ant-dropdown-menu,
+.ant-table-filter-dropdown {
   background: var(--gradient-medium-transparent) !important;
   padding: 0 !important;
+}
+
+.ant-table-filter-dropdown .search-filter-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem !important;
+}
+
+.ant-table-filter-dropdown .search-filter-container .ant-input {
+  grid-column: span 2;
 }
 
 .ant-dropdown-menu-item {

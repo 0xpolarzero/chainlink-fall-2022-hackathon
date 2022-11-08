@@ -3,7 +3,7 @@ import TwitterVerifiedTable from '../components/explore/TwitterVerifiedTable';
 import TwitterVerifiedTableSkeleton from '../components/explore/TwitterVerifiedTableSkeleton';
 import PromisesDataContext from '../systems/PromisesDataContext';
 import { useContext, useEffect, useState } from 'react';
-import { AutoComplete, Pagination } from 'antd';
+import { Button, Tooltip } from 'antd';
 
 const twitterVerifiedUsers = [
   {
@@ -22,11 +22,9 @@ const twitterVerifiedUsers = [
 let twitterVerifiedUsersError;
 
 export default function exploreTwitterVerified({ setActivePage }) {
-  const [shownPage, setShownPage] = useState(1);
-  const [shownTwitterVerified, setShownTwitterVerified] = useState([]);
-  const [sortedTwitterVerified, setSortedTwitterVerified] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
-  const [searchOptions, setSearchOptions] = useState([]);
+  const [sortedTwitterVerifiedUsers, setSortedTwitterVerifiedUsers] = useState(
+    [],
+  );
 
   //   const {
   //     fetchTwitterVerifiedUsers,
@@ -34,48 +32,10 @@ export default function exploreTwitterVerified({ setActivePage }) {
   //     twitterVerifiedUsersError,
   //   } = useContext(PromisesDataContext);
 
-  // SEARCHING ----------------------------------------------
-  const handleSearch = (e) => {
-    if (e.type === 'keydown' && e.key !== 'Enter') return;
-
-    // Show the twitterVerified corresponding to the search value
-    if (!!twitterVerifiedUsers && searchValue !== '') {
-      const filteredTwitterVerified = twitterVerifiedUsers.filter(
-        (twitterVerified) =>
-          twitterVerified.twitterHandles.map((handle) =>
-            handle.toLowerCase().includes(searchValue.toLowerCase()),
-          ) ||
-          twitterVerified.address
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()),
-      );
-      setShownTwitterVerified(filteredTwitterVerified);
-      // ... but get it back if the user deletes the search
-    } else if (!!twitterVerifiedUsers) {
-      setShownTwitterVerified(
-        sortedTwitterVerified.slice((shownPage - 1) * 5, shownPage * 5),
-      );
-    }
-  };
-  // --------------------------------------------------------
-
   useEffect(() => {
     setActivePage(1);
     // fetchTwitterVerifiedUsers();
   });
-
-  useEffect(() => {
-    // Map through the users and add all their handles to the search options
-    if (!!twitterVerifiedUsers && !twitterVerifiedUsersError) {
-      // Map through the users, then map through their handles and add each one to the search options
-      let options = [];
-      const twitterVerifiedHandles = twitterVerifiedUsers.map((user) =>
-        user.twitterHandles.map((handle) => options.push({ value: handle })),
-      );
-      console.log(options);
-      setSearchOptions(options);
-    }
-  }, [twitterVerifiedUsers]);
 
   useEffect(() => {
     if (!!twitterVerifiedUsers && !twitterVerifiedUsersError) {
@@ -83,13 +43,9 @@ export default function exploreTwitterVerified({ setActivePage }) {
       const sortedTwitterVerified = twitterVerifiedUsers.sort(
         (a, b) => b.verifiedAt - a.verifiedAt,
       );
-      setSortedTwitterVerified(sortedTwitterVerified);
-      // Show the first 5 handles
-      setShownTwitterVerified(
-        sortedTwitterVerified.slice((shownPage - 1) * 5, shownPage * 5),
-      );
+      setSortedTwitterVerifiedUsers(sortedTwitterVerified);
     }
-  }, [shownPage, twitterVerifiedUsers]);
+  }, [twitterVerifiedUsers]);
 
   if (twitterVerifiedUsersError) {
     console.log(twitterVerifiedUsersError);
@@ -112,24 +68,22 @@ export default function exploreTwitterVerified({ setActivePage }) {
       <section className='section section-explore'>
         <div className='header'>
           <div className='title'> Verified Twitter handles</div>
-          <AutoComplete
-            options={searchOptions}
-            style={{ width: '100%' }}
-            placeholder='Search an address or a Twitter handle...'
-            filterOption={(inputValue, option) =>
-              option.value.toLowerCase().indexOf(inputValue.toLowerCase()) !==
-              -1
+          <Tooltip
+            title={
+              <div>
+                You can verifiy a Twitter handle for the Ethereum address you're
+                connected with.
+                <br /> <br />
+                <b>
+                  <i className='fas fa-warning' /> Warning:
+                </b>{' '}
+                You won't be able to remove an associated Twitter handle once
+                it's verified.
+              </div>
             }
-            onChange={(e) => setSearchValue(e)}
-            onKeyDown={handleSearch}
-            allowClear={true}
-            clearIcon={<i className='fas fa-trash'></i>}
-            onClear={() =>
-              setShownTwitterVerified(
-                sortedTwitterVerified.slice((shownPage - 1) * 5, shownPage * 5),
-              )
-            }
-          />
+          >
+            <Button type='primary'>Verify a Twitter handle</Button>
+          </Tooltip>
         </div>
         <div className='twitter-verified-container'>
           {!twitterVerifiedUsers ? (
@@ -141,16 +95,9 @@ export default function exploreTwitterVerified({ setActivePage }) {
                 Twitter handle!
               </div>
             ) : (
-              <div className='promises-list-wrapper'>
+              <div className='twitter-verified-table'>
                 <TwitterVerifiedTable
-                  twitterVerifiedUsers={shownTwitterVerified}
-                />
-                <Pagination
-                  simple
-                  defaultCurrent={1}
-                  total={twitterVerifiedUsers.length}
-                  onChange={(e) => setShownPage(e)}
-                  pageSize={1}
+                  twitterVerifiedUsers={sortedTwitterVerifiedUsers}
                 />
               </div>
             )

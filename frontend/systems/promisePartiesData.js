@@ -169,6 +169,7 @@ const displayPartiesData = (
           <a
             href={`https://twitter.com/${partyTwitterHandles[i]}`}
             target='_blank'
+            rel='noopener noreferrer'
           >
             @{partyTwitterHandles[i]}
           </a>
