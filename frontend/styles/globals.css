@@ -136,38 +136,17 @@ a:not(.header) {
   color: #fff;
   font-size: 1rem;
   font-weight: 600;
+  text-align: center;
   letter-spacing: 0.1rem;
   text-transform: uppercase;
-  border-width: 3px;
-  border-style: solid;
-  border-radius: 6px;
-  border-image: linear-gradient(to bottom, #fe3dce, rgba(254, 61, 206, 0)) 1
-    100%;
-  padding: 0 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.action-btn.styled {
-  background: var(--gradient-color-main);
-  box-shadow: rgba(50, 45, 71, 0.5) 2px 1000px 1px inset;
-  text-align: center;
-  padding: 0.3rem 2rem;
-  outline: none;
-  border: 0;
-}
-
-.action-btn.styled:hover {
-  box-shadow: none;
+.action-btn:hover {
   transform: scale(1.02);
 }
 
 .action-btn.styled:active {
   transform: scale(0.98);
-}
-
-.action-btn a {
-  color: #fff;
 }
 
 .error-container {

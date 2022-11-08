@@ -3,7 +3,7 @@ import NewPromiseDrawer from '../components/user/NewPromiseDrawer';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import PromisesDataContext from '../systems/PromisesDataContext';
-import { Pagination } from 'antd';
+import { Button, Pagination } from 'antd';
 import { useAccount } from 'wagmi';
 import { useContext, useEffect, useState } from 'react';
 
@@ -117,14 +117,15 @@ export default function userPromises({ setActivePage }) {
       <section className='section section-user'>
         <div className='header'>
           <div className='title'>Your promises</div>
-          <button
-            className='action-btn styled'
+          <Button
+            type='primary'
+            className='action-btn'
             onClick={() => setDrawerOpen(true)}
           >
             New Promise
-          </button>
+          </Button>
         </div>
-        <div className='user-promises owner'>
+        <div className='user-dashboard owner'>
           <div className='header-sub'>You created:</div>
           <div className='promises-list'>
             {!promises ? (
@@ -155,7 +156,7 @@ export default function userPromises({ setActivePage }) {
           </div>
         </div>
 
-        <div className='user-promises involved'>
+        <div className='user-dashboard involved'>
           <div className='header-sub'>You're involved with:</div>
           <div className='promises-list'>
             {!promises ? (

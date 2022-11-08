@@ -1,7 +1,7 @@
 @import './globals.css';
 @import './components/home.css';
 @import './components/explore-promises.css';
-@import './components/user-promises.css';
+@import './components/user-dashboard.css';
 @import './animations.css';
 
 /* Dependencies */

@@ -40,7 +40,7 @@ export const Header = ({ activePage, setActivePage }) => {
   };
 
   const smoothScrollTo = (target) => {
-    // Make sure the activePage page is '/' and not '/explore-promises' or '/user-promises'
+    // Make sure the activePage page is '/' and not '/explore-promises' or '/user-dashboard'
     if (typeof window === 'undefined') return;
     if (window.location.pathname !== '/') return;
 
@@ -97,14 +97,14 @@ export const Header = ({ activePage, setActivePage }) => {
             <span>Explore</span> <i className='fas fa-chevron-down' />
           </a>
         </Dropdown>
-        <Link href='/user-promises'>
+        <Link href='/user-dashboard'>
           <a
             className={activePage === 2 ? 'active' : ''}
             onClick={(e) => handleNavItemClick(e, 2)}
             onMouseEnter={() => updateSlider(2)}
             onMouseLeave={() => updateSlider(activePage)}
           >
-            Your promises
+            Dashboard
           </a>
         </Link>
         <ConnectButton

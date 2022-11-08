@@ -1,4 +1,4 @@
-.user-promises {
+.user-dashboard {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -12,7 +12,7 @@
   align-items: baseline;
 }
 
-.user-promises .header-sub {
+.user-dashboard .header-sub {
   font-size: 1.4rem;
   font-weight: 500;
 }
@@ -63,11 +63,11 @@
   z-index: 1;
 }
 
-.user-promises .ant-collapse-header i {
+.user-dashboard .ant-collapse-header i {
   transition: all 0.3s ease;
 }
 
-.user-promises .ant-collapse-header:hover i {
+.user-dashboard .ant-collapse-header:hover i {
   transform: rotate(-90deg);
 }
 

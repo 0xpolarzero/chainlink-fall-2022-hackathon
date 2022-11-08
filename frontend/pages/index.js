@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '../styles/Home.module.css';
+import { Button } from 'antd';
 
 export default function Home() {
   return (
@@ -18,12 +18,16 @@ export default function Home() {
             <p>It's time to hold founders accountable for their promises.</p>
           </div>
           <div className='action'>
-            <button className='action-btn styled'>
-              <Link href='/explore-promises'>Explore the directory</Link>
-            </button>
-            <button className='action-btn styled'>
-              <Link href='/user-promises'>Publish your promise</Link>
-            </button>
+            <Link href='/explore-promises'>
+              <Button type='primary' className='action-btn'>
+                Explore the directory
+              </Button>
+            </Link>
+            <Link href='/user-dashboard'>
+              <Button type='primary' className='action-btn'>
+                Publish your promise
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

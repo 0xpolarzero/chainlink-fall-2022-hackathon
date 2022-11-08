@@ -1,4 +1,5 @@
 .section-explore,
+.section-explore-twitter,
 .section-user {
   flex-direction: column;
   justify-content: flex-start;
@@ -8,17 +9,23 @@
 }
 
 .section-explore .header,
+.section-explore-twitter .header,
 .section-user .header {
   font-size: 2rem;
   font-weight: 600;
 }
 
-.section-explore .header {
+.section-explore .header,
+.section-explore-twitter .header {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: flex-end;
   gap: 3rem;
   width: 100%;
+}
+
+.section-explore-twitter .header {
+  grid-template-columns: 1fr auto;
 }
 
 /* ---------- CARD ---------- */

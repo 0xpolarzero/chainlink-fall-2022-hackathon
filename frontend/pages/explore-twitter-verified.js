@@ -65,7 +65,7 @@ export default function exploreTwitterVerified({ setActivePage }) {
 
   return (
     <main className={styles.explore}>
-      <section className='section section-explore'>
+      <section className='section section-explore-twitter'>
         <div className='header'>
           <div className='title'> Verified Twitter handles</div>
           <Tooltip
@@ -82,7 +82,9 @@ export default function exploreTwitterVerified({ setActivePage }) {
               </div>
             }
           >
-            <Button type='primary'>Verify a Twitter handle</Button>
+            <Button type='primary' className='action-btn'>
+              Verify a Twitter handle
+            </Button>
           </Tooltip>
         </div>
         <div className='twitter-verified-container'>
