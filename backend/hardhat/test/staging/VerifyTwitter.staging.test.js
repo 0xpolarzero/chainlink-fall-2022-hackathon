@@ -176,14 +176,16 @@ developmentChains.includes(network.name)
             );
 
             // Should be left untouched
+            assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
             assert.equal(isVerifiedHandle[1], VERIFIED_USERNAME_2);
             assert.equal(isVerifiedHandle.length, 2);
           };
 
+          // This time
           await requestAVerification(
-            promiseFactory,
+            verifyTwitter,
             VERIFIED_USERNAME,
-            'TwitterAddVerifiedFailed',
+            'VerificationSuccessful',
             verifications,
           );
         });
