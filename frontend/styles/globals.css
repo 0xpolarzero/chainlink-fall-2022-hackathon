@@ -124,6 +124,14 @@ ul {
   margin: 0;
 }
 
+main {
+  width: 100%;
+  justify-self: center;
+}
+
+.container {
+}
+
 .icon::after {
   display: inline-block;
   text-rendering: auto;
@@ -269,6 +277,11 @@ ul {
 
   main.home {
     scroll-snap-type: y mandatory;
+  }
+
+  main:not(.home) {
+    display: flex;
+    justify-content: center;
   }
 
   .section {

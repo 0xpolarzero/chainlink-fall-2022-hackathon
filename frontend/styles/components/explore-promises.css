@@ -4,8 +4,9 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 2rem;
+  gap: 1rem;
   padding: 7rem 3rem 4rem 3rem;
+  width: min(100%, 1400px);
 }
 
 .section-explore .header,

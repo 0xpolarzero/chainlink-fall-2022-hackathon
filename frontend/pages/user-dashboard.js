@@ -3,13 +3,16 @@ import NewPromiseDrawer from '../components/user/NewPromiseDrawer';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import PromisesDataContext from '../systems/PromisesDataContext';
-import { Button, Pagination } from 'antd';
-import { useAccount } from 'wagmi';
+import promiseFactoryAbi from '../constants/PromiseFactory.json';
+import networkMapping from '../constants/networkMapping';
+import { Button, Divider, Pagination, Skeleton } from 'antd';
+import { ethers } from 'ethers';
+import { useAccount, useNetwork, useProvider } from 'wagmi';
 import { useContext, useEffect, useState } from 'react';
 
 export default function userPromises({ setActivePage }) {
   const [isDefinitelyConnected, setIsDefinitelyConnected] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [newPromiseDrawerOpen, setNewPromiseDrawerOpen] = useState(false);
   const [userCreatedPromises, setUserCreatedPromises] = useState([]);
   const [userShownCreatedPromises, setUserShownCreatedPromises] = useState([]);
   const [userInvolvedPromises, setUserInvolvedPromises] = useState([]);
@@ -18,12 +21,31 @@ export default function userPromises({ setActivePage }) {
   );
   const [shownCreatedPage, setShownCreatedPage] = useState(1);
   const [shownInvolvedPage, setShownInvolvedPage] = useState(1);
+  const [verifiedHandles, setVerifiedHandles] = useState([]);
   const { address: userAddress, isConnected } = useAccount();
+  const { chain } = useNetwork();
+  const provider = useProvider();
+  const promiseFactoryAddress =
+    networkMapping[chain ? chain.id : '80001'].PromiseFactory[0];
   const { fetchPromises, promises, promisesLoading, promisesError } =
     useContext(PromisesDataContext);
 
+  const getVerifiedHandles = async () => {
+    const promiseFactoryContract = new ethers.Contract(
+      promiseFactoryAddress,
+      promiseFactoryAbi,
+      provider,
+    );
+
+    const handles = await promiseFactoryContract.getTwitterVerifiedHandle(
+      userAddress,
+    );
+    setVerifiedHandles(handles);
+  };
+
   useEffect(() => {
     fetchPromises();
+    getVerifiedHandles();
     setActivePage(2);
   }, []);
 
@@ -120,13 +142,15 @@ export default function userPromises({ setActivePage }) {
           <Button
             type='primary'
             className='action-btn'
-            onClick={() => setDrawerOpen(true)}
+            onClick={() => setNewPromiseDrawerOpen(true)}
           >
             New Promise
           </Button>
         </div>
         <div className='user-dashboard owner'>
-          <div className='header-sub'>You created:</div>
+          <Divider plain orientation='left'>
+            <div className='header-sub'>You created</div>
+          </Divider>
           <div className='promises-list'>
             {!promises ? (
               <PromisesCollapseSkeleton arraySize={3} />
@@ -157,7 +181,9 @@ export default function userPromises({ setActivePage }) {
         </div>
 
         <div className='user-dashboard involved'>
-          <div className='header-sub'>You're involved with:</div>
+          <Divider plain orientation='left'>
+            <div className='header-sub'>You're involved with</div>
+          </Divider>
           <div className='promises-list'>
             {!promises ? (
               <PromisesCollapseSkeleton arraySize={3} />
@@ -186,9 +212,46 @@ export default function userPromises({ setActivePage }) {
             )}
           </div>
         </div>
+
+        <div className='user-dashboard twitter-verified'>
+          <div className='header'>
+            <Divider plain orientation='left' style={{ position: 'relative' }}>
+              <div className='header-sub'>Your verified Twitter handles</div>
+              <Button
+                type='primary'
+                className='action-btn absolute'
+                onClick={() => setTwitterHandleDrawerOpen(true)}
+              >
+                Verify handle
+              </Button>
+            </Divider>
+          </div>
+          <div className='twitter-verified-list'>
+            {!verifiedHandles ? (
+              <Skeleton active title={false} paragraph={{ rows: 3 }} />
+            ) : verifiedHandles.length > 0 ? (
+              verifiedHandles.map((handle) => (
+                <div className='twitter-verified-item' key={handle}>
+                  <a
+                    href={`https://twitter.com/${handle}`}
+                    target='_blank'
+                    rel='noopener noreferer'
+                  >
+                    @{handle}
+                  </a>
+                </div>
+              ))
+            ) : (
+              <div className='no-promises'>
+                You haven't verified any Twitter handle yet.
+              </div>
+            )}
+          </div>
+        </div>
+
         <NewPromiseDrawer
-          drawerOpen={drawerOpen}
-          setDrawerOpen={setDrawerOpen}
+          drawerOpen={newPromiseDrawerOpen}
+          setDrawerOpen={setNewPromiseDrawerOpen}
         />
       </section>
     </main>
