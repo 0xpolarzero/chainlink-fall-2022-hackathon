@@ -3,24 +3,12 @@ import { Button, Input, Table, Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 
-const data = [
-  {
-    key: '1',
-    address: '0x0000000000000000000000000000000000000000',
-    twitterHandles: ['elonmusk'],
-  },
-  {
-    key: '2',
-    address: '0x3000000000000000000000000000000000000000',
-    twitterHandles: ['jack', 'j4ck'],
-  },
-];
 export default function TwitterVerifiedTable({ twitterVerifiedUsers }) {
   const [twitterVerifiedData, setTwitterVerifiedData] = useState([]);
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
-      pageSize: 5,
+      pageSize: 10,
       position: ['bottomCenter'],
     },
   });
