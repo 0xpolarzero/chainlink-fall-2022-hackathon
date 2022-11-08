@@ -51,6 +51,7 @@ export default function RowPromiseAddParticipant({
         });
     },
     onError: (err) => {
+      console.log(addParticipantArgs);
       toast.error('Error adding participant');
       console.log('error adding participant', err);
       setSubmitLoading(false);
@@ -79,13 +80,14 @@ export default function RowPromiseAddParticipant({
     }
 
     // Make sure it's not empty
+    let twitterHandle;
     if (formValues.partyTwitterHandle) {
       // Remove the @ from the twitter handle if it exists
-      formValues.partyTwitterHandle = formValues.partyTwitterHandle
+      twitterHandle = formValues.partyTwitterHandle
         .replace('@', '')
         .toLowerCase();
     } else {
-      formValues.partyTwitterHandle = '';
+      twitterHandle = '';
     }
 
     // Now the participant can be added
@@ -94,7 +96,7 @@ export default function RowPromiseAddParticipant({
     setAddParticipantArgs([
       promiseAddress,
       formValues.participantName,
-      formValues.participantTwitterHandle,
+      twitterHandle,
       formValues.participantAddress,
     ]);
   };
