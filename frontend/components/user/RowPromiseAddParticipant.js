@@ -11,7 +11,6 @@ export default function RowPromiseAddParticipant({
   partyAddresses,
   contractAddress: promiseAddress,
   isPromiseLocked,
-  gatherPartiesData,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -19,15 +18,10 @@ export default function RowPromiseAddParticipant({
   const [addParticipantArgs, setAddParticipantArgs] = useState([]);
   const [form] = Form.useForm();
   const { chain } = useNetwork();
-  const contractAddress = networkMapping[chain.id || '80001'].PromiseFactory[0];
+  const contractAddress =
+    networkMapping[(chain && chain.id) || '80001'].PromiseFactory[0];
   const { reFetchPromises, promises, promisesError } =
     useContext(PromisesDataContext);
-
-  useEffect(() => {
-    // When a new participant is added, promises get updated
-    // Only then, fetch the new parties data
-    // gatherPartiesData();
-  }, [promises]);
 
   // It's easier this way to prevent any errors logging in the console
   // + we are sure it will be called only when the args are valid
@@ -109,8 +103,8 @@ export default function RowPromiseAddParticipant({
     setIsModalOpen(false);
     setSubmitLoading(false);
     setIsFormDisabled(false);
-    form.resetFields();
     setAddParticipantArgs([]);
+    form.resetFields();
   };
 
   useEffect(() => {

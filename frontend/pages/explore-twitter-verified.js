@@ -4,11 +4,14 @@ import TwitterVerifiedTableSkeleton from '../components/explore/TwitterVerifiedT
 import PromisesDataContext from '../systems/PromisesDataContext';
 import { useContext, useEffect, useState } from 'react';
 import { Button, Tooltip } from 'antd';
+import VerifyTwitterDrawer from '../components/user/VerifyTwitterDrawer';
 
 export default function exploreTwitterVerified({ setActivePage }) {
   const [sortedTwitterVerifiedUsers, setSortedTwitterVerifiedUsers] = useState(
     [],
   );
+  const [isVerifyTwitterDrawerOpen, setIsVerifyTwitterDrawerOpen] =
+    useState(false);
 
   const {
     fetchTwitterVerifiedUsers,
@@ -66,7 +69,11 @@ export default function exploreTwitterVerified({ setActivePage }) {
               </div>
             }
           >
-            <Button type='primary' className='action-btn'>
+            <Button
+              type='primary'
+              className='action-btn'
+              onClick={() => setIsVerifyTwitterDrawerOpen(true)}
+            >
               Verify a Twitter handle
             </Button>
           </Tooltip>
@@ -91,6 +98,10 @@ export default function exploreTwitterVerified({ setActivePage }) {
             'Seems like there was an error loading this page... Please try refreshing.'
           )}
         </div>
+        <VerifyTwitterDrawer
+          isDrawerOpen={isVerifyTwitterDrawerOpen}
+          setIsDrawerOpen={setIsVerifyTwitterDrawerOpen}
+        />
       </section>
     </main>
   );
