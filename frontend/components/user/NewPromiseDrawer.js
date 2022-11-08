@@ -1,10 +1,16 @@
-import PDFUploader from './PDFUploader';
+import FileUploader from './FileUploader';
+import ConnectBundlr from './ConnectBundlr';
 import { validateNewPromiseForm } from '../../systems/validateNewPromiseForm';
 import { uploadToIPFS } from '../../systems/uploadToIPFS';
+import { uploadToArweave } from '../../systems/uploadToArweave';
 import networkMapping from '../../constants/networkMapping';
 import promiseFactoryAbi from '../../constants/PromiseFactory.json';
-import { Input, Tooltip, Form, Drawer, Space, Button } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { Input, Tooltip, Form, Drawer, Space, Button, Switch } from 'antd';
+import {
+  InfoCircleOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from '@ant-design/icons';
 import { useAccount, useNetwork, useContractWrite } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -13,6 +19,11 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(false);
   const [createPromiseArgs, setCreatePromiseArgs] = useState([]);
+  const [bundlr, setBundlr] = useState({
+    instance: null,
+    isReady: false,
+  });
+  const [isArweaveChecked, setIsArweaveChecked] = useState(true);
   const [form] = Form.useForm();
   const { chain } = useNetwork();
   const { address: userAddress } = useAccount();
@@ -44,6 +55,11 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     const formValues = await validateNewPromiseForm(form);
 
     if (!formValues) {
+      return;
+    }
+
+    if (isArweaveChecked && !isBundlrReady) {
+      toast.error('Please connect to Arweave first');
       return;
     }
 
@@ -124,6 +140,10 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
           form={form}
           submitLoading={submitLoading}
           isFormDisabled={isFormDisabled}
+          isArweaveChecked={isArweaveChecked}
+          setIsArweaveChecked={setIsArweaveChecked}
+          bundlr={bundlr}
+          setBundlr={setBundlr}
         />
       </div>
     </Drawer>
@@ -137,6 +157,10 @@ const NewPromiseForm = ({
   form,
   submitLoading,
   isFormDisabled,
+  isArweaveChecked,
+  setIsArweaveChecked,
+  bundlr,
+  setBundlr,
 }) => {
   return (
     <Form
@@ -334,7 +358,45 @@ const NewPromiseForm = ({
         )}
       </Form.List>
 
-      <PDFUploader />
+      <Form.Item
+        label='Where do you want to upload the files?'
+        name='storage'
+        className='form-upload-choice'
+      >
+        <div>
+          <span>
+            IPFS{' '}
+            <Tooltip title='IPFS is a decentralized storage network. Your files will be sent to the network and become available to be downloaded, and pinned by other users. We will be the first ones to pin your files through Web3.Storage & Filecoin.'>
+              <i className='fas fa-question-circle' />
+            </Tooltip>
+          </span>
+          <Switch
+            checked
+            disabled
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
+          />
+        </div>
+        <div>
+          <span>
+            Arweave{' '}
+            <Tooltip title='Your files will be sent to the permaweb, on the Arweave blockchain. This is an additional option, but highly recommanded, as it is a sign of trust and permanence. You will first need to connect your wallet to the network (operated by Bundlr, a L2 on Arweave), and pay for the transaction fees.'>
+              <i className='fas fa-question-circle' />
+            </Tooltip>
+          </span>
+          <Switch
+            defaultChecked
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
+            onChange={(checked) => setIsArweaveChecked(checked)}
+          />
+        </div>
+      </Form.Item>
+      {isArweaveChecked ? (
+        <ConnectBundlr bundlr={bundlr} setBundlr={setBundlr} />
+      ) : null}
+
+      <FileUploader />
     </Form>
   );
 };
