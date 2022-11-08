@@ -163,3 +163,21 @@
   right: 0;
   z-index: 10;
 }
+
+.form-upload-choice {
+  margin-bottom: 1rem !important;
+}
+
+.form-upload-choice + div {
+  margin-bottom: 1.5rem;
+}
+
+.form-upload-choice .ant-form-item-control-input-content {
+  display: flex;
+  gap: 3rem;
+}
+
+.form-upload-choice .ant-form-item-control-input-content > div {
+  display: flex;
+  gap: 1rem;
+}
