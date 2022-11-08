@@ -79,6 +79,8 @@ const createRequest = (input, callback) => {
             const result =
               // Make sure there is an address
               isValidHex(address) &&
+              // Make sure there are tweets
+              !!tweets &&
               // If in the array tweets there is a tweet that includes the signature
               tweets.some((tweet) =>
                 tweet.text.toLowerCase().includes(signature.toLowerCase()),

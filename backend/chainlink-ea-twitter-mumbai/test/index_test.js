@@ -69,7 +69,6 @@ describe('createRequest', () => {
           assert.isNotEmpty(data.data);
           assert.equal(typeof data.data.result, 'boolean');
           assert.isNotEmpty(data.data.username);
-          assert.isNotEmpty(data.data.userId);
           assert.isNotEmpty(data.data.name);
           done();
         });
@@ -91,8 +90,30 @@ describe('createRequest', () => {
           assert.equal(data.jobRunID, jobID);
           assert.equal(typeof data.data.result, 'boolean');
           assert.equal(data.data.username, 'TwitterDev');
-          assert.equal(data.data.userId, '2244994945');
           assert.equal(data.data.name, 'Twitter Dev');
+          done();
+        },
+      );
+    });
+
+    // A user with no tweets should return false
+    // This is a bit of a hack, but it works
+    it('user with no tweets', (done) => {
+      createRequest(
+        {
+          id: jobID,
+          data: {
+            username: 'kfkfkf',
+            address: INCORRECT_ADDRESS,
+          },
+        },
+        (statusCode, data) => {
+          console.log(data);
+          assert.equal(statusCode, 200);
+          assert.equal(data.jobRunID, jobID);
+          assert.equal(data.data.result, false);
+          assert.isNotEmpty(data.data.username);
+          assert.isNotEmpty(data.data.name);
           done();
         },
       );
