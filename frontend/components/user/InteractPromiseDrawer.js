@@ -11,6 +11,7 @@ import RowPromiseAddParticipant from './RowPromiseAddParticipant';
 import RowPromiseApproval from './RowPromiseApproval';
 import RowPromiseVerification from './RowPromiseVerification';
 import RowPromiseLock from './RowPromiseLock';
+import { Divider } from 'antd';
 
 export default function InteractPromiseDrawer({ contractAttributes }) {
   const [isPromiseLocked, setIsPromiseLocked] = useState(null);
@@ -110,7 +111,7 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
           gatherPartiesData={gatherPartiesData}
         />
 
-        <div className='drawer-item-separator'></div>
+        <Divider style={{ gridColumn: 'span 2', margin: '0.2rem 0' }} />
 
         <RowPromiseApproval
           key='approval'
@@ -131,7 +132,7 @@ export default function InteractPromiseDrawer({ contractAttributes }) {
           />
         )}
 
-        <div className='drawer-item-separator'></div>
+        <Divider style={{ gridColumn: 'span 2', margin: '0.2rem 0' }} />
 
         <RowPromiseLock
           key='lock'

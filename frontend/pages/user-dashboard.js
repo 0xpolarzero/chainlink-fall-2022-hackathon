@@ -148,9 +148,11 @@ export default function userPromises({ setActivePage }) {
           </Button>
         </div>
         <div className='user-dashboard owner'>
-          <Divider plain orientation='left'>
-            <div className='header-sub'>You created</div>
-          </Divider>
+          <div className='header'>
+            <Divider plain orientation='left'>
+              <div className='header-sub'>You created</div>
+            </Divider>
+          </div>
           <div className='promises-list'>
             {!promises ? (
               <PromisesCollapseSkeleton arraySize={3} />
@@ -181,9 +183,11 @@ export default function userPromises({ setActivePage }) {
         </div>
 
         <div className='user-dashboard involved'>
-          <Divider plain orientation='left'>
-            <div className='header-sub'>You're involved with</div>
-          </Divider>
+          <div className='header'>
+            <Divider plain orientation='left'>
+              <div className='header-sub'>You're involved with</div>
+            </Divider>
+          </div>
           <div className='promises-list'>
             {!promises ? (
               <PromisesCollapseSkeleton arraySize={3} />
