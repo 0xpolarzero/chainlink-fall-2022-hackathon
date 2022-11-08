@@ -47,7 +47,7 @@ export default function RowPromiseVerification({
       const txReceipt = await toast.promise(tx.wait(1), {
         pending: 'Requesting verification to the Chainlink Node...',
         success:
-          'Request sent! Please wait for the Operator to fulfill the request.',
+          'Request sent! Please wait for the Chainlink Node to fulfill the request.',
         error: 'Error sending request',
       });
       waitForChainlinkFulfillment(
