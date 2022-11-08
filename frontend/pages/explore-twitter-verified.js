@@ -5,37 +5,21 @@ import PromisesDataContext from '../systems/PromisesDataContext';
 import { useContext, useEffect, useState } from 'react';
 import { Button, Tooltip } from 'antd';
 
-const twitterVerifiedUsers = [
-  {
-    address: '0x0000000000000000000000000000000000000000',
-    twitterHandles: ['elonmusk'],
-  },
-  {
-    address: '0x0000000000000000000000000000000000000000',
-    twitterHandles: ['jack', 'j4ck'],
-  },
-  {
-    address: '0x0000000000000000000000000000000000000000',
-    twitterHandles: ['eric'],
-  },
-];
-let twitterVerifiedUsersError;
-
 export default function exploreTwitterVerified({ setActivePage }) {
   const [sortedTwitterVerifiedUsers, setSortedTwitterVerifiedUsers] = useState(
     [],
   );
 
-  //   const {
-  //     fetchTwitterVerifiedUsers,
-  //     twitterVerifiedUsers,
-  //     twitterVerifiedUsersError,
-  //   } = useContext(PromisesDataContext);
+  const {
+    fetchTwitterVerifiedUsers,
+    twitterVerifiedUsers,
+    twitterVerifiedUsersError,
+  } = useContext(PromisesDataContext);
 
   useEffect(() => {
     setActivePage(1);
-    // fetchTwitterVerifiedUsers();
-  });
+    fetchTwitterVerifiedUsers();
+  }, []);
 
   useEffect(() => {
     if (!!twitterVerifiedUsers && !twitterVerifiedUsersError) {
