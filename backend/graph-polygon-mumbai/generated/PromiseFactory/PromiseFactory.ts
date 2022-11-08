@@ -82,28 +82,6 @@ export class PromiseContractCreated__Params {
   }
 }
 
-export class TwitterAddVerifiedFailed extends ethereum.Event {
-  get params(): TwitterAddVerifiedFailed__Params {
-    return new TwitterAddVerifiedFailed__Params(this);
-  }
-}
-
-export class TwitterAddVerifiedFailed__Params {
-  _event: TwitterAddVerifiedFailed;
-
-  constructor(event: TwitterAddVerifiedFailed) {
-    this._event = event;
-  }
-
-  get _owner(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get _twitterHandle(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
 export class TwitterAddVerifiedSuccessful extends ethereum.Event {
   get params(): TwitterAddVerifiedSuccessful__Params {
     return new TwitterAddVerifiedSuccessful__Params(this);

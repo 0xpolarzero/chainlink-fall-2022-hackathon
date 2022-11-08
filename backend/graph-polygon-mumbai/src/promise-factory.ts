@@ -81,17 +81,26 @@ export function handleTwitterAddVerifiedSuccessful(
       getIdFromEventParams(event.params._owner),
     );
     // If the user has never been verified before, create a new array
-    twitterHandlesArray = new Array<string>();
+    // and add the new handle to it
+    twitterHandlesArray = new Array<string>().concat([
+      event.params._twitterHandle,
+    ]);
   } else {
     // If the user has been verified before, get the array from the entity
     twitterHandlesArray = twitterVerifiedUser.twitterHandles;
+    // Add the new handle to the array
+    twitterHandlesArray = twitterHandlesArray.concat([
+      event.params._twitterHandle,
+    ]);
+    // Remove duplicates from the array (if the same handle has been verified)
+    twitterHandlesArray = twitterHandlesArray.filter(
+      (value, index, self) => self.indexOf(value) === index,
+    );
   }
 
   twitterVerifiedUser.address = event.params._owner;
   // Set the twitterHandles without needing to check its content
-  twitterVerifiedUser.twitterHandles = twitterHandlesArray.concat([
-    event.params._twitterHandle,
-  ]);
+  twitterVerifiedUser.twitterHandles = twitterHandlesArray;
   twitterVerifiedUser.verifiedAt = event.block.timestamp;
 
   twitterVerifiedUser.save();

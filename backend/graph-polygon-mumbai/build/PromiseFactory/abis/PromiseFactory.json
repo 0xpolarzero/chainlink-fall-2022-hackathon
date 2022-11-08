@@ -42,11 +42,6 @@
   },
   {
     "inputs": [],
-    "name": "PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "PromiseFactory__createPromiseContract__DUPLICATE_FIELD",
     "type": "error"
   },
@@ -128,25 +123,6 @@
       }
     ],
     "name": "PromiseContractCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_owner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "_twitterHandle",
-        "type": "string"
-      }
-    ],
-    "name": "TwitterAddVerifiedFailed",
     "type": "event"
   },
   {
