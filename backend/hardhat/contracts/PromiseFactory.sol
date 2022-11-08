@@ -2,6 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "./PromiseContract.sol";
+import "hardhat/console.sol";
 
 /**
  * @author polarzero
@@ -16,7 +17,6 @@ contract PromiseFactory {
     error PromiseFactory__createPromiseContract__DUPLICATE_FIELD();
     error PromiseFactory__addParticipant__NOT_PARTICIPANT();
     error PromiseFactory__addParticipant__ALREADY_PARTICIPANT();
-    error PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
     error PromiseFactory__NOT_OWNER();
     error PromiseFactory__NOT_VERIFIER();
 
@@ -193,7 +193,11 @@ contract PromiseFactory {
                     keccak256(abi.encodePacked(verifiedAccounts[i])) ==
                     keccak256(abi.encodePacked(_twitterHandle))
                 ) {
-                    revert PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED();
+                    emit TwitterAddVerifiedSuccessful(
+                        _userAddress,
+                        _twitterHandle
+                    );
+                    return;
                 }
             }
             // But if it is not included, add it
