@@ -1,18 +1,14 @@
 import VerifyTwitterInstructions from './VerifyTwitterInstructions';
 import networkMapping from '../../constants/networkMapping';
 import verifyTwitterAbi from '../../constants/VerifyTwitter.json';
+import promiseFactoryAbi from '../../constants/PromiseFactory.json';
 import PromisesDataContext from '../../systems/PromisesDataContext';
 import { waitForChainlinkFullfillment } from '../../systems/verifyTwitter';
 import { Button, Form, Input, Drawer, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
-import {
-  useAccount,
-  useContractWrite,
-  useNetwork,
-  usePrepareContractWrite,
-  useProvider,
-} from 'wagmi';
+import { ethers } from 'ethers';
+import { useAccount, useContractWrite, useNetwork, useProvider } from 'wagmi';
 import { useContext, useEffect, useState } from 'react';
 
 export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
@@ -21,25 +17,24 @@ export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
   const [isWaitingforVerification, setIsWaitingForVerification] =
     useState(false);
   const [args, setArgs] = useState([]);
+  const [verifiedHandles, setVerifiedHandles] = useState([]);
   // Hooks
   const { address: userAddress } = useAccount();
   const { chain } = useNetwork();
   const provider = useProvider();
   const [form] = Form.useForm();
   // Network
-  const contractAddress =
+  const verifyTwitterAddress =
     networkMapping[(chain && chain.id) || '80001'].VerifyTwitter[0];
+  const promiseFactoryAddress =
+    networkMapping[chain ? chain.id : '80001'].PromiseFactory[0];
+
   const { reFetchTwitterVerifiedUsers, twitterVerifiedUsersError } =
     useContext(PromisesDataContext);
 
-  // First check if the username is not already verified for this address
-  // Then check if it's a valid username
-
-  const { config: verifyConfig } = usePrepareContractWrite({});
-
   const { write: verifyTwitter } = useContractWrite({
     mode: 'recklesslyUnprepared',
-    address: contractAddress,
+    address: verifyTwitterAddress,
     abi: verifyTwitterAbi,
     functionName: 'requestVerification',
     args: args,
@@ -47,17 +42,26 @@ export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
       const txReceipt = await toast.promise(tx.wait(1), {
         pending: 'Requesting verification to the Chainlink Node...',
         success:
-          'Request sent! Please wait for the Operator to fulfill the request.',
+          'Request sent! Please wait for the Chainlink Node to fulfill the request.',
         error: 'Error sending request',
       });
       waitForChainlinkFullfillment(
-        contractAddress,
+        verifyTwitterAddress,
         verifyTwitterAbi,
         provider,
         args[0],
         setIsWaitingForVerification,
-        reFetchTwitterVerifiedUsers,
-      );
+      ).then(() => {
+        toast
+          .promise(tx.wait(3), {
+            pending: 'Please allow TheGraph a few seconds to update...',
+            success: `Verified users updated!`,
+            error: 'Error updating verified users. Please refresh the page.',
+          })
+          .then(() => {
+            reFetchTwitterVerifiedUsers();
+          });
+      });
       handleCancel();
     },
     onError: (err) => {
@@ -91,11 +95,18 @@ export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
     setArgs([formValues.twitterHandle]);
   };
 
-  useEffect(() => {
-    if (args.length > 0) {
-      verifyTwitter();
-    }
-  }, [args]);
+  const getVerifiedHandles = async () => {
+    const promiseFactoryContract = new ethers.Contract(
+      promiseFactoryAddress,
+      promiseFactoryAbi,
+      provider,
+    );
+
+    const handles = await promiseFactoryContract.getTwitterVerifiedHandle(
+      userAddress,
+    );
+    setVerifiedHandles(handles);
+  };
 
   const handleCancel = () => {
     setIsDrawerOpen(false);
@@ -104,6 +115,16 @@ export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
     setArgs([]);
     form.resetFields();
   };
+
+  useEffect(() => {
+    getVerifiedHandles();
+  }, []);
+
+  useEffect(() => {
+    if (args.length > 0) {
+      verifyTwitter();
+    }
+  }, [args]);
 
   return (
     <div>
@@ -181,6 +202,26 @@ export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
               requestVerification={requestVerification}
               isWaitingforVerification={isWaitingforVerification}
             />
+          </div>
+          <div className='verified-handles'>
+            <h3>Already verified handles</h3>
+            {verifiedHandles.length > 0 ? (
+              <ul>
+                {verifiedHandles.map((handle, index) => (
+                  <li key={index}>
+                    <a
+                      href={`https://twitter.com/${handle}`}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      @{handle}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No verified handles found.</p>
+            )}
           </div>
         </Form>
       </Drawer>
