@@ -6,21 +6,25 @@ import { WebBundlr } from '@bundlr-network/client';
 import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
 
-const zip = new JSZip();
+const zipInstance = new JSZip();
 
 const uploadToArweave = async (bundlr, userBalance, files, promiseName) => {
   try {
     const bundlrInstance = bundlr.instance;
     const formattedPromiseName = promiseName.toLowerCase().replace(/\s/g, '-');
 
-    // GATHER INFORMATIONS ------------------------------------------------------
-    // Get the total size of the files
-    let totalSize = 0;
-    files.forEach((file) => {
-      totalSize += file.size;
-    });
-    // Find the required price for the upload
-    const requiredPrice = await bundlrInstance.getPrice(totalSize);
+    // Create a zip with the files
+    const filesObj = files.map((file) => file.originFileObj);
+    const preparedFiles = await prepareReadStream(filesObj);
+    const zipFile = await createZip(preparedFiles, formattedPromiseName);
+    const preparedZip = await prepareReadStream(
+      [zipFile],
+      formattedPromiseName,
+    );
+
+    // Get the price of the upload
+    const requiredPrice = await bundlrInstance.getPrice(zipFile.size);
+    const bundlrStartingBalance = await bundlrInstance.getLoadedBalance();
     const requiredFund = requiredPrice
       .minus(bundlrStartingBalance)
       .multipliedBy(1.1)
@@ -29,6 +33,7 @@ const uploadToArweave = async (bundlr, userBalance, files, promiseName) => {
     // Fund the instance if needed
     const fundTx = await fundBundlr(
       bundlrInstance,
+      bundlrStartingBalance,
       userBalance,
       requiredPrice,
       requiredFund,
@@ -38,23 +43,21 @@ const uploadToArweave = async (bundlr, userBalance, files, promiseName) => {
       return false;
     }
 
-    // SEND FILES TO BUNDLR ---------------------------------------------------
-    const preparedFiles = await prepareReadStream(files);
+    // Upload the zip to Bundlr
     const uploadedFiles = await uploadFilesToBundlr(
       bundlrInstance,
-      preparedFiles,
+      preparedZip,
     );
 
-    // Check that each file was uploaded successfully (if not it's false)
+    // Check that it was uploaded successfully (if not it will be false)
     if (uploadedFiles.includes(false)) {
-      toast.error('Failed to upload one or more files');
+      toast.error('Failed to upload files to Bundlr');
       return false;
     }
 
-    await returnBalanceToUser(bundlrInstance);
+    // await returnBalanceToUser(bundlrInstance);
 
-    console.log(uploadedFiles);
-    return uploadedFiles;
+    return uploadedFiles[0];
   } catch (err) {
     console.log(err);
     return false;
@@ -88,12 +91,12 @@ const initializeBundlr = async (provider, chainId) => {
 
 const fundBundlr = async (
   bundlrInstance,
+  bundlrStartingBalance,
   userBalance,
   requiredPrice,
   requiredFund,
 ) => {
   // Get the balance of the instance and the user
-  const bundlrStartingBalance = await bundlrInstance.getLoadedBalance();
   console.log(
     'Bundlr balance: ',
     ethers.utils.formatUnits(bundlrStartingBalance.toString(), 'ether'),
@@ -131,20 +134,29 @@ const fundBundlr = async (
           console.log(err);
           return false;
         });
+
+      return fundTx;
     }
   }
+
+  return true;
 };
 
-const prepareReadStream = async (files) => {
+const prepareReadStream = async (files, promiseName) => {
   // Prepare a read stream for the files
   let preparedFiles = [];
   for (let i = 0; i < files.length; i++) {
     await new Promise((resolve, reject) => {
       console.log('Preparing file: ', files[i].name);
-      const fileStream = fileReaderStream(files[i].originFileObj);
+      const fileStream = fileReaderStream(files[i]);
+      console.log(files[i]);
       preparedFiles.push({
         stream: fileStream,
-        name: files[i].name,
+        name: files[i].name
+          ? files[i].name
+          : files[i].type === 'application/zip'
+          ? `${promiseName}.zip`
+          : `${promiseName}.txt`,
         type: files[i].type,
         size: files[i].size,
       });
@@ -159,6 +171,28 @@ const prepareReadStream = async (files) => {
   }
 
   return preparedFiles;
+};
+
+const createZip = async (files, promiseName) => {
+  // Create a zip with the files
+  files.forEach((file) => {
+    zipInstance.file(file.name, file.stream);
+  });
+
+  const zipFile = await zipInstance
+    .generateAsync({
+      type: 'blob',
+      compression: 'DEFLATE',
+      compressionOptions: {
+        level: 9,
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+      return false;
+    });
+
+  return zipFile;
 };
 
 const uploadFilesToBundlr = async (bundlrInstance, preparedFiles) => {
@@ -189,11 +223,10 @@ const uploadFilesToBundlr = async (bundlrInstance, preparedFiles) => {
         console.log(err);
         return false;
       });
-    console.log(uploadTx);
 
     // Get the url
-    const fileUrl = `https://arweave.net/${uploadTx.data.id}`;
-    uploadedFiles.push(fileUrl);
+    const fileId = uploadTx.data.id;
+    uploadedFiles.push(fileId);
   }
 
   return uploadedFiles;

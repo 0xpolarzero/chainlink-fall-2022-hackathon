@@ -18,7 +18,7 @@ export default function FileUploader() {
 
     beforeUpload: async (file) => {
       // Don't allow directories
-      if (file.type === '') {
+      if (file.size === '' || file.size === 0) {
         toast.error('Please upload files one at a time');
         return Upload.LIST_IGNORE;
       }

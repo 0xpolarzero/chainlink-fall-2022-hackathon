@@ -1,23 +1,40 @@
 import FileUploader from './FileUploader';
+import ConnectBundlr from './ConnectBundlr';
 import { validateNewPromiseForm } from '../../systems/validateNewPromiseForm';
 import { uploadToIPFS } from '../../systems/uploadToIPFS';
+import { uploadToArweave } from '../../systems/uploadToArweave';
+import { encryptAES256 } from '../../systems/encryptAES256';
 import networkMapping from '../../constants/networkMapping';
 import promiseFactoryAbi from '../../constants/PromiseFactory.json';
-import { Input, Tooltip, Form, Drawer, Space, Button } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { useAccount, useNetwork, useContractWrite } from 'wagmi';
+import { Input, Tooltip, Form, Drawer, Space, Button, Switch } from 'antd';
+import {
+  CheckOutlined,
+  CloseOutlined,
+  InfoCircleOutlined,
+} from '@ant-design/icons';
+import { useAccount, useBalance, useNetwork, useContractWrite } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
+  // Form and submit
   const [submitLoading, setSubmitLoading] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(false);
-  const [ipfsUploadToast, setIpfsUploadToast] = useState(null);
-  const [ipfsUploadProgress, setIpfsUploadProgress] = useState(0);
   const [createPromiseArgs, setCreatePromiseArgs] = useState([]);
   const [form] = Form.useForm();
-  const { chain } = useNetwork();
+  // IPFS
+  const [ipfsUploadToast, setIpfsUploadToast] = useState(null);
+  const [ipfsUploadProgress, setIpfsUploadProgress] = useState(0);
+  // Bundlr
+  const [bundlr, setBundlr] = useState({
+    instance: null,
+    isReady: false,
+  });
+  const [isArweaveChecked, setIsArweaveChecked] = useState(true);
+
   const { address: userAddress } = useAccount();
+  const { data: userBalance } = useBalance({ addressOrName: userAddress });
+  const { chain } = useNetwork();
   const contractAddress = networkMapping[chain.id || '80001'].PromiseFactory[0];
 
   const { write: createPromise } = useContractWrite({
@@ -49,6 +66,11 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       return;
     }
 
+    if (isArweaveChecked && !bundlr.instance) {
+      toast.error('Please connect to Bundlr');
+      return;
+    }
+
     // Everything is valid so we can start creating the promise
     setSubmitLoading(true);
     // Disable the form inputs while the promise is being created
@@ -69,11 +91,38 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       return;
     }
 
+    // Upload to Arweave
+    let arweaveId = null;
+    if (isArweaveChecked) {
+      arweaveId = await uploadToArweave(
+        bundlr,
+        userBalance,
+        formValues.files,
+        formValues.promiseName,
+      );
+    }
+
+    // Set a unique identifier attesting that the promise was created using the website
+    // So we are sure the files have been sent to both IPFS and Arweave
+    // This will allow the promise to be displayed as more 'trustworthy' on the UI
+    // It is not a very decentralized solution, but it is a good start for making sure the data
+    // will indeed be persisted on IPFS and Arweave
+    // The key is generated using the following parameters,
+    // a 256 bit AES encryption key, and a 128 bit IV
+    const encryptedBytes32 = encryptAES256(
+      formValues.promiseName,
+      userAddress,
+      ipfsCid,
+      arweaveId,
+    );
+
     // Then create the promise
     // This will trigger the useEffect hook (to make sure the args are filled)
     setCreatePromiseArgs([
       formValues.promiseName,
       ipfsCid,
+      // arweaveId,
+      // encryptedBytes32,
       formValues.partyNameArray,
       formValues.partyTwitterHandleArray,
       formValues.partyAddressArray,
@@ -110,6 +159,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
         render: 'Files uploaded to IPFS',
         type: 'success',
         isLoading: false,
+        autoClose: 5000,
       });
     } else if (ipfsUploadProgress === 'error') {
       // If the upload failed, update with an error toast
@@ -117,6 +167,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
         render: 'Error uploading files to IPFS',
         type: 'error',
         isLoading: false,
+        autoClose: 5000,
       });
     }
   }, [ipfsUploadProgress]);
@@ -151,6 +202,10 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
           form={form}
           submitLoading={submitLoading}
           isFormDisabled={isFormDisabled}
+          isArweaveChecked={isArweaveChecked}
+          setIsArweaveChecked={setIsArweaveChecked}
+          bundlr={bundlr}
+          setBundlr={setBundlr}
         />
       </div>
     </Drawer>
@@ -164,6 +219,10 @@ const NewPromiseForm = ({
   form,
   submitLoading,
   isFormDisabled,
+  isArweaveChecked,
+  setIsArweaveChecked,
+  bundlr,
+  setBundlr,
 }) => {
   return (
     <Form
@@ -361,7 +420,7 @@ const NewPromiseForm = ({
         )}
       </Form.List>
 
-      {/* <Form.Item
+      <Form.Item
         label='Where do you want to upload the files?'
         name='storage'
         className='form-upload-choice'
@@ -383,7 +442,22 @@ const NewPromiseForm = ({
         <div>
           <span>
             Arweave{' '}
-            <Tooltip title='Your files will be sent to the permaweb, on the Arweave blockchain. This is an additional option, but highly recommanded, as it is a sign of trust and permanence. You will first need to connect your wallet to the network (operated by Bundlr, a L2 on Arweave), and pay for the transaction fees.'>
+            <Tooltip
+              title={
+                <div>
+                  Your files will be sent to the permaweb, on the Arweave
+                  blockchain. This is an additional option, but highly
+                  recommanded, as it is a sign of trust and permanence. You will
+                  first need to connect your wallet to the network (operated by
+                  Bundlr, a L2 on Arweave), and pay for the transaction fees.
+                  <br />
+                  <b>
+                    If successfully backed up, a verified badge will be
+                    displayed on your promise.
+                  </b>
+                </div>
+              }
+            >
               <i className='fas fa-question-circle' />
             </Tooltip>
           </span>
@@ -397,7 +471,7 @@ const NewPromiseForm = ({
       </Form.Item>
       {isArweaveChecked ? (
         <ConnectBundlr bundlr={bundlr} setBundlr={setBundlr} />
-      ) : null} */}
+      ) : null}
 
       <FileUploader />
     </Form>
