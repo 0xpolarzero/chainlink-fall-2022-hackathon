@@ -1,24 +1,22 @@
 import networkMapping from '../constants/networkMapping';
+import fileReaderStream from 'filereader-stream';
+import JSZip from 'jszip';
+import { Modal } from 'antd';
 import { WebBundlr } from '@bundlr-network/client';
 import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
 
-const UPLOAD_SIZE = 10000000;
-const SAFE_ADDITIONAL_FUND = '10000000000000000'; // 0.01 MATIC
-
-const uploadToArweave = async (files) => {
-  // Initialize Bundlr
-  // Get the balance of the instance
-  // Get the price for the size of the files
-  // If the balance is less than the price, ask the user to fund the instance
-};
+const zip = new JSZip();
 
 const initializeBundlr = async (provider, chainId) => {
-  const bundlr = new WebBundlr(
-    'http://node1.bundlr.network',
-    'matic',
-    provider,
-  );
+  const rpcUrl =
+    chainId === 80001
+      ? process.env.NEXT_PUBLIC_MUMBAI_RPC_URL
+      : process.env.NEXT_PUBLIC_POLYGON_RPC_URL;
+  const bundlrUrl = networkMapping[chainId].Bundlr[0];
+  const bundlr = new WebBundlr(bundlrUrl, 'matic', provider, {
+    providerUrl: rpcUrl,
+  });
 
   await bundlr.ready().catch((err) => {
     console.log(err);
@@ -35,41 +33,192 @@ const initializeBundlr = async (provider, chainId) => {
   return { instance: bundlr, isReady };
 };
 
-const fundBundlr = async (provider, chainId) => {
-  const rpcUrl =
-    chainId === 80001
-      ? process.env.NEXT_PUBLIC_MUMBAI_RPC_URL
-      : process.env.NEXT_PUBLIC_POLYGON_RPC_URL;
+const uploadToArweave = async (bundlr, userBalance, files, promiseName) => {
+  console.log(zip);
+  try {
+    const bundlrInstance = bundlr.instance;
+    const formattedPromiseName = promiseName.toLowerCase().replace(/\s/g, '-');
 
-  // Initialize a signer with the private key
-  const signer = new ethers.Wallet(
-    process.env.NEXT_PUBLIC_PRIVATE_KEY,
-    provider,
-  );
-  const bundlrUrl = networkMapping[chainId].Bundlr[0];
-  const bundlr = new WebBundlr(bundlrUrl, 'matic', signer.provider, {
-    providerUrl: rpcUrl,
-  });
-  await bundlr.ready();
+    // GATHER INFORMATIONS ------------------------------------------------------
+    // Get the balance of the instance and the user
+    const bundlrStartingBalance = await bundlrInstance.getLoadedBalance();
+    console.log(
+      'Bundlr balance: ',
+      ethers.utils.formatUnits(bundlrStartingBalance.toString(), 'ether'),
+    );
+    console.log(
+      'User balance: ',
+      ethers.utils.formatUnits(userBalance.value, 'ether'),
+    );
 
-  // Get the balance of the instance
-  const balance = await bundlr.getLoadedBalance();
-  const convertedBalance = bundlr.utils.unitConverter(balance).toString();
-  console.log('Current balance: ', convertedBalance);
+    // Get the total size of the files
+    let totalSize = 0;
+    files.forEach((file) => {
+      totalSize += file.size;
+    });
+    // Find the required price for the upload
+    const requiredPrice = await bundlrInstance.getPrice(totalSize);
+    const formattedRequiredPrice = bundlrInstance.utils
+      .unitConverter(requiredPrice)
+      .toString();
+    console.log('Required price: ', formattedRequiredPrice);
 
-  // Get the price for x amount of data
-  const requiredPrice = await bundlr.getPrice(UPLOAD_SIZE);
-  // Add some extra funds to make sure the upload goes through
-  const convertedPrice =
-    bundlr.utils.unitConverter('matic', requiredPrice).toString() +
-    SAFE_ADDITIONAL_FUND;
-  console.log('Required price: ', convertedPrice);
+    // FUND THE INSTANCE --------------------------------------------------------
+    if (bundlrStartingBalance.isLessThan(requiredPrice)) {
+      if (userBalance.value.formatted < formattedRequiredPrice) {
+        toast.error(
+          `Insufficient funds to upload to Arweave. You need at least ${formattedRequiredPrice} MATIC to upload.`,
+        );
+        return false;
+      } else {
+        // Fund the bundlr instance - add a safe amount to the required price
+        const requiredFund = requiredPrice
+          .minus(bundlrStartingBalance)
+          .multipliedBy(1.1)
+          .integerValue();
+        const formattedRequiredFund = bundlrInstance.utils
+          .unitConverter(requiredFund)
+          .toFixed(4)
+          .toString();
 
-  // Fund it with 0.01 MATIC
-  await bundlr.fund('100000000000000000');
+        const fundTx = await toast
+          .promise(bundlrInstance.fund(requiredFund), {
+            pending: `Funding your Bundlr wallet with ${formattedRequiredFund} MATIC...`,
+            success: 'Funded Bundlr successfully!',
+            error: 'Failed to fund Bundlr',
+          })
+          .catch((err) => {
+            console.log(err);
+            return false;
+          });
+      }
+    }
+
+    // SEND FILES TO BUNDLR ---------------------------------------------------
+    // Prepare the files for upload
+    let preparedFiles = [];
+    for (let i = 0; i < files.length; i++) {
+      await new Promise((resolve, reject) => {
+        console.log('Preparing file: ', files[i].name);
+        const fileStream = fileReaderStream(files[i].originFileObj);
+        preparedFiles.push({
+          stream: fileStream,
+          name: files[i].name,
+          type: files[i].type,
+          size: files[i].size,
+        });
+        resolve();
+      }).catch((err) => {
+        toast.error(
+          `Failed to prepare file ${files[i].originFileObj.name} for upload`,
+        );
+        console.log(err);
+        return false;
+      });
+    }
+
+    // Upload each file and get the url
+    let uploadedfiles = [];
+    for (const file of preparedFiles) {
+      let uploadProgress = 0;
+      // Prepare the uploader
+      const uploader = bundlrInstance.uploader.chunkedUploader;
+      uploader.setBatchSize(1);
+      const uploadOptions = {
+        tags: [{ name: 'Content-Type', value: file.type }],
+      };
+
+      // Listen for the upload progress
+      uploader.on('chunkUpload', (chunk) => {
+        uploadProgress = ((chunk.totalUploaded / file.size) * 100).toFixed();
+      });
+
+      // Upload the file
+      const uploadTx = await toast
+        .promise(uploader.uploadData(file.stream, uploadOptions), {
+          pending: `Bundlr: uploading ${file.name}... (${uploadProgress}%)`,
+          success: `${file.name} uploaded successfully!`,
+          error: `Failed to upload ${file.name}`,
+        })
+        .catch((err) => {
+          console.log(err);
+          return false;
+        });
+      console.log(uploadTx);
+
+      // Get the url
+      const fileUrl = `https://arweave.net/${uploadTx.data.id}`;
+      uploadedfiles.push(fileUrl);
+    }
+
+    // RETURN THE BALANCE ---------------------------------------------------------
+    // Return the remaining balance from what the user gave before the upload
+    const bundlrEndingBalance = await bundlrInstance.getLoadedBalance();
+    const formattedBundlrEndingBalance = bundlrInstance.utils
+      .unitConverter(bundlrEndingBalance)
+      .toFixed(4)
+      .toString();
+
+    if (formattedBundlrEndingBalance > 0) {
+      const userWantsToWithdraw = await confirmWithdraw(
+        formattedBundlrEndingBalance,
+      );
+
+      if (userWantsToWithdraw) {
+        const withdrawTx = await toast
+          .promise(bundlrInstance.withdrawBalance(bundlrEndingBalance), {
+            pending: `Withdrawing ${formattedBundlrEndingBalance} MATIC...`,
+            success: 'Withdrawn successfully!',
+            error: 'Failed to withdraw',
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+
+    // Check that each file was uploaded successfully (if not it's false)
+    if (uploadedfiles.includes(false)) {
+      toast.error('Failed to upload one or more files');
+      return false;
+    }
+
+    console.log(uploadedfiles);
+    return uploadedfiles;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 };
 
-export { uploadToArweave, initializeBundlr, fundBundlr };
+const confirmWithdraw = async (balance) => {
+  const isUserConfirmed = await new Promise((resolve, reject) => {
+    Modal.confirm({
+      title: 'Withdraw remaining balance',
+      content: (
+        <>
+          <p>There are {balance} MATIC remaining in your Bundlr wallet.</p>
+          <p className='warning-message' style={{ textAlign: 'left' }}>
+            Do you want to withdraw it to your wallet?
+          </p>
+        </>
+      ),
+      okText: 'Yes',
+      okType: 'primary',
+      cancelText: 'No',
+      onOk() {
+        resolve(true);
+      },
+      onCancel() {
+        return false;
+      },
+    });
+  });
+
+  return isUserConfirmed;
+};
+
+export { uploadToArweave, initializeBundlr };
 
 // 3.3608
 // 1.0455

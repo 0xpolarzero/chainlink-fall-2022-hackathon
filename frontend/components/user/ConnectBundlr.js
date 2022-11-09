@@ -27,7 +27,11 @@ export default function ConnectBundlr({ bundlr, setBundlr }) {
         type='primary'
         onClick={async () => {
           const bundlrInitialized = await initializeBundlr(provider, chainId);
-          setBundlr(bundlrInitialized);
+          setBundlr({
+            instance: bundlrInitialized.instance,
+            isReady: bundlrInitialized.isReady,
+            provider: provider,
+          });
         }}
         disabled={bundlr.isReady}
       >

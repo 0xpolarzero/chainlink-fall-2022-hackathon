@@ -33,7 +33,6 @@ export default function FileUploader() {
         setFileList([...fileList, file]);
         toast.info(`Added ${file.name}`);
       }
-      console.log('fileList', file);
     },
 
     onRemove: (file) => {
@@ -46,40 +45,6 @@ export default function FileUploader() {
   const getTotalSize = (files) => {
     if (files.length === 0) return 0;
     return files.reduce((acc, file) => acc + file.size, 0);
-  };
-
-  const confirmUpload = async (file) => {
-    const isUserConfirmed = await new Promise((resolve, reject) => {
-      Modal.confirm({
-        title: 'Confirm Upload',
-        content: (
-          <>
-            <p>Are you sure you want to upload this file?</p>
-            <p>
-              <b>File Name:</b> {file.name}
-            </p>
-            <p>
-              <b>File Size:</b> {formatSize(file.size)}
-            </p>
-            <p className='warning-message'>
-              <b>Warning:</b> Once you create the promise, this file will be
-              uploaded to IPFS and will be publicly available on the internet.
-            </p>
-          </>
-        ),
-        okText: 'Yes',
-        okType: 'primary',
-        cancelText: 'No',
-        onOk() {
-          resolve(true);
-        },
-        onCancel() {
-          return false;
-        },
-      });
-    });
-
-    return isUserConfirmed;
   };
 
   const getFile = (e) => {

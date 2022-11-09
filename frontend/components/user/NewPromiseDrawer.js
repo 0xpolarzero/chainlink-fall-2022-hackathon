@@ -11,7 +11,7 @@ import {
   CheckOutlined,
   CloseOutlined,
 } from '@ant-design/icons';
-import { useAccount, useNetwork, useContractWrite } from 'wagmi';
+import { useAccount, useBalance, useNetwork, useContractWrite } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -27,6 +27,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [form] = Form.useForm();
   const { chain } = useNetwork();
   const { address: userAddress } = useAccount();
+  const { data: userBalance } = useBalance({ addressOrName: userAddress });
   const contractAddress = networkMapping[chain.id || '80001'].PromiseFactory[0];
 
   const { write: createPromise } = useContractWrite({
@@ -58,10 +59,30 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       return;
     }
 
-    if (isArweaveChecked && !isBundlrReady) {
+    if (isArweaveChecked && !bundlr.isReady) {
       toast.error('Please connect to Arweave first');
       return;
     }
+
+    const bundlrUrl = await uploadToArweave(
+      bundlr,
+      userBalance,
+      formValues.files,
+      formValues.promiseName,
+    );
+    // .catch((err) => {
+    //   console.log('error uploading files to Bundlr', err);
+    //   toast.error('Files could not be uploaded to Bundlr.');
+    //   setSubmitLoading(false);
+    //   setIsFormDisabled(false);
+    //   return;
+    // });
+
+    if (!bundlrUrl) {
+      console.log('DONE');
+      return;
+    }
+    return;
 
     // Everything is valid so we can start creating the promise
     setSubmitLoading(true);
@@ -79,6 +100,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       })
       .catch((err) => {
         console.log('error uploading files to IPFS', err);
+        toast.error('Files could not be uploaded to IPFS.');
         setSubmitLoading(false);
         setIsFormDisabled(false);
         return;
