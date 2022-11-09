@@ -12,6 +12,8 @@ import { toast } from 'react-toastify';
 export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [isFormDisabled, setIsFormDisabled] = useState(false);
+  const [ipfsUploadToast, setIpfsUploadToast] = useState(null);
+  const [ipfsUploadProgress, setIpfsUploadProgress] = useState(0);
   const [createPromiseArgs, setCreatePromiseArgs] = useState([]);
   const [form] = Form.useForm();
   const { chain } = useNetwork();
@@ -53,21 +55,19 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     setIsFormDisabled(true);
 
     // Upload the files to IPFS
-    // We assume 'uploadToIPFS' returns a valid CID
-    // If it did not, it would be visible in the Promise UI
-    const ipfsCid = await toast
-      .promise(uploadToIPFS(formValues.files), {
-        pending: 'Uploading files to IPFS...',
-        success: 'Files uploaded successfully!',
-        error: 'Files could not be uploaded.',
-      })
-      .catch((err) => {
-        console.log('error uploading files to IPFS', err);
-        toast.error('Files could not be uploaded to IPFS.');
-        setSubmitLoading(false);
-        setIsFormDisabled(false);
-        return;
-      });
+    // If it doesn't work, it will return false
+    // Show a toast pending message that we can update on progress
+    setIpfsUploadToast(
+      toast.loading(`Uploading files to IPFS... ${ipfsUploadProgress}%`),
+    );
+    const ipfsCid = await uploadToIPFS(formValues.files, setIpfsUploadProgress);
+
+    // If the upload failed, show an error toast and return
+    if (!ipfsCid) {
+      setSubmitLoading(false);
+      setIsFormDisabled(false);
+      return;
+    }
 
     // Then create the promise
     // This will trigger the useEffect hook (to make sure the args are filled)
@@ -86,6 +86,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     form.resetFields();
     setIsFormDisabled(false);
     setCreatePromiseArgs([]);
+    setIpfsUploadProgress(0);
   };
 
   useEffect(() => {
@@ -94,6 +95,31 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       createPromise();
     }
   }, [createPromiseArgs]);
+
+  useEffect(() => {
+    // Update the toast when the upload progress changes
+    if (ipfsUploadProgress < 100) {
+      toast.update(ipfsUploadToast, {
+        render: `Uploading files to IPFS... ${ipfsUploadProgress}%`,
+        type: 'loading',
+        isLoading: true,
+      });
+      // If the upload is complete, update with a success toast
+    } else if (ipfsUploadProgress === 100) {
+      toast.update(ipfsUploadToast, {
+        render: 'Files uploaded to IPFS',
+        type: 'success',
+        isLoading: false,
+      });
+    } else if (ipfsUploadProgress === 'error') {
+      // If the upload failed, update with an error toast
+      toast.update(ipfsUploadToast, {
+        render: 'Error uploading files to IPFS',
+        type: 'error',
+        isLoading: false,
+      });
+    }
+  }, [ipfsUploadProgress]);
 
   return (
     <Drawer
