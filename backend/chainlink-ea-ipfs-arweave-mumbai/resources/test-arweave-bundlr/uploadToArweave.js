@@ -1,16 +1,15 @@
-import Bundlr from '@bundlr-network/client';
-import dotenv from 'dotenv';
-dotenv.config();
+const Bundlr = require('@bundlr-network/client/');
+const dotenv = require('dotenv').config();
 
-const bundlr = new Bundlr(
-  'http://node1.bundlr.network',
-  'MATIC',
+const bundlr = new Bundlr.default(
+  'https://devnet.bundlr.network',
+  'matic',
   process.env.PRIVATE_KEY,
 );
 
-async function uploadToArweave() {
-  console.log(bundlr.getLoadedBalance());
-}
+const uploadToArweave = async () => {
+  console.log((await bundlr.getLoadedBalance()).toString());
+};
 
 uploadToArweave()
   .then(() => {
