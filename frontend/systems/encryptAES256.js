@@ -1,4 +1,4 @@
-import AES from 'crypto-js/aes';
+import CryptoJS from 'crypto-js';
 
 const encryptAES256 = (userAddress, ipfsCid, arweaveId) => {
   const key = process.env.NEXT_PUBLIC_AES_ENCRYPTION_KEY;
