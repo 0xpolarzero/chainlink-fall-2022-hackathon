@@ -5,7 +5,9 @@ const {
   USER_ADDRESS,
   IPFS_CID,
   ARWEAVE_ID,
-  ENCRYPTED_PROOF,
+  ENCRYPTED_PROOF_VALID,
+  ENCRYPTED_PROOF_VALID_NO_ARWEAVE,
+  ENCRYPTED_PROOF_INVALID,
 } = require('./mocks/mock-data.js');
 
 describe('createRequest', () => {
@@ -26,7 +28,7 @@ describe('createRequest', () => {
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
             arweaveId: ARWEAVE_ID,
-            encryptedProof: ENCRYPTED_PROOF,
+            encryptedProof: ENCRYPTED_PROOF_VALID,
           },
         },
       },
@@ -39,7 +41,7 @@ describe('createRequest', () => {
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
             arweaveId: ARWEAVE_ID,
-            encryptedProof: ENCRYPTED_PROOF,
+            encryptedProof: ENCRYPTED_PROOF_VALID,
           },
         },
       },
@@ -52,7 +54,7 @@ describe('createRequest', () => {
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
             arweaveId: ARWEAVE_ID,
-            encryptedProof: ENCRYPTED_PROOF,
+            encryptedProof: ENCRYPTED_PROOF_VALID,
           },
         },
       },
@@ -63,10 +65,54 @@ describe('createRequest', () => {
         createRequest(req.testData, (statusCode, data) => {
           assert.equal(statusCode, 200);
           assert.equal(data.jobRunID, req.name === 'empty id' ? '' : jobID);
-          assert.equal(data.data.result, true);
+          assert.equal(data.data.result, 3);
           assert.equal(data.data.promiseAddress, PROMISE_ADDRESS);
           done();
         });
+      });
+    });
+
+    // If the user did not upload the file to Arweave, the arweaveId will be an empty string
+    it('returns a result of 2 if arweaveId is empty', (done) => {
+      const req = {
+        id: jobID,
+        data: {
+          promiseAddress: PROMISE_ADDRESS,
+          userAddress: USER_ADDRESS,
+          ipfsCid: IPFS_CID,
+          arweaveId: '',
+          encryptedProof: ENCRYPTED_PROOF_VALID_NO_ARWEAVE,
+        },
+      };
+
+      createRequest(req, (statusCode, data) => {
+        assert.equal(statusCode, 200);
+        assert.equal(data.jobRunID, jobID);
+        assert.equal(data.data.result, 2);
+        assert.equal(data.data.promiseAddress, PROMISE_ADDRESS);
+        done();
+      });
+    });
+
+    // If the user did not use the website to upload the files, the encryptedProof won't be valid
+    it('returns a result of 1 if the proof is invalid', (done) => {
+      const req = {
+        id: jobID,
+        data: {
+          promiseAddress: PROMISE_ADDRESS,
+          userAddress: USER_ADDRESS,
+          ipfsCid: IPFS_CID,
+          arweaveId: ARWEAVE_ID,
+          encryptedProof: ENCRYPTED_PROOF_INVALID,
+        },
+      };
+
+      createRequest(req, (statusCode, data) => {
+        assert.equal(statusCode, 200);
+        assert.equal(data.jobRunID, jobID);
+        assert.equal(data.data.result, 1);
+        assert.equal(data.data.promiseAddress, PROMISE_ADDRESS);
+        done();
       });
     });
   });
@@ -90,7 +136,7 @@ describe('createRequest', () => {
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
             arweaveId: ARWEAVE_ID,
-            encryptedProof: ENCRYPTED_PROOF,
+            encryptedProof: ENCRYPTED_PROOF_VALID,
           },
         },
         expectedError: 'Required parameter not supplied: promiseAddress',
@@ -103,7 +149,7 @@ describe('createRequest', () => {
             promiseAddress: PROMISE_ADDRESS,
             ipfsCid: IPFS_CID,
             arweaveId: ARWEAVE_ID,
-            encryptedProof: ENCRYPTED_PROOF,
+            encryptedProof: ENCRYPTED_PROOF_VALID,
           },
         },
         expectedError: 'Required parameter not supplied: userAddress',
@@ -116,7 +162,7 @@ describe('createRequest', () => {
             promiseAddress: PROMISE_ADDRESS,
             userAddress: USER_ADDRESS,
             arweaveId: ARWEAVE_ID,
-            encryptedProof: ENCRYPTED_PROOF,
+            encryptedProof: ENCRYPTED_PROOF_VALID,
           },
         },
         expectedError: 'Required parameter not supplied: ipfsCid',
@@ -129,7 +175,7 @@ describe('createRequest', () => {
             promiseAddress: PROMISE_ADDRESS,
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
-            encryptedProof: ENCRYPTED_PROOF,
+            encryptedProof: ENCRYPTED_PROOF_VALID,
           },
         },
         expectedError: 'Required parameter not supplied: arweaveId',

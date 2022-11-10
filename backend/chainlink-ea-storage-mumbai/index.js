@@ -48,9 +48,16 @@ const createRequest = (input, callback) => {
     const decryptedString = decryptedData.toString(CryptoJS.enc.Utf8);
     const expectedString = userAddress + ipfsCid + arweaveId;
 
+    // If the strings don't match, return 1
+    // If they do and arweaveId is empty, return 2 (not been uploaded to Arweave)
+    // If they do and an arweaveId is provided, return 3
+
+    const storageStatus =
+      decryptedString === expectedString ? (arweaveId ? 3 : 2) : 1;
+
     const response = {
       data: {
-        result: decryptedString === expectedString,
+        result: storageStatus,
         promiseAddress: promiseAddress,
       },
       jobRunID,
