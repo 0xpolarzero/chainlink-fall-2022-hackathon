@@ -26,7 +26,7 @@ developmentChains.includes(network.name)
         user = accounts[1];
 
         console.log('Deploying contracts...');
-        await deployments.fixture('main');
+        await deployments.fixture(['promise-factory', 'verify-twitter']);
         console.log('Deployed contracts.');
 
         verifyTwitterDeploy = await ethers.getContract('VerifyTwitter');
@@ -35,9 +35,9 @@ developmentChains.includes(network.name)
 
         // Set the allowed verifier (VerifyTwitter address) if needed
         console.log('Setting allowed verifier...');
-        const isVerifier = await promiseFactory.getVerifier();
+        const isVerifier = await promiseFactory.getTwitterVerifier();
         if (isVerifier !== verifyTwitter.address) {
-          await promiseFactory.setVerifier(verifyTwitter.address);
+          await promiseFactory.setTwitterVerifier(verifyTwitter.address);
         }
         console.log('Allowed verifier set.');
 
@@ -132,25 +132,22 @@ developmentChains.includes(network.name)
           );
         });
 
-        ita(
-          'Should emit a successful event and add the user to the verified users mapping',
-          async () => {
-            const verifications = async () => {
-              const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
-                deployer.address,
-              );
-
-              assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
-            };
-
-            await requestAVerification(
-              verifyTwitter,
-              VERIFIED_USERNAME,
-              'VerificationSuccessful',
-              verifications,
+        it('Should emit a successful event and add the user to the verified users mapping', async () => {
+          const verifications = async () => {
+            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
+              deployer.address,
             );
-          },
-        );
+
+            assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
+          };
+
+          await requestAVerification(
+            verifyTwitter,
+            VERIFIED_USERNAME,
+            'VerificationSuccessful',
+            verifications,
+          );
+        });
 
         it('Should allow a user to verify an additional username with their address', async () => {
           const verifications = async () => {
