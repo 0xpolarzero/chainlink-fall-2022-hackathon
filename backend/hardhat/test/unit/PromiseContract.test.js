@@ -4,7 +4,7 @@ const { deployments, network, ethers } = require('hardhat');
 
 !developmentChains.includes(network.name)
   ? describe.skip
-  : describe.only('PromiseContract unit tests', function() {
+  : describe('PromiseContract unit tests', function() {
       let deployer;
       let userFirst;
       let userSecond;

@@ -28,7 +28,7 @@ const TEST_USERNAME_2 = 'john123';
         verifyTwitterMockDeploy = await ethers.getContract('VerifyTwitterMock');
         verifyTwitterMock = verifyTwitterMockDeploy.connect(deployer);
         promiseFactory = await ethers.getContract('PromiseFactory', deployer);
-        await promiseFactory.setVerifier(verifyTwitterMock.address);
+        await promiseFactory.setTwitterVerifier(verifyTwitterMock.address);
       });
 
       describe('constructor', function() {
@@ -54,14 +54,7 @@ const TEST_USERNAME_2 = 'john123';
       });
 
       describe('requestVerification', function() {
-        it('Should return the correct requestId', async () => {
-          const tx = await verifyTwitterMock.requestVerification(TEST_USERNAME);
-          const txReceipt = await tx.wait(1);
-
-          assert.equal(txReceipt.events[0].args.requestId, REQUEST_ID);
-        });
-
-        it('Should emit an event with the requestId and the username', async () => {
+        it('Should emit an event with the correct requestId and the username', async () => {
           await expect(verifyTwitterMock.requestVerification(TEST_USERNAME))
             .to.emit(verifyTwitterMock, 'VerificationRequested')
             .withArgs(REQUEST_ID, TEST_USERNAME);
@@ -139,7 +132,9 @@ const TEST_USERNAME_2 = 'john123';
           );
 
           // Request verification again
-          const tx = await verifyTwitterMock.requestVerification(TEST_USERNAME);
+          const tx = await verifyTwitterMock.requestVerification(
+            TEST_USERNAME_2,
+          );
           const txReceipt = await tx.wait(1);
 
           assert.equal(txReceipt.events[0].args.requestId, REQUEST_ID);
@@ -160,7 +155,7 @@ const TEST_USERNAME_2 = 'john123';
           assert.equal(isVerifiedHandle[1], TEST_USERNAME_2);
         });
 
-        it('Should revert if the user tries to verify the same username again', async () => {
+        it('Should allow the user to verify the same username again but not add it again to the mapping', async () => {
           await verifyTwitterMock.fulfillVerification(
             REQUEST_ID,
             TEST_USERNAME,
@@ -169,19 +164,25 @@ const TEST_USERNAME_2 = 'john123';
           );
 
           // Request verification again
-          await verifyTwitterMock.requestVerification(TEST_USERNAME);
+          const tx = await verifyTwitterMock.requestVerification(TEST_USERNAME);
+          const txReceipt = await tx.wait(1);
+
+          assert.equal(txReceipt.events[0].args.requestId, REQUEST_ID);
 
           // Fulfill the request again
-          await expect(
-            verifyTwitterMock.fulfillVerification(
-              REQUEST_ID,
-              TEST_USERNAME,
-              true,
-              user.address,
-            ),
-          ).to.be.revertedWith(
-            'PromiseFactory__addTwitterVerifiedUser__ALREADY_VERIFIED()',
+          await verifyTwitterMock.fulfillVerification(
+            REQUEST_ID,
+            TEST_USERNAME,
+            true,
+            user.address,
           );
+
+          const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
+            user.address,
+          );
+
+          assert.equal(isVerifiedHandle[0], TEST_USERNAME);
+          assert.equal(isVerifiedHandle[1], undefined);
         });
       });
 
