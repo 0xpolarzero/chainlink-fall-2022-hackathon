@@ -90,6 +90,14 @@ contract PromiseContract {
     /// Functions
     /**
      * @dev Initialize the contract from the Master Contract with the user address as the owner
+     * @param _owner The address of the creator of the promise
+     * @param _promiseName The name of the promise
+     * @param _ipfsCid The IPFS CID of the content
+     * @param _arweaveId The Arweave ID of the content
+     * @param _encryptedProof The encrypted proof of the promise (see ./VerifyStorage.sol)
+     * @param _partyNames The names of the parties
+     * @param _partyTwitterHandles The twitter handles of the parties (optional, if not provided = '')
+     * @param _partyAddresses The addresses of the parties
      */
 
     constructor(
@@ -161,13 +169,15 @@ contract PromiseContract {
      * @param _participantName The name of the participant
      * @param _participantTwitterHandle The twitter handle of the participant
      * @param _participantAddress The address of the participant
+     * @param _resetApprovalStatus Whether or not to reset the approval status of the participants
+     * -> true if a participant is being added after the promise creation
      */
 
     function createParticipant(
         string memory _participantName,
         string memory _participantTwitterHandle,
         address _participantAddress,
-        bool _checkApprovalStatus
+        bool _resetApprovalStatus
     ) public onlyPromiseFactory onlyUnlocked {
         // Revert if the name is not between 2 and 30 characters
         if (
@@ -188,7 +198,7 @@ contract PromiseContract {
         // Make sure the promise gets disapproved for every participants
         // In case a new participant is added, they will need to approve it again
         // We just need to do this if a participant is being added, not at the initialization
-        if (_checkApprovalStatus) {
+        if (_resetApprovalStatus) {
             address[] memory participantAddresses = s_participantAddresses;
 
             for (uint256 i = 0; i < s_participantCount; i++) {
