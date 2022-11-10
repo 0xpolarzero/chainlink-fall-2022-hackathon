@@ -121,8 +121,8 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     setCreatePromiseArgs([
       formValues.promiseName,
       ipfsCid,
-      // arweaveId,
-      // encryptedBytes32,
+      arweaveId,
+      encryptedBytes32,
       formValues.partyNameArray,
       formValues.partyTwitterHandleArray,
       formValues.partyAddressArray,

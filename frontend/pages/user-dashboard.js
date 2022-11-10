@@ -1,5 +1,6 @@
 import styles from '../styles/Home.module.css';
 import NewPromiseDrawer from '../components/user/NewPromiseDrawer';
+import VerifyTwitterDrawer from '../components/user/VerifyTwitterDrawer';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import PromisesDataContext from '../systems/PromisesDataContext';
@@ -23,6 +24,7 @@ export default function userPromises({ setActivePage }) {
   const [shownInvolvedPage, setShownInvolvedPage] = useState(1);
   const [verifiedHandles, setVerifiedHandles] = useState([]);
   const { address: userAddress, isConnected } = useAccount();
+  const [twitterHandleDrawerOpen, setTwitterHandleDrawerOpen] = useState(false);
   const { chain } = useNetwork();
   const provider = useProvider();
   const promiseFactoryAddress =
@@ -256,6 +258,11 @@ export default function userPromises({ setActivePage }) {
         <NewPromiseDrawer
           drawerOpen={newPromiseDrawerOpen}
           setDrawerOpen={setNewPromiseDrawerOpen}
+        />
+
+        <VerifyTwitterDrawer
+          isDrawerOpen={twitterHandleDrawerOpen}
+          setIsDrawerOpen={setTwitterHandleDrawerOpen}
         />
       </section>
     </main>
