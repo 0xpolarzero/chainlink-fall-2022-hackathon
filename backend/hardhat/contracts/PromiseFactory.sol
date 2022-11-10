@@ -24,8 +24,8 @@ contract PromiseFactory {
     address private immutable i_owner;
     // The VerifyTwitter contract
     address private s_twitterVerifier;
-    // The VerifyBackup contract
-    address private s_backupVerifier;
+    // The VerifyStorage contract
+    address private s_storageVerifier;
 
     // Map the owner addresses to the child contracts they created
     mapping(address => PromiseContract[]) private s_promiseContracts;
@@ -58,9 +58,9 @@ contract PromiseFactory {
         address _participantAddress
     );
 
-    event BackupStatusUpdated(
+    event StorageStatusUpdated(
         address indexed _contractAddress,
-        uint8 _backupStatus
+        uint8 _storageStatus
     );
 
     /// Modifiers
@@ -79,8 +79,8 @@ contract PromiseFactory {
         _;
     }
 
-    modifier onlyBackupVerifier() {
-        if (msg.sender != s_backupVerifier) {
+    modifier onlyStorageVerifier() {
+        if (msg.sender != s_storageVerifier) {
             revert PromiseFactory__NOT_VERIFIER();
         }
         _;
@@ -92,10 +92,10 @@ contract PromiseFactory {
      * @notice Initialize the contract
      */
 
-    constructor(address _twitterVerifier, address _backupVerifier) {
+    constructor(address _twitterVerifier, address _storageVerifier) {
         i_owner = msg.sender;
         s_twitterVerifier = _twitterVerifier;
-        s_backupVerifier = _backupVerifier;
+        s_storageVerifier = _storageVerifier;
     }
 
     /**
@@ -285,14 +285,14 @@ contract PromiseFactory {
         );
     }
 
-    function updateBackupStatus(
+    function updateStorageStatus(
         address _promiseContractAddress,
-        uint8 _backupStatus
-    ) public onlyBackupVerifier {
-        PromiseContract(_promiseContractAddress).updateBackupStatus(
-            _backupStatus
+        uint8 _storageStatus
+    ) public onlyStorageVerifier {
+        PromiseContract(_promiseContractAddress).updateStorageStatus(
+            _storageStatus
         );
-        emit BackupStatusUpdated(_promiseContractAddress, _backupStatus);
+        emit StorageStatusUpdated(_promiseContractAddress, _storageStatus);
     }
 
     /// Setters
@@ -300,8 +300,8 @@ contract PromiseFactory {
         s_twitterVerifier = _twitterVerifier;
     }
 
-    function setBackupVerifier(address _backupVerifier) external onlyOwner {
-        s_backupVerifier = _backupVerifier;
+    function setStorageVerifier(address _storageVerifier) external onlyOwner {
+        s_storageVerifier = _storageVerifier;
     }
 
     /// Getters
@@ -344,7 +344,7 @@ contract PromiseFactory {
         return s_twitterVerifier;
     }
 
-    function getBackupVerifier() public view returns (address) {
-        return s_backupVerifier;
+    function getStorageVerifier() public view returns (address) {
+        return s_storageVerifier;
     }
 }

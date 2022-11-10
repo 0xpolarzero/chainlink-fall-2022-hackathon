@@ -2,14 +2,14 @@ const { assert, expect } = require('chai');
 const {
   developmentChains,
   VERIFY_TWITTER_MUMBAI,
-  VERIFY_BACKUP_MUMBAI,
+  VERIFY_STORAGE_MUMBAI,
 } = require('../../helper-hardhat-config');
 const { deployments, network, ethers } = require('hardhat');
 
 // TODO
 // arweaveId : provided and ''
 // encryptedBytes32: correct and incorrect
-// backupStatus: 0, 1, 2 and 3
+// storageStatus: 0, 1, 2 and 3
 
 !developmentChains.includes(network.name)
   ? describe.skip
@@ -61,11 +61,11 @@ const { deployments, network, ethers } = require('hardhat');
         it('Should initialize the variables with the right value', async () => {
           const owner = await promiseFactory.getOwner();
           const twitterVerifier = await promiseFactory.getTwitterVerifier();
-          const backupVerifier = await promiseFactory.getBackupVerifier();
+          const storageVerifier = await promiseFactory.getStorageVerifier();
 
           assert.equal(owner, deployer.address);
           assert.equal(twitterVerifier, VERIFY_TWITTER_MUMBAI);
-          assert.equal(backupVerifier, VERIFY_BACKUP_MUMBAI);
+          assert.equal(storageVerifier, VERIFY_STORAGE_MUMBAI);
         });
       });
 

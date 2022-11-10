@@ -200,5 +200,3 @@ const TEST_USERNAME_2 = 'john123';
         });
       });
     });
-
-// Same handle revert

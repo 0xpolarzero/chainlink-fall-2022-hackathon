@@ -16,7 +16,7 @@ contract PromiseContract {
     error PromiseContract__createParticipant__INCORRECT_FIELD_LENGTH();
     error PromiseContract__approvePromise__ALREADY_APPROVED();
     error PromiseContract__lockPromise__PARTICIPANT_NOT_APPROVED();
-    error PromiseContract__updateBackupStatus__INVALID_STATUS();
+    error PromiseContract__updateStorageStatus__INVALID_STATUS();
 
     /// Types
     struct Participant {
@@ -29,12 +29,12 @@ contract PromiseContract {
     uint256 private s_participantCount = 0;
     // If the promise is created through the website, the content uploaded to IPFS
     // and eventually Arweave can be verified with the encryptedBytes32
-    // which will result in a backupStatus that provides information on the persistence of the data
-    // backupStatus = 0 -> the provided IPFS and Arweave hashes have not yet been verified
-    // backupStatus = 1 -> the provided IPFS and eventually Arweave hashes could not be verified
-    // backupStatus = 2 -> only the IPFS hash has been provided and verified
-    // backupStatus = 3 -> both the IPFS & Arweave hashes has been provided and verified
-    uint8 private s_backupStatus = 0;
+    // which will result in a storageStatus that provides information on the persistence of the data
+    // storageStatus = 0 -> the provided IPFS and Arweave hashes have not yet been verified
+    // storageStatus = 1 -> the provided IPFS and eventually Arweave hashes could not be verified
+    // storageStatus = 2 -> only the IPFS hash has been provided and verified
+    // storageStatus = 3 -> both the IPFS & Arweave hashes has been provided and verified
+    uint8 private s_storageStatus = 0;
     // The 3 following variables need to be stored in a string because of their length
     // So they cannot be set to immutable
     string private s_promiseName;
@@ -66,7 +66,7 @@ contract PromiseContract {
 
     event PromiseLocked();
 
-    event PromiseBackupStatusUpdated(uint8 backupStatus);
+    event PromiseStorageStatusUpdated(uint8 storageStatus);
 
     /// Modifiers
     modifier onlyParticipant() {
@@ -207,21 +207,24 @@ contract PromiseContract {
     }
 
     /**
-     * @notice Update the backup status of the promise
+     * @notice Update the storage status of the promise
      * @dev This function can only be called by the Promise Factory
-     * @param _backupStatus The new backup status of the promise
+     * @param _storageStatus The new storage status of the promise
      * - 1 -> the provided IPFS and eventually Arweave hashes could not be verified
      * - 2 -> only the IPFS hash has been provided and verified
      * - 3 -> both the IPFS & Arweave hashes has been provided and verified
      */
 
-    function updateBackupStatus(uint8 _backupStatus) public onlyPromiseFactory {
-        if (_backupStatus < 1 || _backupStatus > 3) {
-            revert PromiseContract__updateBackupStatus__INVALID_STATUS();
+    function updateStorageStatus(uint8 _storageStatus)
+        public
+        onlyPromiseFactory
+    {
+        if (_storageStatus < 1 || _storageStatus > 3) {
+            revert PromiseContract__updateStorageStatus__INVALID_STATUS();
         }
 
-        s_backupStatus = _backupStatus;
-        emit PromiseBackupStatusUpdated(_backupStatus);
+        s_storageStatus = _storageStatus;
+        emit PromiseStorageStatusUpdated(_storageStatus);
     }
 
     /// Getters
@@ -245,8 +248,8 @@ contract PromiseContract {
         return i_encryptedBytes32;
     }
 
-    function getBackupStatus() public view returns (uint8) {
-        return s_backupStatus;
+    function getStorageStatus() public view returns (uint8) {
+        return s_storageStatus;
     }
 
     function getParticipant(address _address)
