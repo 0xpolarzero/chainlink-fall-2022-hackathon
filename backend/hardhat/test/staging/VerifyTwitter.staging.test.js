@@ -132,22 +132,25 @@ developmentChains.includes(network.name)
           );
         });
 
-        it('Should emit a successful event and add the user to the verified users mapping', async () => {
-          const verifications = async () => {
-            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
-              deployer.address,
+        ita(
+          'Should emit a successful event and add the user to the verified users mapping',
+          async () => {
+            const verifications = async () => {
+              const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
+                deployer.address,
+              );
+
+              assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
+            };
+
+            await requestAVerification(
+              verifyTwitter,
+              VERIFIED_USERNAME,
+              'VerificationSuccessful',
+              verifications,
             );
-
-            assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
-          };
-
-          await requestAVerification(
-            verifyTwitter,
-            VERIFIED_USERNAME,
-            'VerificationSuccessful',
-            verifications,
-          );
-        });
+          },
+        );
 
         it('Should allow a user to verify an additional username with their address', async () => {
           const verifications = async () => {

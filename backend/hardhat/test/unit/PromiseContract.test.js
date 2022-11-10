@@ -4,7 +4,7 @@ const { deployments, network, ethers } = require('hardhat');
 
 !developmentChains.includes(network.name)
   ? describe.skip
-  : describe('PromiseContract unit tests', function() {
+  : describe.only('PromiseContract unit tests', function() {
       let deployer;
       let userFirst;
       let userSecond;
@@ -28,6 +28,8 @@ const { deployments, network, ethers } = require('hardhat');
         const deployTx = await promiseFactory.createPromiseContract(
           'Test Agreement',
           'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
+          '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
+          '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
           ['Bob', 'Alice'],
           ['@bob', '@alice'],
           [userFirst.address, userSecond.address],
@@ -46,15 +48,25 @@ const { deployments, network, ethers } = require('hardhat');
         it('Should initialize the variables with the right value', async () => {
           const owner = await promiseContract.getOwner();
           const name = await promiseContract.getName();
-          const cid = await promiseContract.getIpfsCid();
+          const ipfsCid = await promiseContract.getIpfsCid();
+          const arweaveId = await promiseContract.getArweaveId();
+          const encryptedBytes32 = await promiseContract.getEncryptedBytes32();
           const participantCount = await promiseContract.getParticipantCount();
           const promiseFactoryAddress = await promiseContract.getPromiseFactoryContract();
 
           assert.equal(owner, userFirst.address);
           assert.equal(name, 'Test Agreement');
           assert.equal(
-            cid,
+            ipfsCid,
             'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
+          );
+          assert.equal(
+            arweaveId,
+            '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
+          );
+          assert.equal(
+            encryptedBytes32,
+            '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
           );
           assert.equal(participantCount, 2);
           assert.equal(promiseFactoryAddress, promiseFactory.address);

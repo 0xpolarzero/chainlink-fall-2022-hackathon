@@ -23,7 +23,9 @@ contract PromiseFactory {
     /// Variables
     address private immutable i_owner;
     // The VerifyTwitter contract
-    address private s_verifier;
+    address private s_twitterVerifier;
+    // The VerifyBackup contract
+    address private s_backupVerifier;
 
     // Map the owner addresses to the child contracts they created
     mapping(address => PromiseContract[]) private s_promiseContracts;
@@ -37,6 +39,8 @@ contract PromiseFactory {
         address indexed _contractAddress,
         string _promiseName,
         string _ipfsCid,
+        string _arweaveId,
+        bytes32 encryptedBytes32,
         string[] _partyNames,
         string[] _partyTwitterHandles,
         address[] _partyAddresses
@@ -54,6 +58,11 @@ contract PromiseFactory {
         address _participantAddress
     );
 
+    event BackupStatusUpdated(
+        address indexed _contractAddress,
+        uint8 _backupStatus
+    );
+
     /// Modifiers
     modifier onlyOwner() {
         // msg sender should be the deployer of the contract
@@ -63,8 +72,15 @@ contract PromiseFactory {
         _;
     }
 
-    modifier onlyVerifier() {
-        if (msg.sender != s_verifier) {
+    modifier onlyTwitterVerifier() {
+        if (msg.sender != s_twitterVerifier) {
+            revert PromiseFactory__NOT_VERIFIER();
+        }
+        _;
+    }
+
+    modifier onlyBackupVerifier() {
+        if (msg.sender != s_backupVerifier) {
             revert PromiseFactory__NOT_VERIFIER();
         }
         _;
@@ -76,9 +92,10 @@ contract PromiseFactory {
      * @notice Initialize the contract
      */
 
-    constructor(address _verifier) {
+    constructor(address _twitterVerifier, address _backupVerifier) {
         i_owner = msg.sender;
-        s_verifier = _verifier;
+        s_twitterVerifier = _twitterVerifier;
+        s_backupVerifier = _backupVerifier;
     }
 
     /**
@@ -94,6 +111,8 @@ contract PromiseFactory {
     function createPromiseContract(
         string memory _promiseName,
         string memory _ipfsCid,
+        string memory _arweaveId,
+        bytes32 _encryptedBytes32,
         string[] memory _partyNames,
         string[] memory _partyTwitterHandles,
         address[] memory _partyAddresses
@@ -147,6 +166,8 @@ contract PromiseFactory {
             msg.sender,
             _promiseName,
             _ipfsCid,
+            _arweaveId,
+            _encryptedBytes32,
             _partyNames,
             _partyTwitterHandles,
             _partyAddresses
@@ -158,6 +179,8 @@ contract PromiseFactory {
             address(promiseContract),
             _promiseName,
             _ipfsCid,
+            _arweaveId,
+            _encryptedBytes32,
             _partyNames,
             _partyTwitterHandles,
             _partyAddresses
@@ -177,7 +200,7 @@ contract PromiseFactory {
     function addTwitterVerifiedUser(
         address _userAddress,
         string memory _twitterHandle
-    ) external onlyVerifier {
+    ) external onlyTwitterVerifier {
         // If the user address doesn't have a verified account yet, create a new array
         if (s_twitterVerifiedUsers[_userAddress].length == 0) {
             s_twitterVerifiedUsers[_userAddress] = new string[](1);
@@ -262,9 +285,23 @@ contract PromiseFactory {
         );
     }
 
+    function updateBackupStatus(
+        address _promiseContractAddress,
+        uint8 _backupStatus
+    ) public onlyBackupVerifier {
+        PromiseContract(_promiseContractAddress).updateBackupStatus(
+            _backupStatus
+        );
+        emit BackupStatusUpdated(_promiseContractAddress, _backupStatus);
+    }
+
     /// Setters
-    function setVerifier(address _verifier) external onlyOwner {
-        s_verifier = _verifier;
+    function setTwitterVerifier(address _twitterVerifier) external onlyOwner {
+        s_twitterVerifier = _twitterVerifier;
+    }
+
+    function setBackupVerifier(address _backupVerifier) external onlyOwner {
+        s_backupVerifier = _backupVerifier;
     }
 
     /// Getters
@@ -303,7 +340,11 @@ contract PromiseFactory {
         return i_owner;
     }
 
-    function getVerifier() public view returns (address) {
-        return s_verifier;
+    function getTwitterVerifier() public view returns (address) {
+        return s_twitterVerifier;
+    }
+
+    function getBackupVerifier() public view returns (address) {
+        return s_backupVerifier;
     }
 }

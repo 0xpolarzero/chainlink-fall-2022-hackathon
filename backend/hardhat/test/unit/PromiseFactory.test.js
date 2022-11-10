@@ -2,8 +2,14 @@ const { assert, expect } = require('chai');
 const {
   developmentChains,
   VERIFY_TWITTER_MUMBAI,
+  VERIFY_BACKUP_MUMBAI,
 } = require('../../helper-hardhat-config');
 const { deployments, network, ethers } = require('hardhat');
+
+// TODO
+// arweaveId : provided and ''
+// encryptedBytes32: correct and incorrect
+// backupStatus: 0, 1, 2 and 3
 
 !developmentChains.includes(network.name)
   ? describe.skip
@@ -18,7 +24,9 @@ const { deployments, network, ethers } = require('hardhat');
       const createCorrectPromiseContract = async () => {
         const tx = await promiseFactory.createPromiseContract(
           args.name,
-          args.cid,
+          args.ipfsCid,
+          args.arweaveId,
+          args.encryptedBytes32,
           args.partyNames,
           args.partyTwitters,
           args.partyAddresses,
@@ -38,7 +46,11 @@ const { deployments, network, ethers } = require('hardhat');
         promiseFactory = promiseFactoryDeploy.connect(deployer);
         args = {
           name: 'Test Agreement',
-          cid: 'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
+          ipfsCid:
+            'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
+          arweaveId: '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
+          encryptedBytes32:
+            '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
           partyNames: ['Bob', 'Alice'],
           partyTwitters: ['@bob', '@alice'],
           partyAddresses: [deployer.address, user.address],
@@ -48,10 +60,12 @@ const { deployments, network, ethers } = require('hardhat');
       describe('constructor', function() {
         it('Should initialize the variables with the right value', async () => {
           const owner = await promiseFactory.getOwner();
-          const verifier = await promiseFactory.getVerifier();
+          const twitterVerifier = await promiseFactory.getTwitterVerifier();
+          const backupVerifier = await promiseFactory.getBackupVerifier();
 
           assert.equal(owner, deployer.address);
-          assert.equal(verifier, VERIFY_TWITTER_MUMBAI);
+          assert.equal(twitterVerifier, VERIFY_TWITTER_MUMBAI);
+          assert.equal(backupVerifier, VERIFY_BACKUP_MUMBAI);
         });
       });
 
@@ -60,7 +74,9 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               args.name,
-              args.cid,
+              args.ipfsCid,
+              [],
+              args.encryptedBytes32,
               [],
               [],
               [],
@@ -70,19 +86,36 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               '',
-              args.cid,
+              args.ipfsCid,
+              args.arweaveId,
+              args.encryptedBytes32,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
             ),
           ).to.be.revertedWith('PromiseFactory__EMPTY_FIELD()');
+
+          // Special case with bytes32 missing
+          await expect(
+            promiseFactory.createPromiseContract(
+              args.name,
+              args.ipfsCid,
+              args.arweaveId,
+              [],
+              args.partyNames,
+              args.partyTwitters,
+              args.partyAddresses,
+            ),
+          ).to.be.reverted;
         });
 
         it('Should revert if there is a mismatch between names and addresses length', async () => {
           await expect(
             promiseFactory.createPromiseContract(
               args.name,
-              args.cid,
+              args.ipfsCid,
+              args.arweaveId,
+              args.encryptedBytes32,
               args.partyNames,
               args.partyTwitters,
               [deployer.address],
@@ -94,7 +127,9 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               args.name,
-              args.cid,
+              args.ipfsCid,
+              args.arweaveId,
+              args.encryptedBytes32,
               args.partyNames,
               args.partyTwitters,
               [deployer.address, deployer.address],
@@ -106,7 +141,9 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               args.name,
-              args.cid,
+              args.ipfsCid,
+              args.arweaveId,
+              args.encryptedBytes32,
               args.partyNames,
               ['@bob', '@bob'],
               args.partyAddresses,
@@ -121,7 +158,9 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               name,
-              args.cid,
+              args.ipfsCid,
+              args.arweaveId,
+              args.encryptedBytes32,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
@@ -134,12 +173,16 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseFactory.createPromiseContract(
               args.name,
-              args.cid,
+              args.ipfsCid,
+              args.arweaveId,
+              args.encryptedBytes32,
               partyNames,
               args.partyTwitters,
               args.partyAddresses,
             ),
-          ).to.be.revertedWith('PromiseFactory__INCORRECT_FIELD_LENGTH()');
+          ).to.be.revertedWith(
+            "VM Exception while processing transaction: reverted with custom error 'PromiseContract__createParticipant__INCORRECT_FIELD_LENGTH()",
+          );
         });
 
         it('Should create a new PromiseContract', async () => {
@@ -178,7 +221,7 @@ const { deployments, network, ethers } = require('hardhat');
               deployer.address,
               promiseContractAddress,
               args.name,
-              args.cid,
+              args.ipfsCid,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
@@ -205,7 +248,7 @@ const { deployments, network, ethers } = require('hardhat');
 
         it('Should not allow anyone else than the owner to call `setVerifier`', async () => {
           await expect(
-            promiseFactory.connect(user).setVerifier(user.address),
+            promiseFactory.connect(user).setTwitterVerifier(user.address),
           ).to.be.revertedWith('PromiseFactory__NOT_OWNER()');
         });
 
@@ -219,31 +262,6 @@ const { deployments, network, ethers } = require('hardhat');
           promiseContract = await ethers.getContractAt(
             'PromiseContract',
             promiseContractAddress,
-          );
-        });
-
-        it('Should revert if one of the fields is empty', async () => {
-          // Here the error message is not the same as in the contract because
-          // the contract is not called directly but through the factory
-          await expect(
-            promiseFactory.addParticipant(
-              promiseContract.address,
-              '',
-              'handle',
-              deployer.address,
-            ),
-          ).to.be.revertedWith(
-            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__EMPTY_FIELD()",
-          );
-          await expect(
-            promiseFactory.addParticipant(
-              promiseContract.address,
-              'name',
-              '',
-              deployer.address,
-            ),
-          ).to.be.revertedWith(
-            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__EMPTY_FIELD()",
           );
         });
 
