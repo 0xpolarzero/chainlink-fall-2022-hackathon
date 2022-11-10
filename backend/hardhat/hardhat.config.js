@@ -8,7 +8,8 @@ require('dotenv').config();
 
 const POLYGON_RPC_URL = process.env.POLYGON_RPC_URL;
 const MUMBAI_RPC_URL = process.env.MUMBAI_RPC_URL;
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const PRIVATE_KEY_DEPLOYER = process.env.PRIVATE_KEY_DEPLOYER;
+const PRIVATE_KEY_USER = process.env.PRIVATE_KEY_USER;
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY;
 
@@ -29,13 +30,13 @@ module.exports = {
     },
     polygon: {
       url: POLYGON_RPC_URL,
-      accounts: [PRIVATE_KEY],
+      accounts: [PRIVATE_KEY_DEPLOYER],
       chainId: 137,
       blockConfirmations: 5,
     },
     mumbai: {
       url: MUMBAI_RPC_URL,
-      accounts: [PRIVATE_KEY],
+      accounts: [PRIVATE_KEY_DEPLOYER, PRIVATE_KEY_USER],
       chainId: 80001,
       blockConfirmations: 5,
     },
@@ -44,7 +45,7 @@ module.exports = {
     deployer: {
       default: 0,
     },
-    participant: {
+    user: {
       default: 1,
     },
   },
