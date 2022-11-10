@@ -31,6 +31,7 @@ contract VerifyStorageMock is
     // Declare the PromiseFactory contract address and the interface
     address private s_promiseFactoryContract;
     IPromiseFactory private s_promiseFactoryInterface;
+    address private s_fakePromiseFactoryContract;
 
     // Events
     event StorageStatusUpdateRequested(
@@ -64,10 +65,12 @@ contract VerifyStorageMock is
     // We don't need to pass the owner address to ConfirmedOwnerTestHelper
     // But need to pass the link token address and the oracle address to ChainlinkClientTestHelper
     // We are passing a fake address that we own as the oracle, to be able to fulfill requests
+    // We do the same for the promise factory contract, to test the onlyFactory modifier
     constructor(
         address _linkTokenContract,
         address _oracleContract,
-        address _promiseFactoryContract
+        address _promiseFactoryContract,
+        address _fakePromiseFactoryContract
     )
         ConfirmedOwnerTestHelper()
         ChainlinkClientTestHelper(_linkTokenContract, _oracleContract)
@@ -75,11 +78,12 @@ contract VerifyStorageMock is
         setChainlinkToken(_linkTokenContract);
         setChainlinkOracle(_oracleContract);
         setPromiseFactoryContract(_promiseFactoryContract);
+        s_fakePromiseFactoryContract = _fakePromiseFactoryContract;
     }
 
     // Modifier to check if the caller is the PromiseFactory contract
     modifier onlyPromiseFactory() {
-        if (msg.sender != s_promiseFactoryContract)
+        if (msg.sender != s_fakePromiseFactoryContract)
             revert VerifyStorage__NOT_FACTORY();
         _;
     }

@@ -45,7 +45,7 @@ const { deployments, network, ethers } = require('hardhat');
         promiseFactoryDeploy = await ethers.getContract('PromiseFactory');
         promiseFactory = promiseFactoryDeploy.connect(deployer);
         args = {
-          name: 'Test Agreement',
+          name: 'Test promise',
           ipfsCid:
             'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
           arweaveId: '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
