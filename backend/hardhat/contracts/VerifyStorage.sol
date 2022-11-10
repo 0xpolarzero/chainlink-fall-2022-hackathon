@@ -45,11 +45,11 @@ contract VerifyStorage is ChainlinkClient, ConfirmedOwner {
     // Events
     event StorageStatusUpdateRequested(
         bytes32 indexed requestId,
-        address indexed contractAddress
+        address indexed promiseAddress
     );
     event StorageStatusUpdateSuccessful(
         bytes32 indexed requestId,
-        address indexed contractAddress,
+        address indexed promiseAddress,
         uint8 storageStatus
     );
 
