@@ -8,6 +8,8 @@ import "./IPromiseFactory.sol";
 import "./utils/AddressToString.sol";
 
 /**
+ * @author polarzero
+ * @title VerifyTwitterMock
  * @notice This contract is used to test the VerifyTwitter contract
  * The functions are the same, but they don't actually send data to the operator
  * We make use of the ChainlinkClientTestHelper contract to mock the ChainlinkClient
@@ -22,17 +24,12 @@ contract VerifyTwitterMock is
     using Chainlink for Chainlink.Request;
 
     // Chainlink variables
-    bytes32 private constant ORACLE_JOB_ID = "79bf989ad07648c0a59bd679f366592d";
     uint256 private constant ORACLE_PAYMENT = (1 * LINK_DIVISIBILITY) / 10; // 0.1 LINK
+    bytes32 private s_oracleJobId = "b6ddd15e02e84e3cb8840f75c7658ba8";
 
     // Declare the PromiseFactory contract address and the interface
-    address public s_promiseFactoryContract;
-    IPromiseFactory public s_promiseFactoryInterface;
-
-    // Variables returned by the oracle
-    string public s_username;
-    address public s_userAddress;
-    bool public s_verified = false;
+    address private s_promiseFactoryContract;
+    IPromiseFactory private s_promiseFactoryInterface;
 
     // Events
     event VerificationRequested(bytes32 indexed requestId, string username);
@@ -46,8 +43,10 @@ contract VerifyTwitterMock is
 
     /**
      * @notice Initialize the link token and target oracle
+     * @param _linkTokenContract (Mumbai): 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
+     * @param _oracleContract ! Not the true oracle contract, but the address we own
+     * @param _promiseFactoryContract: The address of the PromiseFactory contract
      * Operator contract: 0x2BB8Dd9C16edeF313eb9ccBd5F42A8b577cB1E3c
-     * Link token: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
      * Job ID: 79bf989a-d076-48c0-a59b-d679f366592d
      */
 
@@ -78,11 +77,11 @@ contract VerifyTwitterMock is
         public
         returns (bytes32 requestId)
     {
-        requestId = "0x1234567890";
         // ! This should be called by Chainlink when building the request
         // ! It would associate the requestId with the operator address
-        // ! ... which prevents anyone from calling the fulfill function
+        // ! ... which prevents anyone else from calling the fulfill function
         // ! We're doing it here only for testing purposes, so we can trigger it manually
+        requestId = "0x1234567890";
         publicAddExternalRequest(msg.sender, requestId);
         emit VerificationRequested(requestId, _username);
     }
@@ -99,11 +98,7 @@ contract VerifyTwitterMock is
         string memory _username,
         bool _verified,
         address _userAddress
-    ) public recordChainlinkFulfillment(_requestId) {
-        s_username = _username;
-        s_userAddress = _userAddress;
-        s_verified = _verified;
-
+    ) external recordChainlinkFulfillment(_requestId) {
         if (_verified) {
             // It's ok if the user already have a verified account, they can still verify another one
             // Call the PromiseFactory contract to verify the user
@@ -123,12 +118,6 @@ contract VerifyTwitterMock is
             emit VerificationFailed(_requestId, _username);
         }
     }
-
-    /**
-     * @notice Call the promise factory contract to verify a Twitter account
-     * @dev It also sets the promise factory contract interface with this address
-     * @param _promiseFactoryContract The address of the PromiseFactory contract
-     */
 
     function setPromiseFactoryContract(address _promiseFactoryContract)
         public
