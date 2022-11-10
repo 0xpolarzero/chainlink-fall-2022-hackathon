@@ -92,7 +92,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     }
 
     // Upload to Arweave
-    let arweaveId = null;
+    let arweaveId = '';
     if (isArweaveChecked) {
       arweaveId = await uploadToArweave(
         bundlr,
