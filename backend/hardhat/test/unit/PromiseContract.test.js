@@ -50,7 +50,7 @@ const { deployments, network, ethers } = require('hardhat');
           const name = await promiseContract.getName();
           const ipfsCid = await promiseContract.getIpfsCid();
           const arweaveId = await promiseContract.getArweaveId();
-          const encryptedProof = await promiseContract.getencryptedProof();
+          const encryptedProof = await promiseContract.getEncryptedProof();
           const participantCount = await promiseContract.getParticipantCount();
           const promiseFactoryAddress = await promiseContract.getPromiseFactoryContract();
 

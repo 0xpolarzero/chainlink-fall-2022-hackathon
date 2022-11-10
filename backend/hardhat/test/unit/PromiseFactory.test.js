@@ -6,11 +6,6 @@ const {
 } = require('../../helper-hardhat-config');
 const { deployments, network, ethers } = require('hardhat');
 
-// TODO
-// arweaveId : provided and ''
-// encryptedProof: correct and incorrect
-// storageStatus: 0, 1, 2 and 3
-
 !developmentChains.includes(network.name)
   ? describe.skip
   : describe('PromiseFactory unit tests', function() {
@@ -94,19 +89,6 @@ const { deployments, network, ethers } = require('hardhat');
               args.partyAddresses,
             ),
           ).to.be.revertedWith('PromiseFactory__EMPTY_FIELD()');
-
-          // Special case with bytes32 missing
-          await expect(
-            promiseFactory.createPromiseContract(
-              args.name,
-              args.ipfsCid,
-              args.arweaveId,
-              [],
-              args.partyNames,
-              args.partyTwitters,
-              args.partyAddresses,
-            ),
-          ).to.be.reverted;
         });
 
         it('Should revert if there is a mismatch between names and addresses length', async () => {
@@ -240,19 +222,42 @@ const { deployments, network, ethers } = require('hardhat');
       });
 
       describe('addTwitterVerifiedUser', function() {
-        it('Should not allow anyone other than the TwitterVerification contract to add a Twitter verified user', async () => {
+        it('Should not allow anyone other than the VerifyTwitter contract to add a Twitter verified user', async () => {
           await expect(
             promiseFactory.addTwitterVerifiedUser(deployer.address, 'username'),
           ).to.be.revertedWith('PromiseFactory__NOT_VERIFIER()');
         });
 
-        it('Should not allow anyone else than the owner to call `setVerifier`', async () => {
+        it('Should not allow anyone else than the owner to call `setTwitterVerifier`', async () => {
           await expect(
             promiseFactory.connect(user).setTwitterVerifier(user.address),
           ).to.be.revertedWith('PromiseFactory__NOT_OWNER()');
         });
 
-        // The rest of the tests are performed in ./VerifyTwitter.test.js
+        // The rest of the tests are performed in ./VerifyTwitter.staging.test.js
+      });
+
+      describe('updateStorageStatus', function() {
+        it('Should not allow anyone other than the VerifyStorage contract to update the storage status', async () => {
+          const { txReceipt } = await createCorrectPromiseContract();
+          promiseContractAddress = txReceipt.events[1].address;
+          promiseContract = await ethers.getContractAt(
+            'PromiseContract',
+            promiseContractAddress,
+          );
+
+          await expect(
+            promiseFactory.updateStorageStatus(promiseContract.address, 1),
+          ).to.be.revertedWith('PromiseFactory__NOT_VERIFIER()');
+        });
+
+        it('Should not allow anyone else than the owner to call `setStorageVerifier`', async () => {
+          await expect(
+            promiseFactory.connect(user).setStorageVerifier(user.address),
+          ).to.be.revertedWith('PromiseFactory__NOT_OWNER()');
+        });
+
+        // The rest of the tests are performed in VerifyStorage.staging.test.js
       });
 
       describe('addParticipant', function() {

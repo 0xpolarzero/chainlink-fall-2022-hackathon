@@ -165,22 +165,13 @@ contract VerifyStorageMock is
         s_promiseFactoryInterface = IPromiseFactory(_promiseFactoryContract);
     }
 
-    /**
-     * @notice Set the oracle job ID
-     * @param _oracleJobId The oracle job ID
-     */
-
-    function setOracleJobId(bytes32 _oracleJobId) public onlyOwner {
-        s_oracleJobId = _oracleJobId;
-    }
-
     // Getters
 
     function getPromiseFactoryContract() public view returns (address) {
         return s_promiseFactoryContract;
     }
 
-    function getOracleJobId() public view returns (bytes32) {
-        return s_oracleJobId;
+    function getOraclePayment() public pure returns (uint256) {
+        return ORACLE_PAYMENT;
     }
 }
