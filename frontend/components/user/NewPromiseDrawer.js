@@ -109,7 +109,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     // will indeed be persisted on IPFS and Arweave
     // The key is generated using the following parameters,
     // a 256 bit AES encryption key, and a 128 bit IV
-    const encryptedBytes32 = encryptAES256(
+    const encryptedProof = encryptAES256(
       formValues.promiseName,
       userAddress,
       ipfsCid,
@@ -122,7 +122,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       formValues.promiseName,
       ipfsCid,
       arweaveId,
-      encryptedBytes32,
+      encryptedProof,
       formValues.partyNameArray,
       formValues.partyTwitterHandleArray,
       formValues.partyAddressArray,

@@ -9,13 +9,7 @@ const encryptAES256 = (promiseName, address, ipfsCid, arweaveId) => {
     iv: iv,
   });
 
-  // We want to be able to store it in a bytes32 variable
-  // We only need the first 32 bytes, that will need to match when performing
-  // the same process in the External Adapter
-  const encryptedHex = encrypted.ciphertext.toString();
-  const encryptedHex32 = '0x' + encryptedHex.slice(0, 64);
-
-  return encryptedHex32;
+  return encrypted.ciphertext.toString();
 };
 
 export { encryptAES256 };
