@@ -6,9 +6,4 @@ interface IPromiseFactory {
         address _userAddress,
         string memory _username
     ) external;
-
-    function updateStorageStatus(
-        address _promiseContractAddress,
-        uint8 _storageStatus
-    ) external;
 }
