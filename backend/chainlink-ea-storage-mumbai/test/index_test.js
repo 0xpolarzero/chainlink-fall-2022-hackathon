@@ -6,7 +6,7 @@ const {
   USER_ADDRESS,
   IPFS_CID,
   ARWEAVE_ID,
-  ENCRYPTED_BYTES32,
+  ENCRYPTED_PROOF,
 } = require('./mocks/mock-data.js');
 
 describe('createRequest', () => {
@@ -28,7 +28,7 @@ describe('createRequest', () => {
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
             arweaveId: ARWEAVE_ID,
-            encryptedBytes32: ENCRYPTED_BYTES32,
+            encryptedProof: ENCRYPTED_PROOF,
           },
         },
       },
@@ -42,7 +42,7 @@ describe('createRequest', () => {
       //       userAddress: USER_ADDRESS,
       //       ipfsCid: IPFS_CID,
       //       arweaveId: ARWEAVE_ID,
-      //       encryptedBytes32: ENCRYPTED_BYTES32,
+      //       encryptedProof: ENCRYPTED_PROOF,
       //     },
       //   },
       // },
@@ -56,7 +56,7 @@ describe('createRequest', () => {
       //       userAddress: USER_ADDRESS,
       //       ipfsCid: IPFS_CID,
       //       arweaveId: ARWEAVE_ID,
-      //       encryptedBytes32: ENCRYPTED_BYTES32,
+      //       encryptedProof: ENCRYPTED_PROOF,
       //     },
       //   },
       // },

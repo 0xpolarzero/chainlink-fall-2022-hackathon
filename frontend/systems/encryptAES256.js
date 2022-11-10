@@ -9,7 +9,7 @@ const encryptAES256 = (promiseName, address, ipfsCid, arweaveId) => {
     iv: iv,
   });
 
-  return encrypted.ciphertext.toString();
+  return encrypted.toString();
 };
 
 export { encryptAES256 };

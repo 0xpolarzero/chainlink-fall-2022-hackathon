@@ -1,5 +1,5 @@
 const { Requester, Validator } = require('@chainlink/external-adapter');
-const AES = require('crypto-js/aes');
+const CryptoJS = require('crypto-js');
 require('dotenv').config();
 
 // Define custom error scenarios for the API.
@@ -15,7 +15,7 @@ const customParams = {
   userAddress: true,
   ipfsCid: true,
   arweaveId: true,
-  encryptedBytes32: true,
+  encryptedProof: true,
 };
 
 const createRequest = (input, callback) => {
@@ -28,33 +28,31 @@ const createRequest = (input, callback) => {
   const userAddress =
     validator.validated.data.userAddress ||
     '0x0000000000000000000000000000000000000000';
-  const ipfsCid =
-    validator.validated.data.ipfsCid ||
-    'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi';
-  const arweaveId =
-    validator.validated.data.arweaveId ||
-    '1JXtGzqZtJxG0yUvJGmZwWqjLbIuTtqXgKXgjXgqXgq';
-  const encryptedBytes32 =
-    validator.validated.data.encryptedBytes32 ||
-    '0x0000000000000000000000000000000000000000000000000000000000000000';
+  const ipfsCid = validator.validated.data.ipfsCid || '';
+  const arweaveId = validator.validated.data.arweaveId || '';
+  const encryptedProof = validator.validated.data.encryptedProof || '';
 
   try {
     const key = process.env.AES_ENCRYPTION_KEY;
     const iv = process.env.AES_ENCRYPTION_IV;
-    const data = promiseName + userAddress + ipfsCid + arweaveId;
 
-    const encrypted = AES.encrypt(data, key, {
+    // Get back the encrypted hex string in base64
+    const encryptedBase64 = Buffer.from(encryptedProof, 'hex').toString(
+      'base64',
+    );
+
+    // Decrypt it
+    const decryptedData = CryptoJS.AES.decrypt(encryptedBase64, key, {
       iv: iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
     });
-    const encryptedHex = encrypted.ciphertext.toString();
-    const encryptedHex32 = '0x' + encryptedHex.slice(0, 64);
+    const decryptedString = decryptedData.toString(CryptoJS.enc.Utf8);
+    const expectedString = promiseName + userAddress + ipfsCid + arweaveId;
 
     const response = {
       data: {
-        result: encryptedBytes32 === encryptedHex32,
-        base: encryptedBytes32,
-        compare: encryptedHex32,
-        data: data,
+        result: decryptedString === expectedString,
         promiseAddress: promiseAddress,
       },
       jobRunID,
