@@ -6,6 +6,9 @@ const {
 } = require('../helper-hardhat-config');
 const { verify } = require('../utils/verify');
 
+// Usually, deploying mocks is done first (00-...), but here
+// we need to deploy the PromiseFactory first to get its address
+
 module.exports = async function({ getNamedAccounts, deployments }) {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
@@ -18,17 +21,14 @@ module.exports = async function({ getNamedAccounts, deployments }) {
     waitConfirmations: network.config.blockConfirmations || 1,
   });
 
-  if (
-    !developmentChains.includes(network.name) &&
-    process.env.ETHERSCAN_API_KEY
-  ) {
-    console.log('Verifying contract...');
-    await verify(verifyTwitterMock.address, [
-      LINK_TOKEN_MUMBAI,
-      OPERATOR_MUMBAI,
-      promiseFactory.address,
-    ]);
-  }
+  const verifyStorageMock = await deploy('VerifyStorageMock', {
+    from: deployer,
+    args: [LINK_TOKEN_MUMBAI, OPERATOR_MUMBAI, promiseFactory.address],
+    log: true,
+    waitConfirmations: network.config.blockConfirmations || 1,
+  });
+
+  // We don't need to verify the mocks
 };
 
 module.exports.tags = ['all', 'mocks'];
