@@ -2,7 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "./PromiseContract.sol";
-import "hardhat/console.sol";
+import "./IVerifyStorage.sol";
 
 /**
  * @author polarzero
@@ -57,6 +57,8 @@ contract PromiseFactory {
         string _participantTwitterHandle,
         address _participantAddress
     );
+
+    event StorageStatusUpdateRequested(address promiseContract);
 
     event StorageStatusUpdated(
         address indexed _contractAddress,
@@ -188,6 +190,16 @@ contract PromiseFactory {
             _partyTwitterHandles,
             _partyAddresses
         );
+
+        // Request a storage status update to the VerifyStorage contract
+        IVerifyStorage(s_storageVerifier).requestStorageStatusUpdate(
+            address(promiseContract),
+            msg.sender,
+            _ipfsCid,
+            _arweaveId,
+            _encryptedProof
+        );
+        emit StorageStatusUpdateRequested(address(promiseContract));
 
         return address(promiseContract);
     }
