@@ -193,47 +193,6 @@ contract PromiseFactory {
     }
 
     /**
-     * @notice Add a verified Twitter account to the list of verified accounts
-     * @dev Only the verifier contract can call this function, after the account
-     * has been verified with the Chainlink Node + External Adapter
-     * @param _userAddress The address of the user
-     * @param _twitterHandle The Twitter handle of the verified account
-     */
-
-    function addTwitterVerifiedUser(
-        address _userAddress,
-        string memory _twitterHandle
-    ) external onlyTwitterVerifier {
-        // If the user address doesn't have a verified account yet, create a new array
-        if (s_twitterVerifiedUsers[_userAddress].length == 0) {
-            s_twitterVerifiedUsers[_userAddress] = new string[](1);
-            // Add the verified account to the array
-            s_twitterVerifiedUsers[_userAddress][0] = _twitterHandle;
-        } else if (s_twitterVerifiedUsers[_userAddress].length > 0) {
-            string[] memory verifiedAccounts = s_twitterVerifiedUsers[
-                _userAddress
-            ];
-            for (uint256 i = 0; i < verifiedAccounts.length; i++) {
-                // If the user already verified this account, revert
-                if (
-                    keccak256(abi.encodePacked(verifiedAccounts[i])) ==
-                    keccak256(abi.encodePacked(_twitterHandle))
-                ) {
-                    emit TwitterAddVerifiedSuccessful(
-                        _userAddress,
-                        _twitterHandle
-                    );
-                    return;
-                }
-            }
-            // But if it is not included, add it
-            s_twitterVerifiedUsers[_userAddress].push(_twitterHandle);
-        }
-
-        emit TwitterAddVerifiedSuccessful(_userAddress, _twitterHandle);
-    }
-
-    /**
      * @notice Add a participant to a promise contract
      * @dev Only a participant of the contract can call this function
      * @dev It can only be called if the contract is not locked (the child contract takes care of that)
@@ -288,10 +247,51 @@ contract PromiseFactory {
         );
     }
 
+    /**
+     * @notice Add a verified Twitter account to the list of verified accounts
+     * @dev Only the verifier contract can call this function, after the account
+     * has been verified with the Chainlink Node + External Adapter
+     * @param _userAddress The address of the user
+     * @param _twitterHandle The Twitter handle of the verified account
+     */
+
+    function addTwitterVerifiedUser(
+        address _userAddress,
+        string memory _twitterHandle
+    ) external onlyTwitterVerifier {
+        // If the user address doesn't have a verified account yet, create a new array
+        if (s_twitterVerifiedUsers[_userAddress].length == 0) {
+            s_twitterVerifiedUsers[_userAddress] = new string[](1);
+            // Add the verified account to the array
+            s_twitterVerifiedUsers[_userAddress][0] = _twitterHandle;
+        } else if (s_twitterVerifiedUsers[_userAddress].length > 0) {
+            string[] memory verifiedAccounts = s_twitterVerifiedUsers[
+                _userAddress
+            ];
+            for (uint256 i = 0; i < verifiedAccounts.length; i++) {
+                // If the user already verified this account, revert
+                if (
+                    keccak256(abi.encodePacked(verifiedAccounts[i])) ==
+                    keccak256(abi.encodePacked(_twitterHandle))
+                ) {
+                    emit TwitterAddVerifiedSuccessful(
+                        _userAddress,
+                        _twitterHandle
+                    );
+                    return;
+                }
+            }
+            // But if it is not included, add it
+            s_twitterVerifiedUsers[_userAddress].push(_twitterHandle);
+        }
+
+        emit TwitterAddVerifiedSuccessful(_userAddress, _twitterHandle);
+    }
+
     function updateStorageStatus(
         address _promiseContractAddress,
         uint8 _storageStatus
-    ) public onlyStorageVerifier {
+    ) external onlyStorageVerifier {
         PromiseContract(_promiseContractAddress).updateStorageStatus(
             _storageStatus
         );
