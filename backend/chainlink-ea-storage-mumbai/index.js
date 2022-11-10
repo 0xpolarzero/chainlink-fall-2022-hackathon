@@ -10,7 +10,6 @@ const customError = (data) => {
 };
 
 const customParams = {
-  promiseName: true,
   promiseAddress: true,
   userAddress: true,
   ipfsCid: true,
@@ -21,7 +20,6 @@ const customParams = {
 const createRequest = (input, callback) => {
   const validator = new Validator(callback, input, customParams);
   const jobRunID = validator.validated.id;
-  const promiseName = validator.validated.data.promiseName || 'promise';
   const promiseAddress =
     validator.validated.data.promiseAddress ||
     '0x0000000000000000000000000000000000000000';
@@ -48,7 +46,7 @@ const createRequest = (input, callback) => {
       padding: CryptoJS.pad.Pkcs7,
     });
     const decryptedString = decryptedData.toString(CryptoJS.enc.Utf8);
-    const expectedString = promiseName + userAddress + ipfsCid + arweaveId;
+    const expectedString = userAddress + ipfsCid + arweaveId;
 
     const response = {
       data: {

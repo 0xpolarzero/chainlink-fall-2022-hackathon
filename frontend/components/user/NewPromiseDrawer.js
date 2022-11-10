@@ -109,12 +109,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     // will indeed be persisted on IPFS and Arweave
     // The key is generated using the following parameters,
     // a 256 bit AES encryption key, and a 128 bit IV
-    const encryptedProof = encryptAES256(
-      formValues.promiseName,
-      userAddress,
-      ipfsCid,
-      arweaveId,
-    );
+    const encryptedProof = encryptAES256(userAddress, ipfsCid, arweaveId);
 
     // Then create the promise
     // This will trigger the useEffect hook (to make sure the args are filled)

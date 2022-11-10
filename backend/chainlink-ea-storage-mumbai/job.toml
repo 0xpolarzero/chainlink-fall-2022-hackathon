@@ -1,29 +1,28 @@
 type = "directrequest"
 schemaVersion = 1
-name = "TWITTER-EA"
+name = "STORAGE-EA"
 maxTaskDuration = "0s"
 contractAddress = "0xD4D1fe6FF0A871Ccf37bCfbce3135f548E5f05B5"
 minIncomingConfirmations = 0
 observationSource = """
-    decode_log      [type="ethabidecodelog"
-                        abi="OracleRequest(bytes32 indexed specId, address requester, bytes32 requestId, uint256 payment, address callbackAddr, bytes4 callbackFunctionId, uint256 cancelExpiration, uint256 dataVersion, bytes data)"
-                        data="$(jobRun.logData)"
-                        topics="$(jobRun.logTopics)"]
+    decode_log              [type="ethabidecodelog"
+                                abi="OracleRequest(bytes32 indexed specId, address requester, bytes32 requestId, uint256 payment, address callbackAddr, bytes4 callbackFunctionId, uint256 cancelExpiration, uint256 dataVersion, bytes data)"
+                                data="$(jobRun.logData)"
+                                topics="$(jobRun.logTopics)"]
 
-    decode_cbor     [type="cborparse" data="$(decode_log.data)"]
-    fetch           [type="bridge" name="twitter" requestData="{\\"id\\": $(jobSpec.externalJobID), \\"data\\": { \\"username\\": $(decode_cbor.username), \\"address\\": $(decode_cbor.address)}}"]
-    parseResult     [type="jsonparse" path="data,result" data="$(fetch)"]
-    parseUsername   [type="jsonparse" path="data,username" data="$(fetch)"]
-    parseAddress    [type="jsonparse" path="data,address" data="$(fetch)"]
+    decode_cbor             [type="cborparse" data="$(decode_log.data)"]
+    fetch                   [type="bridge" name="storage" requestData="{\\"id\\": $(jobSpec.externalJobID), \\"data\\": { \\"promiseAddress\\": $(decode_cbor.promiseAddress), \\"userAddress\\": $(decode_cbor.userAddress), \\"ipfsCid\\": $(decode_cbor.ipfsCid), \\"arweaveId\\": $(decode_cbor.arweaveId), \\"encryptedProof\\": $(decode_cbor.encryptedProof)}}"]
+    parseResult             [type="jsonparse" path="data,result" data="$(fetch)"]
+    parsePromiseAddress     [type="jsonparse" path="data,promiseAddress" data="$(fetch)"]
 
-    encode_data     [type="ethabiencode" abi="(bytes32 _requestId, string _username, bool _verified, address _userAddress)"
-                        data="{\\"_requestId\\": $(decode_log.requestId),\\"_username\\": $(parseUsername), \\"_verified\\": $(parseResult),\\"_userAddress\\": $(parseAddress)}"]
+    encode_data             [type="ethabiencode" abi="(bytes32 _requestId, address _promiseAddress, uint8 _storageStatus)"
+                                data="{\\"_requestId\\": $(decode_log.requestId),\\"_promiseAddress\\": $(parsePromiseAddress), \\"_storageStatus\\": $(parseResult)}"]
 
-    encode_tx       [type="ethabiencode"
-                        abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"
-                        data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"]
+    encode_tx               [type="ethabiencode"
+                                abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"
+                                data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"]
 
-    submit_tx [type="ethtx" to="0xD4D1fe6FF0A871Ccf37bCfbce3135f548E5f05B5" data="$(encode_tx)"]
+    submit_tx               [type="ethtx" to="0xD4D1fe6FF0A871Ccf37bCfbce3135f548E5f05B5" data="$(encode_tx)"]
 
-    decode_log -> decode_cbor -> fetch -> parseResult -> parseUsername -> parseAddress -> encode_data -> encode_tx -> submit_tx
+    decode_log -> decode_cbor -> fetch -> parseResult -> parsePromiseAddress -> encode_data -> encode_tx -> submit_tx
 """

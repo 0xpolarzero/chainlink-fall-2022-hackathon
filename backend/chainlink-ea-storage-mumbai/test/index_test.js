@@ -1,7 +1,6 @@
 const assert = require('chai').assert;
 const createRequest = require('../index.js').createRequest;
 const {
-  PROMISE_NAME,
   PROMISE_ADDRESS,
   USER_ADDRESS,
   IPFS_CID,
@@ -23,7 +22,6 @@ describe('createRequest', () => {
         name: 'id not supplied',
         testData: {
           data: {
-            promiseName: PROMISE_NAME,
             promiseAddress: PROMISE_ADDRESS,
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
@@ -37,7 +35,6 @@ describe('createRequest', () => {
         testData: {
           id: '',
           data: {
-            promiseName: PROMISE_NAME,
             promiseAddress: PROMISE_ADDRESS,
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
@@ -51,7 +48,6 @@ describe('createRequest', () => {
         testData: {
           id: jobID,
           data: {
-            promiseName: PROMISE_NAME,
             promiseAddress: PROMISE_ADDRESS,
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
@@ -84,28 +80,13 @@ describe('createRequest', () => {
       {
         name: 'no data supplied',
         testData: { id: jobID, data: {} },
-        expectedError: 'Required parameter not supplied: promiseName',
-      },
-      {
-        name: 'no promiseName supplied',
-        testData: {
-          id: jobID,
-          data: {
-            promiseAddress: PROMISE_ADDRESS,
-            userAddress: USER_ADDRESS,
-            ipfsCid: IPFS_CID,
-            arweaveId: ARWEAVE_ID,
-            encryptedProof: ENCRYPTED_PROOF,
-          },
-        },
-        expectedError: 'Required parameter not supplied: promiseName',
+        expectedError: 'Required parameter not supplied: promiseAddress',
       },
       {
         name: 'no promiseAddress supplied',
         testData: {
           id: jobID,
           data: {
-            promiseName: PROMISE_NAME,
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
             arweaveId: ARWEAVE_ID,
@@ -119,7 +100,6 @@ describe('createRequest', () => {
         testData: {
           id: jobID,
           data: {
-            promiseName: PROMISE_NAME,
             promiseAddress: PROMISE_ADDRESS,
             ipfsCid: IPFS_CID,
             arweaveId: ARWEAVE_ID,
@@ -133,7 +113,6 @@ describe('createRequest', () => {
         testData: {
           id: jobID,
           data: {
-            promiseName: PROMISE_NAME,
             promiseAddress: PROMISE_ADDRESS,
             userAddress: USER_ADDRESS,
             arweaveId: ARWEAVE_ID,
@@ -147,7 +126,6 @@ describe('createRequest', () => {
         testData: {
           id: jobID,
           data: {
-            promiseName: PROMISE_NAME,
             promiseAddress: PROMISE_ADDRESS,
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
@@ -161,7 +139,6 @@ describe('createRequest', () => {
         testData: {
           id: jobID,
           data: {
-            promiseName: PROMISE_NAME,
             promiseAddress: PROMISE_ADDRESS,
             userAddress: USER_ADDRESS,
             ipfsCid: IPFS_CID,
@@ -200,7 +177,7 @@ describe('createRequest', () => {
         assert.equal(data.status, 'errored');
         assert.equal(
           data.error,
-          "AdapterError: TypeError: Cannot read properties of undefined (reading 'promiseName')",
+          "AdapterError: TypeError: Cannot read properties of undefined (reading 'promiseAddress')",
         );
         done();
       });
