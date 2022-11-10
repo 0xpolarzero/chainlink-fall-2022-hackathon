@@ -8,7 +8,7 @@ const { deployments, network, ethers } = require('hardhat');
 
 // TODO
 // arweaveId : provided and ''
-// encryptedBytes32: correct and incorrect
+// encryptedProof: correct and incorrect
 // storageStatus: 0, 1, 2 and 3
 
 !developmentChains.includes(network.name)
@@ -26,7 +26,7 @@ const { deployments, network, ethers } = require('hardhat');
           args.name,
           args.ipfsCid,
           args.arweaveId,
-          args.encryptedBytes32,
+          args.encryptedProof,
           args.partyNames,
           args.partyTwitters,
           args.partyAddresses,
@@ -49,7 +49,7 @@ const { deployments, network, ethers } = require('hardhat');
           ipfsCid:
             'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
           arweaveId: '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
-          encryptedBytes32:
+          encryptedProof:
             '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
           partyNames: ['Bob', 'Alice'],
           partyTwitters: ['@bob', '@alice'],
@@ -76,7 +76,7 @@ const { deployments, network, ethers } = require('hardhat');
               args.name,
               args.ipfsCid,
               [],
-              args.encryptedBytes32,
+              args.encryptedProof,
               [],
               [],
               [],
@@ -88,7 +88,7 @@ const { deployments, network, ethers } = require('hardhat');
               '',
               args.ipfsCid,
               args.arweaveId,
-              args.encryptedBytes32,
+              args.encryptedProof,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
@@ -115,7 +115,7 @@ const { deployments, network, ethers } = require('hardhat');
               args.name,
               args.ipfsCid,
               args.arweaveId,
-              args.encryptedBytes32,
+              args.encryptedProof,
               args.partyNames,
               args.partyTwitters,
               [deployer.address],
@@ -129,7 +129,7 @@ const { deployments, network, ethers } = require('hardhat');
               args.name,
               args.ipfsCid,
               args.arweaveId,
-              args.encryptedBytes32,
+              args.encryptedProof,
               args.partyNames,
               args.partyTwitters,
               [deployer.address, deployer.address],
@@ -143,7 +143,7 @@ const { deployments, network, ethers } = require('hardhat');
               args.name,
               args.ipfsCid,
               args.arweaveId,
-              args.encryptedBytes32,
+              args.encryptedProof,
               args.partyNames,
               ['@bob', '@bob'],
               args.partyAddresses,
@@ -160,7 +160,7 @@ const { deployments, network, ethers } = require('hardhat');
               name,
               args.ipfsCid,
               args.arweaveId,
-              args.encryptedBytes32,
+              args.encryptedProof,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
@@ -175,7 +175,7 @@ const { deployments, network, ethers } = require('hardhat');
               args.name,
               args.ipfsCid,
               args.arweaveId,
-              args.encryptedBytes32,
+              args.encryptedProof,
               partyNames,
               args.partyTwitters,
               args.partyAddresses,

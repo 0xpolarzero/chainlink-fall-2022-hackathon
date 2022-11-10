@@ -50,7 +50,7 @@ const { deployments, network, ethers } = require('hardhat');
           const name = await promiseContract.getName();
           const ipfsCid = await promiseContract.getIpfsCid();
           const arweaveId = await promiseContract.getArweaveId();
-          const encryptedBytes32 = await promiseContract.getEncryptedBytes32();
+          const encryptedProof = await promiseContract.getencryptedProof();
           const participantCount = await promiseContract.getParticipantCount();
           const promiseFactoryAddress = await promiseContract.getPromiseFactoryContract();
 
@@ -65,7 +65,7 @@ const { deployments, network, ethers } = require('hardhat');
             '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
           );
           assert.equal(
-            encryptedBytes32,
+            encryptedProof,
             '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
           );
           assert.equal(participantCount, 2);

@@ -28,7 +28,7 @@ contract PromiseContract {
     /// Variables
     uint256 private s_participantCount = 0;
     // If the promise is created through the website, the content uploaded to IPFS
-    // and eventually Arweave can be verified with the encryptedBytes32
+    // and eventually Arweave can be verified with the encryptedProof
     // which will result in a storageStatus that provides information on the persistence of the data
     // storageStatus = 0 -> the provided IPFS and Arweave hashes have not yet been verified
     // storageStatus = 1 -> the provided IPFS and eventually Arweave hashes could not be verified
@@ -40,7 +40,7 @@ contract PromiseContract {
     string private s_promiseName;
     string private s_ipfsCid;
     string private s_arweaveId;
-    bytes32 private immutable i_encryptedBytes32;
+    string private s_encryptedProof;
     address private immutable i_owner;
     address private immutable i_promiseFactoryContract;
     address[] private s_participantAddresses;
@@ -97,7 +97,7 @@ contract PromiseContract {
         string memory _promiseName,
         string memory _ipfsCid,
         string memory _arweaveId,
-        bytes32 _encryptedBytes32,
+        string memory _encryptedProof,
         string[] memory _partyNames,
         string[] memory _partyTwitterHandles,
         address[] memory _partyAddresses
@@ -107,7 +107,7 @@ contract PromiseContract {
         s_promiseName = _promiseName;
         s_ipfsCid = _ipfsCid;
         s_arweaveId = _arweaveId;
-        i_encryptedBytes32 = _encryptedBytes32;
+        s_encryptedProof = _encryptedProof;
 
         for (uint256 i = 0; i < _partyAddresses.length; i++) {
             createParticipant(
@@ -244,8 +244,8 @@ contract PromiseContract {
         return s_arweaveId;
     }
 
-    function getEncryptedBytes32() public view returns (bytes32) {
-        return i_encryptedBytes32;
+    function getEncryptedProof() public view returns (string memory) {
+        return s_encryptedProof;
     }
 
     function getStorageStatus() public view returns (uint8) {

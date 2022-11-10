@@ -40,7 +40,7 @@ contract PromiseFactory {
         string _promiseName,
         string _ipfsCid,
         string _arweaveId,
-        bytes32 encryptedBytes32,
+        string encryptedProof,
         string[] _partyNames,
         string[] _partyTwitterHandles,
         address[] _partyAddresses
@@ -102,6 +102,9 @@ contract PromiseFactory {
      * @notice Create a new contract and add it to the list of child contracts
      * @param _promiseName The name of the contract specified by the user
      * @param _ipfsCid The CID of the directory stored on IPFS
+     * @param _arweaveId The ID of the zip stored on Arweave
+     * @param _encryptedProof The encrypted string of the promise name, user
+     * address, IPFS and Arweave hashes
      * @param _partyNames The names of the parties specified by the user
      * @param _partyTwitterHandles The Twitter handles of the parties specified by the user
      * @param _partyAddresses The addresses specified by the user that will be allowed to interact
@@ -112,7 +115,7 @@ contract PromiseFactory {
         string memory _promiseName,
         string memory _ipfsCid,
         string memory _arweaveId,
-        bytes32 _encryptedBytes32,
+        string memory _encryptedProof,
         string[] memory _partyNames,
         string[] memory _partyTwitterHandles,
         address[] memory _partyAddresses
@@ -167,7 +170,7 @@ contract PromiseFactory {
             _promiseName,
             _ipfsCid,
             _arweaveId,
-            _encryptedBytes32,
+            _encryptedProof,
             _partyNames,
             _partyTwitterHandles,
             _partyAddresses
@@ -180,7 +183,7 @@ contract PromiseFactory {
             _promiseName,
             _ipfsCid,
             _arweaveId,
-            _encryptedBytes32,
+            _encryptedProof,
             _partyNames,
             _partyTwitterHandles,
             _partyAddresses
