@@ -5,7 +5,6 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "./IPromiseFactory.sol";
 import "./utils/AddressToString.sol";
-import "hardhat/console.sol";
 
 /**
  * @author polarzero
@@ -26,11 +25,6 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
     address private s_promiseFactoryContract;
     IPromiseFactory private s_promiseFactoryInterface;
 
-    // Variables returned by the oracle
-    string private s_username;
-    address private s_userAddress;
-    bool private s_verified = false;
-
     // Events
     event VerificationRequested(bytes32 indexed requestId, string username);
     event VerificationFailed(bytes32 indexed requestId, string username);
@@ -40,7 +34,6 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         address userAddress,
         bool verified
     );
-    event FundsWithdrawn(uint256 amount);
 
     /**
      * @notice Initialize the link token and target oracle
@@ -94,11 +87,7 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         string memory _username,
         bool _verified,
         address _userAddress
-    ) public recordChainlinkFulfillment(_requestId) {
-        s_username = _username;
-        s_userAddress = _userAddress;
-        s_verified = _verified;
-
+    ) external recordChainlinkFulfillment(_requestId) {
         if (_verified) {
             // It's ok if the user already have a verified account, they can still verify another one
             // Call the PromiseFactory contract to verify the user
@@ -120,31 +109,8 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
     }
 
     /**
-     * @notice Withdraw LINK from this contract
-     */
-
-    function withdrawLink() public onlyOwner {
-        LinkTokenInterface linkToken = LinkTokenInterface(
-            chainlinkTokenAddress()
-        );
-        uint256 balance = linkToken.balanceOf(address(this));
-
-        (bool success, ) = address(this).call(
-            abi.encodeWithSelector(
-                linkToken.transfer.selector,
-                msg.sender,
-                linkToken.balanceOf(address(this))
-            )
-        );
-        require(success, "Unable to transfer");
-
-        emit FundsWithdrawn(balance);
-    }
-
-    /**
-     * @notice Call the promise factory contract to verify a Twitter account
-     * @dev It also sets the promise factory contract interface with this address
-     * @param _promiseFactoryContract The address of the PromiseFactory contract
+     * @notice Set the address of the PromiseFactory contract
+     * @param _promiseFactoryContract: The address of the PromiseFactory contract
      */
 
     function setPromiseFactoryContract(address _promiseFactoryContract)
@@ -155,18 +121,23 @@ contract VerifyTwitter is ChainlinkClient, ConfirmedOwner {
         s_promiseFactoryInterface = IPromiseFactory(_promiseFactoryContract);
     }
 
+    /**
+     * @notice Set the oracle job ID
+     * @param _oracleJobId The oracle job ID
+     */
+
     function setOracleJobId(bytes32 _oracleJobId) public onlyOwner {
         s_oracleJobId = _oracleJobId;
     }
 
     // Getters
 
-    function getOracleJobId() public view returns (bytes32) {
-        return s_oracleJobId;
-    }
-
     function getPromiseFactoryContract() public view returns (address) {
         return s_promiseFactoryContract;
+    }
+
+    function getOracleJobId() public view returns (bytes32) {
+        return s_oracleJobId;
     }
 
     function getOraclePayment() public pure returns (uint256) {
