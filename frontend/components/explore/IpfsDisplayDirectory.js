@@ -166,12 +166,14 @@ export default function IpfsDisplaydirectory({
                       user can provide any valid CID.
                     </p>
                     <p>
-                      <b>NOTE:</b> As soon as the promise is locked, the
-                      contract will try to perform a permanent backup to{' '}
+                      <b>NOTE:</b> Check the storage status on the right to see
+                      if the content has been backed up to{' '}
                       <a href='https://arwiki.wiki/#/en/main' target='_blank'>
                         Arweave
                       </a>
-                      , the result of which will be displayed on the badge.
+                      . If so, the directory has been sent as a .zip archive on
+                      the permaweb, not counting the IPFS nodes that are storing
+                      it.
                     </p>
                   </span>
                 }

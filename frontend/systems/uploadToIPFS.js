@@ -8,7 +8,6 @@ const uploadToIPFS = async (files, setIpfsUploadProgress) => {
     // Get the total size of the files
     const totalSize = files.reduce((acc, file) => acc + file.size, 0);
     let uploadProgress = 0;
-    let uploadProgressInPercent = 0;
 
     // Update the progress on each chunk
     const onStoredChunk = (size) => {

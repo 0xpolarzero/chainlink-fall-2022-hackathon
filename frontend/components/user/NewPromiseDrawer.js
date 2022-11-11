@@ -23,7 +23,6 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   const [createPromiseArgs, setCreatePromiseArgs] = useState([]);
   const [form] = Form.useForm();
   // IPFS
-  const [ipfsUploadToast, setIpfsUploadToast] = useState(null);
   const [ipfsUploadProgress, setIpfsUploadProgress] = useState(0);
   // Bundlr
   const [bundlr, setBundlr] = useState({
@@ -32,6 +31,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
   });
   const [isArweaveChecked, setIsArweaveChecked] = useState(true);
 
+  const [statusMessage, setStatusMessage] = useState('');
   const { address: userAddress } = useAccount();
   const { data: userBalance } = useBalance({ addressOrName: userAddress });
   const { chain } = useNetwork();
@@ -55,6 +55,8 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       toast.error('Error creating promise');
       console.log('error creating promise', err);
       setSubmitLoading(false);
+      setIsFormDisabled(false);
+      setStatusMessage('');
     },
   });
   // ----------------
@@ -78,11 +80,15 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
 
     // Upload the files to IPFS
     // If it doesn't work, it will return false
-    // Show a toast pending message that we can update on progress
-    setIpfsUploadToast(
-      toast.loading(`Uploading files to IPFS... ${ipfsUploadProgress}%`),
+    setStatusMessage(`Uploading files to IPFS... ${ipfsUploadProgress}%`);
+    const ipfsCid = await toast.promise(
+      uploadToIPFS(formValues.files, setIpfsUploadProgress),
+      {
+        pending: `Uploading files to IPFS...`,
+        success: `Files uploaded to IPFS!`,
+        error: `Error uploading files to IPFS`,
+      },
     );
-    const ipfsCid = await uploadToIPFS(formValues.files, setIpfsUploadProgress);
 
     // If the upload failed, show an error toast and return
     if (!ipfsCid) {
@@ -99,7 +105,14 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
         userBalance,
         formValues.files,
         formValues.promiseName,
+        setStatusMessage,
       );
+
+      if (!arweaveId) {
+        setSubmitLoading(false);
+        setIsFormDisabled(false);
+        return;
+      }
     }
 
     // Set a unique identifier attesting that the promise was created using the website
@@ -109,10 +122,14 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     // will indeed be persisted on IPFS and Arweave
     // The key is generated using the following parameters,
     // a 256 bit AES encryption key, and a 128 bit IV
+    setStatusMessage(
+      'Encrypting the proof that your files have indeed been uploaded...',
+    );
     const encryptedProof = encryptAES256(userAddress, ipfsCid, arweaveId);
 
     // Then create the promise
     // This will trigger the useEffect hook (to make sure the args are filled)
+    setStatusMessage('Waiting for you to confirm the transaction...');
     setCreatePromiseArgs([
       formValues.promiseName,
       ipfsCid,
@@ -131,41 +148,15 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
     setIsFormDisabled(false);
     setCreatePromiseArgs([]);
     setIpfsUploadProgress(0);
+    setStatusMessage('');
   };
 
   useEffect(() => {
     // Don't fire on first render or when the args are reset
-    if (createPromiseArgs.length === 5) {
+    if (createPromiseArgs.length === 7) {
       createPromise();
     }
   }, [createPromiseArgs]);
-
-  useEffect(() => {
-    // Update the toast when the upload progress changes
-    if (ipfsUploadProgress < 100) {
-      toast.update(ipfsUploadToast, {
-        render: `Uploading files to IPFS... ${ipfsUploadProgress}%`,
-        type: 'loading',
-        isLoading: true,
-      });
-      // If the upload is complete, update with a success toast
-    } else if (ipfsUploadProgress === 100) {
-      toast.update(ipfsUploadToast, {
-        render: 'Files uploaded to IPFS',
-        type: 'success',
-        isLoading: false,
-        autoClose: 5000,
-      });
-    } else if (ipfsUploadProgress === 'error') {
-      // If the upload failed, update with an error toast
-      toast.update(ipfsUploadToast, {
-        render: 'Error uploading files to IPFS',
-        type: 'error',
-        isLoading: false,
-        autoClose: 5000,
-      });
-    }
-  }, [ipfsUploadProgress]);
 
   return (
     <Drawer
@@ -192,6 +183,9 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
       }
     >
       <div className='drawer-content'>
+        {submitLoading ? (
+          <div className='info-message'>{statusMessage}</div>
+        ) : null}
         <NewPromiseForm
           userAddress={userAddress}
           form={form}

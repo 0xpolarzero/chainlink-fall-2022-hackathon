@@ -8,8 +8,15 @@ import { toast } from 'react-toastify';
 
 const zipInstance = new JSZip();
 
-const uploadToArweave = async (bundlr, userBalance, files, promiseName) => {
+const uploadToArweave = async (
+  bundlr,
+  userBalance,
+  files,
+  promiseName,
+  setStatusMessage,
+) => {
   try {
+    setStatusMessage('Preparing files for upload to Arweave...');
     const bundlrInstance = bundlr.instance;
     const formattedPromiseName = promiseName.toLowerCase().replace(/\s/g, '-');
 
@@ -37,6 +44,7 @@ const uploadToArweave = async (bundlr, userBalance, files, promiseName) => {
       userBalance,
       requiredPrice,
       requiredFund,
+      setStatusMessage,
     );
 
     if (!fundTx) {
@@ -47,6 +55,7 @@ const uploadToArweave = async (bundlr, userBalance, files, promiseName) => {
     const uploadedFiles = await uploadFilesToBundlr(
       bundlrInstance,
       preparedZip,
+      setStatusMessage,
     );
 
     // Check that it was uploaded successfully (if not it will be false)
@@ -95,7 +104,9 @@ const fundBundlr = async (
   userBalance,
   requiredPrice,
   requiredFund,
+  setStatusMessage,
 ) => {
+  setStatusMessage('Waiting for you to fund your Bundlr wallet...');
   // Get the balance of the instance and the user
   console.log(
     'Bundlr balance: ',
@@ -195,7 +206,14 @@ const createZip = async (files, promiseName) => {
   return zipFile;
 };
 
-const uploadFilesToBundlr = async (bundlrInstance, preparedFiles) => {
+const uploadFilesToBundlr = async (
+  bundlrInstance,
+  preparedFiles,
+  setStatusMessage,
+) => {
+  setStatusMessage(
+    'Please sign the transaction so the files can be uploaded to Arweave...',
+  );
   // Upload each file and get the url
   let uploadedFiles = [];
   for (const file of preparedFiles) {
