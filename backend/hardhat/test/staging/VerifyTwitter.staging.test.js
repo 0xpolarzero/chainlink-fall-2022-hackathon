@@ -124,7 +124,7 @@ developmentChains.includes(network.name)
             assert.equal(isVerifiedHandle, '');
           };
 
-          await requestAVerification(
+          await createVerificationRequest(
             verifyTwitter,
             UNVERIFIED_USERNAME,
             'VerificationFailed',
@@ -141,7 +141,7 @@ developmentChains.includes(network.name)
             assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
           };
 
-          await requestAVerification(
+          await createVerificationRequest(
             verifyTwitter,
             VERIFIED_USERNAME,
             'VerificationSuccessful',
@@ -159,7 +159,7 @@ developmentChains.includes(network.name)
             assert.equal(isVerifiedHandle.length, 2);
           };
 
-          await requestAVerification(
+          await createVerificationRequest(
             verifyTwitter,
             VERIFIED_USERNAME_2,
             'VerificationSuccessful',
@@ -182,7 +182,7 @@ developmentChains.includes(network.name)
           };
 
           // This time
-          await requestAVerification(
+          await createVerificationRequest(
             verifyTwitter,
             VERIFIED_USERNAME,
             'VerificationSuccessful',
@@ -191,7 +191,7 @@ developmentChains.includes(network.name)
         });
       });
 
-      const requestAVerification = async (
+      const createVerificationRequest = async (
         eventContract,
         username,
         event,

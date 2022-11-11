@@ -15,8 +15,8 @@ observationSource = """
     parseResult             [type="jsonparse" path="data,result" data="$(fetch)"]
     parsePromiseAddress     [type="jsonparse" path="data,promiseAddress" data="$(fetch)"]
 
-    encode_data             [type="ethabiencode" abi="(bytes32 _requestId, address _promiseAddress, uint8 _storageStatus)"
-                                data="{\\"_requestId\\": $(decode_log.requestId),\\"_promiseAddress\\": $(parsePromiseAddress), \\"_storageStatus\\": $(parseResult)}"]
+    encode_data             [type="ethabiencode" abi="(bytes32 _requestId, address _promiseAddress, uint8 _backupStatus)"
+                                data="{\\"_requestId\\": $(decode_log.requestId), \\"_promiseAddress\\": $(parsePromiseAddress), \\"_backupStatus\\": $(parseResult)}"]
 
     encode_tx               [type="ethabiencode"
                                 abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"

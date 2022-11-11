@@ -45,8 +45,11 @@ const createRequest = (input, callback) => {
       mode: CryptoJS.mode.CBC,
       padding: CryptoJS.pad.Pkcs7,
     });
-    const decryptedString = decryptedData.toString(CryptoJS.enc.Utf8);
-    const expectedString = userAddress + ipfsCid + arweaveId;
+    // We must transform to lowercase because the addresses can mismatch if not
+    const decryptedString = decryptedData
+      .toString(CryptoJS.enc.Utf8)
+      .toLowerCase();
+    const expectedString = (userAddress + ipfsCid + arweaveId).toLowerCase();
 
     // If the strings don't match, return 1
     // If they do and arweaveId is empty, return 2 (not been uploaded to Arweave)
@@ -67,7 +70,7 @@ const createRequest = (input, callback) => {
     callback(response.status, Requester.success(jobRunID, response));
   } catch (err) {
     console.log(err);
-    callback(500, Requester.errored(jobRunID, error));
+    callback(500, Requester.errored(jobRunID, err));
   }
 };
 
