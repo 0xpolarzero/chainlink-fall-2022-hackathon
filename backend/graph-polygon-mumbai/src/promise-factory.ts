@@ -31,6 +31,7 @@ export function handlePromiseContractCreated(
   activePromise.contractAddress = event.params._contractAddress;
   activePromise.promiseName = event.params._promiseName;
   activePromise.ipfsCid = event.params._ipfsCid;
+  activePromise.arweaveId = event.params._arweaveId;
   activePromise.partyNames = event.params._partyNames;
   activePromise.partyTwitterHandles = event.params._partyTwitterHandles;
   activePromise.partyAddresses = event.params._partyAddresses.map<Bytes>(

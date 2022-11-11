@@ -4,6 +4,7 @@ type ActivePromise @entity {
   contractAddress: Bytes!
   promiseName: String!
   ipfsCid: String!
+  arweaveId: String!
   partyNames: [String!]!
   partyTwitterHandles: [String!]!
   partyAddresses: [Bytes!]!
@@ -17,6 +18,7 @@ type PromiseContractCreated @entity {
   contractAddress: Bytes!
   promiseName: String!
   ipfsCid: String!
+  arweaveId: String!
   partyNames: [String!]!
   partyTwitterHandles: [String!]!
   partyAddresses: [Bytes!]!

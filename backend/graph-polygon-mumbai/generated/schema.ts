@@ -78,6 +78,15 @@ export class ActivePromise extends Entity {
     this.set("ipfsCid", Value.fromString(value));
   }
 
+  get arweaveId(): string {
+    let value = this.get("arweaveId");
+    return value!.toString();
+  }
+
+  set arweaveId(value: string) {
+    this.set("arweaveId", Value.fromString(value));
+  }
+
   get partyNames(): Array<string> {
     let value = this.get("partyNames");
     return value!.toStringArray();
@@ -210,6 +219,15 @@ export class PromiseContractCreated extends Entity {
 
   set ipfsCid(value: string) {
     this.set("ipfsCid", Value.fromString(value));
+  }
+
+  get arweaveId(): string {
+    let value = this.get("arweaveId");
+    return value!.toString();
+  }
+
+  set arweaveId(value: string) {
+    this.set("arweaveId", Value.fromString(value));
   }
 
   get partyNames(): Array<string> {
