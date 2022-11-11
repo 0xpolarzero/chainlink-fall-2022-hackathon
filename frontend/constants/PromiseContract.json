@@ -17,6 +17,16 @@
         "type": "string"
       },
       {
+        "internalType": "string",
+        "name": "_arweaveId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_encryptedProof",
+        "type": "string"
+      },
+      {
         "internalType": "string[]",
         "name": "_partyNames",
         "type": "string[]"
@@ -57,7 +67,17 @@
   },
   {
     "inputs": [],
+    "name": "PromiseContract__createParticipant__INCORRECT_FIELD_LENGTH",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "PromiseContract__lockPromise__PARTICIPANT_NOT_APPROVED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PromiseContract__updateStorageStatus__INVALID_STATUS",
     "type": "error"
   },
   {
@@ -117,6 +137,19 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "storageStatus",
+        "type": "uint8"
+      }
+    ],
+    "name": "PromiseStorageStatusUpdated",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "approvePromise",
     "outputs": [],
@@ -139,11 +172,42 @@
         "internalType": "address",
         "name": "_participantAddress",
         "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_resetApprovalStatus",
+        "type": "bool"
       }
     ],
     "name": "createParticipant",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getArweaveId",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getEncryptedProof",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -300,7 +364,33 @@
   },
   {
     "inputs": [],
+    "name": "getStorageStatus",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "lockPromise",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "_storageStatus",
+        "type": "uint8"
+      }
+    ],
+    "name": "updateStorageStatus",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -1,7 +1,7 @@
 {
   "80001": {
-    "PromiseFactory": ["0x20140C04A2646D0283EA82D7EF2f27a6277DfF6C"],
-    "VerifyTwitter": ["0xaCf2a60308AaA3edEB3407ab81A68F184806BAAF"],
+    "PromiseFactory": ["0x3d6661bc7d1D7efCcf86Cb9B3DaD46D20E7d864e"],
+    "VerifyTwitter": ["0x7dFeABA7D45DA6B2bDFC4d39b0970bD91c4C02f2"],
     "Bundlr": ["https://devnet.bundlr.network"]
   },
   "137": {
