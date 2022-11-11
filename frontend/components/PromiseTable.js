@@ -29,6 +29,7 @@ export default function PromiseTable({
   const {
     contractAddress,
     ipfsCid,
+    arweaveId,
     partyNames,
     partyTwitterHandles,
     partyAddresses,
@@ -53,6 +54,7 @@ export default function PromiseTable({
       partyTwitterHandles,
       addressToApprovedStatus,
       addressToTwitterVerifiedStatus,
+      isPromiseLocked,
     );
     setPartiesData(partiesDataToDisplay);
 
@@ -62,8 +64,10 @@ export default function PromiseTable({
 
   return (
     <div key='contract' className='card-item contract-identity'>
-      {/* <RibbonBadge isPromiseLocked={isPromiseLocked} /> */}
-      <StorageStatusRibbon contractAddress={contractAddress} />
+      <StorageStatusRibbon
+        contractAddress={contractAddress}
+        arweaveId={arweaveId}
+      />
       <Table
         dataSource={contractData}
         columns={contractColumns}

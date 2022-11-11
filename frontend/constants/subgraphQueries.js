@@ -8,6 +8,7 @@ const GET_ACTIVE_PROMISE = gql`
       contractAddress
       promiseName
       ipfsCid
+      arweaveId
       partyNames
       partyTwitterHandles
       partyAddresses

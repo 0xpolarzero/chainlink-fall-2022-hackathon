@@ -33,6 +33,7 @@ export default function FormattedAddress({ address, isShrinked, type }) {
   useEffect(() => {
     if (type === 'ipfs') setPrefix('https://dweb.link/ipfs/');
     if (type === 'eth') setPrefix('https://mumbai.polygonscan.com/address/');
+    if (type === 'arweave') setPrefix('https://arweave.net/');
   }, [type]);
 
   return (

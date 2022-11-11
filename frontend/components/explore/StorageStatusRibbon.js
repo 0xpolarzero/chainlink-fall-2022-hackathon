@@ -1,11 +1,12 @@
 import promiseContractAbi from '../../constants/PromiseContract.json';
-import { Badge, Skeleton, Popover, Tooltip } from 'antd';
+import { Badge, Tooltip } from 'antd';
 import { ethers } from 'ethers';
 import { useProvider } from 'wagmi';
 import { useEffect, useState } from 'react';
 
 export default function StorageStatusRibbon({
   contractAddress: promiseContractAddress,
+  arweaveId,
 }) {
   const [storageStatus, setStorageStatus] = useState(null);
   const [storageStatusTitle, setStorageStatusTitle] = useState('');
@@ -46,16 +47,34 @@ export default function StorageStatusRibbon({
       setStorageStatusColor('var(--toastify-color-warning)');
       setStorageStatusIcon('fas fa-warning');
     } else if (storageStatus === 2) {
-      setStorageStatusTitle('Verified');
+      setStorageStatusTitle('Verified (IPFS)');
       setStorageStatusDesc(
         'The provided IPFS CID was verified by the Chainlink oracle. The data on IPFS was picked up by our node.',
       );
       setStorageStatusColor('var(--toastify-color-success)');
       setStorageStatusIcon('fas fa-check');
     } else if (storageStatus === 3) {
-      setStorageStatusTitle('Verified');
+      setStorageStatusTitle('Verified (IPFS + Arweave)');
       setStorageStatusDesc(
-        'The The provided IPFS CID and  Arweave ID were verified by the Chainlink oracle. The data on IPFS was picked up by our node and an archive was sent to the Arweave network for permanent storage.',
+        <div>
+          The The provided IPFS CID and Arweave ID were verified by the
+          Chainlink oracle. The data on IPFS was picked up by our node and an
+          archive was sent to the Arweave network for permanent storage.
+          <br />
+          <br />
+          Archive URL on Arweave:{' '}
+          <a
+            href={`https://arweave.net/${arweaveId}`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {arweaveId}
+          </a>{' '}
+          <span className='warning'>
+            <i className='fas fa-warning' />
+            will download on click
+          </span>
+        </div>,
       );
       setStorageStatusColor('var(--toastify-color-success)');
       setStorageStatusIcon('fas fa-check');

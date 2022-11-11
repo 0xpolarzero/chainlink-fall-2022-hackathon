@@ -145,6 +145,7 @@ const displayPartiesData = (
   partyTwitterHandles,
   addressToApprovedStatus,
   addressToTwitterVerifiedStatus,
+  isPromiseLocked,
 ) => {
   const dataToDisplay = [];
 
@@ -174,17 +175,18 @@ const displayPartiesData = (
             @{partyTwitterHandles[i]}
           </a>
         ),
-      // TODO Link to the Tx verification
       twitterVerifiedDiv:
         partyTwitterHandles[i] === ''
           ? null
           : getVerificationDiv(
               addressToTwitterVerifiedStatus[partyAddresses[i]],
               'Not verified',
+              'twitter',
             ),
       promiseApprovedDiv: getVerificationDiv(
         addressToApprovedStatus[partyAddresses[i]],
         'Not approved',
+        'approved',
       ),
     });
   }
@@ -199,12 +201,10 @@ const getVerificationDiv = (isTrue, message, type) => {
     );
   } else if (isTrue) {
     return (
-      <a className='verified' href='some-tx-link' target='_blank'>
+      <div className='verified'>
         <i className='fas fa-check'></i>
-        <span>
-          Tx <i className='fas fa-chain'></i>
-        </span>
-      </a>
+        Yes
+      </div>
     );
   } else {
     return (

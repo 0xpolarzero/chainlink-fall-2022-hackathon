@@ -1,5 +1,4 @@
 import VerifyTwitterInstructions from './VerifyTwitterInstructions';
-import { getVerificationDiv } from '../../systems/promisePartiesData';
 import { waitForChainlinkFulfillment } from '../../systems/verifyTwitter';
 import verifyTwitterAbi from '../../constants/VerifyTwitter.json';
 import networkMapping from '../../constants/networkMapping';
@@ -19,12 +18,8 @@ export default function RowPromiseVerification({
   addressToTwitterVerifiedStatus,
   gatherPartiesData,
 }) {
-  const [verificationDiv, setVerificationDiv] = useState(null);
   const [isWaitingforVerification, setIsWaitingForVerification] =
     useState(false);
-  // const [verifyTwitterContract, setVerifyTwitterContract] = useState(
-  //   networkMapping['80001']['VerifyTwitter'][0],
-  // );
   const verifyTwitterContract =
     networkMapping[(chain && chain.id) || '80001'].VerifyTwitter[0];
   const { chain } = useNetwork();
@@ -74,21 +69,6 @@ export default function RowPromiseVerification({
     }
   };
 
-  useEffect(() => {
-    setVerificationDiv(
-      getVerificationDiv(
-        interactingUser.twitterVerifiedStatus,
-        'Twitter handle not verified',
-      ),
-    );
-  }, [addressToTwitterVerifiedStatus, userAddress]);
-
-  // useEffect(() => {
-  //   if (chain) {
-  //     setVerifyTwitterContract(networkMapping[chain.id]['VerifyTwitter'][0]);
-  //   }
-  // }, [chain]);
-
   // If it's loading, set a skeleton
   if (interactingUser.twitterVerifiedStatus === undefined) {
     return (
@@ -105,21 +85,23 @@ export default function RowPromiseVerification({
   if (interactingUser.twitterVerifiedStatus === true) {
     return (
       <>
-        <div className='twitter-verify-status'>{verificationDiv}</div>
-        <div className='verified'>Twitter verified</div>
+        <div className='verified' style={{ justifySelf: 'left' }}>
+          <i className='fas fa-check'></i>
+          Twitter handle verified
+        </div>
+        <div className='verified'></div>
       </>
     );
   }
 
   return (
     <>
-      {/* Status */}
-      <div className='twitter-verify-status'>{verificationDiv}</div>
+      <div className='not-verified'>
+        <i className='fas fa-times'></i>
+        <span>Twitter handle not verified</span>
+      </div>
       <div></div>
-      {/* <Button type='primary' className='no-btn'> */}
-      {/* <i className='fas fa-arrow-down'></i> */}
-      {/* </Button> */}
-      {/* Tweet */}
+
       <VerifyTwitterInstructions
         userAddress={userAddress}
         requestVerification={requestVerification}

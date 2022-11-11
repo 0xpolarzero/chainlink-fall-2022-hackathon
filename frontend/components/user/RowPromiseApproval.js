@@ -1,4 +1,3 @@
-import { getVerificationDiv } from '../../systems/promisePartiesData';
 import promiseContractAbi from '../../constants/PromiseContract.json';
 import { Button, Skeleton } from 'antd';
 import { toast } from 'react-toastify';
@@ -7,16 +6,13 @@ import {
   useContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
-import { useEffect, useState } from 'react';
 
 export default function RowPromiseApproval({
   interactingUser,
   contractAddress,
   userAddress,
-  addressToApprovedStatus,
   gatherPartiesData,
 }) {
-  const [verificationDiv, setVerificationDiv] = useState(null);
   const { config: approveConfig, error: approveError } =
     usePrepareContractWrite({
       address: contractAddress,
@@ -54,15 +50,6 @@ export default function RowPromiseApproval({
     confirmations: 1,
   });
 
-  useEffect(() => {
-    setVerificationDiv(
-      getVerificationDiv(
-        addressToApprovedStatus[userAddress.toLowerCase()],
-        'Promise not approved',
-      ),
-    );
-  }, [addressToApprovedStatus, userAddress]);
-
   // If the users approved status is undefined, it's still loading
   if (interactingUser.promiseApprovedStatus === undefined) {
     return (
@@ -77,19 +64,30 @@ export default function RowPromiseApproval({
 
   return (
     <>
-      <div className='promise-approve-status'>{verificationDiv}</div>
       {interactingUser.promiseApprovedStatus ? (
-        <div className='verified'>Promise approved</div>
+        <>
+          <div className='verified' style={{ justifySelf: 'left' }}>
+            <i className='fas fa-check'></i>
+            Promise approved
+          </div>
+          <div></div>
+        </>
       ) : (
-        <div className='promise-approve-interact'>
-          <Button
-            type='primary'
-            onClick={approvePromise}
-            loading={isApprovingPromise || isWaitingForApproval}
-          >
-            <i className='fas fa-signature' /> Approve promise
-          </Button>
-        </div>
+        <>
+          <div className='not-verified'>
+            <i className='fas fa-times'></i>
+            <span>Promise not approved</span>
+          </div>
+          <div className='promise-approve-interact'>
+            <Button
+              type='primary'
+              onClick={approvePromise}
+              loading={isApprovingPromise || isWaitingForApproval}
+            >
+              <i className='fas fa-signature' /> Approve promise
+            </Button>
+          </div>
+        </>
       )}
     </>
   );

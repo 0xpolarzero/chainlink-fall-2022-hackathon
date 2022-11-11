@@ -181,6 +181,7 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
           </Button>
         </div>
       }
+      destroyOnClose={true}
     >
       <div className='drawer-content'>
         {submitLoading ? (

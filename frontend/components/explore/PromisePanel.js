@@ -18,7 +18,6 @@ export default function PromisePanel({ contractAttributes }) {
 
   const { contractAddress, partyAddresses, partyTwitterHandles, ipfsCid } =
     contractAttributes;
-
   // Status of the promise (locked/unlocked)
   const getPromiseStatus = async () => {
     const isLocked = await promiseStatus().getIsPromiseLocked(
