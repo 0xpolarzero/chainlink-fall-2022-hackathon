@@ -6,9 +6,9 @@ dataSources:
     name: PromiseFactory
     network: mumbai
     source:
-      address: '0x20140C04A2646D0283EA82D7EF2f27a6277DfF6C'
+      address: '0x3d6661bc7d1D7efCcf86Cb9B3DaD46D20E7d864e'
       abi: PromiseFactory
-      startBlock: 29044474
+      startBlock: 29097528
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -20,7 +20,7 @@ dataSources:
           file: ./abis/PromiseFactory.json
       eventHandlers:
         - event: PromiseContractCreated(indexed address,indexed
-            address,string,string,string[],string[],address[])
+            address,string,string,string,string,string[],string[],address[])
           handler: handlePromiseContractCreated
         - event: ParticipantAdded(indexed address,string,string,address)
           handler: handleParticipantAdded

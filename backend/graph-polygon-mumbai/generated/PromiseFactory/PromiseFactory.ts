@@ -69,16 +69,64 @@ export class PromiseContractCreated__Params {
     return this._event.parameters[3].value.toString();
   }
 
+  get _arweaveId(): string {
+    return this._event.parameters[4].value.toString();
+  }
+
+  get encryptedProof(): string {
+    return this._event.parameters[5].value.toString();
+  }
+
   get _partyNames(): Array<string> {
-    return this._event.parameters[4].value.toStringArray();
+    return this._event.parameters[6].value.toStringArray();
   }
 
   get _partyTwitterHandles(): Array<string> {
-    return this._event.parameters[5].value.toStringArray();
+    return this._event.parameters[7].value.toStringArray();
   }
 
   get _partyAddresses(): Array<Address> {
-    return this._event.parameters[6].value.toAddressArray();
+    return this._event.parameters[8].value.toAddressArray();
+  }
+}
+
+export class StorageStatusUpdateRequested extends ethereum.Event {
+  get params(): StorageStatusUpdateRequested__Params {
+    return new StorageStatusUpdateRequested__Params(this);
+  }
+}
+
+export class StorageStatusUpdateRequested__Params {
+  _event: StorageStatusUpdateRequested;
+
+  constructor(event: StorageStatusUpdateRequested) {
+    this._event = event;
+  }
+
+  get promiseContract(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class StorageStatusUpdated extends ethereum.Event {
+  get params(): StorageStatusUpdated__Params {
+    return new StorageStatusUpdated__Params(this);
+  }
+}
+
+export class StorageStatusUpdated__Params {
+  _event: StorageStatusUpdated;
+
+  constructor(event: StorageStatusUpdated) {
+    this._event = event;
+  }
+
+  get _contractAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get _storageStatus(): i32 {
+    return this._event.parameters[1].value.toI32();
   }
 }
 
@@ -112,16 +160,20 @@ export class PromiseFactory extends ethereum.SmartContract {
   createPromiseContract(
     _promiseName: string,
     _ipfsCid: string,
+    _arweaveId: string,
+    _encryptedProof: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
     _partyAddresses: Array<Address>
   ): Address {
     let result = super.call(
       "createPromiseContract",
-      "createPromiseContract(string,string,string[],string[],address[]):(address)",
+      "createPromiseContract(string,string,string,string,string[],string[],address[]):(address)",
       [
         ethereum.Value.fromString(_promiseName),
         ethereum.Value.fromString(_ipfsCid),
+        ethereum.Value.fromString(_arweaveId),
+        ethereum.Value.fromString(_encryptedProof),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
         ethereum.Value.fromAddressArray(_partyAddresses)
@@ -134,16 +186,20 @@ export class PromiseFactory extends ethereum.SmartContract {
   try_createPromiseContract(
     _promiseName: string,
     _ipfsCid: string,
+    _arweaveId: string,
+    _encryptedProof: string,
     _partyNames: Array<string>,
     _partyTwitterHandles: Array<string>,
     _partyAddresses: Array<Address>
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "createPromiseContract",
-      "createPromiseContract(string,string,string[],string[],address[]):(address)",
+      "createPromiseContract(string,string,string,string,string[],string[],address[]):(address)",
       [
         ethereum.Value.fromString(_promiseName),
         ethereum.Value.fromString(_ipfsCid),
+        ethereum.Value.fromString(_arweaveId),
+        ethereum.Value.fromString(_encryptedProof),
         ethereum.Value.fromStringArray(_partyNames),
         ethereum.Value.fromStringArray(_partyTwitterHandles),
         ethereum.Value.fromAddressArray(_partyAddresses)
@@ -221,6 +277,29 @@ export class PromiseFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  getStorageVerifier(): Address {
+    let result = super.call(
+      "getStorageVerifier",
+      "getStorageVerifier():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getStorageVerifier(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getStorageVerifier",
+      "getStorageVerifier():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   getTwitterVerifiedHandle(_userAddress: Address): Array<string> {
     let result = super.call(
       "getTwitterVerifiedHandle",
@@ -246,14 +325,22 @@ export class PromiseFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toStringArray());
   }
 
-  getVerifier(): Address {
-    let result = super.call("getVerifier", "getVerifier():(address)", []);
+  getTwitterVerifier(): Address {
+    let result = super.call(
+      "getTwitterVerifier",
+      "getTwitterVerifier():(address)",
+      []
+    );
 
     return result[0].toAddress();
   }
 
-  try_getVerifier(): ethereum.CallResult<Address> {
-    let result = super.tryCall("getVerifier", "getVerifier():(address)", []);
+  try_getTwitterVerifier(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getTwitterVerifier",
+      "getTwitterVerifier():(address)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -279,8 +366,12 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _verifier(): Address {
+  get _twitterVerifier(): Address {
     return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _storageVerifier(): Address {
+    return this._call.inputValues[1].value.toAddress();
   }
 }
 
@@ -393,16 +484,24 @@ export class CreatePromiseContractCall__Inputs {
     return this._call.inputValues[1].value.toString();
   }
 
+  get _arweaveId(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+
+  get _encryptedProof(): string {
+    return this._call.inputValues[3].value.toString();
+  }
+
   get _partyNames(): Array<string> {
-    return this._call.inputValues[2].value.toStringArray();
+    return this._call.inputValues[4].value.toStringArray();
   }
 
   get _partyTwitterHandles(): Array<string> {
-    return this._call.inputValues[3].value.toStringArray();
+    return this._call.inputValues[5].value.toStringArray();
   }
 
   get _partyAddresses(): Array<Address> {
-    return this._call.inputValues[4].value.toAddressArray();
+    return this._call.inputValues[6].value.toAddressArray();
   }
 }
 
@@ -418,32 +517,96 @@ export class CreatePromiseContractCall__Outputs {
   }
 }
 
-export class SetVerifierCall extends ethereum.Call {
-  get inputs(): SetVerifierCall__Inputs {
-    return new SetVerifierCall__Inputs(this);
+export class SetStorageVerifierCall extends ethereum.Call {
+  get inputs(): SetStorageVerifierCall__Inputs {
+    return new SetStorageVerifierCall__Inputs(this);
   }
 
-  get outputs(): SetVerifierCall__Outputs {
-    return new SetVerifierCall__Outputs(this);
+  get outputs(): SetStorageVerifierCall__Outputs {
+    return new SetStorageVerifierCall__Outputs(this);
   }
 }
 
-export class SetVerifierCall__Inputs {
-  _call: SetVerifierCall;
+export class SetStorageVerifierCall__Inputs {
+  _call: SetStorageVerifierCall;
 
-  constructor(call: SetVerifierCall) {
+  constructor(call: SetStorageVerifierCall) {
     this._call = call;
   }
 
-  get _verifier(): Address {
+  get _storageVerifier(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 }
 
-export class SetVerifierCall__Outputs {
-  _call: SetVerifierCall;
+export class SetStorageVerifierCall__Outputs {
+  _call: SetStorageVerifierCall;
 
-  constructor(call: SetVerifierCall) {
+  constructor(call: SetStorageVerifierCall) {
+    this._call = call;
+  }
+}
+
+export class SetTwitterVerifierCall extends ethereum.Call {
+  get inputs(): SetTwitterVerifierCall__Inputs {
+    return new SetTwitterVerifierCall__Inputs(this);
+  }
+
+  get outputs(): SetTwitterVerifierCall__Outputs {
+    return new SetTwitterVerifierCall__Outputs(this);
+  }
+}
+
+export class SetTwitterVerifierCall__Inputs {
+  _call: SetTwitterVerifierCall;
+
+  constructor(call: SetTwitterVerifierCall) {
+    this._call = call;
+  }
+
+  get _twitterVerifier(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetTwitterVerifierCall__Outputs {
+  _call: SetTwitterVerifierCall;
+
+  constructor(call: SetTwitterVerifierCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateStorageStatusCall extends ethereum.Call {
+  get inputs(): UpdateStorageStatusCall__Inputs {
+    return new UpdateStorageStatusCall__Inputs(this);
+  }
+
+  get outputs(): UpdateStorageStatusCall__Outputs {
+    return new UpdateStorageStatusCall__Outputs(this);
+  }
+}
+
+export class UpdateStorageStatusCall__Inputs {
+  _call: UpdateStorageStatusCall;
+
+  constructor(call: UpdateStorageStatusCall) {
+    this._call = call;
+  }
+
+  get _promiseContractAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _storageStatus(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+}
+
+export class UpdateStorageStatusCall__Outputs {
+  _call: UpdateStorageStatusCall;
+
+  constructor(call: UpdateStorageStatusCall) {
     this._call = call;
   }
 }

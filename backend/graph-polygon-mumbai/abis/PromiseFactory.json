@@ -1,7 +1,16 @@
 [
   {
     "inputs": [
-      { "internalType": "address", "name": "_verifier", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_twitterVerifier",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_storageVerifier",
+        "type": "address"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -89,6 +98,18 @@
       },
       {
         "indexed": false,
+        "internalType": "string",
+        "name": "_arweaveId",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "encryptedProof",
+        "type": "string"
+      },
+      {
+        "indexed": false,
         "internalType": "string[]",
         "name": "_partyNames",
         "type": "string[]"
@@ -107,6 +128,38 @@
       }
     ],
     "name": "PromiseContractCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "promiseContract",
+        "type": "address"
+      }
+    ],
+    "name": "StorageStatusUpdateRequested",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_contractAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "_storageStatus",
+        "type": "uint8"
+      }
+    ],
+    "name": "StorageStatusUpdated",
     "type": "event"
   },
   {
@@ -162,6 +215,8 @@
     "inputs": [
       { "internalType": "string", "name": "_promiseName", "type": "string" },
       { "internalType": "string", "name": "_ipfsCid", "type": "string" },
+      { "internalType": "string", "name": "_arweaveId", "type": "string" },
+      { "internalType": "string", "name": "_encryptedProof", "type": "string" },
       { "internalType": "string[]", "name": "_partyNames", "type": "string[]" },
       {
         "internalType": "string[]",
@@ -217,6 +272,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getStorageVerifier",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "address", "name": "_userAddress", "type": "address" }
     ],
@@ -227,16 +289,47 @@
   },
   {
     "inputs": [],
-    "name": "getVerifier",
+    "name": "getTwitterVerifier",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_verifier", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_storageVerifier",
+        "type": "address"
+      }
     ],
-    "name": "setVerifier",
+    "name": "setStorageVerifier",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_twitterVerifier",
+        "type": "address"
+      }
+    ],
+    "name": "setTwitterVerifier",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_promiseContractAddress",
+        "type": "address"
+      },
+      { "internalType": "uint8", "name": "_storageStatus", "type": "uint8" }
+    ],
+    "name": "updateStorageStatus",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
