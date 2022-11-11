@@ -13,7 +13,7 @@ const ARWEAVE_ID = '1JXtGzqZtJxG0yUvJGmZwWqjLbIuTtqXgKXgjXgqXgq';
 
 developmentChains.includes(network.name)
   ? describe.skip
-  : describe.only('VerifyStorage staging tests', function() {
+  : describe('VerifyStorage staging tests', function() {
       let deployer;
       let user;
       let verifyStorageDeploy;
@@ -124,7 +124,6 @@ developmentChains.includes(network.name)
         // All the requests are made by the PromiseFactory contract
         // during the promise creation process
         it('Should revert if called by anyone else than the PromiseFactory contract', async () => {
-          // TODO WHY NOT REVERTED WITH RIGHT REVERT MESSAGE?
           await expect(
             verifyStorage.requestStorageStatusUpdate(
               '0x0000000000000000000000000000000000000000',
@@ -197,7 +196,7 @@ developmentChains.includes(network.name)
           });
         });
 
-        it.only('Should update the storageStatus with the correct status', async () => {
+        it('Should update the storageStatus with the correct status', async () => {
           // Setup each scenario
           const scenarios = [
             {
@@ -224,35 +223,30 @@ developmentChains.includes(network.name)
           ];
 
           for (const scenario of scenarios) {
-            let localPromiseContract;
             console.log(`Testing scenario: ${scenario.name}`);
-            console.log('encryptedProof', scenario.encryptedProof);
 
-            // Setup a listener in the VerifyStorage contract for the StorageStatusUpdateSuccessful event
-            console.log('Setting up listener...');
+            console.log('Setting up listeners...');
             await new Promise(async (resolve, reject) => {
               console.log('Waiting for the oracle to fulfill the request...');
 
+              console.log(
+                'Setting up listener for the StorageStatusUpdateSuccessful event...',
+              );
+              // Setup a listener in the VerifyStorage contract for the StorageStatusUpdateSuccessful event
               verifyStorage.once(
                 'StorageStatusUpdateSuccessful',
                 async (requestId, promiseAddress, storageStatus) => {
                   console.log('StorageStatusUpdateSuccessful event fired.');
                   // Check the storage status in the event
-                  console.log(
-                    storageStatus === scenario.expectedStatus ? '✅' : '❌',
-                  );
-                  assert.equal(storageStatus, scenario.expectedStatus);
-
-                  // Check the storage status in the promise contract
-                  // hoping it was updated correctly
                   try {
                     console.log(
-                      'Checking storage status in the promise contract...',
+                      storageStatus === scenario.expectedStatus
+                        ? `${scenario.name} ✅`
+                        : `${scenario.name} ❌`,
                     );
-                    const status = await localPromiseContract.getStorageStatus();
-                    assert.equal(status.toString(), scenario.expectedStatus);
+                    assert.equal(storageStatus, scenario.expectedStatus);
                     console.log('Done.');
-                    resolve();
+                    // resolve();
                   } catch (err) {
                     reject(err);
                   }
@@ -268,9 +262,35 @@ developmentChains.includes(network.name)
                 deployer.address,
                 user.address,
               );
-              localPromiseContract = await ethers.getContractAt(
+              const localPromiseContract = await ethers.getContractAt(
                 'PromiseContract',
                 txReceipt.events[1].address,
+              );
+
+              // Setup a listener to check the storage status only when
+              // it has been updated (StorageStatusUpdateSuccessful event)
+              // and hope it will be setup before the event is fired
+              console.log(
+                'Setting up listener for the StorageStatusUpdated event...',
+              );
+              // Once the verification has been done, this event will be emitted
+              localPromiseContract.once(
+                'PromiseStorageStatusUpdated',
+                async () => {
+                  console.log('PromiseStorageStatusUpdated event fired.');
+                  try {
+                    // Check the storage status in the promise contract
+                    console.log(
+                      'Checking storage status in the promise contract...',
+                    );
+                    const status = await localPromiseContract.getStorageStatus();
+                    assert.equal(status.toString(), scenario.expectedStatus);
+                    console.log('Done.');
+                    resolve();
+                  } catch (err) {
+                    reject(err);
+                  }
+                },
               );
             });
           }

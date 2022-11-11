@@ -174,6 +174,10 @@ contract VerifyStorage is ChainlinkClient, ConfirmedOwner {
         return s_oracleJobId;
     }
 
+    function getOraclePayment() public pure returns (uint256) {
+        return ORACLE_PAYMENT;
+    }
+
     function getLinkBalance() public view returns (uint256) {
         LinkTokenInterface linkToken = LinkTokenInterface(
             chainlinkTokenAddress()
