@@ -36,7 +36,7 @@ contract VerifyStorage is ChainlinkClient, ConfirmedOwner {
 
     // Chainlink variables
     uint256 private constant ORACLE_PAYMENT = (1 * LINK_DIVISIBILITY) / 10; // 0.1 LINK
-    bytes32 private s_oracleJobId = "6b8a5d182e2640999421f57e9c0a1d4e";
+    bytes32 private s_oracleJobId = "cd430ded65b64b5fae032f9b9b37b89d";
 
     // Declare the PromiseFactory contract address and the interface
     address private s_promiseFactoryContract;
@@ -119,24 +119,26 @@ contract VerifyStorage is ChainlinkClient, ConfirmedOwner {
      * @notice Callback function used by the oracleto return the promise storage status
      * @param _requestId The request ID
      * @param _promiseAddress The address of the promise contract
-     * @param _storageStatus The storage status of the promise
+     * @param _backupStatus The storage status of the promise
+     * -> We're receiving _backupStatus instead of _storageStatus because the Node is
+     * confused about that _storage keyword, so it's better to change it only in that job.
      * @dev Only the Chainlink oracle can call this function
      */
 
     function fulfillStorageStatusUpdate(
         bytes32 _requestId,
         address _promiseAddress,
-        uint8 _storageStatus
+        uint8 _backupStatus
     ) external recordChainlinkFulfillment(_requestId) {
         s_promiseFactoryInterface.updateStorageStatus(
             _promiseAddress,
-            _storageStatus
+            _backupStatus
         );
 
         emit StorageStatusUpdateSuccessful(
             _requestId,
             _promiseAddress,
-            _storageStatus
+            _backupStatus
         );
     }
 

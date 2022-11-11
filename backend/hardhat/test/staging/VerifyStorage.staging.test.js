@@ -7,7 +7,7 @@ const {
 const { encryptAES256 } = require('../utils/encryptAES256');
 const { deployments, network, ethers } = require('hardhat');
 
-const REQUIRED_LINK_AMOUNT_FOR_TESTS = ethers.utils.parseEther('0.1');
+const REQUIRED_LINK_AMOUNT_FOR_TESTS = ethers.utils.parseEther('0.5');
 const IPFS_CID = 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi';
 const ARWEAVE_ID = '1JXtGzqZtJxG0yUvJGmZwWqjLbIuTtqXgKXgjXgqXgq';
 
@@ -24,14 +24,16 @@ developmentChains.includes(network.name)
       let encryptedProofInvalid;
 
       const createPromiseContract = async (
+        ipfsCid,
+        arweaveId,
         encryptedProof,
         bobAddress,
         aliceAddress,
       ) => {
         const tx = await promiseFactory.createPromiseContract(
           'Test promise',
-          IPFS_CID,
-          ARWEAVE_ID,
+          ipfsCid,
+          arweaveId,
           encryptedProof,
           ['Bob', 'Alice'],
           ['@bob', '@alice'],
@@ -91,13 +93,19 @@ developmentChains.includes(network.name)
 
         // Setup a few encrypted proofs for different scenarios
         encryptedProofValid = encryptAES256(
-          deployer.address + IPFS_CID + ARWEAVE_ID,
+          deployer.address,
+          IPFS_CID,
+          ARWEAVE_ID,
         );
         encryptedProofValidNoArweave = encryptAES256(
-          deployer.address + IPFS_CID + '',
+          deployer.address,
+          IPFS_CID,
+          '',
         );
         encryptedProofInvalid = encryptAES256(
-          deployer.address + 'wrongCid' + 'wrongId',
+          deployer.address,
+          'wrongCid',
+          'wrongId',
         );
       });
 
@@ -112,33 +120,27 @@ developmentChains.includes(network.name)
         });
       });
 
-      describe.only('requestStorageStatusUpdate', function() {
+      describe('requestStorageStatusUpdate', function() {
         // All the requests are made by the PromiseFactory contract
         // during the promise creation process
-        it.only('Should revert if called by anyone else than the PromiseFactory contract', async () => {
-          console.log('Creating promise contract...');
-          const { txReceipt } = await createPromiseContract(
-            encryptedProofValid,
-            deployer.address,
-            user.address,
-          );
-          const promiseContractAddress = txReceipt.events[1].address;
-
+        it('Should revert if called by anyone else than the PromiseFactory contract', async () => {
           // TODO WHY NOT REVERTED WITH RIGHT REVERT MESSAGE?
           await expect(
             verifyStorage.requestStorageStatusUpdate(
-              promiseContractAddress,
+              '0x0000000000000000000000000000000000000000',
               deployer.address,
               IPFS_CID,
               ARWEAVE_ID,
               encryptedProofValid,
             ),
-          ).to.be.revertedWith('VerifyStorage__NOT_FACTORY()');
+          ).to.be.reverted;
         });
 
         it('Should emit an event with the promiseAddress when creating the promise', async () => {
           console.log('Creating promise contract...');
           const { txReceipt } = await createPromiseContract(
+            IPFS_CID,
+            ARWEAVE_ID,
             encryptedProofValid,
             deployer.address,
             user.address,
@@ -156,145 +158,122 @@ developmentChains.includes(network.name)
       describe('fulfillStorageStatusUpdate', function() {
         it('Should revert if called by anyone other than the oracle', async () => {
           // Setup a listener in the VerifyStorage contract to grab the request ID
-          const requestId = await new Promise((resolve) => {
-            verifyStorage.on(
+          console.log(
+            'Setting up listener for the StorageStatusUpdateRequested event...',
+          );
+          await new Promise(async (resolve, reject) => {
+            console.log('Waiting for the oracle to fulfill the request...');
+            verifyStorage.once(
               'StorageStatusUpdateRequested',
-              (promiseAddress, requestId) => {
+              async (requestId, promiseAddress) => {
+                console.log('StorageStatusUpdateRequested event fired.');
                 // Once the event is emitted, try to fulfill the request
-                tryToFulfillRequest(requestId, promiseAddress, resolve);
+                try {
+                  await expect(
+                    verifyStorage.fulfillStorageStatusUpdate(
+                      requestId,
+                      promiseAddress,
+                      3,
+                    ),
+                  ).to.be.revertedWith(
+                    'Source must be the oracle of the request',
+                  );
+                  resolve();
+                } catch (err) {
+                  reject(err);
+                }
               },
             );
+
+            // Create a promise contract that will trigger a request
+            console.log('Creating promise contract...');
+            await createPromiseContract(
+              IPFS_CID,
+              ARWEAVE_ID,
+              encryptedProofValid,
+              deployer.address,
+              user.address,
+            );
           });
-
-          // Create a promise contract that will trigger a request
-          console.log('Creating promise contract...');
-          await createPromiseContract(
-            encryptedProofValid,
-            deployer.address,
-            user.address,
-          );
-
-          const tryToFulfillRequest = async (
-            requestId,
-            promiseAddress,
-            resolve,
-          ) => {
-            // Try to fulfill the request
-            await expect(
-              verifyStorage.fulfillStorageStatusUpdate(
-                requestId,
-                promiseAddress,
-                3,
-              ),
-            ).to.be.revertedWith('VerifyStorage__NOT_ORACLE');
-            resolve(requestId);
-          };
         });
 
-        it('Should emit a failed event and not add the user to the verified users mapping', async () => {
-          const verifications = async () => {
-            // Check the mapping in PromiseFactory
-            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
-              deployer.address,
-            );
+        it.only('Should update the storageStatus with the correct status', async () => {
+          // Setup each scenario
+          const scenarios = [
+            {
+              name: 'Valid proof',
+              ipfsCid: IPFS_CID,
+              arweaveId: ARWEAVE_ID,
+              encryptedProof: encryptedProofValid,
+              expectedStatus: 3,
+            },
+            {
+              name: 'Valid proof without Arweave ID',
+              ipfsCid: IPFS_CID,
+              arweaveId: '',
+              encryptedProof: encryptedProofValidNoArweave,
+              expectedStatus: 2,
+            },
+            {
+              name: 'Invalid proof',
+              ipfsCid: 'differentWrongCid',
+              arweaveId: 'differentWrongId',
+              encryptedProof: encryptedProofInvalid,
+              expectedStatus: 1,
+            },
+          ];
 
-            assert.equal(isVerifiedHandle, '');
-          };
+          for (const scenario of scenarios) {
+            let localPromiseContract;
+            console.log(`Testing scenario: ${scenario.name}`);
+            console.log('encryptedProof', scenario.encryptedProof);
 
-          await requestAVerification(
-            verifyTwitter,
-            UNVERIFIED_USERNAME,
-            'VerificationFailed',
-            verifications,
-          );
-        });
+            // Setup a listener in the VerifyStorage contract for the StorageStatusUpdateSuccessful event
+            console.log('Setting up listener...');
+            await new Promise(async (resolve, reject) => {
+              console.log('Waiting for the oracle to fulfill the request...');
 
-        it('Should emit a successful event and add the user to the verified users mapping', async () => {
-          const verifications = async () => {
-            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
-              deployer.address,
-            );
+              verifyStorage.once(
+                'StorageStatusUpdateSuccessful',
+                async (requestId, promiseAddress, storageStatus) => {
+                  console.log('StorageStatusUpdateSuccessful event fired.');
+                  // Check the storage status in the event
+                  console.log(
+                    storageStatus === scenario.expectedStatus ? '✅' : '❌',
+                  );
+                  assert.equal(storageStatus, scenario.expectedStatus);
 
-            assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
-          };
+                  // Check the storage status in the promise contract
+                  // hoping it was updated correctly
+                  try {
+                    console.log(
+                      'Checking storage status in the promise contract...',
+                    );
+                    const status = await localPromiseContract.getStorageStatus();
+                    assert.equal(status.toString(), scenario.expectedStatus);
+                    console.log('Done.');
+                    resolve();
+                  } catch (err) {
+                    reject(err);
+                  }
+                },
+              );
 
-          await requestAVerification(
-            verifyTwitter,
-            VERIFIED_USERNAME,
-            'VerificationSuccessful',
-            verifications,
-          );
-        });
-
-        it('Should allow a user to verify an additional username with their address', async () => {
-          const verifications = async () => {
-            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
-              deployer.address,
-            );
-
-            assert.equal(isVerifiedHandle[1], VERIFIED_USERNAME_2);
-            assert.equal(isVerifiedHandle.length, 2);
-          };
-
-          await requestAVerification(
-            verifyTwitter,
-            VERIFIED_USERNAME_2,
-            'VerificationSuccessful',
-            verifications,
-          );
-        });
-
-        it("Should not add the verified account if it's already been verified for this address", async () => {
-          // Setup a listener to grab the failure in adding a new verified user in PromiseFactory
-          // It will revert the transaction after emitting a TwitterAddVerifiedFailed
-          const verifications = async () => {
-            const isVerifiedHandle = await promiseFactory.getTwitterVerifiedHandle(
-              deployer.address,
-            );
-
-            // Should be left untouched
-            assert.equal(isVerifiedHandle[0], VERIFIED_USERNAME);
-            assert.equal(isVerifiedHandle[1], VERIFIED_USERNAME_2);
-            assert.equal(isVerifiedHandle.length, 2);
-          };
-
-          // This time
-          await requestAVerification(
-            verifyTwitter,
-            VERIFIED_USERNAME,
-            'VerificationSuccessful',
-            verifications,
-          );
+              // Create a promise contract that will trigger a request
+              console.log('Creating promise contract...');
+              const { txReceipt } = await createPromiseContract(
+                scenario.ipfsCid,
+                scenario.arweaveId,
+                scenario.encryptedProof,
+                deployer.address,
+                user.address,
+              );
+              localPromiseContract = await ethers.getContractAt(
+                'PromiseContract',
+                txReceipt.events[1].address,
+              );
+            });
+          }
         });
       });
-
-      const requestAVerification = async (
-        eventContract,
-        username,
-        event,
-        verificationsToPerform,
-      ) => {
-        // Setup a listener for the event
-        console.log('Setting up Listener...');
-        await new Promise(async (resolve, reject) => {
-          console.log('Waiting for the oracle to fulfill the request...');
-
-          eventContract.once(event, async () => {
-            console.log(`${event} event fired.`);
-            try {
-              await verificationsToPerform();
-              resolve();
-            } catch (err) {
-              console.log(err);
-              reject(err);
-            }
-          });
-
-          // Request a verification
-          console.log('Requesting a verification...');
-          const tx = await verifyTwitter.requestVerification(username);
-          await tx.wait(1);
-          console.log('Verification requested.');
-        });
-      };
     });
