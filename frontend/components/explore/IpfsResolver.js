@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 const web3StorageClient = getWeb3StorageClient();
 
-export default function IpfsResolver({ ipfsCid }) {
+export default function IpfsResolver({ ipfsCid, contractAddress }) {
   const [resolvedData, setResolvedData] = useState({
     link: '',
     content: '',

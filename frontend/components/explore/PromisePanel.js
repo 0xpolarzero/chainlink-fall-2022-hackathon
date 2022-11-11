@@ -61,7 +61,7 @@ export default function PromisePanel({ contractAttributes }) {
         addressToTwitterVerifiedStatus={addressToTwitterVerifiedStatus}
       />
       <div key='viewer' className='card-item ipfs-viewer'>
-        <IpfsResolver ipfsCid={ipfsCid} />
+        <IpfsResolver ipfsCid={ipfsCid} contractAddress={contractAddress} />
       </div>
     </div>
   );

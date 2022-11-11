@@ -612,6 +612,16 @@ ant-select {
   transform: translateY(0.1rem) !important;
 }
 
+.storage-ribbon {
+  position: relative;
+}
+
+.storage-ribbon > span {
+  position: absolute !important;
+  right: 0 !important;
+  left: initial !important;
+}
+
 /* Font Awesome icons */
 
 .fa-twitter {

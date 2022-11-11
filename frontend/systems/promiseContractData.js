@@ -1,5 +1,5 @@
-import { Tooltip } from 'antd';
 import FormattedAddress from '../components/utils/FormattedAddress';
+import { Tooltip } from 'antd';
 
 const columns = [
   {
@@ -47,6 +47,7 @@ const columns = [
 ];
 
 const displayContractData = (contractAddress, ipfsCid) => {
+  const isCidValid = checkCidFormat(ipfsCid);
   const contractData = [
     {
       contractAddress: (
@@ -57,17 +58,48 @@ const displayContractData = (contractAddress, ipfsCid) => {
         />
       ),
       ipfsCid: (
-        <FormattedAddress
-          address={ipfsCid}
-          isShrinked='responsive'
-          type='ipfs'
-        />
+        <>
+          <FormattedAddress
+            address={ipfsCid}
+            isShrinked='responsive'
+            type='ipfs'
+          />
+          {!isCidValid && (
+            <Tooltip
+              title={
+                <span>
+                  This is not a valid IPFS CID. Please check the{' '}
+                  <a
+                    href='https://docs.ipfs.io/concepts/content-addressing/'
+                    target='_blank'
+                  >
+                    IPFS documentation
+                  </a>{' '}
+                  for more information.
+                </span>
+              }
+            >
+              {' '}
+              <i
+                className='fas fa-warning'
+                style={{ color: 'var(--toastify-color-warning)' }}
+              />
+            </Tooltip>
+          )}
+        </>
       ),
       key: contractAddress,
     },
   ];
 
   return contractData;
+};
+
+const checkCidFormat = (cid) => {
+  const cidRegex = new RegExp(
+    '^(Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[A-Za-z2-7]{58,}|B[A-Z2-7]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[0-9A-F]{50,})$',
+  );
+  return cidRegex.test(cid);
 };
 
 export { columns, displayContractData };

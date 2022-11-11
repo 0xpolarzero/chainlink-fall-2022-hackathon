@@ -1,4 +1,4 @@
-import RibbonBadge from './utils/RibbonBadge';
+import StorageStatusRibbon from './explore/StorageStatusRibbon';
 import {
   columns as partiesColumns,
   displayPartiesData,
@@ -62,7 +62,8 @@ export default function PromiseTable({
 
   return (
     <div key='contract' className='card-item contract-identity'>
-      <RibbonBadge isPromiseLocked={isPromiseLocked} />
+      {/* <RibbonBadge isPromiseLocked={isPromiseLocked} /> */}
+      <StorageStatusRibbon contractAddress={contractAddress} />
       <Table
         dataSource={contractData}
         columns={contractColumns}
