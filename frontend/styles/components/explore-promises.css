@@ -148,3 +148,27 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+.ant-table-title > b {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.promise-status-lock {
+  margin-left: 2rem;
+}
+
+.promise-status-lock > span {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.promise-status-lock.locked {
+  color: var(--toastify-color-success);
+}
+
+.promise-status-lock.unlocked {
+  color: var(--toastify-color-warning);
+}

@@ -1,4 +1,5 @@
 import StorageStatusRibbon from './explore/StorageStatusRibbon';
+import PromiseStatusBadge from './explore/PromiseStatusBadge';
 import {
   columns as partiesColumns,
   displayPartiesData,
@@ -82,6 +83,7 @@ export default function PromiseTable({
               <Tooltip title='The parties added by the creator to the promise. The promise creator is the first party.'>
                 <i className='fas fa-question-circle' />
               </Tooltip>
+              <PromiseStatusBadge isPromiseLocked={isPromiseLocked} />
             </b>
           )}
           dataSource={partiesData}
