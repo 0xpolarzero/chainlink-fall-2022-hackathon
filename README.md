@@ -12,7 +12,7 @@ Promise is a blockchain service, both for founders, creators and regular users. 
 
 A tool to introduce a team, or just themselves, using their digital identity: Ethereum address, Twitter account. That, associated with a communication of their project: roadmap, letter of intent, diagrams, or just an idea...
 
-They can create a promise, add team members, associate their Twitter account with an Ethereum address, and verify it through a transparent and non-intrusive method. The promise is backed up with any relevant documents, ensuring their permanence and availability. Once the promise has been approved by all involved, it can be locked, thereby freezing it irrevocably on the blockchain.
+They can create a promise, add team members, associate their Twitter account with an Ethereum address, and verify it through a transparent and non-intrusive method<sup id="1">[1](#external-adapter-twitter-verification)</sup>. The promise is backed up with any relevant documents, ensuring their permanence and availability. Once the promise has been approved by all involved, it can be locked, thereby freezing it irrevocably on the blockchain.
 
 ### For users
 
