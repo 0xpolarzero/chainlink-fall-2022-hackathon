@@ -7,17 +7,14 @@ import {
   useContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
-import { useEffect, useState } from 'react';
 
 export default function RowPromiseLock({
-  interactingUser,
   contractAddress,
   userAddress,
   isPromiseLocked,
   getPromiseStatus,
   allPartiesApproved,
 }) {
-  const [lockDiv, setLockDiv] = useState(null);
   const { config: lockConfig, error: lockError } = usePrepareContractWrite({
     address: contractAddress,
     abi: promiseContractAbi,
@@ -55,10 +52,6 @@ export default function RowPromiseLock({
     confirmations: 1,
   });
 
-  useEffect(() => {
-    setLockDiv(promiseStatus().getLockDiv(isPromiseLocked, 'Promise unlocked'));
-  }, [isPromiseLocked]);
-
   // If the users approved status is null, it's still loading
   if (allPartiesApproved === null) {
     return (
@@ -73,28 +66,41 @@ export default function RowPromiseLock({
 
   return (
     <>
-      <div className='promise-lock-status'>{lockDiv}</div>
       {isPromiseLocked ? (
-        <div className='verified'>Promise locked</div>
+        <>
+          <div className='verified' style={{ justifySelf: 'left' }}>
+            <i className='fas fa-lock'></i>
+            Promise locked
+          </div>
+          <div></div>
+        </>
       ) : (
-        <div className='promise-lock-interact'>
-          <Tooltip
-            title={
-              !allPartiesApproved
-                ? 'All parties must approve the promise before it can be locked.'
-                : ''
-            }
-          >
-            <Button
-              type='primary'
-              onClick={lockPromise}
-              loading={isLockingPromise || isWaitingForLock}
-              disabled={!allPartiesApproved}
+        <>
+          <div className='warning'>
+            <i className='fas fa-unlock'></i>
+            <Tooltip title='Locking the promise will prevent any new participant to be added. This action cannot be undone.'>
+              <span>Promise unlocked</span>
+            </Tooltip>
+          </div>
+          <div className='promise-lock-interact'>
+            <Tooltip
+              title={
+                !allPartiesApproved
+                  ? 'All parties must approve the promise before it can be locked.'
+                  : ''
+              }
             >
-              <i className='fas fa-lock' /> Lock promise
-            </Button>
-          </Tooltip>
-        </div>
+              <Button
+                type='primary'
+                onClick={lockPromise}
+                loading={isLockingPromise || isWaitingForLock}
+                disabled={!allPartiesApproved}
+              >
+                <i className='fas fa-lock' /> Lock promise
+              </Button>
+            </Tooltip>
+          </div>
+        </>
       )}
     </>
   );
