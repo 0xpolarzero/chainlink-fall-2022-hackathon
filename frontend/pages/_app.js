@@ -76,16 +76,12 @@ function MyApp({ Component, pageProps }) {
             <PromisesDataProvider>
               <Header activePage={activePage} setActivePage={setActivePage} />
               <Component {...pageProps} setActivePage={setActivePage} />
-              {/* <Footer /> */}
+              <Footer />
             </PromisesDataProvider>
           </ApolloProvider>
         </RainbowKitProvider>
       </WagmiConfig>
-      <ToastContainer
-        // theme='colored'
-        // progressStyle={{ background: '#fff' }}
-        position={'bottom-right'}
-      />
+      <ToastContainer position={'bottom-right'} />
     </div>
   );
 }

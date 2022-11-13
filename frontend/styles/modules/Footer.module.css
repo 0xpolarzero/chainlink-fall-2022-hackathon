@@ -1,0 +1,30 @@
+.footer {
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex: 1;
+  padding: 1rem 0;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer > div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.footer > div > a:not(.nosocial) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(195, 87, 100, 0.1);
+  transition: background 0.2s ease;
+}
+
+.footer > div > a:hover {
+  background: rgba(195, 87, 100, 0.2);
+  transform: scale(1.1);
+}
