@@ -79,6 +79,15 @@ export const Header = ({ activePage, setActivePage }) => {
             The project
           </a>
         </Link>
+        <Link href='https://docs.usepromise.xyz/'>
+          <a
+            onMouseEnter={() => updateSlider(1)}
+            onMouseLeave={() => updateSlider(activePage)}
+            style={{ display: 'flex', gap: '0.5rem' }}
+          >
+            <i className='fas fa-book'></i>Docs
+          </a>
+        </Link>
         <Dropdown
           overlay={exploreMenu}
           selectable={true}
@@ -89,8 +98,8 @@ export const Header = ({ activePage, setActivePage }) => {
             className={
               activePage === 1 ? 'active dropdown-title' : 'dropdown-title'
             }
-            onClick={(e) => handleNavItemClick(e, 1)}
-            onMouseEnter={() => updateSlider(1)}
+            onClick={(e) => handleNavItemClick(e, 2)}
+            onMouseEnter={() => updateSlider(2)}
             onMouseLeave={() => updateSlider(activePage)}
           >
             <span>Explore</span> <i className='fas fa-chevron-down' />
@@ -99,8 +108,8 @@ export const Header = ({ activePage, setActivePage }) => {
         <Link href='/user-dashboard'>
           <a
             className={activePage === 2 ? 'active' : ''}
-            onClick={(e) => handleNavItemClick(e, 2)}
-            onMouseEnter={() => updateSlider(2)}
+            onClick={(e) => handleNavItemClick(e, 3)}
+            onMouseEnter={() => updateSlider(3)}
             onMouseLeave={() => updateSlider(activePage)}
           >
             Dashboard
