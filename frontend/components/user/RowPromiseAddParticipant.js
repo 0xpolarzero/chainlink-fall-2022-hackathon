@@ -1,6 +1,6 @@
 import networkMapping from '../../constants/networkMapping';
 import promiseFactoryAbi from '../../constants/PromiseFactory.json';
-import PromisesDataContext from '../../systems/PromisesDataContext';
+import PromisesDataContext from '../../systems/context/PromisesDataContext';
 import { Button, Form, Input, Modal, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';

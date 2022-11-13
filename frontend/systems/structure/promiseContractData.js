@@ -1,4 +1,4 @@
-import FormattedAddress from '../components/utils/FormattedAddress';
+import FormattedAddress from '../../components/utils/FormattedAddress';
 import { Tooltip } from 'antd';
 
 const columns = [

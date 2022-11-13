@@ -1,4 +1,4 @@
-import { promiseStatus } from '../../systems/promiseStatus';
+import { promiseStatus } from '../../systems/structure/promiseStatus';
 import promiseContractAbi from '../../constants/PromiseContract.json';
 import { Button, Skeleton, Tooltip } from 'antd';
 import { toast } from 'react-toastify';

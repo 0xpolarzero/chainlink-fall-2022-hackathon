@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 
-import { PromisesDataProvider } from '../systems/PromisesDataContext';
+import { PromisesDataProvider } from '../systems/context/PromisesDataContext';
 import {
   getDefaultWallets,
   RainbowKitProvider,

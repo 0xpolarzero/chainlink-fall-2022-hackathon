@@ -1,4 +1,4 @@
-import promiseContractAbi from '../constants/PromiseContract.json';
+import promiseContractAbi from '../../constants/PromiseContract.json';
 import { Skeleton } from 'antd';
 import { ethers } from 'ethers';
 

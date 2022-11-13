@@ -3,11 +3,11 @@ import PromiseStatusBadge from './explore/PromiseStatusBadge';
 import {
   columns as partiesColumns,
   displayPartiesData,
-} from '../systems/promisePartiesData';
+} from '../systems/structure/promisePartiesData';
 import {
   columns as contractColumns,
   displayContractData,
-} from '../systems/promiseContractData';
+} from '../systems/structure/promiseContractData';
 import { Table, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 

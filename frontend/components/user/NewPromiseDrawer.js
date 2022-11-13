@@ -1,9 +1,9 @@
 import FileUploader from './FileUploader';
 import ConnectBundlr from './ConnectBundlr';
-import { validateNewPromiseForm } from '../../systems/validateNewPromiseForm';
-import { uploadToIPFS } from '../../systems/uploadToIPFS';
-import { uploadToArweave } from '../../systems/uploadToArweave';
-import { encryptAES256 } from '../../systems/encryptAES256';
+import { validateNewPromiseForm } from '../../systems/tasks/validateNewPromiseForm';
+import { uploadToIPFS } from '../../systems/tasks/uploadToIPFS';
+import { uploadToArweave } from '../../systems/tasks/uploadToArweave';
+import { encryptAES256 } from '../../systems/tasks/encryptAES256';
 import networkMapping from '../../constants/networkMapping';
 import promiseFactoryAbi from '../../constants/PromiseFactory.json';
 import { Input, Tooltip, Form, Drawer, Space, Button, Switch } from 'antd';

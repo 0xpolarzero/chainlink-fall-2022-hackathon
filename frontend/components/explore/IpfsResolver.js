@@ -1,8 +1,8 @@
 import IpfsDisplayPdf from './IpfsDisplayPdf';
 import IpfsDisplayDirectory from './IpfsDisplayDirectory';
 import FormattedAddress from '../utils/FormattedAddress';
-import { getContentFromCid } from '../../systems/getContentFromCid';
-import { getWeb3StorageClient } from '../../systems/getWeb3StorageClient';
+import { getContentFromCid } from '../../systems/tasks/getContentFromCid';
+import { getWeb3StorageClient } from '../../systems/tasks/getWeb3StorageClient';
 import { Badge, Popover, Skeleton } from 'antd';
 import { useEffect, useState } from 'react';
 

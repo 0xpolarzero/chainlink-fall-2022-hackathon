@@ -1,5 +1,5 @@
 import VerifyTwitterInstructions from './VerifyTwitterInstructions';
-import { waitForChainlinkFulfillment } from '../../systems/verifyTwitter';
+import { waitForChainlinkFulfillment } from '../../systems/tasks/verifyTwitter';
 import verifyTwitterAbi from '../../constants/VerifyTwitter.json';
 import networkMapping from '../../constants/networkMapping';
 import { Skeleton } from 'antd';

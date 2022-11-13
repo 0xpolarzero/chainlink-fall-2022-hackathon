@@ -1,4 +1,4 @@
-import { getContentFromCid } from '../../systems/getContentFromCid';
+import { getContentFromCid } from '../../systems/tasks/getContentFromCid';
 import { formatSize } from '../../systems/utils';
 import { Skeleton, Table, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';

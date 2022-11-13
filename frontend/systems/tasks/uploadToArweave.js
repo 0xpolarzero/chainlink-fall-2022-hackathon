@@ -1,4 +1,4 @@
-import networkMapping from '../constants/networkMapping';
+import networkMapping from '../../constants/networkMapping';
 import fileReaderStream from 'filereader-stream';
 import JSZip from 'jszip';
 import { Modal } from 'antd';

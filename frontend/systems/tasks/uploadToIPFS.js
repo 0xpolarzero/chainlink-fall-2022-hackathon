@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import { getWeb3StorageClient } from './getWeb3StorageClient';
 
 const web3StorageClient = getWeb3StorageClient();

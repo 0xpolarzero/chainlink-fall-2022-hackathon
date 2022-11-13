@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNetwork, useSigner } from 'wagmi';
-import { initializeBundlr } from '../..//systems/uploadToArweave';
+import { initializeBundlr } from '../..//systems/tasks/uploadToArweave';
 
 export default function ConnectBundlr({ bundlr, setBundlr }) {
   const [chainId, setChainId] = useState('80001');

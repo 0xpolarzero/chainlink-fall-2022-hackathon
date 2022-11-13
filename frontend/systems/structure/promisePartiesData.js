@@ -1,7 +1,7 @@
-import FormattedAddress from '../components/utils/FormattedAddress';
-import promiseContractAbi from '../constants/PromiseContract.json';
-import promiseFactoryAbi from '../constants/PromiseFactory.json';
-import networkMapping from '../constants/networkMapping';
+import FormattedAddress from '../../components/utils/FormattedAddress';
+import promiseContractAbi from '../../constants/PromiseContract.json';
+import promiseFactoryAbi from '../../constants/PromiseFactory.json';
+import networkMapping from '../../constants/networkMapping';
 import { Skeleton, Tooltip } from 'antd';
 import { ethers } from 'ethers';
 

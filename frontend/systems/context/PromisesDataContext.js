@@ -1,7 +1,7 @@
 import {
   GET_ACTIVE_PROMISE,
   GET_TWITTER_VERIFIED_USER,
-} from '../constants/subgraphQueries';
+} from '../../constants/subgraphQueries';
 import { useLazyQuery } from '@apollo/client';
 import { createContext, useState } from 'react';
 

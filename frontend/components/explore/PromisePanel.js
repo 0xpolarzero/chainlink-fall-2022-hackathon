@@ -1,10 +1,10 @@
 import PromiseTable from '../PromiseTable';
 import IpfsResolver from './IpfsResolver';
-import { promiseStatus } from '../../systems/promiseStatus';
+import { promiseStatus } from '../../systems/structure/promiseStatus';
 import {
   getPartiesApprovedStatus,
   getPartiesTwitterVerifiedStatus,
-} from '../../systems/promisePartiesData';
+} from '../../systems/structure/promisePartiesData';
 import { useProvider, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 

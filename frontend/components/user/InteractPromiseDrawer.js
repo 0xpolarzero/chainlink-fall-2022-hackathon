@@ -1,9 +1,9 @@
 import {
   getPartiesApprovedStatus,
   getPartiesTwitterVerifiedStatus,
-} from '../../systems/promisePartiesData';
-import { getVerificationDiv } from '../../systems/promisePartiesData';
-import { promiseStatus } from '../../systems/promiseStatus';
+} from '../../systems/structure/promisePartiesData';
+import { getVerificationDiv } from '../../systems/structure/promisePartiesData';
+import { promiseStatus } from '../../systems/structure/promiseStatus';
 import { useAccount, useProvider, useNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 import PromiseTable from '../PromiseTable';

@@ -3,7 +3,7 @@ import NewPromiseDrawer from '../components/user/NewPromiseDrawer';
 import VerifyTwitterDrawer from '../components/user/VerifyTwitterDrawer';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
-import PromisesDataContext from '../systems/PromisesDataContext';
+import PromisesDataContext from '../systems/context/PromisesDataContext';
 import promiseFactoryAbi from '../constants/PromiseFactory.json';
 import networkMapping from '../constants/networkMapping';
 import { Button, Divider, Pagination, Skeleton } from 'antd';
