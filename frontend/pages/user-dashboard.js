@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css';
+import styles from '../styles/modules/Home.module.css';
 import NewPromiseDrawer from '../components/user/NewPromiseDrawer';
 import VerifyTwitterDrawer from '../components/user/VerifyTwitterDrawer';
 import PromisesCollapse from '../components/PromisesCollapse';

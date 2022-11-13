@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css';
+import styles from '../styles/modules/Home.module.css';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import PromisesDataContext from '../systems/context/PromisesDataContext';

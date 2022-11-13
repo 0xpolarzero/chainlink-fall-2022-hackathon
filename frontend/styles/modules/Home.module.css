@@ -1,7 +1,6 @@
 .container {
   background: var(--background-color-dark);
-  /* background: url('../asset/vivid-blurred-colorful-background.jpg'); */
-  background: url('../asset/vivid-blurred-colorful-wallpaper-background(1).jpg');
+  background: url('../../asset/vivid-blurred-colorful-wallpaper-background(1).jpg');
   background-size: cover;
   position: relative;
 }

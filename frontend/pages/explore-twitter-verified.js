@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css';
+import styles from '../styles/modules/Home.module.css';
 import TwitterVerifiedTable from '../components/explore/TwitterVerifiedTable';
 import TwitterVerifiedTableSkeleton from '../components/explore/TwitterVerifiedTableSkeleton';
 import PromisesDataContext from '../systems/context/PromisesDataContext';

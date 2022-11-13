@@ -1,14 +1,14 @@
 @import './globals.css';
-@import './components/home.css';
-@import './components/explore-promises.css';
-@import './components/user-dashboard.css';
+@import './pages/home.css';
+@import './pages/explore-promises.css';
+@import './pages/user-dashboard.css';
 @import './animations.css';
 
 /* Dependencies */
 @import '@rainbow-me/rainbowkit/styles.css';
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 @import 'react-toastify/dist/ReactToastify.css';
-@import 'antd-specified.css';
-@import 'antd-animations.css';
+@import './antd/antd-specified.css';
+@import './antd/antd-animations.css';
 @import '@react-pdf-viewer/core/lib/styles/index.css';
 @import '@react-pdf-viewer/default-layout/lib/styles/index.css';

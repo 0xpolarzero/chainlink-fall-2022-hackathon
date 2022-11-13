@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import styles from '../../styles/Header.module.css';
+import styles from '../../styles/modules/Header.module.css';
 import Link from 'next/link';
-import Image from 'next/image';
 import Logo from '../../asset/logo-colored-no-background.svg';
+import { Dropdown, Menu } from 'antd';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useEffect } from 'react';
-import { Dropdown, Menu } from 'antd';
 
 export const Header = ({ activePage, setActivePage }) => {
   const exploreMenu = (

@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css';
+import styles from '../styles/modules/Home.module.css';
 import '../styles/index.css';
 import Head from 'next/head';
 import { Header } from '../components/layout/Header';
