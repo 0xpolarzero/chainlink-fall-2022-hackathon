@@ -1,3 +1,4 @@
+/* GLOBALS - Shared with Dashboard & Explore Twitter */
 .section-explore,
 .section-explore-twitter,
 .section-user {
@@ -29,8 +30,7 @@
   grid-template-columns: 1fr auto;
 }
 
-/* ---------- CARD ---------- */
-
+/* LIST (containing the collapse) */
 .promises-list {
   display: flex;
   flex-direction: column;
@@ -49,28 +49,6 @@
 
 .promises-list-wrapper .ant-pagination {
   justify-self: center;
-}
-
-.promise-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-}
-
-.promise-header-name {
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.promise-header-address {
-  opacity: 0.8;
-  z-index: 2;
-}
-
-.promise-header-address > span::after {
-  content: '•';
-  margin: 0 0.4rem;
 }
 
 .ant-collapse {
@@ -97,6 +75,29 @@
   box-shadow: rgba(255, 255, 255, 0.1) 2px 1000px 1px inset;
 }
 
+.promise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.promise-header-name {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.promise-header-address {
+  opacity: 0.8;
+  z-index: 2;
+}
+
+.promise-header-address > span::after {
+  content: '•';
+  margin: 0 0.4rem;
+}
+
+/* PROMISE (in panel) - Shared in Dashboard drawer */
 .card-item .title,
 .drawer-item .title {
   font-size: 1rem;
@@ -112,16 +113,6 @@
 .card-item.parties .title,
 .drawer-item.parties .title {
   margin-bottom: 1rem;
-}
-
-.ipfs-viewer {
-  position: relative;
-}
-
-.ipfs-viewer .security {
-  position: absolute;
-  top: 1rem;
-  left: 50%;
 }
 
 .twitter-verified-container {
@@ -171,4 +162,51 @@
 
 .promise-status-lock.unlocked {
   color: var(--toastify-color-warning);
+}
+
+/* IPFS display */
+.ipfs-viewer {
+  position: relative;
+}
+
+.ipfs-viewer .security {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+}
+
+.ipfs-display {
+  position: relative;
+}
+
+.ipfs-display .action-directory {
+  position: absolute;
+  top: 1rem;
+  left: 10rem;
+  display: flex;
+  gap: 2rem;
+  z-index: 1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ipfs-display .action-directory::before {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  top: 0;
+  left: -1.5rem;
+  width: 1px;
+  height: 100%;
+}
+
+.ipfs-display .action-directory > div {
+  font-size: 1rem;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.ipfs-display .action-directory > div:hover {
+  opacity: 1;
+  transform: scale(1.02);
 }

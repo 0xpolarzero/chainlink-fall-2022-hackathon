@@ -1,3 +1,4 @@
+/* GLOBALS */
 .user-dashboard {
   display: flex;
   flex-direction: column;
@@ -17,49 +18,7 @@
   font-weight: 500;
 }
 
-.drawer-content .info-message {
-  background: rgba(0, 0, 0, 0.2);
-  text-align: center;
-  font-weight: 500;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.drawer-content label {
-  font-size: 1rem !important;
-}
-
-.ant-drawer .form-btns {
-  display: flex;
-  gap: 1rem;
-}
-
-.ant-drawer .ant-space-item {
-  align-items: center !important;
-}
-
-.ant-drawer .ant-space-item i {
-  opacity: 0.7;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.ant-drawer .ant-space-item i:hover {
-  opacity: 1;
-}
-
-.icon-double {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.ant-drawer .ant-space .ant-space-item:nth-child(3) .ant-input-prefix,
-.add-participant-form .ant-form-item:nth-child(3) .ant-input-prefix {
-  margin-right: 0.3rem !important;
-}
-
+/* LIST */
 .ant-collapse-header {
   position: relative; /* So we can add an invisible div to handle click events */
 }
@@ -79,6 +38,17 @@
 
 .user-dashboard .ant-collapse-header:hover i {
   transform: rotate(-90deg);
+}
+
+/* DRAWER */
+.drawer-content .info-message {
+  background: rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-weight: 500;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .promise-drawer {
@@ -122,40 +92,38 @@
   transform: scale(1.2);
 }
 
-.ipfs-display {
-  position: relative;
+/* Form */
+.drawer-content label {
+  font-size: 1rem !important;
 }
 
-.ipfs-display .action-directory {
-  position: absolute;
-  top: 1rem;
-  left: 10rem;
+.ant-drawer .form-btns {
   display: flex;
-  gap: 2rem;
-  z-index: 1;
+  gap: 1rem;
+}
+
+.ant-drawer .ant-space-item {
+  align-items: center !important;
+}
+
+.ant-drawer .ant-space-item i {
+  opacity: 0.7;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.ipfs-display .action-directory::before {
-  content: '';
-  position: absolute;
-  background: rgba(255, 255, 255, 0.1);
-  top: 0;
-  left: -1.5rem;
-  width: 1px;
-  height: 100%;
-}
-
-.ipfs-display .action-directory > div {
-  font-size: 1rem;
-  opacity: 0.7;
-  transition: all 0.3s ease;
-}
-
-.ipfs-display .action-directory > div:hover {
+.ant-drawer .ant-space-item i:hover {
   opacity: 1;
-  transform: scale(1.02);
+}
+
+.ant-drawer .ant-space .ant-space-item:nth-child(3) .ant-input-prefix,
+.add-participant-form .ant-form-item:nth-child(3) .ant-input-prefix {
+  margin-right: 0.3rem !important;
+}
+
+.icon-double {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .promise-drawer .header {
