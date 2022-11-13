@@ -1,13 +1,25 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
+import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "./PromiseContract.sol";
 import "./IVerifyStorage.sol";
 
 /**
  * @author polarzero
- * @title Master Contract
- * @notice This is the master contract initializing & referencing all child contracts
+ * @title PromiseFactory
+ * @notice This is the factory contract initializing & referencing all promises
+ * @dev This contract is the only one that can create new promises
+ * For a successful flow, the following steps are recommended:
+ * 1. Deploy the PromiseFactory contract
+ * 2. Deploy the verifiers (VerifyStorage, VerifyTwitter)
+ * 3. Set the verifiers in the PromiseFactory contract
+ * 4. Fund the verifiers with LINK
+ * 5. Deploy a new promise contract
+ * * Only via the App can the promises be successfully verified by the VerifyStorage contract
+ * * If you want to reproduce this verification, you will need your own External Adapter,
+ * * and an interface that both encrypt/decrypt the IPFS & Arweave hashes with the same
+ * * encryption key. More details in the documentation.
  */
 
 contract PromiseFactory {
@@ -34,6 +46,7 @@ contract PromiseFactory {
     mapping(address => string[]) private s_twitterVerifiedUsers;
 
     /// Events
+    // Emitted when a new PromiseContract is created
     event PromiseContractCreated(
         address indexed _owner,
         address indexed _contractAddress,
@@ -46,11 +59,13 @@ contract PromiseFactory {
         address[] _partyAddresses
     );
 
+    // Emitted when a user was successfully verified by the VerifyTwitter contract
     event TwitterAddVerifiedSuccessful(
         address indexed _owner,
         string _twitterHandle
     );
 
+    // Emitted when a user was added to a PromiseContract
     event ParticipantAdded(
         address indexed _contractAddress,
         string _participantName,
@@ -58,8 +73,11 @@ contract PromiseFactory {
         address _participantAddress
     );
 
+    // Emitted when a contract has just been created
+    // and a storage update request was sent to the VerifyStorage contract
     event StorageStatusUpdateRequested(address promiseContract);
 
+    // Emitted when the storage status has been updated (to 1 - 3)
     event StorageStatusUpdated(
         address indexed _contractAddress,
         uint8 _storageStatus
@@ -299,6 +317,15 @@ contract PromiseFactory {
 
         emit TwitterAddVerifiedSuccessful(_userAddress, _twitterHandle);
     }
+
+    /**
+     * @notice Update the storage status of a promise contract
+     * @dev Only the verifier contract can call this function, after the storage
+     * has been verified with the Chainlink Node + External Adapter
+     * @param _promiseContractAddress The address of the promise contract
+     * @param _storageStatus The new storage status
+     * -> 1 = failed, 2 = IPFS provided & verified, 3 = IPFS + Arweave provided & verified
+     */
 
     function updateStorageStatus(
         address _promiseContractAddress,
