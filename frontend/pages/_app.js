@@ -5,6 +5,7 @@ import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 
 import { PromisesDataProvider } from '../systems/context/PromisesDataContext';
+// Rainbowkit & Wagmi
 import {
   getDefaultWallets,
   RainbowKitProvider,
@@ -13,11 +14,12 @@ import {
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { publicProvider } from 'wagmi/providers/public';
+
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { ToastContainer } from 'react-toastify';
 import { useState } from 'react';
 
-// Rainbowkit & Wagmi config
+// Configure chains
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.polygonMumbai],
   [
@@ -28,11 +30,13 @@ const { chains, provider, webSocketProvider } = configureChains(
   ],
 );
 
+// Configure connection
 const { connectors } = getDefaultWallets({
   appName: 'Promise',
   chains,
 });
 
+// Create client
 const wagmiClient = createClient({
   provider,
   webSocketProvider,
@@ -53,7 +57,10 @@ function MyApp({ Component, pageProps }) {
     <div className={styles.container}>
       <Head>
         <title>Promise</title>
-        <meta name='description' content='Promise app description' />
+        <meta
+          name='description'
+          content='Promise is a blockchain service for founders, creators and regular users. The end purpose is to improve trust in our digital relationships and make founders more accountable for their promises.'
+        />
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
