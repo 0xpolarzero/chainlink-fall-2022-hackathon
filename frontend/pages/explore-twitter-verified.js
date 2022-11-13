@@ -1,7 +1,7 @@
 import styles from '../styles/modules/Home.module.css';
-import VerifyTwitterDrawer from '../components/user/VerifyTwitterDrawer';
-import TwitterVerifiedTable from '../components/explore/TwitterVerifiedTable';
-import TwitterVerifiedTableSkeleton from '../components/explore/TwitterVerifiedTableSkeleton';
+import VerifyTwitterDrawer from '../components/user-dashboard/VerifyTwitterDrawer';
+import TwitterVerifiedTable from '../components/explore-twitter/TwitterVerifiedTable';
+import TwitterVerifiedTableSkeleton from '../components/explore-twitter/TwitterVerifiedTableSkeleton';
 import PromisesDataContext from '../systems/context/PromisesDataContext';
 import { Button, Tooltip } from 'antd';
 import { useContext, useEffect, useState } from 'react';

@@ -1,5 +1,5 @@
-import PromisePanel from './explore/PromisePanel';
-import InteractPromiseDrawer from './user/InteractPromiseDrawer';
+import PromisePanel from './explore-promises/PromisePanel';
+import InteractPromiseDrawer from './user-dashboard/InteractPromiseDrawer';
 import FormattedAddress from './utils/FormattedAddress';
 import DateFromTimestamp from './utils/DateFromTimestamp';
 import { Collapse, Drawer, Tooltip } from 'antd';

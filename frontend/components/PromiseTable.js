@@ -1,5 +1,5 @@
-import StorageStatusRibbon from './explore/StorageStatusRibbon';
-import PromiseStatusBadge from './explore/PromiseStatusBadge';
+import StorageStatusRibbon from './explore-promises/StorageStatusRibbon';
+import PromiseStatusBadge from './explore-promises/PromiseStatusBadge';
 import {
   columns as partiesColumns,
   displayPartiesData,

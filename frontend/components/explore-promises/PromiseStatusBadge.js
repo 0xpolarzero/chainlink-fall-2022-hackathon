@@ -1,4 +1,4 @@
-import { Badge, Skeleton, Tooltip } from 'antd';
+import { Skeleton, Tooltip } from 'antd';
 
 export default function PromiseStatusBadge({ isPromiseLocked }) {
   if (isPromiseLocked === undefined || isPromiseLocked === null) {
