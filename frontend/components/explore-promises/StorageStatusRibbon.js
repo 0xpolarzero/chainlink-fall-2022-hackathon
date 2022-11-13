@@ -57,9 +57,9 @@ export default function StorageStatusRibbon({
       setStorageStatusTitle('Verified (IPFS + Arweave)');
       setStorageStatusDesc(
         <div>
-          The The provided IPFS CID and Arweave ID were verified by the
-          Chainlink oracle. The data on IPFS was picked up by our node and an
-          archive was sent to the Arweave network for permanent storage.
+          The provided IPFS CID and Arweave ID were verified by the Chainlink
+          oracle. The data on IPFS was picked up by our node and an archive was
+          sent to the Arweave network for permanent storage.
           <br />
           <br />
           Archive URL on Arweave:{' '}

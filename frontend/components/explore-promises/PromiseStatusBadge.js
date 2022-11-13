@@ -3,7 +3,12 @@ import { Skeleton, Tooltip } from 'antd';
 export default function PromiseStatusBadge({ isPromiseLocked }) {
   if (isPromiseLocked === undefined || isPromiseLocked === null) {
     return (
-      <Skeleton active paragraph={{ rows: 1 }} title={false} width={100} />
+      <Skeleton
+        active
+        paragraph={{ rows: 1 }}
+        title={false}
+        style={{ width: 100 }}
+      />
     );
   }
 
