@@ -112,10 +112,8 @@ contract PromiseFactory {
      * @notice Initialize the contract
      */
 
-    constructor(address _twitterVerifier, address _storageVerifier) {
+    constructor() {
         i_owner = msg.sender;
-        s_twitterVerifier = _twitterVerifier;
-        s_storageVerifier = _storageVerifier;
     }
 
     /**

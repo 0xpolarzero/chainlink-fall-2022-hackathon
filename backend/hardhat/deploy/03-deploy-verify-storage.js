@@ -1,4 +1,4 @@
-const { network, ethers } = require('hardhat');
+const { network } = require('hardhat');
 const {
   developmentChains,
   LINK_TOKEN_MUMBAI,

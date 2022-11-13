@@ -1,6 +1,7 @@
-const { network, ethers } = require('hardhat');
+const { ethers } = require('hardhat');
 const { LINK_TOKEN_MUMBAI } = require('../helper-hardhat-config');
 
+// Choose a fund amount to send to the verifier contracts
 const LINK_FUNDING_AMOUNT = ethers.utils.parseEther('2');
 
 module.exports = async function({ getNamedAccounts, deployments }) {
@@ -9,6 +10,7 @@ module.exports = async function({ getNamedAccounts, deployments }) {
   let verifyTwitter = await deployments.get('VerifyTwitter');
   let verifyStorage = await deployments.get('VerifyStorage');
 
+  // Grab contracts
   promiseFactory = await ethers.getContractAt(
     'PromiseFactory',
     promiseFactory.address,
@@ -36,6 +38,7 @@ module.exports = async function({ getNamedAccounts, deployments }) {
     LINK_TOKEN_MUMBAI,
     deployer,
   );
+
   console.log('Funding VerifyTwitter contract with LINK...');
   await linkToken.transfer(verifyTwitter.address, LINK_FUNDING_AMOUNT);
   console.log('Funding VerifyStorage contract with LINK...');

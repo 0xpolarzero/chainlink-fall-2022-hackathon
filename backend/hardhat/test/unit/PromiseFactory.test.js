@@ -1,9 +1,5 @@
 const { assert, expect } = require('chai');
-const {
-  developmentChains,
-  VERIFY_TWITTER_MUMBAI,
-  VERIFY_STORAGE_MUMBAI,
-} = require('../../helper-hardhat-config');
+const { developmentChains } = require('../../helper-hardhat-config');
 const { deployments, network, ethers } = require('hardhat');
 
 !developmentChains.includes(network.name)
@@ -55,12 +51,8 @@ const { deployments, network, ethers } = require('hardhat');
       describe('constructor', function() {
         it('Should initialize the variables with the right value', async () => {
           const owner = await promiseFactory.getOwner();
-          const twitterVerifier = await promiseFactory.getTwitterVerifier();
-          const storageVerifier = await promiseFactory.getStorageVerifier();
 
           assert.equal(owner, deployer.address);
-          assert.equal(twitterVerifier, VERIFY_TWITTER_MUMBAI);
-          assert.equal(storageVerifier, VERIFY_STORAGE_MUMBAI);
         });
       });
 

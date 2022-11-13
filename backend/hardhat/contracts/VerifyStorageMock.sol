@@ -59,6 +59,8 @@ contract VerifyStorageMock is
      * @param _linkTokenContract (Mumbai): 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
      * @param _oracleContract ! Not the true oracle contract, but the address we own
      * @param _promiseFactoryContract: The address of the PromiseFactory contract
+     * @param _fakePromiseFactoryContract: The address of the fake PromiseFactory contract
+     * -> It will allow us to pretend we are the PromiseFactory during unit tests
      */
 
     // Differences from the real contract:
