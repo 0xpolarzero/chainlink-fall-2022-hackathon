@@ -106,7 +106,13 @@ export default function PromisesCollapse({ promises, context }) {
                             </>
                           }
                         >
-                          LOGO
+                          <i
+                            className='fas fa-pencil-alt'
+                            style={{
+                              fontSize: '0.7rem',
+                              marginLeft: '0.2rem',
+                            }}
+                          />
                         </Tooltip>
                       </span>
                     ) : null}
