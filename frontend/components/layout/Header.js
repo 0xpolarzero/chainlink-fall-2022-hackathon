@@ -9,8 +9,8 @@ import { useEffect } from 'react';
 export const Header = ({ activePage, setActivePage }) => {
   const exploreMenu = (
     <Menu
-      onClick={(e) => handleNavItemClick(e, 1)}
-      onMouseEnter={() => updateSlider(1)}
+      onClick={(e) => handleNavItemClick(e, 2)}
+      onMouseEnter={() => updateSlider(2)}
       onMouseLeave={() => updateSlider(activePage)}
     >
       <Menu.Item key='promises'>
@@ -97,9 +97,8 @@ export const Header = ({ activePage, setActivePage }) => {
         >
           <a
             className={
-              activePage === 1 ? 'active dropdown-title' : 'dropdown-title'
+              activePage === 2 ? 'active dropdown-title' : 'dropdown-title'
             }
-            onClick={(e) => handleNavItemClick(e, 2)}
             onMouseEnter={() => updateSlider(2)}
             onMouseLeave={() => updateSlider(activePage)}
           >
@@ -108,7 +107,7 @@ export const Header = ({ activePage, setActivePage }) => {
         </Dropdown>
         <Link href='/user-dashboard'>
           <a
-            className={activePage === 2 ? 'active' : ''}
+            className={activePage === 3 ? 'active' : ''}
             onClick={(e) => handleNavItemClick(e, 3)}
             onMouseEnter={() => updateSlider(3)}
             onMouseLeave={() => updateSlider(activePage)}

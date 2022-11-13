@@ -48,7 +48,7 @@ export default function userPromises({ setActivePage }) {
   useEffect(() => {
     fetchPromises();
     getVerifiedHandles();
-    setActivePage(2);
+    setActivePage(3);
   }, []);
 
   useEffect(() => {

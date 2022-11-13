@@ -20,7 +20,7 @@ export default function exploreTwitterVerified({ setActivePage }) {
   } = useContext(PromisesDataContext);
 
   useEffect(() => {
-    setActivePage(1);
+    setActivePage(2);
     fetchTwitterVerifiedUsers();
   }, []);
 

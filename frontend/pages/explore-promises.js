@@ -46,7 +46,7 @@ export default function explorePromises({ setActivePage }) {
   // --------------------------------------------------------
 
   useEffect(() => {
-    setActivePage(1);
+    setActivePage(2);
     fetchPromises();
   }, []);
 
