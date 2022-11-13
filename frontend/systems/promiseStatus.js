@@ -17,12 +17,13 @@ const promiseStatus = () => {
   const getLockDiv = (isTrue, message) => {
     if (isTrue) {
       return (
-        <a className='verified' href='some-tx-link' target='_blank'>
-          <i className='fas fa-lock'></i>
-          <span>
-            Tx <i className='fas fa-chain'></i>
-          </span>
-        </a>
+        <>
+          <div className='verified' style={{ justifySelf: 'left' }}>
+            <i className='fas fa-check'></i>
+            Promise approved
+          </div>
+          <div></div>
+        </>
       );
     } else if (isTrue === undefined || isTrue === null) {
       return (

@@ -2,7 +2,7 @@ import PromisePanel from './explore/PromisePanel';
 import InteractPromiseDrawer from './user/InteractPromiseDrawer';
 import FormattedAddress from './utils/FormattedAddress';
 import DateFromTimestamp from './utils/DateFromTimestamp';
-import { Collapse, Drawer } from 'antd';
+import { Collapse, Drawer, Tooltip } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
@@ -92,6 +92,24 @@ export default function PromisesCollapse({ promises, context }) {
                       type='eth'
                     />{' '}
                     <DateFromTimestamp timestamp={promise.createdAt} />
+                    {promise.createdAt !== promise.updatedAt ? (
+                      <span>
+                        {' '}
+                        <Tooltip
+                          title={
+                            <>
+                              (updated{' '}
+                              <DateFromTimestamp
+                                timestamp={promise.updatedAt}
+                              />
+                              )
+                            </>
+                          }
+                        >
+                          LOGO
+                        </Tooltip>
+                      </span>
+                    ) : null}
                   </div>
                   <div
                     className='invisible-wrapper'
