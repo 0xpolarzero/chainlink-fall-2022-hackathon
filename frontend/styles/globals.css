@@ -4,6 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 :root {
+  /* FONTS */
   --font-poppins: 'Poppins', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   --font-titillium: 'Titillium Web', -apple-system, BlinkMacSystemFont, Segoe UI,
@@ -15,6 +16,7 @@
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
 
+  /* COLORS */
   --twilight-lavender: #8b4562ff;
   --dark-purple: rgb(44, 12, 37);
   --crimson-ua: #96202eff;
@@ -23,7 +25,13 @@
   --popstar-dark: rgb(60, 26, 31);
   --pink-dark: #fe8dc6;
   --pink-light: #fed1c7;
+  --primary-color-white: #ffffff;
+  --background-color-light: #2b313a;
+  --background-color-medium: #131923;
+  --background-color-dark: #0b111b;
+  --background-color-purple: #211d34;
 
+  /* GRADIENTS */
   --gradient-color-main: linear-gradient(
     90deg,
     var(--crimson-ua) 0%,
@@ -50,11 +58,7 @@
     rgba(62, 16, 53, 0.8) 100%
   );
 
-  --primary-color-white: #ffffff;
-  --background-color-light: #2b313a;
-  --background-color-medium: #131923;
-  --background-color-dark: #0b111b;
-  --background-color-purple: #211d34;
+  /* UTILITIES */
   --tab-nav-items: 4;
   --tab-nav-current-item: 0;
 
@@ -69,6 +73,7 @@
   --toastify-spinner-color-empty-area: #e0e0e0;
 
   /* Override Antd */
+  /* The following variables replace the commented ones in ./antd/antd-specified.css */
   /* #177ddc */
   --ant-blue-override: #555e99ff;
   /* #165996 */
@@ -94,6 +99,8 @@
   /* --antd-wave-shadow-color */
   --ant-wave-shadow-color-override: var(--popstar);
 }
+
+/* MAIN */
 
 html,
 body {
@@ -129,8 +136,7 @@ main {
   justify-self: center;
 }
 
-.container {
-}
+/* GLOBALLY USED CLASSES */
 
 .icon::after {
   display: inline-block;
@@ -269,26 +275,6 @@ main {
   transform: scale(1.02);
 }
 
-@media (min-height: 30em) {
-  main {
-    overflow-y: scroll;
-    height: 100vh;
-  }
-
-  main.home {
-    scroll-snap-type: y mandatory;
-  }
-
-  main:not(.home) {
-    display: flex;
-    justify-content: center;
-  }
-
-  .section {
-    min-height: 100vh;
-  }
-}
-
 .error-message,
 .warning-message {
   text-align: center;
@@ -313,6 +299,28 @@ main {
   text-align: center;
 }
 
+@media (min-height: 30em) {
+  main {
+    overflow-y: scroll;
+    height: 100vh;
+  }
+
+  main.home {
+    scroll-snap-type: y mandatory;
+  }
+
+  main:not(.home) {
+    display: flex;
+    justify-content: center;
+  }
+
+  .section {
+    min-height: 100vh;
+  }
+}
+
+/* OVERRIDES */
+
 /* Override Rainbow wallet CSS */
 
 .iekbcc0.ju367va.ju367v1n:not(.ju367vz) {
@@ -329,50 +337,13 @@ main {
 
 /* Override Antd CSS */
 
-.ant-popover-inner,
-.ant-popover-arrow-content,
-.ant-popuver:after,
-.ant-tooltip-inner,
-.ant-tooltip-arrow-content::before {
-  background: var(--popstar) !important;
+/* Badge */
+.ant-badge {
+  cursor: pointer;
+  z-index: 2;
 }
 
-.interaction .ant-tooltip-disabled-compatible-wrapper {
-  width: 100%;
-}
-
-.ant-popover a,
-.ant-tooltip-inner a {
-  color: #fff !important;
-  font-weight: 600;
-}
-
-.ant-popover a::after,
-.ant-tooltip-inner a::after {
-  font: normal normal normal 14px/1 FontAwesome;
-  content: ' \f35d';
-}
-
-.ant-popover-arrow-content {
-  --antd-arrow-background-color: var(--popstar) !important;
-}
-
-.ant-collapse-borderless {
-  background: transparent !important;
-}
-
-.ant-collapse-header-text {
-  align-self: center;
-}
-.ant-skeleton-content .ant-skeleton-paragraph {
-  margin: 0 !important;
-}
-
-.ant-skeleton-content .ant-skeleton-paragraph > li {
-  width: 100% !important;
-  background: var(--gradient-high-transparent) !important;
-}
-
+/* Button */
 .ant-btn-primary,
 .ant-btn-default {
   font-family: var(--font-poppins);
@@ -428,42 +399,16 @@ main {
   background: transparent !important;
 }
 
-.anticon-info-circle,
-.anticon-inbox {
-  color: #fff !important;
-  opacity: 0.7;
-  transition: all 0.3s ease;
+/* Collapse */
+.ant-collapse-borderless {
+  background: transparent !important;
 }
 
-.anticon:hover {
-  opacity: 1;
+.ant-collapse-header-text {
+  align-self: center;
 }
 
-.ant-input:hover {
-  vertical-align: baseline !important;
-}
-
-.ant-input-prefix {
-  margin-right: 1rem !important;
-}
-
-ant-select {
-  position: sticky !important;
-}
-
-.ant-pagination-simple-pager input,
-.ant-select-selection-search-input {
-  color: #fff !important;
-}
-
-.ant-select-clear {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-.ant-select-clear:hover {
-  color: rgba(255, 255, 255, 1) !important;
-}
-
+/* Drawer */
 .ant-drawer-header {
   display: grid !important;
   grid-template-columns: 1fr auto !important;
@@ -483,87 +428,7 @@ ant-select {
   backdrop-filter: blur(10px) !important;
 }
 
-.ant-table {
-  border-radius: 6px !important;
-}
-
-.ant-table-cell[colspan='2'] > div {
-  justify-content: center;
-}
-
-.ipfs-display .ant-table-tbody .ant-table-row {
-  cursor: pointer;
-}
-
-.ant-ribbon-wrapper {
-  z-index: 1;
-}
-
-.ant-ribbon.badge-locked {
-  background: rgba(88, 173, 139, 0.7) !important;
-}
-
-.ant-ribbon.badge-unlocked {
-  background: rgba(213, 168, 122, 0.7) !important;
-}
-
-.ant-ribbon-wrapper > span {
-  position: absolute !important;
-  right: 0 !important;
-  left: initial !important;
-}
-
-.ant-badge {
-  cursor: pointer;
-  z-index: 2;
-}
-
-.section-explore .promises-list .ant-table-pagination,
-.promise-drawer .ant-table-pagination {
-  position: absolute !important;
-  top: 0.5rem !important;
-  right: 1rem !important;
-  margin: 0 !important;
-  z-index: 1;
-}
-
-.ant-pagination-item a {
-  transition: all 0.3s ease !important;
-}
-
-.ant-pagination-item-link:disabled {
-  opacity: 0.5 !important;
-}
-
-.ant-upload.ant-upload-btn {
-  padding: 1rem 2rem !important;
-}
-
-.ant-upload-list-item-card-actions-btn {
-  background: var(--popstar);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.ant-upload-list-item-card-actions-btn:hover {
-  background: var(--crimson-ua);
-}
-
-.ant-upload-list-item-card-actions-btn:hover span {
-  color: #fff !important;
-  opacity: 1 !important;
-}
-
-.ant-upload-list-item-info {
-  padding: 1rem 0.5rem;
-}
-
-.ant-upload-list-item-progress {
-  bottom: -1.1rem !important;
-}
-
+/* Dropdown */
 .ant-dropdown {
   backdrop-filter: blur(10px) !important;
 }
@@ -612,6 +477,94 @@ ant-select {
   transform: translateY(0.1rem) !important;
 }
 
+/* Icon */
+.anticon-info-circle,
+.anticon-inbox {
+  color: #fff !important;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.anticon:hover {
+  opacity: 1;
+}
+
+/* Input */
+.ant-input:hover {
+  vertical-align: baseline !important;
+}
+
+.ant-input-prefix {
+  margin-right: 1rem !important;
+}
+
+/* Pagination */
+.ant-pagination-simple-pager input,
+.ant-select-selection-search-input {
+  color: #fff !important;
+}
+
+.section-explore .promises-list .ant-table-pagination,
+.promise-drawer .ant-table-pagination {
+  position: absolute !important;
+  top: 0.5rem !important;
+  right: 1rem !important;
+  margin: 0 !important;
+  z-index: 1;
+}
+
+.ant-pagination-item a {
+  transition: all 0.3s ease !important;
+}
+
+.ant-pagination-item-link:disabled {
+  opacity: 0.5 !important;
+}
+
+/* Popover */
+.ant-popover-inner,
+.ant-popover-arrow-content,
+.ant-popuver:after,
+.ant-tooltip-inner,
+.ant-tooltip-arrow-content::before {
+  background: var(--popstar) !important;
+}
+
+.ant-popover a,
+.ant-tooltip-inner a {
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.ant-popover a::after,
+.ant-tooltip-inner a::after {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: ' \f35d';
+}
+
+.ant-popover-arrow-content {
+  --antd-arrow-background-color: var(--popstar) !important;
+}
+
+/* Ribbon */
+.ant-ribbon-wrapper {
+  z-index: 1;
+}
+
+.ant-ribbon.badge-locked {
+  background: rgba(88, 173, 139, 0.7) !important;
+}
+
+.ant-ribbon.badge-unlocked {
+  background: rgba(213, 168, 122, 0.7) !important;
+}
+
+.ant-ribbon-wrapper > span {
+  position: absolute !important;
+  right: 0 !important;
+  left: initial !important;
+}
+
 .storage-ribbon {
   position: relative;
 }
@@ -622,11 +575,74 @@ ant-select {
   left: initial !important;
 }
 
-/* Font Awesome icons */
-
-.fa-twitter {
-  /* color: #50b0ec; */
+/* Select */
+.ant-select-clear {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
+
+.ant-select-clear:hover {
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+/* Skeleton */
+.ant-skeleton-content .ant-skeleton-paragraph {
+  margin: 0 !important;
+}
+
+.ant-skeleton-content .ant-skeleton-paragraph > li {
+  width: 100% !important;
+  background: var(--gradient-high-transparent) !important;
+}
+
+/* Table */
+.ant-table {
+  border-radius: 6px !important;
+}
+
+.ant-table-cell[colspan='2'] > div {
+  justify-content: center;
+}
+
+.ipfs-display .ant-table-tbody .ant-table-row {
+  cursor: pointer;
+}
+
+/* Tooltip */
+.interaction .ant-tooltip-disabled-compatible-wrapper {
+  width: 100%;
+}
+
+/* Upload */
+.ant-upload.ant-upload-btn {
+  padding: 1rem 2rem !important;
+}
+
+.ant-upload-list-item-card-actions-btn {
+  background: var(--popstar);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ant-upload-list-item-card-actions-btn:hover {
+  background: var(--crimson-ua);
+}
+
+.ant-upload-list-item-card-actions-btn:hover span {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+.ant-upload-list-item-info {
+  padding: 1rem 0.5rem;
+}
+
+.ant-upload-list-item-progress {
+  bottom: -1.1rem !important;
+}
+
+/* Font Awesome icons */
 
 .fa-question-circle,
 .fa-question-circle,

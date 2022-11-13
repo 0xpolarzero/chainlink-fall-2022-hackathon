@@ -2,7 +2,6 @@
 @import './pages/home.css';
 @import './pages/explore-promises.css';
 @import './pages/user-dashboard.css';
-@import './animations.css';
 
 /* Dependencies */
 @import '@rainbow-me/rainbowkit/styles.css';
