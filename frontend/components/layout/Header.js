@@ -83,6 +83,7 @@ export const Header = ({ activePage, setActivePage }) => {
           <a
             onMouseEnter={() => updateSlider(1)}
             onMouseLeave={() => updateSlider(activePage)}
+            target='_blank'
             style={{ display: 'flex', gap: '0.5rem' }}
           >
             <i className='fas fa-book'></i>Docs
