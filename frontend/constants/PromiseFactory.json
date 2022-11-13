@@ -1,1 +1,211 @@
-[{"type":"constructor","payable":false,"inputs":[{"type":"address","name":"_twitterVerifier"},{"type":"address","name":"_storageVerifier"}]},{"type":"error","name":"PromiseFactory__EMPTY_FIELD","inputs":[]},{"type":"error","name":"PromiseFactory__INCORRECT_FIELD_LENGTH","inputs":[]},{"type":"error","name":"PromiseFactory__NOT_OWNER","inputs":[]},{"type":"error","name":"PromiseFactory__NOT_VERIFIER","inputs":[]},{"type":"error","name":"PromiseFactory__addParticipant__ALREADY_PARTICIPANT","inputs":[]},{"type":"error","name":"PromiseFactory__addParticipant__NOT_PARTICIPANT","inputs":[]},{"type":"error","name":"PromiseFactory__createPromiseContract__DUPLICATE_FIELD","inputs":[]},{"type":"event","anonymous":false,"name":"ParticipantAdded","inputs":[{"type":"address","name":"_contractAddress","indexed":true},{"type":"string","name":"_participantName","indexed":false},{"type":"string","name":"_participantTwitterHandle","indexed":false},{"type":"address","name":"_participantAddress","indexed":false}]},{"type":"event","anonymous":false,"name":"PromiseContractCreated","inputs":[{"type":"address","name":"_owner","indexed":true},{"type":"address","name":"_contractAddress","indexed":true},{"type":"string","name":"_promiseName","indexed":false},{"type":"string","name":"_ipfsCid","indexed":false},{"type":"string","name":"_arweaveId","indexed":false},{"type":"string","name":"encryptedProof","indexed":false},{"type":"string[]","name":"_partyNames","indexed":false},{"type":"string[]","name":"_partyTwitterHandles","indexed":false},{"type":"address[]","name":"_partyAddresses","indexed":false}]},{"type":"event","anonymous":false,"name":"StorageStatusUpdateRequested","inputs":[{"type":"address","name":"promiseContract","indexed":false}]},{"type":"event","anonymous":false,"name":"StorageStatusUpdated","inputs":[{"type":"address","name":"_contractAddress","indexed":true},{"type":"uint8","name":"_storageStatus","indexed":false}]},{"type":"event","anonymous":false,"name":"TwitterAddVerifiedSuccessful","inputs":[{"type":"address","name":"_owner","indexed":true},{"type":"string","name":"_twitterHandle","indexed":false}]},{"type":"function","name":"addParticipant","constant":false,"payable":false,"inputs":[{"type":"address","name":"_promiseContractAddress"},{"type":"string","name":"_partyName"},{"type":"string","name":"_partyTwitterHandle"},{"type":"address","name":"_partyAddress"}],"outputs":[]},{"type":"function","name":"addTwitterVerifiedUser","constant":false,"payable":false,"inputs":[{"type":"address","name":"_userAddress"},{"type":"string","name":"_twitterHandle"}],"outputs":[]},{"type":"function","name":"createPromiseContract","constant":false,"payable":false,"inputs":[{"type":"string","name":"_promiseName"},{"type":"string","name":"_ipfsCid"},{"type":"string","name":"_arweaveId"},{"type":"string","name":"_encryptedProof"},{"type":"string[]","name":"_partyNames"},{"type":"string[]","name":"_partyTwitterHandles"},{"type":"address[]","name":"_partyAddresses"}],"outputs":[{"type":"address","name":"promiseContractAddress"}]},{"type":"function","name":"getOwner","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"address"}]},{"type":"function","name":"getPromiseContractAddresses","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"address","name":"_owner"}],"outputs":[{"type":"address[]"}]},{"type":"function","name":"getPromiseContractCount","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"address","name":"_userAddress"}],"outputs":[{"type":"uint256"}]},{"type":"function","name":"getStorageVerifier","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"address"}]},{"type":"function","name":"getTwitterVerifiedHandle","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"address","name":"_userAddress"}],"outputs":[{"type":"string[]"}]},{"type":"function","name":"getTwitterVerifier","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"address"}]},{"type":"function","name":"setStorageVerifier","constant":false,"payable":false,"inputs":[{"type":"address","name":"_storageVerifier"}],"outputs":[]},{"type":"function","name":"setTwitterVerifier","constant":false,"payable":false,"inputs":[{"type":"address","name":"_twitterVerifier"}],"outputs":[]},{"type":"function","name":"updateStorageStatus","constant":false,"payable":false,"inputs":[{"type":"address","name":"_promiseContractAddress"},{"type":"uint8","name":"_storageStatus"}],"outputs":[]}]
+[
+  {
+    "type": "constructor",
+    "payable": false,
+    "inputs": [
+      { "type": "address", "name": "_twitterVerifier" },
+      { "type": "address", "name": "_storageVerifier" }
+    ]
+  },
+  { "type": "error", "name": "PromiseFactory__EMPTY_FIELD", "inputs": [] },
+  {
+    "type": "error",
+    "name": "PromiseFactory__INCORRECT_FIELD_LENGTH",
+    "inputs": []
+  },
+  { "type": "error", "name": "PromiseFactory__NOT_OWNER", "inputs": [] },
+  { "type": "error", "name": "PromiseFactory__NOT_VERIFIER", "inputs": [] },
+  {
+    "type": "error",
+    "name": "PromiseFactory__addParticipant__ALREADY_PARTICIPANT",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "PromiseFactory__addParticipant__NOT_PARTICIPANT",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "PromiseFactory__createPromiseContract__DUPLICATE_FIELD",
+    "inputs": []
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "ParticipantAdded",
+    "inputs": [
+      { "type": "address", "name": "_contractAddress", "indexed": true },
+      { "type": "string", "name": "_participantName", "indexed": false },
+      {
+        "type": "string",
+        "name": "_participantTwitterHandle",
+        "indexed": false
+      },
+      { "type": "address", "name": "_participantAddress", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "PromiseContractCreated",
+    "inputs": [
+      { "type": "address", "name": "_owner", "indexed": true },
+      { "type": "address", "name": "_contractAddress", "indexed": true },
+      { "type": "string", "name": "_promiseName", "indexed": false },
+      { "type": "string", "name": "_ipfsCid", "indexed": false },
+      { "type": "string", "name": "_arweaveId", "indexed": false },
+      { "type": "string", "name": "encryptedProof", "indexed": false },
+      { "type": "string[]", "name": "_partyNames", "indexed": false },
+      { "type": "string[]", "name": "_partyTwitterHandles", "indexed": false },
+      { "type": "address[]", "name": "_partyAddresses", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "StorageStatusUpdateRequested",
+    "inputs": [
+      { "type": "address", "name": "promiseContract", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "StorageStatusUpdated",
+    "inputs": [
+      { "type": "address", "name": "_contractAddress", "indexed": true },
+      { "type": "uint8", "name": "_storageStatus", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "TwitterAddVerifiedSuccessful",
+    "inputs": [
+      { "type": "address", "name": "_owner", "indexed": true },
+      { "type": "string", "name": "_twitterHandle", "indexed": false }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "addParticipant",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      { "type": "address", "name": "_promiseContractAddress" },
+      { "type": "string", "name": "_partyName" },
+      { "type": "string", "name": "_partyTwitterHandle" },
+      { "type": "address", "name": "_partyAddress" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "addTwitterVerifiedUser",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      { "type": "address", "name": "_userAddress" },
+      { "type": "string", "name": "_twitterHandle" }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "createPromiseContract",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      { "type": "string", "name": "_promiseName" },
+      { "type": "string", "name": "_ipfsCid" },
+      { "type": "string", "name": "_arweaveId" },
+      { "type": "string", "name": "_encryptedProof" },
+      { "type": "string[]", "name": "_partyNames" },
+      { "type": "string[]", "name": "_partyTwitterHandles" },
+      { "type": "address[]", "name": "_partyAddresses" }
+    ],
+    "outputs": [{ "type": "address", "name": "promiseContractAddress" }]
+  },
+  {
+    "type": "function",
+    "name": "getOwner",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "address" }]
+  },
+  {
+    "type": "function",
+    "name": "getPromiseContractAddresses",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_owner" }],
+    "outputs": [{ "type": "address[]" }]
+  },
+  {
+    "type": "function",
+    "name": "getPromiseContractCount",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_userAddress" }],
+    "outputs": [{ "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "getStorageVerifier",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "address" }]
+  },
+  {
+    "type": "function",
+    "name": "getTwitterVerifiedHandle",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_userAddress" }],
+    "outputs": [{ "type": "string[]" }]
+  },
+  {
+    "type": "function",
+    "name": "getTwitterVerifier",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [],
+    "outputs": [{ "type": "address" }]
+  },
+  {
+    "type": "function",
+    "name": "setStorageVerifier",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_storageVerifier" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "setTwitterVerifier",
+    "constant": false,
+    "payable": false,
+    "inputs": [{ "type": "address", "name": "_twitterVerifier" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "updateStorageStatus",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      { "type": "address", "name": "_promiseContractAddress" },
+      { "type": "uint8", "name": "_storageStatus" }
+    ],
+    "outputs": []
+  }
+]
