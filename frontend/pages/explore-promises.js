@@ -2,8 +2,8 @@ import styles from '../styles/modules/Home.module.css';
 import PromisesCollapse from '../components/PromisesCollapse';
 import PromisesCollapseSkeleton from '../components/PromisesCollapseSkeleton';
 import PromisesDataContext from '../systems/context/PromisesDataContext';
-import { useContext, useEffect, useState } from 'react';
 import { AutoComplete, Pagination } from 'antd';
+import { useContext, useEffect, useState } from 'react';
 
 export default function explorePromises({ setActivePage }) {
   const [shownPage, setShownPage] = useState(1);
@@ -11,7 +11,6 @@ export default function explorePromises({ setActivePage }) {
   const [sortedPromises, setSortedPromises] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [searchOptions, setSearchOptions] = useState([]);
-  // const { data, loading, error } = useQuery(GET_ACTIVE_PROMISE);
   const { fetchPromises, promises, promisesError } =
     useContext(PromisesDataContext);
 

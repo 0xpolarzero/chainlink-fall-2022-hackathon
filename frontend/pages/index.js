@@ -12,10 +12,12 @@ export default function Home() {
           </div>
           <div className='caption'>
             <p>
-              Expose your roadmap or letter of intent in a fully on-chain and
-              decentralized way. Bring accountability to your project.
+              A blockchain service for founders, creators and regular users.
             </p>
-            <p>It's time to hold founders accountable for their promises.</p>
+            <p>
+              Built to help improve trust in our digital relationships and make
+              founders more accountable for their promises.
+            </p>
           </div>
           <div className='action'>
             <Link href='/explore-promises'>
@@ -26,6 +28,12 @@ export default function Home() {
             <Link href='/user-dashboard'>
               <Button type='primary' className='action-btn'>
                 Publish your promise
+              </Button>
+            </Link>
+            <br />
+            <Link href='/explore-twitter-verified'>
+              <Button type='primary' className='action-btn'>
+                Explore verified Twitter handles
               </Button>
             </Link>
           </div>

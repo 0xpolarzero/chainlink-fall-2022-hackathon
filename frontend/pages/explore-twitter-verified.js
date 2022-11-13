@@ -1,10 +1,10 @@
 import styles from '../styles/modules/Home.module.css';
+import VerifyTwitterDrawer from '../components/user/VerifyTwitterDrawer';
 import TwitterVerifiedTable from '../components/explore/TwitterVerifiedTable';
 import TwitterVerifiedTableSkeleton from '../components/explore/TwitterVerifiedTableSkeleton';
 import PromisesDataContext from '../systems/context/PromisesDataContext';
-import { useContext, useEffect, useState } from 'react';
 import { Button, Tooltip } from 'antd';
-import VerifyTwitterDrawer from '../components/user/VerifyTwitterDrawer';
+import { useContext, useEffect, useState } from 'react';
 
 export default function exploreTwitterVerified({ setActivePage }) {
   const [sortedTwitterVerifiedUsers, setSortedTwitterVerifiedUsers] = useState(
