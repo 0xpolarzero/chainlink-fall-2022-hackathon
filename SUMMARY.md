@@ -20,3 +20,7 @@
 
 * [Sending to the IPFS network](ipfs-and-arweave/sending-to-the-ipfs-network.md)
 * [Sending to Arweave with Bundlr](ipfs-and-arweave/sending-to-arweave-with-bundlr.md)
+
+## The Graph
+
+* [Catching events in a promise](the-graph/catching-events-in-a-promise.md)

@@ -12,7 +12,7 @@ The _Explore Promises_ page shows the last created promises, and allows you to s
 
 ## What does a promise look like?
 
-<figure><img src="../.gitbook/assets/image (1).png" alt="An example of promise as it is displayed on the website"><figcaption><p>An example promise as it is displayed on the App.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1).png" alt="An example of promise as it is displayed on the website"><figcaption><p>An example promise as it is displayed on the App.</p></figcaption></figure>
 
 All information and variables of the promise are stored on-chain, in its own smart contract, and fetched before it can be displayed. The content is requested from IPFS to be displayed as well. There are various sections in the promise card:
 
@@ -58,7 +58,7 @@ _****_:hourglass: <mark style="color:red;">**Verification pending...**</mark>
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (7).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (8).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
 
 <details>
 
@@ -96,4 +96,16 @@ The IPFS directory is displayed just below. If it includes only a PDF, it will b
 
 </details>
 
-<figure><img src="../.gitbook/assets/image.png" alt="The message shown with peers pinning the IPFS content of a promise."><figcaption><p>The pinning status of the promise IPFS content.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5).png" alt="The message shown with peers pinning the IPFS content of a promise."><figcaption><p>The pinning status of the promise IPFS content.</p></figcaption></figure>
+
+## Related resources
+
+| Subgraph                                                                                                |
+| ------------------------------------------------------------------------------------------------------- |
+| [The Graph](https://thegraph.com/hosted-service/subgraph/polar0/promises-subgraph-mumbai-v1)            |
+| [Code (repository)](https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/subgraph) |
+
+| Contracts                                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [PromiseContract.sol](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/contracts/PromiseContract.sol)         |
+| [PromiseContract (tests)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/unit/PromiseContract.test.js) |

@@ -4,7 +4,7 @@ description: How to create a promise?
 
 # Creating a promise
 
-<figure><img src="../.gitbook/assets/image (10).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/image (2).png" alt="Creating a promise using the App"><figcaption><p>Click "New promise" to create a promise.</p></figcaption></figure>
 
@@ -67,7 +67,7 @@ If you create a promise from the contract, without using the App, we won't be ab
 Therefore, the promise will be displayed with the tag ":warning:**Not verified**" on the App UI.
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image (4).png" alt="Navigating to the contract from the App to create a promise"><figcaption><p>Navigating to the contract to create a promise.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image.png" alt="Navigating to the contract from the App to create a promise"><figcaption><p>Navigating to the contract to create a promise.</p></figcaption></figure>
 
 Once in the `createPromiseContract` function, you will need to provide the following parameters:
 
@@ -90,3 +90,22 @@ The arrays `_partyNames`_,_ `_partyTwitterHandles` __ and __ `_partyAddresses` n
 {% endhint %}
 
 When all the fields have been filled correctly, you can submit the transaction, and refresh the App to see your promise displayed.
+
+## Related resources
+
+| App                                                                                                                                                               |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Creating a promise (NewPromiseDrawer)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/user-dashboard/NewPromiseDrawer.js) |
+| [Uploading to IPFS](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/systems/tasks/uploadToIPFS.js)                                     |
+| [Uploading to Arweave](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/systems/tasks/uploadToArweave.js)                               |
+| [Encrypting hashes (AES 256)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/systems/tasks/encryptAES256.js)                          |
+
+| Contracts                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [PromiseFactory.sol](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/contracts/PromiseFactory.sol)                          |
+| [PromiseFactory (tests)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/unit/PromiseFactory.test.js)                  |
+| [PromiseContract.sol](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/contracts/PromiseContract.sol)                        |
+| [PromiseContract (tests)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/unit/PromiseContract.test.js)                |
+| [VerifyStorage.sol](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/contracts/VerifyStorage.sol)                            |
+| [VerifyStorage (unit tests)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/unit/VerifyStorageMock.test.js)           |
+| [VerifyStorage (staging tests)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/staging/VerifyStorage.staging.test.js) |
