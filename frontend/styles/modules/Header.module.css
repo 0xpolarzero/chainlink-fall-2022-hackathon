@@ -75,3 +75,8 @@
     100% * var(--tab-nav-current-item) / var(--tab-nav-items)
   );
 }
+
+.links > :global(*.active),
+.links > :global(*.active > *) {
+  text-shadow: 0 0 18px var(--popstar), 0 0 48px var(--popstar) !important;
+}
