@@ -212,7 +212,7 @@ const uploadFilesToBundlr = async (
   setStatusMessage,
 ) => {
   setStatusMessage(
-    'Please sign the transaction so the files can be uploaded to Arweave...',
+    'Please sign the message to authorize Bundlr to send the files on Arweave...',
   );
   // Upload each file and get the url
   let uploadedFiles = [];
