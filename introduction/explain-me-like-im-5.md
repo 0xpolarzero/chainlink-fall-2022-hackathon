@@ -30,6 +30,10 @@ Chainlink Operator contract on Polygonscan
 Chainlink documentation
 {% endembed %}
 
+{% embed url="https://naas.link/" %}
+Node as a Service
+{% endembed %}
+
 ### Twitter verifier
 
 {% embed url="https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-twitter-verification" %}
