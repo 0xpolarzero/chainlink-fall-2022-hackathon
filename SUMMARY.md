@@ -6,7 +6,8 @@
 ## How to use
 
 * [Exploring promises](introduction/exploring-promises.md)
-* [Creating & interacting with promises](introduction/creating-and-interacting-with-promises.md)
+* [Creating a promise](how-to-use/creating-a-promise.md)
+* [Interacting with promises](how-to-use/interacting-with-promises.md)
 * [Verifying a Twitter handle](introduction/verifying-a-twitter-handle.md)
 
 ## Chainlink - External Adapters

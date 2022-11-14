@@ -1,21 +1,44 @@
 ---
-description: How to create a promise and interact with it?
+description: How to create a promise?
 ---
 
-# Creating & interacting with promises
+# Creating a promise
 
 <figure><img src="../.gitbook/assets/image (3).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (7).png" alt="Creating a promise using the App"><figcaption><p>Click "New promise" to create a promise.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image.png" alt="Creating a promise using the App"><figcaption><p>Click "New promise" to create a promise.</p></figcaption></figure>
 
 There are two ways of creating a promise:
 
-* using the App
-* from the contract
+* using the App ;
+* from the contract.
 
 ## Creating a promise using the App
 
-...
+Using the App to create a promise will allow its content to get verified, and spare you the trouble of sending it to IPFS, and eventually to Arweave. The process is rather straightforward:
+
+<figure><img src="../.gitbook/assets/image (2).png" alt="The window displayed for creating a promise on the App"><figcaption><p>The 'Create promise' drawer on the App.</p></figcaption></figure>
+
+1. Enter a name for your promise (max 70 characters).
+2. Input data for at least one participant:
+   * Name (min 2 - max 30 characters) ;
+   * Ethereum address (a valid Ethereum address) ;
+   * Twitter username (optional ; a valid Twitter handle).
+3. Add as many participants as needed.
+4. Choose whether you want to send the files to Arweave (if you do so, you will need to sign a message to connect your wallet to the Bundlr network [sending-to-arweave-with-bundlr.md](../ipfs-and-arweave/sending-to-arweave-with-bundlr.md "mention")).
+5. Upload as many files as needed (max 10 MB).
+
+{% hint style="warning" %}
+You cannot add duplicate Ethereum addresses.
+{% endhint %}
+
+{% hint style="warning" %}
+You need to upload file by file ; you can't upload a folder directly.
+{% endhint %}
+
+{% hint style="info" %}
+Files won't be uploaded to IPFS or Arweave until you click the **Create** button.
+{% endhint %}
 
 ## Creating a promise from the contract
 
