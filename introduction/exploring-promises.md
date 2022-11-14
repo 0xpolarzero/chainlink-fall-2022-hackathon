@@ -58,7 +58,7 @@ _****_:hourglass: <mark style="color:red;">**Verification pending...**</mark>
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (8).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
 
 <details>
 
@@ -96,7 +96,7 @@ The IPFS directory is displayed just below. If it includes only a PDF, it will b
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (5).png" alt="The message shown with peers pinning the IPFS content of a promise."><figcaption><p>The pinning status of the promise IPFS content.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3).png" alt="The message shown with peers pinning the IPFS content of a promise."><figcaption><p>The pinning status of the promise IPFS content.</p></figcaption></figure>
 
 ## Related resources
 
