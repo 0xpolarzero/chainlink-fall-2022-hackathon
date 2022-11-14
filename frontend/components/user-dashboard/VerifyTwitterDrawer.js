@@ -4,7 +4,7 @@ import networkMapping from '../../constants/networkMapping';
 import verifyTwitterAbi from '../../constants/VerifyTwitter.json';
 import promiseFactoryAbi from '../../constants/PromiseFactory.json';
 import PromisesDataContext from '../../systems/context/PromisesDataContext';
-import { waitForChainlinkFullfillment } from '../../systems/tasks/verifyTwitter';
+import { waitForChainlinkFulfillment } from '../../systems/tasks/verifyTwitter';
 import { Button, Form, Input, Drawer, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { toast } from 'react-toastify';
@@ -46,7 +46,7 @@ export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
           'Request sent! Please wait for the Chainlink Node to fulfill the request.',
         error: 'Error sending request',
       });
-      waitForChainlinkFullfillment(
+      waitForChainlinkFulfillment(
         verifyTwitterAddress,
         verifyTwitterAbi,
         provider,
