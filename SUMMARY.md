@@ -3,11 +3,11 @@
 * [Overview](README.md)
 * [Explain me like I'm 5](introduction/explain-me-like-im-5.md)
 
-## Introduction
+## How to use
 
-* [Exploring promises](introduction/exploring-promises.md)
-* [Creating & interacting with promises](introduction/creating-and-interacting-with-promises.md)
-* [Verifying a Twitter handle](introduction/verifying-a-twitter-handle.md)
+* [Exploring promises](how-to-use/exploring-promises.md)
+* [Creating & interacting with promises](how-to-use/creating-and-interacting-with-promises.md)
+* [Verifying a Twitter handle](how-to-use/verifying-a-twitter-handle.md)
 
 ## Chainlink - External Adapters
 
