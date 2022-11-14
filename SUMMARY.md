@@ -6,7 +6,7 @@
 ## How to use
 
 * [Exploring promises](introduction/exploring-promises.md)
-* [Creating a promise](how-to-use/creating-a-promise.md)
+* [Creating a promise](introduction/creating-and-interacting-with-promises.md)
 * [Interacting with promises](how-to-use/interacting-with-promises.md)
 * [Verifying a Twitter handle](introduction/verifying-a-twitter-handle.md)
 

@@ -4,9 +4,9 @@ description: How to create a promise?
 
 # Creating a promise
 
-<figure><img src="../.gitbook/assets/image (3).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image.png" alt="Creating a promise using the App"><figcaption><p>Click "New promise" to create a promise.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5).png" alt="Creating a promise using the App"><figcaption><p>Click "New promise" to create a promise.</p></figcaption></figure>
 
 There are two ways of creating a promise:
 
@@ -15,9 +15,13 @@ There are two ways of creating a promise:
 
 ## Creating a promise using the App
 
-Using the App to create a promise will allow its content to get verified, and spare you the trouble of sending it to IPFS, and eventually to Arweave. The process is rather straightforward:
+Using the App to create a promise will allow its content to get verified, and spare you the trouble of sending it to IPFS, and eventually to Arweave.&#x20;
 
-<figure><img src="../.gitbook/assets/image (2).png" alt="The window displayed for creating a promise on the App"><figcaption><p>The 'Create promise' drawer on the App.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6).png" alt="The window displayed for creating a promise on the App"><figcaption><p>The 'Create promise' drawer on the App.</p></figcaption></figure>
+
+### Filling up the form
+
+The process is rather straightforward:
 
 1. Enter a name for your promise (max 70 characters).
 2. Input data for at least one participant:
@@ -40,6 +44,19 @@ You need to upload file by file ; you can't upload a folder directly.
 Files won't be uploaded to IPFS or Arweave until you click the **Create** button.
 {% endhint %}
 
+### Approving transactions
+
+Once you click **Create**, the process of "uploading" to IPFS / Arweave and submitting the transaction will start.
+
+If you chose not to send the content to Arweave, you will only need to confirm one transaction, which will create the promise contract holding all its information.
+
+If you chose to send the content to Arweave, there are a few additional steps:
+
+1. **Funding your Bundlr wallet**: you will be prompted to confirm a transaction, that will transfer the required amount in MATIC to your Bundlr wallet ; it will be used for sending the files to the Arweave blockchain.
+2. **Authorizing Bundlr**: you will be asked to sign a message to authorize Bundlr to send the files on Arweave.
+
+Once you have completed these steps, the promise will be created, and available both in the **Explore promises** and the **Dashboard** pages.
+
 ## Creating a promise from the contract
 
 The promise creation window provides a link to create the promise by directly interacting with the contract.
@@ -50,7 +67,7 @@ If you create a promise from the contract, without using the App, we won't be ab
 Therefore, the promise will be displayed with the tag ":warning:**Not verified**" on the App UI.
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image (6).png" alt="Navigating to the contract from the App to create a promise"><figcaption><p>Navigating to the contract to create a promise.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt="Navigating to the contract from the App to create a promise"><figcaption><p>Navigating to the contract to create a promise.</p></figcaption></figure>
 
 Once in the `createPromiseContract` function, you will need to provide the following parameters:
 
