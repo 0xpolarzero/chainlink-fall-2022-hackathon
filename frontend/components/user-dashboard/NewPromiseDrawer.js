@@ -1,5 +1,6 @@
 import FileUploader from './FileUploader';
 import ConnectBundlr from './ConnectBundlr';
+import FormattedAddress from '../utils/FormattedAddress';
 import { validateNewPromiseForm } from '../../systems/tasks/validateNewPromiseForm';
 import { uploadToIPFS } from '../../systems/tasks/uploadToIPFS';
 import { uploadToArweave } from '../../systems/tasks/uploadToArweave';
@@ -197,6 +198,32 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
           bundlr={bundlr}
           setBundlr={setBundlr}
         />
+        Or create from the contract directly:{' '}
+        <FormattedAddress
+          address={contractAddress}
+          isShrinked='responsive'
+          type='eth'
+        />{' '}
+        <Tooltip
+          title={
+            <div>
+              Interact with the contract on Polygonscan to create the promise.
+              <br />
+              Click{' '}
+              <b>
+                Contract {'>'} Write Contract {'>'} createPromiseContract
+              </b>
+              <br />
+              <br />
+              <i className='fas fa-warning' /> If you create the promise this
+              way, we won't be able to verify that the files have been uploaded
+              to IPFS and Arweave. This means that the promise will be displayed
+              as 'Not verified' on the UI.
+            </div>
+          }
+        >
+          <i className='fas fa-question-circle'></i>
+        </Tooltip>
       </div>
     </Drawer>
   );
