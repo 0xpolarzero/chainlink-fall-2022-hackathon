@@ -1,4 +1,5 @@
 import VerifyTwitterInstructions from './VerifyTwitterInstructions';
+import FormattedAddress from '../utils/FormattedAddress';
 import networkMapping from '../../constants/networkMapping';
 import verifyTwitterAbi from '../../constants/VerifyTwitter.json';
 import promiseFactoryAbi from '../../constants/PromiseFactory.json';
@@ -158,7 +159,6 @@ export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
               }
             />
           </Form.Item>
-
           <Form.Item
             name='twitterHandle'
             label='Twitter Handle'
@@ -224,6 +224,31 @@ export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
             )}
           </div>
         </Form>
+        <div style={{ marginTop: '2rem' }}>
+          Or verify from the contract directly:{' '}
+          <FormattedAddress
+            address={verifyTwitterAddress}
+            isShrinked='responsive'
+            type='eth-write'
+          />{' '}
+          <Tooltip
+            title={
+              <div>
+                Interact with the contract on Polygonscan to verify your handle.
+                <br />
+                <b>{'>'} requestVerification</b>
+                <br />
+                <br />
+                1. Tweet the verification message
+                <br />
+                2. Enter your Twitter handle as a parameter in{' '}
+                <b>requestVerification</b>, and confirm the transaction.
+              </div>
+            }
+          >
+            <i className='fas fa-question-circle'></i>
+          </Tooltip>
+        </div>
       </Drawer>
     </div>
   );
