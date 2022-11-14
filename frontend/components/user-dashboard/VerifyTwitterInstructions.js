@@ -1,4 +1,5 @@
 import { Button, Popover } from 'antd';
+import { toast } from 'react-toastify';
 
 export default function VerifyTwitterInstructions({
   userAddress,

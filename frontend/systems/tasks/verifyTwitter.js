@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import { ethers } from 'ethers';
 
 // Once the request has been sent, wait for the Chainlink Node to fulfill it
-const waitForChainlinkFullfillment = async (
+const waitForChainlinkFulfillment = async (
   verifyTwitterContract,
   verifyTwitterAbi,
   provider,
@@ -51,4 +51,4 @@ const waitForChainlinkFullfillment = async (
   });
 };
 
-export { waitForChainlinkFullfillment };
+export { waitForChainlinkFulfillment };
