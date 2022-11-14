@@ -15,9 +15,11 @@
     "@rainbow-me/rainbowkit": "^0.7.1",
     "@react-pdf-viewer/core": "^3.7.0",
     "@react-pdf-viewer/default-layout": "^3.7.0",
+    "@react-three/fiber": "^8.9.1",
     "antd": "^4.23.6",
     "crypto-js": "^4.1.1",
     "filereader-stream": "^2.0.0",
+    "glslify-loader": "^2.0.0",
     "graphql": "^16.6.0",
     "jszip": "^3.10.1",
     "next": "12.3.1",
@@ -25,6 +27,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-toastify": "^9.0.8",
+    "three": "^0.146.0",
     "wagmi": "^0.7.5",
     "web3.storage": "^4.4.0"
   },
@@ -32,6 +35,8 @@
     "cid-tool": "^3.0.0",
     "eslint": "8.25.0",
     "eslint-config-next": "12.3.1",
-    "ethers": "^5.7.1"
+    "ethers": "^5.7.1",
+    "fs": "^0.0.1-security",
+    "raw-loader": "^4.0.2"
   }
 }

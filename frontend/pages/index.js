@@ -1,11 +1,18 @@
 import Link from 'next/link';
+import ThreeScene from '../components/index/ThreeScene';
 import { Button } from 'antd';
 
 export default function Home() {
   return (
     <main className='home'>
       <section className='section section-home'>
-        <div className='left'></div>
+        <div className='left'>
+          {/* <div className='logo-home'> */}
+          {/* <img src={Logo.src} alt='logo' width='70%' /> */}
+          {/* </div> */}
+
+          <ThreeScene />
+        </div>
         <div className='right'>
           <div className='title'>
             <div className='title-main'>promise</div>
