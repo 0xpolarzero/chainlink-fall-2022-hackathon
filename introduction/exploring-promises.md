@@ -12,7 +12,7 @@ The _Explore Promises_ page shows the last created promises, and allows you to s
 
 ## What does a promise look like?
 
-<figure><img src="../.gitbook/assets/image (1) (1).png" alt="An example of promise as it is displayed on the website"><figcaption><p>An example promise as it is displayed on the App.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1).png" alt="An example of promise as it is displayed on the website"><figcaption><p>An example promise as it is displayed on the App.</p></figcaption></figure>
 
 All information and variables of the promise are stored on-chain, in its own smart contract, and fetched before it can be displayed. The content is requested from IPFS to be displayed as well. There are various sections in the promise card:
 
@@ -58,7 +58,7 @@ _****_:hourglass: <mark style="color:red;">**Verification pending...**</mark>
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (1).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (7).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
 
 <details>
 
