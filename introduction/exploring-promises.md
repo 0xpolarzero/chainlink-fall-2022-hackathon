@@ -6,7 +6,7 @@ description: How to explore promises through the website?
 
 ## Introduction
 
-<figure><img src="../.gitbook/assets/image (2) (1).png" alt="How to reach the &#x27;Explore promises&#x27; page from the website"><figcaption><p>Go to the <em>Explore promises</em> page from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2).png" alt="How to reach the &#x27;Explore promises&#x27; page from the website"><figcaption><p>Go to the <em>Explore promises</em> page from the menu.</p></figcaption></figure>
 
 The _Explore Promises_ page shows the last created promises, and allows you to search through the available content. You can make a search using a promise name, an Ethereum address, the name or the Twitter handle of a participant.
 
@@ -58,7 +58,7 @@ _****_:hourglass: <mark style="color:red;">**Verification pending...**</mark>
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (3).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
 
 <details>
 
@@ -96,4 +96,4 @@ The IPFS directory is displayed just below. If it includes only a PDF, it will b
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (2).png" alt="The message shown with peers pinning the IPFS content of a promise."><figcaption><p>The pinning status of the promise IPFS content.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5).png" alt="The message shown with peers pinning the IPFS content of a promise."><figcaption><p>The pinning status of the promise IPFS content.</p></figcaption></figure>
