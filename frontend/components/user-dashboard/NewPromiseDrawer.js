@@ -202,17 +202,14 @@ export default function NewPromiseDrawer({ drawerOpen, setDrawerOpen }) {
         <FormattedAddress
           address={contractAddress}
           isShrinked='responsive'
-          type='eth'
+          type='eth-write'
         />{' '}
         <Tooltip
           title={
             <div>
               Interact with the contract on Polygonscan to create the promise.
               <br />
-              Click{' '}
-              <b>
-                Contract {'>'} Write Contract {'>'} createPromiseContract
-              </b>
+              <b>{'>'} createPromiseContract</b>
               <br />
               <br />
               <i className='fas fa-warning' /> If you create the promise this

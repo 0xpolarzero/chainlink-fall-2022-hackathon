@@ -8,6 +8,7 @@ export default function FormattedAddress({ address, isShrinked, type }) {
   const [isAddressHovered, setIsAddressHovered] = useState(false);
   const [shouldShrinkAddress, setShouldShrinkAddress] = useState(false);
   const [prefix, setPrefix] = useState('');
+  const [suffix, setSuffix] = useState('');
   const width = useWidth();
 
   const copyAddress = (e) => {
@@ -34,6 +35,10 @@ export default function FormattedAddress({ address, isShrinked, type }) {
     if (type === 'ipfs') setPrefix('https://dweb.link/ipfs/');
     if (type === 'eth') setPrefix('https://mumbai.polygonscan.com/address/');
     if (type === 'arweave') setPrefix('https://arweave.net/');
+    if (type === 'eth-write') {
+      setPrefix('https://mumbai.polygonscan.com/address/');
+      setSuffix('#writeContract');
+    }
   }, [type]);
 
   return (
@@ -45,10 +50,9 @@ export default function FormattedAddress({ address, isShrinked, type }) {
         </div>
       }
     >
-      <a href={`${prefix}${address}`} target='_blank'>
+      <a href={`${prefix}${address}${suffix}`} target='_blank'>
         {shrinkedAddress}
       </a>
-      {isAddressHovered && <span className='hint'>{address}</span>}
       {/* </span> */}
     </Popover>
   );
