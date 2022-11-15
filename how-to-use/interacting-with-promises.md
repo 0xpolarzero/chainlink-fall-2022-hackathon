@@ -22,7 +22,7 @@ It will always trigger a transaction, that requires the user to approve and pay 
 
 <figure><img src="../.gitbook/assets/image (13).png" alt="Clicking on a promise will open a popup"><figcaption><p>Click on a promise to start interacting with it.</p></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (11).png" alt="The drawer used for interacting with a promise"><figcaption><p>The drawer for interacting with a promise.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (11) (1).png" alt="The drawer used for interacting with a promise"><figcaption><p>The drawer for interacting with a promise.</p></figcaption></figure>
 
 Opening the drawer will display, at the top, the same table as for the promises in the **Explore promises** page ; only omitting to list the IPFS directory [#what-does-a-promise-look-like](../introduction/exploring-promises.md#what-does-a-promise-look-like "mention").
 
@@ -46,7 +46,7 @@ Any time a participant is added, everyone needs to approve the promise again. Th
 
 </details>
 
-<figure><img src="../.gitbook/assets/image.png" alt="The popup shown for adding a new participant to the promise"><figcaption><p>The popup shown for adding a participant.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (11).png" alt="The popup shown for adding a new participant to the promise"><figcaption><p>The popup shown for adding a participant.</p></figcaption></figure>
 
 <details>
 
@@ -54,7 +54,7 @@ Any time a participant is added, everyone needs to approve the promise again. Th
 
 This section allows any participant with a Twitter handle attached to this promise, to ensure that they actually own it.
 
-Please visit [verifying-a-twitter-handle.md](../introduction/verifying-a-twitter-handle.md "mention") for the detailed steps.
+Please visit [verifying-a-twitter-account.md](verifying-a-twitter-account.md "mention") for the detailed steps.
 
 </details>
 
@@ -76,7 +76,7 @@ This **Locked** status is a proof of reliability for your promise, as it means t
 | [Add a participant](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/user-dashboard/RowPromiseAddParticipant.js)                               |
 | [Approve the promise](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/user-dashboard/RowPromiseApproval.js)                                   |
 | [Lock the promise](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/user-dashboard/RowPromiseLock.js)                                          |
-| [Verify a Twitter handle](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/user-dashboard/RowPromiseVerification.js)                           |
+| [Verify a Twitter account](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/user-dashboard/RowPromiseVerification.js)                          |
 
 | Contracts                                                                                                                                      |
 | ---------------------------------------------------------------------------------------------------------------------------------------------- |

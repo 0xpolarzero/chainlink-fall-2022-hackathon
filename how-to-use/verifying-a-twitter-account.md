@@ -2,19 +2,19 @@
 description: How to verify a Twitter account, and browse the verified users?
 ---
 
-# Verifying a Twitter handle
+# Verifying a Twitter account
 
 {% hint style="info" %}
-For a comprehensive overview of the verification process with the Chainlink Node, visit [twitter-handle-verification.md](../chainlink-external-adapters/twitter-handle-verification.md "mention").
+For a comprehensive overview of the verification process with the Chainlink Node, visit [twitter-account-verification.md](../chainlink-external-adapters/twitter-account-verification.md "mention").
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image (8).png" alt="Open the Verified Twitter accounts page from the menu"><figcaption><p>Explore the verified Twitter accounts from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image.png" alt="Open the Verified Twitter accounts page from the menu"><figcaption><p>Explore the verified Twitter accounts from the menu.</p></figcaption></figure>
 
 ## Exploring verified Twitter accounts
 
-You can browse the verified Twitter accounts in the **Verified Twitter accounts** page. Right there, you will find a list of Ethereum addresses that verified their ownership of a Twitter handle. You can search an address or a handle using the <img src="../.gitbook/assets/magnifying-glass-solid.svg" alt="" data-size="line"> icon in the appropriate column.
+You can browse the verified Twitter accounts in the **Verified Twitter accounts** page. Right there, you will find a list of Ethereum addresses that verified their ownership of a Twitter account. You can search an address or a handle using the <img src="../.gitbook/assets/magnifying-glass-solid.svg" alt="" data-size="line"> icon in the appropriate column.
 
-<figure><img src="../.gitbook/assets/image (9).png" alt="The table associating Ethereum addresses to verified Twitter handles"><figcaption><p>Verified Twitter handles associated with their Ethereum address.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2).png" alt="The table associating Ethereum addresses to verified Twitter handles"><figcaption><p>Verified Twitter accounts associated with their Ethereum address</p></figcaption></figure>
 
 ## Verifying a Twitter account
 
@@ -38,7 +38,7 @@ Following this panel instructions, the verification can be done in a few simple 
     * You can as well just copy the following proof, and navigate to Twitter on your own:
 
     _Verifying my Twitter account for <mark style="color:red;">`YOUR ADDRESS`</mark> with @usePromise!_
-3. Click the **Request verification** button ; it will trigger a request to the Chainlink oracle, with your username and your address as parameters ([detailed explanation here](../chainlink-external-adapters/twitter-handle-verification.md)).
+3. Click the **Request verification** button ; it will trigger a request to the Chainlink oracle, with your username and your address as parameters ([detailed explanation here](../chainlink-external-adapters/twitter-account-verification.md)).
 4. Just wait for the verification to be performed...
 
 {% hint style="warning" %}
@@ -71,10 +71,10 @@ Once the request sent, you just need to wait until it's been completed.
 
 ## Related resources
 
-| App                                                                                                                                                                              |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Twitter verified handles (TwitterVerifiedTable)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/explore-twitter/TwitterVerifiedTable.js) |
-| [Verify Twitter drawer](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/user-dashboard/VerifyTwitterDrawer.js)                             |
+| App                                                                                                                                                                               |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Twitter verified accounts (TwitterVerifiedTable)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/explore-twitter/TwitterVerifiedTable.js) |
+| [Verify Twitter drawer](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/frontend/components/user-dashboard/VerifyTwitterDrawer.js)                              |
 
 | Contracts                                                                                                                            |
 | ------------------------------------------------------------------------------------------------------------------------------------ |
