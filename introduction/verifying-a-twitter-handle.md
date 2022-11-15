@@ -8,13 +8,13 @@ description: How to verify a Twitter account, and browse the verified users?
 For a comprehensive overview of the verification process with the Chainlink Node, visit [twitter-handle-verification.md](../chainlink-external-adapters/twitter-handle-verification.md "mention").
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image.png" alt="Open the Verified Twitter accounts page from the menu"><figcaption><p>Explore the verified Twitter accounts from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3).png" alt="Open the Verified Twitter accounts page from the menu"><figcaption><p>Explore the verified Twitter accounts from the menu.</p></figcaption></figure>
 
 ## Exploring verified Twitter accounts
 
 You can browse the verified Twitter accounts in the **Verified Twitter accounts** page. Right there, you will find a list of Ethereum addresses that verified their ownership of a Twitter account. You can search an address or a handle using the <img src="../.gitbook/assets/magnifying-glass-solid.svg" alt="" data-size="line"> icon in the appropriate column.
 
-<figure><img src="../.gitbook/assets/image (1).png" alt="The table associating Ethereum addresses to verified Twitter handles"><figcaption><p>Verified Twitter accounts associated with their Ethereum address</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (2).png" alt="The table associating Ethereum addresses to verified Twitter handles"><figcaption><p>Verified Twitter accounts associated with their Ethereum address</p></figcaption></figure>
 
 ## Verifying a Twitter account
 

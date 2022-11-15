@@ -96,7 +96,7 @@ The IPFS directory is displayed just below. If it includes only a PDF, it will b
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (3).png" alt="The message shown with peers pinning the IPFS content of a promise."><figcaption><p>The pinning status of the promise IPFS content.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt="The message shown with peers pinning the IPFS content of a promise."><figcaption><p>The pinning status of the promise IPFS content.</p></figcaption></figure>
 
 ## Related resources
 
