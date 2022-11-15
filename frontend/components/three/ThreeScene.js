@@ -69,17 +69,6 @@ const CustomGeometryParticles = (props) => {
     points.current.material.uniforms.uTime.value = clock.elapsedTime;
   });
 
-  // Add hover effect to the points
-  const onPointerMove = (e) => {
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-
-    const x = (clientX / innerWidth) * 2 - 1;
-    const y = -(clientY / innerHeight) * 2 + 1;
-
-    points.current.material.uniforms.uMouse.value = new THREE.Vector2(x, y);
-  };
-
   return (
     <points ref={points}>
       <bufferGeometry>
@@ -96,7 +85,6 @@ const CustomGeometryParticles = (props) => {
         fragmentShader={fragmentShader}
         vertexShader={vertexShader}
         uniforms={uniforms}
-        onPointerMove={onPointerMove}
       />
     </points>
   );
