@@ -4,7 +4,7 @@ description: How to create a promise?
 
 # Creating a promise
 
-<figure><img src="../.gitbook/assets/image (1).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/image (5).png" alt="Creating a promise using the App"><figcaption><p>Click "New promise" to create a promise.</p></figcaption></figure>
 
@@ -67,7 +67,7 @@ If you create a promise from the contract, without using the App, we won't be ab
 Therefore, the promise will be displayed with the tag ":warning:**Not verified**" on the App UI.
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image (4).png" alt="Navigating to the contract from the App to create a promise"><figcaption><p>Navigating to the contract to create a promise.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1).png" alt="Navigating to the contract from the App to create a promise"><figcaption><p>Navigating to the contract to create a promise.</p></figcaption></figure>
 
 Once in the `createPromiseContract` function, you will need to provide the following parameters:
 

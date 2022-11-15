@@ -6,13 +6,13 @@ description: How to explore promises through the website?
 
 ## Introduction
 
-<figure><img src="../.gitbook/assets/image (8).png" alt="How to reach the &#x27;Explore promises&#x27; page from the website"><figcaption><p>Go to the <em>Explore promises</em> page from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6).png" alt="How to reach the &#x27;Explore promises&#x27; page from the website"><figcaption><p>Go to the <em>Explore promises</em> page from the menu.</p></figcaption></figure>
 
 The _Explore Promises_ page shows the last created promises, and allows you to search through the available content. You can make a search using a promise name, an Ethereum address, the name or the Twitter handle of a participant.
 
 ## What does a promise look like?
 
-<figure><img src="../.gitbook/assets/image (1) (1).png" alt="An example of promise as it is displayed on the website"><figcaption><p>An example promise as it is displayed on the App.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt="An example of promise as it is displayed on the website"><figcaption><p>An example promise as it is displayed on the App.</p></figcaption></figure>
 
 All information and variables of the promise are stored on-chain, in its own smart contract, and fetched before it can be displayed. The content is requested from IPFS to be displayed as well. There are various sections in the promise card:
 
@@ -58,7 +58,7 @@ _****_:hourglass: <mark style="color:red;">**Verification pending...**</mark>
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (2) (2).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2).png" alt="A Ribbon badge showing the verification status of the promise."><figcaption><p>The verification status.</p></figcaption></figure>
 
 <details>
 

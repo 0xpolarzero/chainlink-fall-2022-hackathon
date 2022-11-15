@@ -1,2 +1,0 @@
-# Twitter handle verification
-

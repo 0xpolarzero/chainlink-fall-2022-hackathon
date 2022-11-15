@@ -9,12 +9,12 @@
 * [Exploring promises](introduction/exploring-promises.md)
 * [Creating a promise](introduction/creating-and-interacting-with-promises.md)
 * [Interacting with promises](how-to-use/interacting-with-promises.md)
-* [Verifying a Twitter account](how-to-use/verifying-a-twitter-account.md)
+* [Verifying a Twitter account](introduction/verifying-a-twitter-handle.md)
 
 ## Chainlink - External Adapters
 
 * [Introduction](chainlink-external-adapters/introduction.md)
-* [Twitter account verification](chainlink-external-adapters/twitter-account-verification.md)
+* [Twitter account verification](chainlink-external-adapters/twitter-handle-verification.md)
 * [IPFS & Arweave verification](chainlink-external-adapters/ipfs-and-arweave-verification.md)
 
 ## IPFS & Arweave
@@ -24,4 +24,4 @@
 
 ## The Graph
 
-* [Catching events in a promise](the-graph/catching-events-in-a-promise.md)
+* [Catching events from promises](the-graph/catching-events-from-promises.md)
