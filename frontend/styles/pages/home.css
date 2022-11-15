@@ -2,13 +2,15 @@
   display: grid;
   grid-template-rows: 1fr auto;
   justify-items: center;
+  height: 100%;
+  padding: 7rem 3rem 4rem 3rem;
 }
 
 .section-home {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  padding: 7rem 3rem 4rem 3rem;
+  padding: 0;
 }
 
 .section-home .left {
@@ -70,6 +72,7 @@ canvas {
 .section-about {
   width: min(100%, 1400px);
   padding: 0 4rem 4rem 4rem;
+  padding: 0;
 }
 
 .section-about .faq {
