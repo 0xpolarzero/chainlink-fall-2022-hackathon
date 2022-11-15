@@ -89,6 +89,7 @@ function MyApp({ Component, pageProps }) {
         </RainbowKitProvider>
       </WagmiConfig>
       <ToastContainer position={'bottom-right'} />
+      <div className={styles.background}></div>
     </div>
   );
 }

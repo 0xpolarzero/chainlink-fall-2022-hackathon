@@ -275,20 +275,6 @@ main {
   transform: scale(1.02);
 }
 
-.logo-home {
-  display: flex;
-  justify-content: center;
-  margin-right: 4rem;
-}
-
-.logo-home > img {
-  transition: all 0.3s ease;
-}
-
-.logo-home:hover > img {
-  transform: scale(1.02);
-}
-
 .error-message,
 .warning-message {
   text-align: center;

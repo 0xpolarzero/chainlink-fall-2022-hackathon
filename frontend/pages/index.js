@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import ThreeScene from '../components/index/ThreeScene';
+import ThreeScene from '../components/three/ThreeScene';
 import { Button } from 'antd';
 
 export default function Home() {
@@ -7,11 +7,9 @@ export default function Home() {
     <main className='home'>
       <section className='section section-home'>
         <div className='left'>
-          {/* <div className='logo-home'> */}
-          {/* <img src={Logo.src} alt='logo' width='70%' /> */}
-          {/* </div> */}
-
-          <ThreeScene />
+          <div className='logo-home'>
+            <ThreeScene />
+          </div>
         </div>
         <div className='right'>
           <div className='title'>

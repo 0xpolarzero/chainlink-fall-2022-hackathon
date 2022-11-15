@@ -1,9 +1,20 @@
+const fragmentShader = `
+varying float vDistance;
+void main() {
+  vec3 color = vec3(0.765,0.341,0.392);
+  float strength = distance(gl_PointCoord, vec2(0.5));
+  strength = 1.0 - strength;
+  strength = pow(strength, 3.0);
+  color = mix(color, vec3(0.97, 0.70, 0.45), vDistance * 0.5);
+  color = mix(vec3(0.0), color, strength);
+  gl_FragColor = vec4(color, strength);
+}
+`;
+
 const vertexShader = `
 uniform float uTime;
 uniform float uRadius;
-
 varying float vDistance;
-
 // Source: https://github.com/dmnsgn/glsl-rotate/blob/main/rotation-3d-y.glsl.js
 mat3 rotation3dY(float angle) {
   float s = sin(angle);
@@ -14,7 +25,6 @@ mat3 rotation3dY(float angle) {
     s, 0.0, c
   );
 }
-
 void main() {
 	float distanceFactor = pow(uRadius - distance(position, vec3(0.0)), 2.0);
 	float size = distanceFactor * 10.0 + 10.0;
@@ -35,4 +45,4 @@ void main() {
   
   `;
 
-export default vertexShader;
+export { fragmentShader, vertexShader };

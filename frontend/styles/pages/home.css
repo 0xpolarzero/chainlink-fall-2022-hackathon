@@ -3,6 +3,10 @@
   grid-template-columns: 1fr 1fr;
 }
 
+.section-home .left {
+  height: 100%;
+}
+
 .section-home .right {
   display: flex;
   flex-direction: column;
@@ -31,4 +35,20 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
+}
+
+.logo-home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-right: 4rem;
+}
+
+.logo-home > img {
+  transition: all 0.3s ease;
+}
+
+.logo-home:hover > img {
+  transform: scale(1.02);
 }

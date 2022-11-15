@@ -1,8 +1,8 @@
 import styles from '../../styles/modules/Home.module.css';
 import Logo from '../../asset/logo-only-icon-colored-no-background.svg';
-import vertexShader from './shaders/vertexShader';
-import fragmentShader from './shaders/fragmentShader';
+import { vertexShader, fragmentShader } from './shaders';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -16,6 +16,7 @@ export default function ThreeScene() {
       >
         <ambientLight intensity={0.5} />
         <CustomGeometryParticles count={4000} />
+        <OrbitControls enablePan={false} enableZoom={false} />
       </Canvas>
     </div>
   );
@@ -52,6 +53,9 @@ const CustomGeometryParticles = (props) => {
       uTime: {
         value: 0.0,
       },
+      uMouse: {
+        value: new THREE.Vector2(0.0, 0.0),
+      },
       uRadius: {
         value: radius,
       },
@@ -64,6 +68,17 @@ const CustomGeometryParticles = (props) => {
 
     points.current.material.uniforms.uTime.value = clock.elapsedTime;
   });
+
+  // Add hover effect to the points
+  const onPointerMove = (e) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+
+    const x = (clientX / innerWidth) * 2 - 1;
+    const y = -(clientY / innerHeight) * 2 + 1;
+
+    points.current.material.uniforms.uMouse.value = new THREE.Vector2(x, y);
+  };
 
   return (
     <points ref={points}>
@@ -81,6 +96,7 @@ const CustomGeometryParticles = (props) => {
         fragmentShader={fragmentShader}
         vertexShader={vertexShader}
         uniforms={uniforms}
+        onPointerMove={onPointerMove}
       />
     </points>
   );
