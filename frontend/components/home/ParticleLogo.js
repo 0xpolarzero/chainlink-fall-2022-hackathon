@@ -3,13 +3,17 @@ import { useEffect, useState } from 'react';
 import Logo from '../../asset/logo-home.png';
 
 export default function ParticleLogo() {
+  const [isParticleDisplayed, setIsParticleDisplayed] = useState(false);
   const initParticles = () => {
-    // const nextParticle = new NextParticle(document.querySelector('#logo'));
-    // const availableWidth =
-    //   document.querySelector('.section-home').getBoundingClientRect().width / 2;
-    // const usableWidth = availableWidth /*  * 0.7 */
-    //   .toFixed();
+    const nextParticle = new NextParticle(document.querySelector('#logo'));
+    setIsParticleDisplayed(true);
   };
+
+  useEffect(() => {
+    if (typeof NextParticle !== 'undefined' && !isParticleDisplayed) {
+      initParticles();
+    }
+  }, []);
 
   return (
     <div className='logo-home'>
@@ -19,7 +23,7 @@ export default function ParticleLogo() {
         src={Logo.src}
         alt='logo'
         id='logo'
-        className='next-particle'
+        // className='next-particle'
         data-max-width='30%'
         data-particle-gap='1'
         data-gravity='0.15'

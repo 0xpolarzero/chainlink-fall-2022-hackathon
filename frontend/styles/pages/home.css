@@ -12,6 +12,9 @@
 
 .section-home .left {
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .section-home .right {
@@ -45,11 +48,20 @@
   gap: 1rem;
 }
 
-.logo-home {
+canvas {
   display: flex;
   justify-content: center;
   position: absolute;
   top: 50%;
   left: 30%;
   transform: translate(-50%, -50%);
+}
+
+.logo-home {
+  display: flex;
+  justify-content: center;
+}
+
+#logo {
+  max-width: 50%;
 }

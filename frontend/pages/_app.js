@@ -1,6 +1,7 @@
 import styles from '../styles/modules/Home.module.css';
 import '../styles/index.css';
 import Head from 'next/head';
+import Router from 'next/router';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 
@@ -17,7 +18,7 @@ import { publicProvider } from 'wagmi/providers/public';
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { ToastContainer } from 'react-toastify';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Configure chains
 const { chains, provider, webSocketProvider } = configureChains(
@@ -51,7 +52,23 @@ const client = new ApolloClient({
 });
 
 function MyApp({ Component, pageProps }) {
+  const [loading, setLoading] = useState(false);
   const [activePage, setActivePage] = useState(0);
+
+  useEffect(() => {
+    console.log(loading);
+    const handleRouteChange = (url) => {
+      setLoading(true);
+    };
+
+    Router.events.on('routeChangeStart', handleRouteChange);
+    Router.events.on('routeChangeComplete', () => setLoading(false));
+    Router.events.on('routeChangeError', () => setLoading(false));
+
+    return () => {
+      Router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [Router.events]);
 
   return (
     <div className={styles.container}>
