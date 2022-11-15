@@ -104,7 +104,7 @@ export default function TwitterVerifiedTable({ twitterVerifiedUsers }) {
       title: () => {
         return (
           <>
-            Verified handles{' '}
+            Verified accounts{' '}
             <Tooltip
               title={
                 <span>

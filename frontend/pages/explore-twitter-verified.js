@@ -54,12 +54,12 @@ export default function exploreTwitterVerified({ setActivePage }) {
     <main className={styles.explore}>
       <section className='section section-explore-twitter'>
         <div className='header'>
-          <div className='title'> Verified Twitter handles</div>
+          <div className='title'> Verified Twitter accounts</div>
           <Tooltip
             title={
               <div>
-                You can verifiy a Twitter handle for the Ethereum address you're
-                connected with.
+                You can verifiy a Twitter account for the Ethereum address
+                you're connected with.
                 <br /> <br />
                 <b>
                   <i className='fas fa-warning' /> Warning:
@@ -74,7 +74,7 @@ export default function exploreTwitterVerified({ setActivePage }) {
               className='action-btn'
               onClick={() => setIsVerifyTwitterDrawerOpen(true)}
             >
-              Verify a Twitter handle
+              Verify a Twitter account
             </Button>
           </Tooltip>
         </div>
@@ -85,7 +85,7 @@ export default function exploreTwitterVerified({ setActivePage }) {
             twitterVerifiedUsers.length === 0 ? (
               <div className='error-container'>
                 There are no verified users yet. Be the first to verify your
-                Twitter handle!
+                Twitter account!
               </div>
             ) : (
               <div className='twitter-verified-table'>

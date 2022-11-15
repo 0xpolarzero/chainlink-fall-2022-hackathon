@@ -220,7 +220,7 @@ export default function VerifyTwitterDrawer({ isDrawerOpen, setIsDrawerOpen }) {
                 ))}
               </ul>
             ) : (
-              <p>No verified handles found.</p>
+              <p>No verified accounts found.</p>
             )}
           </div>
         </Form>

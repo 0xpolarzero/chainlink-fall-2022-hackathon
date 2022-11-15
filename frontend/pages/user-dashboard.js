@@ -222,7 +222,7 @@ export default function userPromises({ setActivePage }) {
         <div className='user-dashboard twitter-verified'>
           <div className='header'>
             <Divider plain orientation='left' style={{ position: 'relative' }}>
-              <div className='header-sub'>Your verified Twitter handles</div>
+              <div className='header-sub'>Your verified Twitter accounts</div>
               <Button
                 type='primary'
                 className='action-btn absolute'
@@ -249,7 +249,7 @@ export default function userPromises({ setActivePage }) {
               ))
             ) : (
               <div className='no-promises'>
-                You haven't verified any Twitter handle yet.
+                You haven't verified any Twitter account yet.
               </div>
             )}
           </div>

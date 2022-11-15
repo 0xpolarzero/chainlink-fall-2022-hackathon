@@ -87,7 +87,7 @@ export default function RowPromiseVerification({
       <>
         <div className='verified' style={{ justifySelf: 'left' }}>
           <i className='fas fa-check'></i>
-          Twitter handle verified
+          Twitter account verified
         </div>
         <div className='verified'></div>
       </>
@@ -98,7 +98,7 @@ export default function RowPromiseVerification({
     <>
       <div className='not-verified'>
         <i className='fas fa-times'></i>
-        <span>Twitter handle not verified</span>
+        <span>Twitter account not verified</span>
       </div>
       <div></div>
 

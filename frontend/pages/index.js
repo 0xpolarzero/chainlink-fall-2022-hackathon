@@ -76,7 +76,7 @@ export default function Home() {
               <br />
               <Link href='/explore-twitter-verified'>
                 <Button type='primary' className='action-btn'>
-                  Explore verified Twitter handles
+                  Explore verified Twitter accounts
                 </Button>
               </Link>
             </div>
