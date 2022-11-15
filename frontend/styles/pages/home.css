@@ -52,12 +52,4 @@
   top: 50%;
   left: 30%;
   transform: translate(-50%, -50%);
-  /* position: absolute;
-  top: 0;
-  left: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%; */
-  /* width: 50%; */
 }
