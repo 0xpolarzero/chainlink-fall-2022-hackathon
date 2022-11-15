@@ -5,48 +5,20 @@
 
 # -------------------
 
-# Names
-
-roadmap.network
-roadmap.vision
-knowyourfounder.xyz
-Promise
-
-promise.directory
-_usePromise.xyz_
-openpromise.xyz
-_thepromise.network_
-_promises.network_
-_onchainpromise.xyz/.com_
-thepromise.tech
-thepromise.app
-
-# Integrations
+# Resources
 
 ## Chainlink:
 
 - Social Media Identity and Domain Names
   → https://unstoppabledomains.com/blog/verifying-twitter-on-your-domain-with-chainlink
   → https://github.com/unstoppabledomains/dot-crypto/blob/1a33aa9312b43a31b2d04dbd53e363801c0ccdf1/contracts/operators/TwitterValidationOperator.sol
-- ! Use it to display ETH/USD price feeds so the users can have a better understanding of the value they need to pay for the service
+- ? Use it to display ETH/USD price feeds so the users can have a better understanding of the value they need to pay for the service
 
-## Quicknode
-
-Use quicknode as a provider
-
-Process:
-
-- Sign message with Wagmi
-- (right after) Send the message to the contract so it gets verified (with its own funds)
-- ... The contract emits an event that triggers the UI to update
-- This part of the UI gets updated ✅ & eventually the address of the tx is displayed
-- Careful with <strong>replay attacks</strong>: needs to check the nonce
-
-# Process
+# First steps of brainstorming
 
 ## Smart contract
 
-### Master contract
+### Promise factory
 
 1. The PDF uploaded agreement is sent to IPFS using Web3.Storage, an URI is generated & it can't be modified anymore.
 2. The 'admin' user should then setup a few parameters for the contract, which when validated will:
@@ -63,7 +35,7 @@ Process:
 
    b. The contract is created, an event `contractCreated` with the address of the owner & address of the child contract. So is `Your letters of intent` in the UI.
 
-### Child contract
+### Promise
 
 3. The child contract is created, with the following parameters (passed in the constructor):
    a. The address of the owner
@@ -89,12 +61,6 @@ Process:
    → Emit an event `contractValidated` that will be caught by the UI to update the page
    → Maybe generate a hash will the content of all the signatures (+ the URI of the PDF)
    → Nobody can't do anything else with the contract.
-
-Either:
-
-1. Everything is just signed, and the owner pays for gas only when validating the contract -> needs to use Chainlink for Twitter verification
-2. It gets paid with a relayer using Chainlink & Twitter verification can be done using a third party
-3. Chainlink is just used for price feeds
 
 ### Signing & verifying (for meta transactions)
 
@@ -141,56 +107,56 @@ Before making the request (Promise creation):
     -> We need a step between the website & the contract that can't be processed if directly interacting with the contract
     -> Maybe the uploads to ipfs & arweave can contain a file with the key and an external adapter (with upkeep) can check its validity? Limits the needed memory for the function (but how to read the arweave zip...)
 
-# Raw ideas
-
-- Fund the contract and allow all users to not pay anything, but needs to embeed the signature with data in each transaction
-
 # TODO
 
 - [x] Let user upload PDF when creating a promise
 - [x] External adapter for Twitter verification + emit event with verified Twitter handle so it can be added to the search options (only verified)
-- [ ] event PromiseContractCreated: only non-modifiable parameters (contract, owner, IPFS uri)
-  - [ ] fetch all other data from the child contract and not factory
-  - [ ] on modification (through factory) emit an event, catch it in graph (new handler) but modify the state in the child
-  - like this, locked state takes more sense
-  - [ ] allow adding participant, modify Twitter handle
-  - [ ] find a way to verify a child contract with constructor parameters
-- [ ] Periodically backup all data to Arweave (and let it be known in the promise UI) OR Web3.Storage (unpin all then pin again)
+- ❌ event PromiseContractCreated: only non-modifiable parameters (contract, owner, IPFS uri)
+  - [x] fetch all other data from the child contract and not factory
+  - [x] on modification (through factory) emit an event, catch it in graph (new handler) but modify the state in the child
+  - [x] allow adding participant, ❌ modify Twitter handle
+- ❌ Periodically backup all data to Arweave (and let it be known in the promise UI) OR Web3.Storage (unpin all then pin again)
   - Along with the way to incencitize users to pin that data, it provides multiple ways to keep it stored (and prevent both me from deleting it and users from providing an URI they are the only one to pin and could delete)
   - OR performUpkeep each time a promise is sent to pin the URI
-- [ ] Modal to interact with created or involved contracts
-  - [ ] Don't let interact if the contract is cancelled
-    - [ ] Both in the contract and the frontend
-  - [ ] Let the user verify Twitter (if not already)
-    - [ ] Both in the contract and the frontend
-    - [ ] In contract, if a twitter is provided (not '') then it needs to be validated for validating
-    - [ ] Maybe: generate a RN with Chainlink, generate a text with address & number, tweet it, read twitter for last tweets (Do not refresh the page!)
-  - [ ] Let the user validate the contract
-    - [ ] Both in the contract and the frontend
-- [ ] Display ENS everywhere, allow to search for ENS
-- [ ] Add a button to say if there is a bug
-- [ ] Monitor contracts with Slither, Tenderly
-- [ ] Verify the contract when it's created from factory
+- [x] Modal to interact with created or involved contracts
+  - [x] Don't let interact if the contract is locked
+    - [x] Both in the contract and the frontend
+  - [x] Let the user verify Twitter (if not already)
+    - [x] Both in the contract and the frontend
+    - [x] In contract, if a twitter is provided (not '') then it needs to be validated for validating
+    - ❌ Maybe: generate a RN with Chainlink, generate a text with address & number, tweet it, read twitter for last tweets (Do not refresh the page!)
+  - [x] Let the user validate the contract
+    - [x] Both in the contract and the frontend
+- 🚩 [ ] Display ENS everywhere, allow to search for ENS
+- 🚩 [ ] Add a button to say if there is a bug
+- 🚩🚩 [ ] Monitor contracts with Slither, Tenderly
+- 🚩[ ] Verify the contract when it's created from factory (EA + Automation)
 
 ## Later
 
-- Don't use web3.storage for the PDF, use IPFS directly, since it has a limit of 5GiB
+- How to bypass web3.storage 5GiB limit?
 - Add other KYC methods (Lens)
 - Use a proxy to be able to change the implementation
-- Let the signers upload different versions of the roadmap and keep it in a single page
-- Connection with Web3Auth -> needs relay for meta transactions
-- Allow whitelisted users (through a NFT, to avoid botting) to vote on the roadmap
-  - Something like reputation, need to figure out a way to issue the NFTs to reputables users
+- Let the signers upload different versions of the content and keep it in a single page
+- Implement relay for meta transactions: separate whiletisted to non-whitelisted
+- Allow whitelisted users (through a token, to avoid botting) to vote on the content reputation?
+  - Need to figure out a way to issue the tokens to "reputables" users
+    → e.g. contributors in recognized DAOs
 
 ## Steps
 
 Deploy contracts
 
 - PromiseFactory, VerifyStorage, VerifyTwitter
-  Set verifiers
+
+Set verifiers
+
 - PromiseFactory.setVerifyStorage(VerifyStorage.address)
 - PromiseFactory.setVerifyTwitter(VerifyTwitter.address)
-  _Fund contracts with Link_ -> if not, we won't be able to create promises
-  -> maybe better to use an upkeep / check the balance often
+
+_Fund contracts with Link_ -> if not, we won't be able to create promises
+
+-> maybe better to use an upkeep / check the balance often
+
 - VerifyStorage
 - VerifyTwitter
