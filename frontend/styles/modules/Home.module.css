@@ -1,8 +1,6 @@
 .container {
   position: relative;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
 }
 
 .background {
@@ -21,13 +19,4 @@
   margin: 0;
   line-height: 1.15;
   font-size: 4rem;
-}
-
-.loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10000;
-  background: red;
 }

@@ -132,9 +132,8 @@ ul {
 }
 
 main {
-  width: 100%;
-  height: 100%;
-  justify-self: center;
+  display: flex;
+  justify-content: center;
 }
 
 /* GLOBALLY USED CLASSES */
@@ -376,6 +375,16 @@ main {
 
 .ant-btn.no-btn {
   background: transparent !important;
+}
+
+/* Card */
+.ant-card-grid {
+  cursor: pointer;
+}
+
+.ant-card-grid-hoverable:hover {
+  color: var(--popstar) !important;
+  box-shadow: none !important;
 }
 
 /* Collapse */
