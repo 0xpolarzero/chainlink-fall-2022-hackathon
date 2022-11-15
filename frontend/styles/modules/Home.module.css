@@ -1,8 +1,7 @@
 .container {
-  /* background: var(--background-color-dark);
-  background: url('../../asset/vivid-blurred-colorful-wallpaper-background(1).jpg');
-  background-size: cover; */
   position: relative;
+  min-height: 100vh;
+  display: flex;
 }
 
 .background {
@@ -21,14 +20,4 @@
   margin: 0;
   line-height: 1.15;
   font-size: 4rem;
-}
-
-.scene {
-  position: fixed;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  width: 60%;
-  height: 70%;
-  z-index: -1;
 }

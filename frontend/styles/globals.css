@@ -258,8 +258,6 @@ main {
 
 .section {
   position: relative;
-  scroll-snap-align: center;
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -297,26 +295,6 @@ main {
 
 .center {
   text-align: center;
-}
-
-@media (min-height: 30em) {
-  main {
-    overflow-y: scroll;
-    height: 100vh;
-  }
-
-  main.home {
-    scroll-snap-type: y mandatory;
-  }
-
-  main:not(.home) {
-    display: flex;
-    justify-content: center;
-  }
-
-  .section {
-    min-height: 100vh;
-  }
 }
 
 /* OVERRIDES */
