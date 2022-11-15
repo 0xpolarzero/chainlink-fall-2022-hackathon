@@ -86,22 +86,17 @@ canvas {
 
 .section-about .header {
   display: grid;
-  grid-template-columns: auto 1fr;
-  justify-items: flex-end;
-  align-items: baseline;
+  justify-items: flex-start;
+  align-items: center;
   width: 100%;
   gap: 2rem;
-}
-
-.section-about .title {
-  font-size: 2rem;
-  font-weight: 600;
 }
 
 .section-about .caption {
   font-size: 1.3rem;
   font-weight: 400;
   opacity: 0.8;
+  margin-left: 1.5rem;
 }
 
 .section-about .links-list {
@@ -110,5 +105,4 @@ canvas {
 
 .section-about .links-list div {
   font-size: 1rem;
-  font-weight: 600;
 }

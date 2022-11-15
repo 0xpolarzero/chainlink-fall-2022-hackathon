@@ -4,7 +4,7 @@ import { Button, Card, Divider } from 'antd';
 
 const gridStyle = {
   minWidth: '200px',
-  textAlign: 'center',
+  // textAlign: 'center',
   alignSelf: 'center',
   height: '100%',
 };
@@ -82,12 +82,12 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <Divider />
         <section className='section section-about'>
           <div className='faq'>
             <div className='header'>
-              <div className='title'>How to use</div>
-              <div className='caption'>Useful links to get started</div>
+              <Divider orientation='left'>
+                <div className='caption'>Get started</div>
+              </Divider>
             </div>
 
             <div className='links-list'>
