@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import styles from '../../styles/modules/Header.module.css';
 import Link from 'next/link';
+import Banner from './Banner';
 import Logo from '../../asset/logo-colored-no-background.svg';
 import { Dropdown, Menu } from 'antd';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -129,6 +130,7 @@ export const Header = ({ activePage, setActivePage }) => {
           }}
         />
       </TabNav>
+      <Banner />
     </header>
   );
 };
