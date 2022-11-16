@@ -19,7 +19,7 @@ Let's take a look at the verification process. As well as it can be requested fr
 
 The process following the request is described in the preceding section ([#the-verification-process](introduction.md#the-verification-process "mention")). We will now further investigate the way in which the External Adapter operates.
 
-## What happens next?
+## How does the EA perform the verification?
 
 The External Adapter is written as a serverless function. Each time it is triggered with a request, the API server grabs the input parameters, performs the custom computation, and sends back its result (or an error, if anything happens in between). The full code [is available here](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/chainlink-ea-twitter-verification/index.js). Let's take a look at what occurs inside the scope of the `createRequest` function ; you will find comments directly in the code, to explain the process.
 
@@ -33,7 +33,7 @@ const roClient = client.readOnly;
 // Custom parameters will be used by the External Adapter
 // true: the parameter is required, if not provided it will
 // throw an error
-// false: the parameter is not required
+// false: the parameter is optional
 const customParams = {
   username: true,
   address: true,
@@ -41,7 +41,7 @@ const customParams = {
 };
 
 const createRequest = (input, callback) => {
-  // The Chainlink Validator helps validate the Chainlink request data
+  // The Chainlink Validator helps validate the request data
   const validator = new Validator(callback, input, customParams);
   const jobRunID = validator.validated.id;
   
@@ -144,7 +144,6 @@ const createRequest = (input, callback) => {
 | [Chainlink Node](https://mumbai.polygonscan.com/address/0x8286abD211dcD9F8485FB6279B4a55696E79f0eB)                                                    |
 | [Operator contract](https://mumbai.polygonscan.com/address/0xd4d1fe6ff0a871ccf37bcfbce3135f548e5f05b5)                                                 |
 | [External Adapter - Twitter verification](https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-twitter-verification) |
-| [External Adapter - storage verification](https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-storage-verification) |
 | [Chainlink NodeJS External Adapter Template](https://github.com/thodges-gh/CL-EA-NodeJS-Template)                                                      |
 
 | Contracts                                                                                                                                                     |
