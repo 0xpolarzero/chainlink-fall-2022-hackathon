@@ -320,6 +320,13 @@ contract PromiseFactory {
      * @notice Update the storage status of a promise contract
      * @dev Only the verifier contract can call this function, after the storage
      * has been verified with the Chainlink Node + External Adapter
+     * @dev This step could as well be avoided for better optimization, since
+     * VerifyStorage could directly call the PromiseContract to update its status
+     * BUT we want to do it this way, because:
+     * - it helps us keep this PromiseFactory contract as a mediator, which
+     * allows for better event tracking & easier security measures
+     * - it is not a major flaw in terms of gas usage, as long as we're deploying
+     * on a L2 solution
      * @param _promiseContractAddress The address of the promise contract
      * @param _storageStatus The new storage status
      * -> 1 = failed, 2 = IPFS provided & verified, 3 = IPFS + Arweave provided & verified
