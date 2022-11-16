@@ -50,15 +50,12 @@ The External Adapters are both hosted as serverless computing functions on [AWS 
 
 ## Resources
 
-| External Adapter                                                                                                                                       |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [Chainlink Node](https://mumbai.polygonscan.com/address/0x8286abD211dcD9F8485FB6279B4a55696E79f0eB)                                                    |
-| [Operator contract](https://mumbai.polygonscan.com/address/0xd4d1fe6ff0a871ccf37bcfbce3135f548e5f05b5)                                                 |
-| [External Adapter - Twitter verification](https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-twitter-verification) |
-| [External Adapter - storage verification](https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-storage-verification) |
-
 | Contracts                                                                                                                                                     |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Chainlink Node](https://mumbai.polygonscan.com/address/0x8286abD211dcD9F8485FB6279B4a55696E79f0eB)                                                           |
+| [Operator contract](https://mumbai.polygonscan.com/address/0xd4d1fe6ff0a871ccf37bcfbce3135f548e5f05b5)                                                        |
+| [External Adapter - Twitter verification](https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-twitter-verification)        |
+| [External Adapter - storage verification](https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-storage-verification)        |
 | [VerifyTwitter.sol](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/contracts/VerifyTwitter.sol)                            |
 | [VerifyTwitter (unit tests)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/unit/VerifyTwitterMock.test.js)           |
 | [VerifyTwitter (staging tests)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/staging/VerifyTwitter.staging.test.js) |

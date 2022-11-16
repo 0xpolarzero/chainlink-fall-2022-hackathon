@@ -10,6 +10,7 @@
 * [Creating a promise](introduction/creating-and-interacting-with-promises.md)
 * [Interacting with promises](how-to-use/interacting-with-promises.md)
 * [Verifying a Twitter account](introduction/verifying-a-twitter-handle.md)
+* [Indexing an IPFS directory](how-to-use/indexing-an-ipfs-directory.md)
 
 ## Chainlink - External Adapters
 

@@ -19,7 +19,7 @@ Let's take a look at the verification process. As well as it can be requested fr
 
 The process following the request is described in the preceding section ([#the-verification-process](introduction.md#the-verification-process "mention")). We will now further investigate the way in which the External Adapter operates.
 
-## What happens when the External Adapter receives the request?
+## What happens next?
 
 The External Adapter is written as a serverless function. Each time it is triggered with a request, the API server grabs the input parameters, performs the custom computation, and sends back its result (or an error, if anything happens in between). The full code [is available here](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/chainlink-ea-twitter-verification/index.js). Let's take a look at what occurs inside the scope of the `createRequest` function ; you will find comments directly in the code, to explain the process.
 
