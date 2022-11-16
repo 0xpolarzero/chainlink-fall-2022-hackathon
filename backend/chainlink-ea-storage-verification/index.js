@@ -32,10 +32,13 @@ const createRequest = (input, callback) => {
 
   try {
     const key = process.env.AES_ENCRYPTION_KEY;
-    const iv = process.env.AES_ENCRYPTION_IV;
+
+    // Grab the iv and encrypted data from the encrypted proof
+    const iv = encryptedProof.slice(0, 32);
+    const encryptedData = encryptedProof.slice(32);
 
     // Get back the encrypted hex string in base64
-    const encryptedBase64 = Buffer.from(encryptedProof, 'hex').toString(
+    const encryptedBase64 = Buffer.from(encryptedData, 'hex').toString(
       'base64',
     );
 
