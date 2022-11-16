@@ -1,8 +1,9 @@
 import styles from '../styles/modules/Home.module.css';
 import '../styles/index.css';
 import Head from 'next/head';
-import { Header } from '../components/layout/Header';
-import { Footer } from '../components/layout/Footer';
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
+import WelcomeMessage from '../components/layout/WelcomeMessage';
 
 import { PromisesDataProvider } from '../systems/context/PromisesDataContext';
 // Rainbowkit & Wagmi
@@ -17,7 +18,7 @@ import { publicProvider } from 'wagmi/providers/public';
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { ToastContainer } from 'react-toastify';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // Configure chains
 const { chains, provider, webSocketProvider } = configureChains(
@@ -84,6 +85,7 @@ function MyApp({ Component, pageProps }) {
               <Header activePage={activePage} setActivePage={setActivePage} />
               <Component {...pageProps} setActivePage={setActivePage} />
               <Footer />
+              <WelcomeMessage />
             </PromisesDataProvider>
           </ApolloProvider>
         </RainbowKitProvider>
