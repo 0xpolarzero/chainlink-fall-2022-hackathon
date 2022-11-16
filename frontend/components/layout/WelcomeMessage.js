@@ -4,9 +4,11 @@ import { useEffect } from 'react';
 export default function WelcomeMessage() {
   const message = (
     <>
-      Please note that all files sent to Arweave using Bundlr are actually{' '}
-      <b>stored only for a week</b>.<br />
-      <br /> This is a limitation <b>specific to deploying on a testnet</b>.
+      Please note that along with currently deploying on tesnet, we are using a{' '}
+      <b>Bundlr devnet node</b>.
+      <br />
+      <br /> This means that files are actually never moved to Arweave, and are{' '}
+      <b>cleared after a week</b>.
     </>
   );
 
