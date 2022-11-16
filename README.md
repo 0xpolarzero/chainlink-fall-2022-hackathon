@@ -16,9 +16,9 @@
     <br /><br />
     <a href="https://usepromise.xyz/">View Demo</a>
     ·
-    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/frontend/issues">Report Bug</a>
+    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/issues">Report Bug</a>
     ·
-    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/frontend/issues">Request Feature</a>
+    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/issues">Request Feature</a>
   </p>
 </div>
 

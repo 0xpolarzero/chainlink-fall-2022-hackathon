@@ -24,82 +24,41 @@
 
 <br />
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-promise">About promise</a>
-      <ul>
-        <li><a href="#built-with">Built with</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#testing">Trying out / testing</a>
-    </li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-
-  </ol>
-</details>
-
-<br />
-
 <!-- ABOUT THE PROJECT -->
 
-# About promise
+# Frontend - Next.js
 
-<img width="2056" alt="image" src="../resources/asset/usepromise-home.png">
+This application is as much an interface with the contracts as a complementary tool. The documentation provides all the comprehensive background for the app.
 
-This project is the product of a month of intense work, research, learning and struggle, as part of the Chainlink Fall 2022 Hackathon.
+<a href='https://docs.usepromise.xyz/how-to-use/exploring-promises'>How to explore and understand promises?</a>
 
-Many thanks to Chainlink for this timely opportunity - the hackathon started the day I finished Patrick Collins 32h course on Full-Stack Blockchain Development, and I was able to put all my new knowledge to good use.
+<a href='https://docs.usepromise.xyz/how-to-use/creating-a-promise'>How to create a promise?</a>
 
-As I'm writing this, one month after the hackathon started, and two months after I started learning Solidity, I feel like I've already come a long way. I am very proud of the result, and I hope you will enjoy it as much as I did - and still do - building it.
+<a href='https://docs.usepromise.xyz/how-to-use/interacting-with-promises'>How to interact with a promise?</a>
 
-Should you be curious to know more about the application, I strongly suggest to have a glance at the documentation, in which I explain in depth how it operates, and how to use it.
+<a href='https://docs.usepromise.xyz/how-to-use/verifying-a-twitter-account'>How to browse through the verified Twitter accounts?</a>
 
-### <a href="https://docs.usepromise.xyz/"><strong>Explore the documentation »</strong></a>
+<a href="https://docs.usepromise.xyz/"><strong>Explore the documentation »</strong></a>
 
 <br />
 
 ## Built with
 
-### Contracts
-
-[![Solidity]](https://soliditylang.org/)
 [![JavaScript]](https://developer.mozilla.org/fr/docs/Web/JavaScript)
-[![Hardhat]](https://hardhat.org/)
+[![NextJS]](https://nextjs.org/)
+[![Antd]](https://ant.design/)
+[![TheGraph]](https://thegraph.com/en/)
+[![ApolloGraphQL]](https://www.apollographql.com/)
 [![Chainlink]](https://chain.link/)
-[![Chai]](https://www.chaijs.com/)
-
-### Storage
-
+[![Rainbow]](https://www.rainbowkit.com/)
+[![Wagmi]](https://wagmi.sh/)
+[![EthersJS]](https://docs.ethers.io/v5/)
+[![Quicknode]](https://www.quicknode.com/)
 [![IPFS]](https://ipfs.tech/)
 [![Web3Storage]](https://web3.storage/)
 [![Filecoin]](https://filecoin.io/)
 [![Arweave]](https://www.arweave.org/)
 [![Bundlr]](https://bundlr.network/)
-
-### Infrastructure
-
-[![Polygon]](https://polygon.technology/)
-[![TheGraph]](https://thegraph.com/en/)
-[![AWS]](https://aws.amazon.com/lambda/)
-[![NodeJS]](https://nodejs.org/)
-
-### Interaction with contracts
-
-[![Rainbow]](https://www.rainbowkit.com/)
-[![Wagmi]](https://wagmi.sh/)
-[![EthersJS]](https://docs.ethers.io/v5/)
-[![Quicknode]](https://www.quicknode.com/)
-
-### Frontend
-
-[![NextJS]](https://nextjs.org/)
-[![ApolloGraphQL]](https://www.apollographql.com/)
-[![Antd]](https://ant.design/)
 
 <!-- GETTING STARTED -->
 
@@ -116,15 +75,25 @@ Should you be curious to know more about the application, I strongly suggest to 
    ```sh
    git clone https://github.com/polar0/chainlink-fall-2022-hackathon
    ```
-2. Navigate into a subdirectory:
+2. Navigate into this subdirectory:
    ```sh
-   cd name-of-the-subdirectory
+   cd frontend
    ```
 3. Install NPM packages using `yarn` or `npm install`.
+4. Create a `.env` file at the root, and populate it with the same variables as the `.env.example` file.
 
 ## Usage
 
-Usage strongly depends on the subdirectory you are in. Please refer to the README.md file in each subdirectory for more information.
+To run the application in development mode, use `yarn dev` or `npm run dev`.
+
+To build the application for production, use:
+
+```sh
+yarn build
+yarn next export
+```
+
+Everything else is already setup (testnet contracts, Chainlink node, etc.).
 
 # License
 
