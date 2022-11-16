@@ -171,8 +171,8 @@ Once the result is returned to the `VerifyStorage` contract, it can fulfill the 
 | [External Adapter - storage verification](https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-storage-verification) |
 | [Chainlink NodeJS External Adapter Template](https://github.com/thodges-gh/CL-EA-NodeJS-Template)                                                      |
 
-| Contracts |
-| --------- |
-|           |
-|           |
-|           |
+| Contracts                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [VerifyStorage.sol](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/contracts/VerifyStorage.sol)                            |
+| [VerifyStorage (unit tests)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/unit/VerifyStorageMock.test.js)           |
+| [VerifyStorage (staging tests)](https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/staging/VerifyStorage.staging.test.js) |
