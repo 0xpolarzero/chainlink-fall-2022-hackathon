@@ -124,14 +124,15 @@ const IpfsPinning = ({ ipfsCid }) => {
               This IPFS content is currently being pinned by{' '}
               <b>{ipfsPeers.length} peers</b>. <br />
               The more peers that pin the content, the more secure it is. <br />
-              If you want to pin the content yourself, and make it un-deletable,
+              If you want to pin the content yourself, and make it undeletable,
               you can: <br />
               <a
-                href='https://docs.ipfs.tech/how-to/companion-node-types/'
+                href='https://docs.usepromise.xyz/how-to-use/indexing-an-ipfs-directory'
                 target='_blank'
-                rel='noreferrer'
+                rel='noopener noreferrer'
               >
-                - follow this guide to run your own IPFS node
+                - follow the documentation to learn how to start indexing
+                content
               </a>
               <br />- use the IPFS CID as the content to pin:{' '}
               <FormattedAddress
