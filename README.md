@@ -1,162 +1,173 @@
-- Overview (first lines)
-- Link to documentation with a screenshot?
-- Overview of the repository structure
-- Instructions for building and running the code
+<a name="readme-top"></a>
 
-# -------------------
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/polar0/chainlink-fall-2022-hackathon">
+    <img src="./resources/asset/logo.svg" alt="Logo" width="80" height="80">
+  </a>
 
-# Resources
+<h2 align="center"><b>promise</b> - a blockchain service for founders, creators and regular users.</h3>
 
-## Chainlink:
+  <p align="center">
+    Built to help improve trust in our digital relationships and make founders more accountable for their promises.
+    <br />
+    <a href="https://docs.usepromise.xyz/"><strong>Explore the documentation »</strong></a>
+    <br /><br />
+    <a href="https://usepromise.xyz/">View Demo</a>
+    ·
+    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/frontend/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/frontend/issues">Request Feature</a>
+  </p>
+</div>
 
-- Social Media Identity and Domain Names
-  → https://unstoppabledomains.com/blog/verifying-twitter-on-your-domain-with-chainlink
-  → https://github.com/unstoppabledomains/dot-crypto/blob/1a33aa9312b43a31b2d04dbd53e363801c0ccdf1/contracts/operators/TwitterValidationOperator.sol
-- ? Use it to display ETH/USD price feeds so the users can have a better understanding of the value they need to pay for the service
+<br />
 
-# First steps of brainstorming
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-promise">About promise</a>
+      <ul>
+        <li><a href="#built-with">Built with</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#testing">Trying out / testing</a>
+    </li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
 
-## Smart contract
+  </ol>
+</details>
 
-### Promise factory
+<br />
 
-1. The PDF uploaded agreement is sent to IPFS using Web3.Storage, an URI is generated & it can't be modified anymore.
-2. The 'admin' user should then setup a few parameters for the contract, which when validated will:
+<!-- ABOUT THE PROJECT -->
 
-   - Create a smart contract for this agreement
-   - Create a mapping between the URI of the PDF (as a unique ID) & the smart contract address
+# About promise
 
-   a. We can gather these first parameters (to save some gas, and not create useless entries in the mapping):
+<img width="2056" alt="image" src="./resources/asset/usepromise-home.png">
 
-   - A name for the agreement
-   - The addresses of the parties that will be allowed to interact
-   - The names of the parties
-   - The twitter handle of the parties
+This project is the product of a month of intense work, research, learning and struggle, as part of the Chainlink Fall 2022 Hackathon.
 
-   b. The contract is created, an event `contractCreated` with the address of the owner & address of the child contract. So is `Your letters of intent` in the UI.
+Many thanks to Chainlink for this timely opportunity - the hackathon started the day I finished Patrick Collins 32h course on Full-Stack Blockchain Development, and I was able to put all my new knowledge to good use.
 
-### Promise
+As I'm writing this, one month after the hackathon started, and two months after I started learning Solidity, I feel like I've already come a long way. I am very proud of the result, and I hope you will enjoy it as much as I did - and still do - building it.
 
-3. The child contract is created, with the following parameters (passed in the constructor):
-   a. The address of the owner
-   b. The name of the intent (! limit the size)
-   c. The addresses of the parties associated to a denomination (name) (! verify if valid address)
-   d. The URI of the PDF (! check if it exists ?)
+Should you be curious to know more about the application, I strongly suggest to have a glance at the documentation, in which I explain in depth how it operates, and how to use it.
 
-4. Now the contract is created, and the page should show the name of the intent, the parties, and the URI of the PDF (and show the PDF in the UI). It is in a `pending` state.
+### <a href="https://docs.usepromise.xyz/"><strong>Explore the documentation »</strong></a>
 
-   - Everyone can:
-   a. Accept the intent (by signing a message with their wallet)
-   b. But only right after adding a KYC or declaring to not give it
-   → This will trigger an event `signatureAccepted` that will be caught by the UI
-   x. ! LATER: KYC with Twitter, which would need anoter stage of approval, preceding the signature (and another state)
-   <!-- - The owner can:
-     a. Cancel the agreement (by signing a message with their wallet)
-     → This will trigger an event `contractCancelled` which will be caught by the UI to update the page.
-     → The contract is now in a `cancelled` state.
-     → Nobody can't do anything else with the contract. -->
+<br />
 
-5. Once all the parties have accepted the agreement, the owner can trigger the `contractValidated` function, which will:
-   → Set the contract in a `validated` state
-   → Emit an event `contractValidated` that will be caught by the UI to update the page
-   → Maybe generate a hash will the content of all the signatures (+ the URI of the PDF)
-   → Nobody can't do anything else with the contract.
+## Built with
 
-### Signing & verifying (for meta transactions)
+### Contracts
 
-- OpenZeppelin: https://docs.openzeppelin.com/contracts/2.x/utilities
-- OpenZeppelin ECDSA library: https://docs.openzeppelin.com/contracts/2.x/api/cryptography#ECDSA
-- Signing message: https://wagmi.sh/docs/hooks/useSignMessage
-- https://programtheblockchain.com/posts/2018/02/17/signing-and-verifying-messages-in-ethereum/
+[![Solidity]](https://soliditylang.org/)
+[![JavaScript]](https://developer.mozilla.org/fr/docs/Web/JavaScript)
+[![Hardhat]](https://hardhat.org/)
+[![Chainlink]](https://chain.link/)
+[![Chai]](https://www.chaijs.com/)
 
-### Relay Manager
+### Storage
 
-- Argent contracts: https://github.com/argentlabs/argent-contracts/blob/develop/contracts/modules/RelayerManager.sol
-- More decentralized (Open GSN): https://docs.opengsn.org/contracts/#receiving-a-relayed-call
-- Chainlink-Relayers (Chainlink Spring Hackathon 2022): https://github.com/ciaranightingale/chainlink-relayers
+[![IPFS]](https://ipfs.tech/)
+[![Web3Storage]](https://web3.storage/)
+[![Filecoin]](https://filecoin.io/)
+[![Arweave]](https://www.arweave.org/)
+[![Bundlr]](https://bundlr.network/)
 
-Easiest solutions for meta transactions:
+### Infrastructure
 
-- Biconomy: https://docs.biconomy.io/products/enable-gasless-transactions
-- Infura: https://infura.io/product/ethereum/transactions-itx
-- Openzeppelin Defender: https://docs.openzeppelin.com/defender/relay
-- Open GSN (more decentralized): https://docs.opengsn.org/contracts/#receiving-a-relayed-call
-- Gelato: https://docs.gelato.network/developer-products/gelato-relay
+[![Polygon]](https://polygon.technology/)
+[![TheGraph]](https://thegraph.com/en/)
+[![AWS]](https://aws.amazon.com/lambda/)
+[![NodeJS]](https://nodejs.org/)
 
-### Twitter verification
+### Interaction with contracts
 
-- Unstoppable TwitterValidationOperator.sol: https://github.com/unstoppabledomains/dot-crypto/blob/1a33aa9312b43a31b2d04dbd53e363801c0ccdf1/contracts/operators/TwitterValidationOperator.sol
+[![Rainbow]](https://www.rainbowkit.com/)
+[![Wagmi]](https://wagmi.sh/)
+[![EthersJS]](https://docs.ethers.io/v5/)
+[![Quicknode]](https://www.quicknode.com/)
 
-### Backups
+### Frontend
 
-When a promise is created via the website, the data is sent both to IPFS & to Arweave. Periodically, an upkeep is performed to pin on a custom IPFS Node the content that could not be uploaded to Arweave. There are 3 secure states:
+[![NextJS]](https://nextjs.org/)
+[![ApolloGraphQL]](https://www.apollographql.com/)
+[![Antd]](https://ant.design/)
 
-- \*\*\* IPFS + Arweave (on upkeep, it checks if the data is valid on Arweave & it gives to the contract the status backedUpOnArweave)
-- \*\* IPFS + IPFS Node (after 1st step, if it doesn't have the status backedUpOnArweave, it is backedUpOnIPFSNode)
-- \* IPFS (if it doesn't have the status backedUpOnArweave or backedUpOnIPFSNode, it is backedUpOnIPFS)
+<!-- GETTING STARTED -->
 
-## Have a contract be interactable only by the web app
+<!----><a id="testing"></a>
 
-Before making the request (Promise creation):
+# Trying out / testing
 
-- Grab the encrypted string
-- Mix it with anything that would make it unique and non-reproductible (timestamp, user address...)
-  - How to make sure the user can't just copy/paste the encrypted string before validating the tx and quickly send it to the contract?
-  - They could even do it with a script, so there would be no difference between the website and a script
-  - The user will always validate the tx before sending it, as it is the last step of the process
-    -> We need a step between the website & the contract that can't be processed if directly interacting with the contract
-    -> Maybe the uploads to ipfs & arweave can contain a file with the key and an external adapter (with upkeep) can check its validity? Limits the needed memory for the function (but how to read the arweave zip...)
+<p>To get a local copy up and running follow these simple example steps.</p>
+<p>You will need to install either <strong>npm</strong> or <strong>yarn</strong> to run the commands, and <strong>git</strong> to clone the repository.</p>
 
-# TODO
+## Installation
 
-- [x] Let user upload PDF when creating a promise
-- [x] External adapter for Twitter verification + emit event with verified Twitter handle so it can be added to the search options (only verified)
-- ❌ event PromiseContractCreated: only non-modifiable parameters (contract, owner, IPFS uri)
-  - [x] fetch all other data from the child contract and not factory
-  - [x] on modification (through factory) emit an event, catch it in graph (new handler) but modify the state in the child
-  - [x] allow adding participant, ❌ modify Twitter handle
-- ❌ Periodically backup all data to Arweave (and let it be known in the promise UI) OR Web3.Storage (unpin all then pin again)
-  - Along with the way to incencitize users to pin that data, it provides multiple ways to keep it stored (and prevent both me from deleting it and users from providing an URI they are the only one to pin and could delete)
-  - OR performUpkeep each time a promise is sent to pin the URI
-- [x] Modal to interact with created or involved contracts
-  - [x] Don't let interact if the contract is locked
-    - [x] Both in the contract and the frontend
-  - [x] Let the user verify Twitter (if not already)
-    - [x] Both in the contract and the frontend
-    - [x] In contract, if a twitter is provided (not '') then it needs to be validated for validating
-    - ❌ Maybe: generate a RN with Chainlink, generate a text with address & number, tweet it, read twitter for last tweets (Do not refresh the page!)
-  - [x] Let the user validate the contract
-    - [x] Both in the contract and the frontend
-- 🚩 [ ] Display ENS everywhere, allow to search for ENS
-- 🚩 [ ] Add a button to say if there is a bug
-- 🚩🚩 [ ] Monitor contracts with Slither, Tenderly
-- 🚩[ ] Verify the contract when it's created from factory (EA + Automation)
+1. Clone the repo:
+   ```sh
+   git clone https://github.com/polar0/chainlink-fall-2022-hackathon
+   ```
+2. Navigate into a subdirectory:
+   ```sh
+   cd name-of-the-subdirectory
+   ```
+3. Install NPM packages using `yarn` or `npm install`.
 
-## Later
+## Usage
 
-- How to bypass web3.storage 5GiB limit?
-- Add other KYC methods (Lens)
-- Use a proxy to be able to change the implementation
-- Let the signers upload different versions of the content and keep it in a single page
-- Implement relay for meta transactions: separate whiletisted to non-whitelisted
-- Allow whitelisted users (through a token, to avoid botting) to vote on the content reputation?
-  - Need to figure out a way to issue the tokens to "reputables" users
-    → e.g. contributors in recognized DAOs
+Usage strongly depends on the subdirectory you are in. Please refer to the README.md file in each subdirectory for more information.
 
-## Steps
+# License
 
-Deploy contracts
+Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-- PromiseFactory, VerifyStorage, VerifyTwitter
+<!----><a id="contact"></a>
 
-Set verifiers
+# Contact - Social
 
-- PromiseFactory.setVerifyStorage(VerifyStorage.address)
-- PromiseFactory.setVerifyTwitter(VerifyTwitter.address)
+[![Website][website]](https://polarzero.xyz/)
+[![Twitter][twitter]](https://twitter.com/0xpolarzero/)
+[![LinkedIn][linkedin]](https://www.linkedin.com/in/antton-lepretre/)
+[![0xpolarzero@gmail.com][email]](mailto:0xpolarzero@gmail.com)
 
-_Fund contracts with Link_ -> if not, we won't be able to create promises
+Project Link: <strong><a href="https://github.com/polar0/chainlink-fall-2022-hackathon">https://github.com/polar0/chainlink-fall-2022-hackathon</a></strong>
 
--> maybe better to use an upkeep / check the balance often
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- VerifyStorage
-- VerifyTwitter
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[website]: https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white
+[twitter]: https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white
+[linkedin]: https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white
+[email]: https://img.shields.io/badge/0xpolarzero@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white
+[solidity]: https://custom-icon-badges.demolab.com/badge/Solidity-3C3C3D?style=for-the-badge&logo=solidity&logoColor=white
+[chainlink]: https://img.shields.io/badge/Chainlink-375BD2.svg?style=for-the-badge&logo=Chainlink&logoColor=white
+[javascript]: https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=for-the-badge&logo=JavaScript&logoColor=black
+[nodejs]: https://img.shields.io/badge/Node.js-339933.svg?style=for-the-badge&logo=nodedotjs&logoColor=white
+[ethersjs]: https://custom-icon-badges.demolab.com/badge/Ethers.js-29349A?style=for-the-badge&logo=ethers&logoColor=white
+[hardhat]: https://custom-icon-badges.demolab.com/badge/Hardhat-181A1F?style=for-the-badge&logo=hardhat
+[chai]: https://img.shields.io/badge/Chai-A30701.svg?style=for-the-badge&logo=Chai&logoColor=white
+[nextjs]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[ipfs]: https://img.shields.io/badge/IPFS-0A1B2B?style=for-the-badge&logo=ipfs&logoColor=white
+[rainbow]: https://custom-icon-badges.demolab.com/badge/Rainbowkit-032463?style=for-the-badge&logo=rainbow
+[wagmi]: https://custom-icon-badges.demolab.com/badge/Wagmi-1C1B1B?style=for-the-badge&logo=wagmi
+[antd]: https://img.shields.io/badge/Ant%20Design-0170FE.svg?style=for-the-badge&logo=Ant-Design&logoColor=white
+[thegraph]: https://custom-icon-badges.demolab.com/badge/TheGraph-0C0A1C?style=for-the-badge&logo=thegraph&logoColor=white
+[apollographql]: https://img.shields.io/badge/Apollo%20GraphQL-311C87.svg?style=for-the-badge&logo=Apollo-GraphQL&logoColor=white
+[aws]: https://img.shields.io/badge/AWS%20Lambda-FF9900.svg?style=for-the-badge&logo=AWS-Lambda&logoColor=white
+[polygon]: https://custom-icon-badges.demolab.com/badge/Polygon-7342DC?style=for-the-badge&logo=polygon&logoColor=white
+[web3storage]: https://custom-icon-badges.demolab.com/badge/Web3%20Storage-3C3CC8?style=for-the-badge&logo=web3storage&logoColor=white
+[filecoin]: https://custom-icon-badges.demolab.com/badge/Filecoin-3F8EF7?style=for-the-badge&logo=filecoin-
+[quicknode]: https://custom-icon-badges.demolab.com/badge/Quicknode-49A1D1?style=for-the-badge&logo=quicknode-&logoColor=white
+[arweave]: https://custom-icon-badges.demolab.com/badge/Arweave-222326?style=for-the-badge&logo=arweave-
+[bundlr]: https://custom-icon-badges.demolab.com/badge/Bundlr-CEE1E4?style=for-the-badge&logo=bundlr&logoColor=black
