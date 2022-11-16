@@ -8,7 +8,7 @@ description: How to verify a Twitter account, and browse the verified users?
 For a comprehensive overview of the verification process with the Chainlink Node, visit [twitter-handle-verification.md](../chainlink-external-adapters/twitter-handle-verification.md "mention").
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image (3).png" alt="Open the Verified Twitter accounts page from the menu"><figcaption><p>Explore the verified Twitter accounts from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (2).png" alt="Open the Verified Twitter accounts page from the menu"><figcaption><p>Explore the verified Twitter accounts from the menu.</p></figcaption></figure>
 
 ## Exploring verified Twitter accounts
 
