@@ -7,8 +7,8 @@ export default function WelcomeMessage() {
       Please note that while operating on a tesnet, we are using a{' '}
       <b>Bundlr devnet node</b>.
       <br />
-      <br /> This means that files are actually never moved to Arweave, and are{' '}
-      <b>cleared after a week</b>.
+      <br /> This means that files are never actually moved to Arweave, and will{' '}
+      <b>only be available for a week</b>.
     </>
   );
 
