@@ -81,13 +81,36 @@ export default function IpfsResolver({ ipfsCid, contractAddress }) {
 }
 
 const IpfsPinning = ({ ipfsCid }) => {
-  const [ipfsPeers, setIpfsPeers] = useState([null]);
+  const [ipfsStatus, setIpfsStatus] = useState([null]);
+  const [longestDeal, setLongestDeal] = useState(0);
+  const [isDealLongEnough, setIsDealLongEnough] = useState(false);
   const [badgeColor, setBadgeColor] = useState('var(--toastify-color-warning)');
 
   // Get the pinning status of the IPFS content
   const getIpfsPinningStatus = async () => {
-    const info = await web3StorageClient.status(ipfsCid);
-    setIpfsPeers(info.pins);
+    const status = await web3StorageClient.status(ipfsCid);
+
+    // Get the longest deal
+    if (status.deals.length > 0) {
+      const longestDeal = status.deals.reduce((a, b) => {
+        return a.expiration > b.expiration ? a : b;
+      });
+
+      const currentDate = new Date();
+      const expirationDate = new Date(longestDeal.expiration);
+      const diffTime = Math.abs(expirationDate - currentDate);
+      const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30));
+
+      if (diffMonths > 12) {
+        setIsDealLongEnough(true);
+      } else {
+        setIsDealLongEnough(false);
+      }
+      setLongestDeal(expirationDate.toLocaleDateString());
+    }
+
+    console.log(status);
+    setIpfsStatus(status);
   };
 
   useEffect(() => {
@@ -95,14 +118,16 @@ const IpfsPinning = ({ ipfsCid }) => {
   }, []);
 
   useEffect(() => {
-    if (ipfsPeers.length <= 3) {
-      setBadgeColor('var(--toastify-color-warning)');
-    } else {
+    // Consider it's secure enough if there are at least 3 pins
+    // or if the longest deal is at least still valid for 12 months
+    if ((ipfsStatus.pins && ipfsStatus.pins.length > 3) || isDealLongEnough) {
       setBadgeColor('var(--toastify-color-success)');
+    } else {
+      setBadgeColor('var(--toastify-color-warning)');
     }
-  }, [ipfsPeers]);
+  }, [ipfsStatus]);
 
-  if (!ipfsPeers || ipfsPeers.length === 0 || ipfsPeers[0] === null) {
+  if (!ipfsStatus || ipfsStatus.pins === undefined) {
     return (
       <div className='security'>
         <Skeleton
@@ -122,48 +147,32 @@ const IpfsPinning = ({ ipfsCid }) => {
           content={
             <div>
               This IPFS content is currently being pinned by{' '}
-              <b>{ipfsPeers.length} peers</b>. <br />
+              <b>{ipfsStatus.pins.length} peers</b>. <br />
               The more peers that pin the content, the more secure it is. <br />
-              If you want to pin the content yourself, and make it undeletable,
-              you can: <br />
               <a
                 href='https://docs.usepromise.xyz/how-to-use/indexing-an-ipfs-directory'
                 target='_blank'
                 rel='noopener noreferrer'
               >
-                - follow the documentation to learn how to start indexing
-                content
+                Follow the documentation to learn how to start pinning content
+                and contribute to making it undeletable
               </a>
-              <br />- use the IPFS CID as the content to pin:{' '}
-              <FormattedAddress
-                address={ipfsCid}
-                isShrinked={true}
-                type='ipfs'
-              />
-              <br />
-              <br />
-              Current peers pinning this content:
-              <br />
-              {ipfsPeers.map((peer) => (
+              .
+              {ipfsStatus.deals.length > 0 && (
                 <>
-                  <FormattedAddress
-                    key={peer.peerId}
-                    address={peer.peerId}
-                    isShrinked={true}
-                    type='ipfs'
-                  />{' '}
-                  {peer.peerId ===
-                  'bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm'
-                    ? '(promise node)'
-                    : ''}
                   <br />
+                  <br />
+                  The persistence if this content is guaranteed by{' '}
+                  <b>{ipfsStatus.deals.length} deals</b> with Filecoin.
+                  <br />
+                  The longest deal ends on <b>{longestDeal}</b>.
                 </>
-              ))}
+              )}
             </div>
           }
         >
           <Badge
-            count={ipfsPeers.length}
+            count={ipfsStatus.pins.length}
             color={badgeColor}
             style={{ marginRight: '-0.5rem' }}
           >
