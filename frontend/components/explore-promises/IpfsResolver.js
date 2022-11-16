@@ -151,7 +151,11 @@ const IpfsPinning = ({ ipfsCid }) => {
                     address={peer.peerId}
                     isShrinked={true}
                     type='ipfs'
-                  />
+                  />{' '}
+                  {peer.peerId ===
+                  'bafzbeibhqavlasjc7dvbiopygwncnrtvjd2xmryk5laib7zyjor6kf3avm'
+                    ? '(promise node)'
+                    : ''}
                   <br />
                 </>
               ))}
