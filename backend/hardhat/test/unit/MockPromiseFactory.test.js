@@ -298,13 +298,6 @@ const { deployments, network, ethers } = require('hardhat');
         });
 
         it('Should revert if the participant name is more than 30 characters', async () => {
-          const { txReceipt } = await createCorrectPromiseContract();
-          const promiseContractAddress = txReceipt.events[1].address;
-          const promiseContract = await ethers.getContractAt(
-            'PromiseContract',
-            promiseContractAddress,
-          );
-
           await expect(
             mockPromiseFactory.addParticipant(
               promiseContract.address,

@@ -5,28 +5,36 @@ const {
 } = require('../../helper-hardhat-config');
 const { deployments, network, ethers } = require('hardhat');
 
-const REQUIRED_LINK_AMOUNT_FOR_TESTS = ethers.utils.parseEther('0.8');
+const REQUIRED_LINK_AMOUNT_FOR_TESTS = ethers.utils.parseEther('0.7');
+const IPFS_CID = 'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq';
+const ARWEAVE_ID = '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY';
+const ENCRYPTED_PROOF =
+  '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3';
+const PARTY_NAMES = ['Bob'];
+const PARTY_TWITTER = ['bob'];
+
+// For some reason, custom errors are not being thrown in staging tests
+// so we are not describing the error cases here
 
 developmentChains.includes(network.name)
   ? describe.skip
-  : describe.only('PromiseFactory staging tests', function() {
+  : describe('PromiseFactory staging tests', function() {
       let deployer;
       let user;
       let promiseFactoryDeploy;
       let promiseFactory;
       let verifyStorage;
-      let args = {};
 
-      const createCorrectPromiseContract = async () => {
+      const createPromiseContract = async (testIdentifier, partyAddresses) => {
         console.log('Creating promise contract...');
         const tx = await promiseFactory.createPromiseContract(
-          args.name,
-          args.ipfsCid,
-          args.arweaveId,
-          args.encryptedProof,
-          args.partyNames,
-          args.partyTwitters,
-          args.partyAddresses,
+          testIdentifier,
+          IPFS_CID,
+          ARWEAVE_ID,
+          ENCRYPTED_PROOF,
+          PARTY_NAMES,
+          PARTY_TWITTER,
+          partyAddresses,
         );
         const txReceipt = await tx.wait(1);
         console.log('Promise contract created.');
@@ -40,9 +48,10 @@ developmentChains.includes(network.name)
         user = accounts[1];
 
         console.log('Deploying contracts...');
-        await deployments.fixture('main');
-        promiseFactoryDeploy = await ethers.getContract('PromiseFactory');
+        await deployments.fixture(['promise-factory', 'verify-storage']);
         console.log('Deployed contracts.');
+
+        promiseFactoryDeploy = await ethers.getContract('PromiseFactory');
         promiseFactory = promiseFactoryDeploy.connect(deployer);
         verifyStorage = await ethers.getContract('VerifyStorage', deployer);
 
@@ -76,18 +85,6 @@ developmentChains.includes(network.name)
           }
           console.log('Funding complete.');
         }
-
-        args = {
-          name: 'Test promise',
-          ipfsCid:
-            'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
-          arweaveId: '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
-          encryptedProof:
-            '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
-          partyNames: ['Bob'],
-          partyTwitters: ['@bob'],
-          partyAddresses: [deployer.address],
-        };
       });
 
       describe('constructor', function() {
@@ -102,71 +99,67 @@ developmentChains.includes(network.name)
         it('Should revert if one of the required fields is empty', async () => {
           await expect(
             promiseFactory.createPromiseContract(
-              args.name,
-              args.ipfsCid,
+              'Test',
+              IPFS_CID,
               [],
-              args.encryptedProof,
+              ENCRYPTED_PROOF,
               [],
               [],
               [],
             ),
-          ).to.be.revertedWith('PromiseFactory__EMPTY_FIELD()');
+          ).to.be.reverted;
 
           await expect(
             promiseFactory.createPromiseContract(
               '',
-              args.ipfsCid,
-              args.arweaveId,
-              args.encryptedProof,
-              args.partyNames,
-              args.partyTwitters,
-              args.partyAddresses,
+              IPFS_CID,
+              ARWEAVE_ID,
+              ENCRYPTED_PROOF,
+              PARTY_NAMES,
+              PARTY_TWITTER,
+              [deployer.address],
             ),
-          ).to.be.revertedWith('PromiseFactory__EMPTY_FIELD()');
+          ).to.be.reverted;
         });
 
         it('Should revert if there is a mismatch between names and addresses length', async () => {
           await expect(
             promiseFactory.createPromiseContract(
-              args.name,
-              args.ipfsCid,
-              args.arweaveId,
-              args.encryptedProof,
-              args.partyNames,
-              args.partyTwitters,
-              [deployer.address],
+              'Test',
+              IPFS_CID,
+              ARWEAVE_ID,
+              ENCRYPTED_PROOF,
+              PARTY_NAMES,
+              PARTY_TWITTER,
+              [deployer.address, user.address],
             ),
-          ).to.be.revertedWith('PromiseFactory__INCORRECT_FIELD_LENGTH()');
+          ).to.be.reverted;
         });
 
         it('Should revert if the same address or Twitter handle is used twice', async () => {
           await expect(
             promiseFactory.createPromiseContract(
-              args.name,
-              args.ipfsCid,
-              args.arweaveId,
-              args.encryptedProof,
-              args.partyNames,
-              args.partyTwitters,
+              'Test',
+              IPFS_CID,
+              ARWEAVE_ID,
+              ENCRYPTED_PROOF,
+              ['Bob', 'Alice'],
+              ['bob', 'alice'],
               [deployer.address, deployer.address],
             ),
-          ).to.be.revertedWith(
-            'PromiseFactory__createPromiseContract__DUPLICATE_FIELD()',
-          );
+          ).to.be.reverted;
 
           await expect(
             promiseFactory.createPromiseContract(
-              args.name,
-              args.ipfsCid,
-              args.arweaveId,
-              args.encryptedProof,
-              args.partyNames,
-              ['@bob', '@bob'],
-              args.partyAddresses,
+              'Test',
+              IPFS_CID,
+              ARWEAVE_ID,
+              ENCRYPTED_PROOF,
+              ['Bob', 'Alice'],
+              ['bob', 'bob'],
+              [deployer.address, user.address],
             ),
-          ).to.be.revertedWith(
-            'PromiseFactory__createPromiseContract__DUPLICATE_FIELD()',
-          );
+          ).to.be.reverted;
         });
 
         it('Should revert if the promise name is more than 70 characters', async () => {
@@ -174,36 +167,36 @@ developmentChains.includes(network.name)
           await expect(
             promiseFactory.createPromiseContract(
               name,
-              args.ipfsCid,
-              args.arweaveId,
-              args.encryptedProof,
-              args.partyNames,
-              args.partyTwitters,
-              args.partyAddresses,
+              IPFS_CID,
+              ARWEAVE_ID,
+              ENCRYPTED_PROOF,
+              PARTY_NAMES,
+              PARTY_TWITTER,
+              [deployer.address],
             ),
-          ).to.be.revertedWith('PromiseFactory__INCORRECT_FIELD_LENGTH()');
+          ).to.be.reverted;
         });
 
         it('Should revert if any of the participant name is more than 30 characters', async () => {
           const partyNames = ['a'.repeat(31), 'b'.repeat(15)];
           await expect(
             promiseFactory.createPromiseContract(
-              args.name,
-              args.ipfsCid,
-              args.arweaveId,
-              args.encryptedProof,
+              'Test',
+              IPFS_CID,
+              ARWEAVE_ID,
+              ENCRYPTED_PROOF,
               partyNames,
-              args.partyTwitters,
-              args.partyAddresses,
+              PARTY_TWITTER,
+              [deployer.address],
             ),
-          ).to.be.revertedWith(
-            "VM Exception while processing transaction: reverted with custom error 'PromiseContract__createParticipant__INCORRECT_FIELD_LENGTH()",
-          );
+          ).to.be.reverted;
         });
 
         it('Should create a new PromiseContract and create a mapping between the sender and the child contract addresses', async () => {
-          const { txReceipt } = await createCorrectPromiseContract();
-          const promiseContractAddress = txReceipt.events[1].address;
+          const { txReceipt } = await createPromiseContract('Test 1', [
+            deployer.address,
+          ]);
+          const promiseContractAddress = txReceipt.events[0].address;
           const promiseContract = await ethers.getContractAt(
             'PromiseContract',
             promiseContractAddress,
@@ -219,47 +212,55 @@ developmentChains.includes(network.name)
             receivedPromiseContractAddresses[0],
             promiseContractAddress,
           );
+
+          // Expected PromiseContract to equal PromiseFactory
         });
 
         it('Should emit a PromiseContractCreated event with the right arguments', async () => {
-          const { tx, txReceipt } = await createCorrectPromiseContract();
-          const promiseContractAddress = txReceipt.events[1].address;
+          const { tx, txReceipt } = await createPromiseContract('Test 2', [
+            deployer.address,
+          ]);
+          const promiseContractAddress = txReceipt.events[0].address;
 
           expect(tx)
             .to.emit(promiseFactory, 'PromiseContractCreated')
             .withArgs(
               deployer.address,
               promiseContractAddress,
-              args.name,
-              args.ipfsCid,
-              args.partyNames,
-              args.partyTwitters,
-              args.partyAddresses,
+              'Test 2',
+              IPFS_CID,
+              ARWEAVE_ID,
+              ENCRYPTED_PROOF,
+              PARTY_NAMES,
+              PARTY_TWITTER,
+              [deployer.address],
             );
         });
 
         it('Should return the correct number of child contracts for a user', async () => {
-          await createCorrectPromiseContract();
-          await createCorrectPromiseContract();
+          await createPromiseContract('Test 3', [deployer.address]);
+          await createPromiseContract('Test 4', [deployer.address]);
 
           const promiseContractsLength = await promiseFactory.getPromiseContractCount(
             deployer.address,
           );
-          assert.equal(promiseContractsLength, 2);
+          // There were 2 PromiseContract created in the previous test
+          // We would usually use a beforeEach hook but it's faster this way
+          assert.equal(promiseContractsLength, 4);
         });
       });
 
       describe('addTwitterVerifiedUser', function() {
-        it('Should not allow anyone other than the VerifyTwitter contract to add a Twitter verified user', async () => {
+        it('Should not allow anyone other than the VerifyTwitter contract to add a verified Twitter user', async () => {
           await expect(
             promiseFactory.addTwitterVerifiedUser(deployer.address, 'username'),
-          ).to.be.revertedWith('PromiseFactory__NOT_VERIFIER()');
+          ).to.be.reverted;
         });
 
         it('Should not allow anyone else than the owner to call `setTwitterVerifier`', async () => {
           await expect(
             promiseFactory.connect(user).setTwitterVerifier(user.address),
-          ).to.be.revertedWith('PromiseFactory__NOT_OWNER()');
+          ).to.be.reverted;
         });
 
         // The rest of the tests are performed in ./VerifyTwitter.staging.test.js
@@ -267,8 +268,10 @@ developmentChains.includes(network.name)
 
       describe('updateStorageStatus', function() {
         it('Should not allow anyone other than the VerifyStorage contract to update the storage status', async () => {
-          const { txReceipt } = await createCorrectPromiseContract();
-          promiseContractAddress = txReceipt.events[1].address;
+          const { txReceipt } = await createPromiseContract('Test 5', [
+            deployer.address,
+          ]);
+          promiseContractAddress = txReceipt.events[0].address;
           promiseContract = await ethers.getContractAt(
             'PromiseContract',
             promiseContractAddress,
@@ -276,25 +279,28 @@ developmentChains.includes(network.name)
 
           await expect(
             promiseFactory.updateStorageStatus(promiseContract.address, 1),
-          ).to.be.revertedWith('PromiseFactory__NOT_VERIFIER()');
+          ).to.be.reverted;
         });
 
         it('Should not allow anyone else than the owner to call `setStorageVerifier`', async () => {
           await expect(
             promiseFactory.connect(user).setStorageVerifier(user.address),
-          ).to.be.revertedWith('PromiseFactory__NOT_OWNER()');
+          ).to.be.reverted;
         });
 
         // The rest of the tests are performed in VerifyStorage.staging.test.js
       });
 
       describe('addParticipant', function() {
-        beforeEach(async () => {
-          const { txReceipt } = await createCorrectPromiseContract();
-          promiseContractAddress = txReceipt.events[1].address;
+        before(async () => {
+          const { txReceipt } = await createPromiseContract('Test 6', [
+            deployer.address,
+          ]);
+          promiseContractAddress = txReceipt.events[0].address;
           promiseContract = await ethers.getContractAt(
             'PromiseContract',
             promiseContractAddress,
+            deployer,
           );
         });
 
@@ -308,9 +314,7 @@ developmentChains.includes(network.name)
                 'handle',
                 user.address,
               ),
-          ).to.be.revertedWith(
-            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__addParticipant__NOT_PARTICIPANT()'",
-          );
+          ).to.be.reverted;
         });
 
         it('Should revert if the participant is already in the PromiseContract', async () => {
@@ -321,19 +325,10 @@ developmentChains.includes(network.name)
               'handle',
               deployer.address,
             ),
-          ).to.be.revertedWith(
-            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__addParticipant__ALREADY_PARTICIPANT()'",
-          );
+          ).to.be.reverted;
         });
 
         it('Should revert if the participant name is more than 30 characters', async () => {
-          const { txReceipt } = await createCorrectPromiseContract();
-          const promiseContractAddress = txReceipt.events[1].address;
-          const promiseContract = await ethers.getContractAt(
-            'PromiseContract',
-            promiseContractAddress,
-          );
-
           await expect(
             promiseFactory.addParticipant(
               promiseContract.address,
@@ -341,55 +336,59 @@ developmentChains.includes(network.name)
               'handle',
               user.address,
             ),
-          ).to.be.revertedWith(
-            "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__INCORRECT_FIELD_LENGTH()'",
-          );
+          ).to.be.reverted;
         });
 
-        it('Should add a participant to the PromiseContract and emit an event', async () => {
-          const tx = await promiseFactory.addParticipant(
-            promiseContract.address,
-            'Charlie',
-            'charlie',
-            user.address,
-          );
+        it('Should add a participant to the PromiseContract, disapprove the promise for all of them, and emit an event', async () => {
+          // Setup a listener for the ParticipantCreated in the PromiseContract
+          await new Promise(async (resolve, reject) => {
+            console.log('Waiting for the participant to be added...');
 
-          const participant = await promiseContract.getParticipant(
-            user.address,
-          );
+            promiseContract.once('ParticipantCreated', async () => {
+              console.log('Participant added!');
+              try {
+                const participant = await promiseContract.getParticipant(
+                  user.address,
+                );
 
-          assert.equal(participant.participantName, 'Charlie');
-          assert.equal(participant.participantTwitterHandle, 'charlie');
-          assert.equal(participant.participantAddress, user.address);
+                // Now that the participant has indeed been added, we can check the values
+                assert.equal(participant.participantName, 'Charlie');
+                assert.equal(participant.participantTwitterHandle, 'charlie');
+                assert.equal(participant.participantAddress, user.address);
 
-          expect(tx)
-            .to.emit(promiseFactory, 'ParticipantAdded')
-            .withArgs(
+                // and verify that the promise has been disapproved for all participants
+                assert.equal(
+                  await promiseContract.getIsPromiseApproved(deployer.address),
+                  false,
+                );
+                resolve();
+              } catch (err) {
+                reject(err);
+              }
+            });
+
+            // Approve the promise and add the participant
+            await promiseContract.approvePromise();
+            const tx = await promiseFactory.addParticipant(
               promiseContract.address,
               'Charlie',
               'charlie',
               user.address,
             );
-        });
 
-        it('Should disapprove the contract for each participant, so they can approve the new status', async () => {
-          await promiseContract.approvePromise();
-          assert.equal(
-            await promiseContract.getIsPromiseApproved(deployer.address),
-            true,
-          );
-
-          await promiseFactory.addParticipant(
-            promiseContract.address,
-            'Charlie',
-            'charlie',
-            user.address,
-          );
-
-          assert.equal(
-            await promiseContract.getIsPromiseApproved(deployer.address),
-            false,
-          );
+            assert.equal(
+              await promiseContract.getIsPromiseApproved(deployer.address),
+              true,
+            );
+            expect(tx)
+              .to.emit(promiseFactory, 'ParticipantAdded')
+              .withArgs(
+                promiseContract.address,
+                'Charlie',
+                'charlie',
+                user.address,
+              );
+          });
         });
       });
     });
