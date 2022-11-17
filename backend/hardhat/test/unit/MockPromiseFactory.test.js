@@ -45,7 +45,7 @@ const { deployments, network, ethers } = require('hardhat');
           encryptedProof:
             '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
           partyNames: ['Bob', 'Alice'],
-          partyTwitters: ['@bob', '@alice'],
+          partyTwitters: ['bob', 'alice'],
           partyAddresses: [deployer.address, user.address],
         };
       });
@@ -121,7 +121,7 @@ const { deployments, network, ethers } = require('hardhat');
               args.arweaveId,
               args.encryptedProof,
               args.partyNames,
-              ['@bob', '@bob'],
+              ['bob', 'bob'],
               args.partyAddresses,
             ),
           ).to.be.revertedWith(
@@ -198,6 +198,8 @@ const { deployments, network, ethers } = require('hardhat');
               promiseContractAddress,
               args.name,
               args.ipfsCid,
+              args.arweaveId,
+              args.encryptedProof,
               args.partyNames,
               args.partyTwitters,
               args.partyAddresses,
@@ -216,7 +218,7 @@ const { deployments, network, ethers } = require('hardhat');
       });
 
       describe('addTwitterVerifiedUser', function() {
-        it('Should not allow anyone other than the VerifyTwitter contract to add a Twitter verified user', async () => {
+        it('Should not allow anyone other than the VerifyTwitter contract to add a verified Twitter user', async () => {
           await expect(
             mockPromiseFactory.addTwitterVerifiedUser(
               deployer.address,

@@ -30,7 +30,7 @@ const ENCRYPTED_PROOF = '01234567890';
           ARWEAVE_ID,
           ENCRYPTED_PROOF,
           ['Bob', 'Alice'],
-          ['@bob', '@alice'],
+          ['bob', 'alice'],
           [deployer.address, user.address],
         );
         const txReceipt = await tx.wait(1);

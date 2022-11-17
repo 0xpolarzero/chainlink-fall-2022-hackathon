@@ -31,7 +31,7 @@ const { deployments, network, ethers } = require('hardhat');
           '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
           '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
           ['Bob', 'Alice'],
-          ['@bob', '@alice'],
+          ['bob', 'alice'],
           [userFirst.address, userSecond.address],
         );
         deployTxReceipt = await deployTx.wait(1);
@@ -77,7 +77,7 @@ const { deployments, network, ethers } = require('hardhat');
           await expect(
             promiseContractDeploy.createParticipant(
               'Bob',
-              '@bob',
+              'bob',
               userFirst.address,
               false,
             ),
@@ -94,7 +94,7 @@ const { deployments, network, ethers } = require('hardhat');
             mockPromiseFactory.addParticipant(
               promiseContract.address,
               'Bob',
-              '@bob',
+              'bob',
               notUser.address,
             ),
           ).to.be.revertedWith('PromiseContract__PROMISE_LOCKED()');
@@ -110,7 +110,7 @@ const { deployments, network, ethers } = require('hardhat');
           );
 
           assert.equal(participant.participantName, 'Bob');
-          assert.equal(participant.participantTwitterHandle, '@bob');
+          assert.equal(participant.participantTwitterHandle, 'bob');
           assert.equal(participant.participantAddress, userFirst.address);
           assert.equal(notParticipant.participantName, '');
           assert.equal(notParticipant.participantTwitterHandle, '');
@@ -144,11 +144,11 @@ const { deployments, network, ethers } = require('hardhat');
           );
 
           assert.equal(participantFirst.name, 'Bob');
-          assert.equal(participantFirst.twitter, '@bob');
+          assert.equal(participantFirst.twitter, 'bob');
           assert.equal(participantFirst.address, userFirst.address);
 
           assert.equal(participantSecond.name, 'Alice');
-          assert.equal(participantSecond.twitter, '@alice');
+          assert.equal(participantSecond.twitter, 'alice');
           assert.equal(participantSecond.address, userSecond.address);
         });
 
@@ -189,7 +189,7 @@ const { deployments, network, ethers } = require('hardhat');
           assert.equal(event.event, 'ParticipantApproved');
           assert.equal(event.args.participantAddress, userFirst.address);
           assert.equal(event.args.participantName, 'Bob');
-          assert.equal(event.args.participantTwitterHandle, '@bob');
+          assert.equal(event.args.participantTwitterHandle, 'bob');
         });
 
         it('Should revert if the user is not a participant', async () => {

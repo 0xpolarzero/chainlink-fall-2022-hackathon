@@ -36,7 +36,7 @@ developmentChains.includes(network.name)
           arweaveId,
           encryptedProof,
           ['Bob', 'Alice'],
-          ['@bob', '@alice'],
+          ['bob', 'alice'],
           [bobAddress, aliceAddress],
         );
         const txReceipt = await tx.wait(1);
