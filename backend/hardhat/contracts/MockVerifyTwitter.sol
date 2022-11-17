@@ -9,7 +9,7 @@ import "./utils/AddressToString.sol";
 
 /**
  * @author polarzero
- * @title VerifyTwitterMock
+ * @title MockVerifyTwitter
  * @notice This contract is used to test the VerifyTwitter contract
  * The functions are the same, but they don't actually send data to the operator
  * We make use of the ChainlinkClientTestHelper contract to mock the ChainlinkClient
@@ -17,7 +17,7 @@ import "./utils/AddressToString.sol";
  * They provide additional functions to test that the contract is correctly initialized
  */
 
-contract VerifyTwitterMock is
+contract MockVerifyTwitter is
     ChainlinkClientTestHelper,
     ConfirmedOwnerTestHelper
 {

@@ -8,7 +8,7 @@ import "./utils/AddressToString.sol";
 
 /**
  * @author polarzero
- * @title VerifyStorageMock
+ * @title MockVerifyStorage
  * @notice This contract is used to test the VerifyStorage contract
  * The functions are the same, but they don't actually send data to the operator
  * We make use of the ChainlinkClientTestHelper contract to mock the ChainlinkClient
@@ -16,7 +16,7 @@ import "./utils/AddressToString.sol";
  * They provide additional functions to test that the contract is correctly initialized
  */
 
-contract VerifyStorageMock is
+contract MockVerifyStorage is
     ChainlinkClientTestHelper,
     ConfirmedOwnerTestHelper
 {
@@ -54,6 +54,13 @@ contract VerifyStorageMock is
         uint8 storageStatus
     );
 
+    // Modifier to check if the caller is the PromiseFactory contract
+    modifier onlyPromiseFactory() {
+        if (msg.sender != s_fakePromiseFactoryContract)
+            revert VerifyStorage__NOT_FACTORY();
+        _;
+    }
+
     /**
      * @notice Initialize the link token and target oracle
      * @param _linkTokenContract (Mumbai): 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
@@ -81,13 +88,6 @@ contract VerifyStorageMock is
         setChainlinkOracle(_oracleContract);
         setPromiseFactoryContract(_promiseFactoryContract);
         s_fakePromiseFactoryContract = _fakePromiseFactoryContract;
-    }
-
-    // Modifier to check if the caller is the PromiseFactory contract
-    modifier onlyPromiseFactory() {
-        if (msg.sender != s_fakePromiseFactoryContract)
-            revert VerifyStorage__NOT_FACTORY();
-        _;
     }
 
     /**
