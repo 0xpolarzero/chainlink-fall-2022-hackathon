@@ -4,29 +4,32 @@ const {
   OPERATOR_MUMBAI,
 } = require('../helper-hardhat-config');
 
-// Usually, deploying mocks is done first (00-...), but here
-// we need to deploy the PromiseFactory first to get its address
-
 module.exports = async function({ getNamedAccounts, deployments }) {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
   const accounts = await ethers.getSigners();
   const fakePromiseFactory = accounts[2];
-  const promiseFactory = await deployments.get('PromiseFactory');
 
-  await deploy('VerifyTwitterMock', {
+  const mockPromiseFactory = await deploy('MockPromiseFactory', {
     from: deployer,
-    args: [LINK_TOKEN_MUMBAI, OPERATOR_MUMBAI, promiseFactory.address],
+    args: [],
     log: true,
     waitConfirmations: network.config.blockConfirmations || 1,
   });
 
-  await deploy('VerifyStorageMock', {
+  await deploy('MockVerifyTwitter', {
+    from: deployer,
+    args: [LINK_TOKEN_MUMBAI, OPERATOR_MUMBAI, mockPromiseFactory.address],
+    log: true,
+    waitConfirmations: network.config.blockConfirmations || 1,
+  });
+
+  await deploy('MockVerifyStorage', {
     from: deployer,
     args: [
       LINK_TOKEN_MUMBAI,
       OPERATOR_MUMBAI,
-      promiseFactory.address,
+      mockPromiseFactory.address,
       fakePromiseFactory.address,
     ],
     log: true,
