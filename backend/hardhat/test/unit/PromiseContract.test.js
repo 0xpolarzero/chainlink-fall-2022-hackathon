@@ -9,7 +9,7 @@ const { deployments, network, ethers } = require('hardhat');
       let userFirst;
       let userSecond;
       let notUser;
-      let promiseFactory;
+      let mockPromiseFactory;
       let promiseContractDeploy;
       let promiseContract;
       let deployTxReceipt;
@@ -20,12 +20,12 @@ const { deployments, network, ethers } = require('hardhat');
         userFirst = accounts[1];
         userSecond = accounts[2];
         notUser = accounts[3];
-        await deployments.fixture('main');
-        promiseFactory = (await ethers.getContract('PromiseFactory')).connect(
-          userFirst,
-        );
+        await deployments.fixture(['main', 'mocks']);
+        mockPromiseFactory = (
+          await ethers.getContract('MockPromiseFactory')
+        ).connect(userFirst);
 
-        const deployTx = await promiseFactory.createPromiseContract(
+        const deployTx = await mockPromiseFactory.createPromiseContract(
           'Test Agreement',
           'bafybeieyah7pyu3mrreajpt4yp7fxzkjzhpir6wu4c6ofg42o57htgmfeq',
           '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
@@ -52,8 +52,7 @@ const { deployments, network, ethers } = require('hardhat');
           const arweaveId = await promiseContract.getArweaveId();
           const encryptedProof = await promiseContract.getEncryptedProof();
           const participantCount = await promiseContract.getParticipantCount();
-          const promiseFactoryAddress = await promiseContract.getPromiseFactoryContract();
-
+          const mockPromiseFactoryAddress = await promiseContract.getPromiseFactoryContract();
           assert.equal(owner, userFirst.address);
           assert.equal(name, 'Test Agreement');
           assert.equal(
@@ -69,7 +68,7 @@ const { deployments, network, ethers } = require('hardhat');
             '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
           );
           assert.equal(participantCount, 2);
-          assert.equal(promiseFactoryAddress, promiseFactory.address);
+          assert.equal(mockPromiseFactoryAddress, mockPromiseFactory.address);
         });
       });
 
@@ -92,7 +91,7 @@ const { deployments, network, ethers } = require('hardhat');
           await promiseContract.lockPromise();
 
           await expect(
-            promiseFactory.addParticipant(
+            mockPromiseFactory.addParticipant(
               promiseContract.address,
               'Bob',
               '@bob',
