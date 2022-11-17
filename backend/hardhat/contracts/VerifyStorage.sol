@@ -53,6 +53,13 @@ contract VerifyStorage is ChainlinkClient, ConfirmedOwner {
         uint8 storageStatus
     );
 
+    // Modifier to check if the caller is the PromiseFactory contract
+    modifier onlyPromiseFactory() {
+        if (msg.sender != s_promiseFactoryContract)
+            revert VerifyStorage__NOT_FACTORY();
+        _;
+    }
+
     /**
      * @notice Initialize the link token and target oracle
      * @param _linkTokenContract (Mumbai): 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
@@ -68,13 +75,6 @@ contract VerifyStorage is ChainlinkClient, ConfirmedOwner {
         setChainlinkToken(_linkTokenContract);
         setChainlinkOracle(_oracleContract);
         setPromiseFactoryContract(_promiseFactoryContract);
-    }
-
-    // Modifier to check if the caller is the PromiseFactory contract
-    modifier onlyPromiseFactory() {
-        if (msg.sender != s_promiseFactoryContract)
-            revert VerifyStorage__NOT_FACTORY();
-        _;
     }
 
     /**
