@@ -23,7 +23,6 @@ export default function ParticleLogo() {
         src={Logo.src}
         alt='logo'
         id='logo'
-        // className='next-particle'
         data-max-width='30%'
         data-particle-gap='1'
         data-gravity='0.15'
