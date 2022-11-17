@@ -119,16 +119,23 @@ const createRequest = (input, callback) => {
       'base64',
     );
 
-    // Decrypt it
-    const decryptedData = CryptoJS.AES.decrypt(encryptedBase64, key, {
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
-    // Get it to lowercase because the addresses could mismatch if not
-    const decryptedString = decryptedData
-      .toString(CryptoJS.enc.Utf8)
-      .toLowerCase();
+    // We're using a nested try/catch here because otherwise the decrypt function
+    // does sometimes throw an error when the key is wrong
+    // In this case, we want to return a 200 response with a status of 1
+    let decryptedString;
+    try {
+      // Decrypt it
+      const decryptedData = CryptoJS.AES.decrypt(encryptedBase64, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      });
+      // We must transform to lowercase because the addresses can mismatch if not
+      decryptedString = decryptedData.toString(CryptoJS.enc.Utf8).toLowerCase();
+    } catch (err) {
+      decryptedString = '';
+    }
+    
     const expectedString = (userAddress + ipfsCid + arweaveId).toLowerCase();
 
     // If the strings don't match, return 1

@@ -6,9 +6,11 @@ description: 'A quick overview: what is promise? Why? How?'
 
 ## What is it? Why?
 
-Promise is a blockchain service for founders, creators and regular users. The end purpose is to improve trust in our digital relationships and make founders more accountable for their promises. It is both a way for gathering information about a team and their project, and for them to make a genuine commitment that cannot be altered.
+Promise is a blockchain service for founders, creators and regular users. The end purpose is to **improve trust in our digital relationships** and make founders more accountable for their promises. It is both a way for gathering information about a team and their project, and for them to make a genuine commitment that cannot be altered.
 
 This tool cannot enforce compliance with an objective or a commitment. But, one can imagine that such a process, if it became usual, could provide a much appreciated transparency and permanence in the _Web3_ space, and more extensively in projects that involve significant investments.
+
+By **putting their reputation at stake in a promise**, in a transparent and verifiable process, **it might provide a lucid picture, and an uncensorable record, of the reliability of a person or a group** - or at least, **of their willingness to be held accountable for their actions**.
 
 ### For founders
 
@@ -18,7 +20,7 @@ They can create a promise, add team members, associate their Twitter account wit
 
 ### For users
 
-We are familiar with the terms of _roadmap_, _utility_, and used to discovering a fine defined schedule when a new project is introduced. While this can be submitted as a blog, website or Twitter thread, _promise_ is a way to know more about this project, with the assurance that this introduction will not be altered as the project matures and the expectations evolve and expectations might shift.
+We are familiar with the terms of _roadmap_, _utility_, and used to discovering a fine defined schedule when a new project is introduced. While this can be submitted as a blog, website or Twitter thread, _promise_ is a way to know more about this project, **with the assurance that this initiative will not be altered as the project matures and the expectations evolve and expectations might shift**.
 
 It can as well be used as an explorer, to find out which projects a Twitter user, or an Ethereum address, might be involved in. Or just to check if an address is tied with a Twitter account, and the other way around.
 

@@ -8,7 +8,7 @@ description: How to verify a Twitter account, and browse the verified users?
 For a comprehensive overview of the verification process with the Chainlink Node, visit [twitter-handle-verification.md](../chainlink-external-adapters/twitter-handle-verification.md "mention").
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image (3).png" alt="Open the Verified Twitter accounts page from the menu"><figcaption><p>Explore the verified Twitter accounts from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (2).png" alt="Open the Verified Twitter accounts page from the menu"><figcaption><p>Explore the verified Twitter accounts from the menu.</p></figcaption></figure>
 
 ## Exploring verified Twitter accounts
 
@@ -24,7 +24,7 @@ There are two ways of verifying a Twitter account with an Ethereum address: from
 
 The **Verified Twitter accounts** and **Dashboard** pages both provide a button for verifying a Twitter handle. Clicking it will open a Drawer that explains how it can be achieved.
 
-<figure><img src="../.gitbook/assets/image (6) (1).png" alt="The drawer that is opened when clicking on the button to verify a Twitter account "><figcaption><p>The Drawer that enables verifying a Twitter account.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6) (1) (1).png" alt="The drawer that is opened when clicking on the button to verify a Twitter account "><figcaption><p>The Drawer that enables verifying a Twitter account.</p></figcaption></figure>
 
 {% hint style="info" %}
 When interacting with a promise, the instructions are nearly similar, except that the user don't need to input a username. It will try to verify the one that was provided during the creation.

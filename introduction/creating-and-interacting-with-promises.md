@@ -4,7 +4,7 @@ description: How to create a promise?
 
 # Creating a promise
 
-<figure><img src="../.gitbook/assets/image (1) (1) (2).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/image (5) (1).png" alt="Creating a promise using the App"><figcaption><p>Click "New promise" to create a promise.</p></figcaption></figure>
 
@@ -17,7 +17,7 @@ There are two ways of creating a promise:
 
 Using the App to create a promise will allow its content to get verified, and spare you the trouble of sending it to IPFS, and eventually to Arweave.&#x20;
 
-<figure><img src="../.gitbook/assets/image (7) (1).png" alt="The window displayed for creating a promise on the App"><figcaption><p>The 'Create promise' drawer on the App.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (7).png" alt="The window displayed for creating a promise on the App"><figcaption><p>The 'Create promise' drawer on the App.</p></figcaption></figure>
 
 ### Filling up the form
 

@@ -4,7 +4,7 @@ description: How does the External Adapter verify a Twitter account?
 
 # Twitter account verification
 
-<figure><img src="../.gitbook/assets/image (4).png" alt="Verifying a new Twitter account on the App"><figcaption><p>Verify a new Twitter account.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (10).png" alt="Verifying a new Twitter account on the App"><figcaption><p>Verify a new Twitter account.</p></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/image (1) (1).png" alt="Accessing the VerifyTwitter contract on Polygonscan from the App"><figcaption><p>Access the updated VerifyTwitter contract from the Drawer.</p></figcaption></figure>
 

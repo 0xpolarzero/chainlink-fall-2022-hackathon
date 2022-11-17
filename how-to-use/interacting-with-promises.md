@@ -4,7 +4,7 @@ description: How to interact with your promises?
 
 # Interacting with promises
 
-<figure><img src="../.gitbook/assets/image (1) (1) (2).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
 
 The dashboard shows different sections to interact with the App:
 
@@ -46,7 +46,7 @@ Any time a participant is added, everyone needs to approve the promise again. Th
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (4) (2).png" alt="The popup shown for adding a new participant to the promise"><figcaption><p>The popup shown for adding a participant.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt="The popup shown for adding a new participant to the promise"><figcaption><p>The popup shown for adding a participant.</p></figcaption></figure>
 
 <details>
 
