@@ -1,12 +1,5 @@
 [
-  {
-    "type": "constructor",
-    "payable": false,
-    "inputs": [
-      { "type": "address", "name": "_twitterVerifier" },
-      { "type": "address", "name": "_storageVerifier" }
-    ]
-  },
+  { "type": "constructor", "payable": false, "inputs": [] },
   { "type": "error", "name": "PromiseFactory__EMPTY_FIELD", "inputs": [] },
   {
     "type": "error",
