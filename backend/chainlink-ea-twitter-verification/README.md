@@ -30,9 +30,15 @@
 
 Parts of this document are copied from <a href='https://github.com/thodges-gh/CL-EA-NodeJS-Template'>the Chainlink NodeJS External Adapter Template</a>.
 
-...
+This is a Chainlink External Adapter that verifies a Twitter account by checking if a signature containing the user's Ethereum address is present in their last 10 tweets.
 
-The documentation provides <a href='https://docs.usepromise.xyz/chainlink-external-adapters/twitter-account-verification'>a more in-depth explanation of the verification process</a>
+The signature is the following:
+
+- `Verifying my Twitter account for <USER_ADDRESS> with @usePromise!`
+
+While the `username` is passed as a parameter in the request, the `address` is grabbed from the `msg.sender`.
+
+The documentation provides <a href='https://docs.usepromise.xyz/chainlink-external-adapters/twitter-account-verification'>a detailed explanation of the verification process</a>.
 
 <a href="https://docs.usepromise.xyz/"><strong>Explore the documentation »</strong></a>
 

@@ -32,7 +32,7 @@ Parts of this document are copied from <a href='https://github.com/thodges-gh/CL
 
 This external adapter enables our application to verify the integrity of files stored on IPFS and Arweave. After the application uploads a file to IPFS and Arweave, both will receive a hash - which is then encrypted along with a secret key. The external adapter can then verify the integrity of the content by decrypting the hash and comparing it to the parameters from the promise contract. It is relevant, since we can vouch for the persistence and integrity of the content of a promise created using our application.
 
-The documentation provides <a href='https://docs.usepromise.xyz/chainlink-external-adapters/ipfs-and-arweave-verification'>a more in-depth explanation of the verification process</a>
+The documentation provides <a href='https://docs.usepromise.xyz/chainlink-external-adapters/ipfs-and-arweave-verification'>a more in-depth explanation of the verification process</a>.
 
 <a href="https://docs.usepromise.xyz/"><strong>Explore the documentation »</strong></a>
 

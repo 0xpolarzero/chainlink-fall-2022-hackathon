@@ -85,8 +85,10 @@ Should you be curious to know more about the application, I strongly suggest to 
 
 [![Polygon]](https://polygon.technology/)
 [![TheGraph]](https://thegraph.com/en/)
+[![ApolloGraphQL]](https://www.apollographql.com/)
 [![AWS]](https://aws.amazon.com/lambda/)
 [![NodeJS]](https://nodejs.org/)
+[![Express]](https://expressjs.com/)
 
 ### Interaction with contracts
 
@@ -98,7 +100,6 @@ Should you be curious to know more about the application, I strongly suggest to 
 ### Frontend
 
 [![NextJS]](https://nextjs.org/)
-[![ApolloGraphQL]](https://www.apollographql.com/)
 [![Antd]](https://ant.design/)
 
 <!-- GETTING STARTED -->
@@ -154,6 +155,7 @@ Project Link: <strong><a href="https://github.com/polar0/chainlink-fall-2022-hac
 [chainlink]: https://img.shields.io/badge/Chainlink-375BD2.svg?style=for-the-badge&logo=Chainlink&logoColor=white
 [javascript]: https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=for-the-badge&logo=JavaScript&logoColor=black
 [nodejs]: https://img.shields.io/badge/Node.js-339933.svg?style=for-the-badge&logo=nodedotjs&logoColor=white
+[express]: https://img.shields.io/badge/Express.js-000000.svg?style=for-the-badge&logo=express&logoColor=white
 [ethersjs]: https://custom-icon-badges.demolab.com/badge/Ethers.js-29349A?style=for-the-badge&logo=ethers&logoColor=white
 [hardhat]: https://custom-icon-badges.demolab.com/badge/Hardhat-181A1F?style=for-the-badge&logo=hardhat
 [chai]: https://img.shields.io/badge/Chai-A30701.svg?style=for-the-badge&logo=Chai&logoColor=white
