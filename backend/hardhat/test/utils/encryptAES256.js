@@ -2,7 +2,7 @@ const CryptoJS = require('crypto-js');
 require('dotenv').config();
 
 const encryptAES256 = (userAddress, ipfsCid, arweaveId) => {
-  const key = process.env.NEXT_PUBLIC_AES_ENCRYPTION_KEY;
+  const key = process.env.AES_ENCRYPTION_KEY;
   const data = userAddress + ipfsCid + arweaveId;
 
   // Generate a random iv in hex
@@ -24,4 +24,4 @@ const encryptAES256 = (userAddress, ipfsCid, arweaveId) => {
   return iv + encryptedHex;
 };
 
-export { encryptAES256 };
+module.exports = { encryptAES256 };
