@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/polar0/chainlink-fall-2022-hackathon">
-    <img src="../resources/asset/logo.svg" alt="Logo" width="80" height="80">
+    <img src="../../resources/asset/logo.svg" alt="Logo" width="80" height="80">
   </a>
 
 <h2 align="center"><b>promise</b> - a blockchain service for founders, creators and regular users.</h3>
@@ -107,7 +107,10 @@ Report coverage:
 
 ```sh
 yarn hardhat coverage
+# same as above, you can add the --network flag
 ```
+
+`hh coverage` will report the coverage of the unit tests. The staging tests are not included in the coverage report. This is why it will be critical for `PromiseFactory`, `VerifyStorage` and `VerifyTwitter`, as well as for the Mock versions while running `hh coverage --network mumbai`.
 
 To get the gas usage report included or not, change `enabled` to `true` or `false` in the hardhat.config.js file.
 

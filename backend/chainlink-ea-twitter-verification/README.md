@@ -1,54 +1,75 @@
-# Chainlink NodeJS External Adapter Template
+<a name="readme-top"></a>
 
-This template provides a basic framework for developing Chainlink external adapters in NodeJS. Comments are included to assist with development and testing of the external adapter. Once the API-specific values (like query parameters and API key authentication) have been added to the adapter, it is very easy to add some tests to verify that the data will be correctly formatted when returned to the Chainlink node. There is no need to use any additional frameworks or to run a Chainlink node in order to test the adapter.
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/polar0/chainlink-fall-2022-hackathon">
+    <img src="../../resources/asset/logo.svg" alt="Logo" width="80" height="80">
+  </a>
 
-## Creating your own adapter from this template
+<h2 align="center"><b>promise</b> - a blockchain service for founders, creators and regular users.</h3>
 
-Clone this repo and change "ExternalAdapterProject" below to the name of your project
+  <p align="center">
+    Built to help improve trust in our digital relationships and make founders more accountable for their promises.
+    <br />
+    <a href="https://docs.usepromise.xyz/"><strong>Explore the documentation »</strong></a>
+    <br /><br />
+    <a href="https://usepromise.xyz/">View Demo</a>
+    ·
+    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-twitter-verification/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-twitter-verification/issues">Request Feature</a>
+  </p>
+</div>
 
-```bash
-git clone https://github.com/thodges-gh/CL-EA-NodeJS-Template.git ExternalAdapterProject
-```
+<br />
 
-Enter into the newly-created directory
+<!-- ABOUT THE PROJECT -->
 
-```bash
-cd ExternalAdapterProject
-```
+# External Adapter - Twitter Account Verification
 
-You can remove the existing git history by running:
+Parts of this document are copied from <a href='https://github.com/thodges-gh/CL-EA-NodeJS-Template'>the Chainlink NodeJS External Adapter Template</a>.
 
-```bash
-rm -rf .git
-```
+...
 
-See [Install Locally](#install-locally) for a quickstart
+The documentation provides <a href='https://docs.usepromise.xyz/chainlink-external-adapters/twitter-account-verification'>a more in-depth explanation of the verification process</a>
 
-## Input Params
+<a href="https://docs.usepromise.xyz/"><strong>Explore the documentation »</strong></a>
 
-- `base`, `from`, or `coin`: The symbol of the currency to query
-- `quote`, `to`, or `market`: The symbol of the currency to convert to
+<br />
 
-## Output
+## Built with
 
-```json
-{
- "jobRunID": "278c97ffadb54a5bbb93cfec5f7b5503",
- "data": {
-  "USD": 164.02,
-  "result": 164.02
- },
- "statusCode": 200
-}
-```
+[![JavaScript]](https://developer.mozilla.org/fr/docs/Web/JavaScript)
+[![NodeJS]](https://nodejs.org/en/)
+[![Express]](https://expressjs.com/)
+[![Mocha]](https://mochajs.org/)
+[![Chainlink]](https://chain.link/)
+[![AWS]](https://aws.amazon.com/fr/lambda/)
 
-## Install Locally
+<!-- GETTING STARTED -->
 
-Install dependencies:
+<!----><a id="testing"></a>
 
-```bash
-yarn
-```
+#
+
+<p>To get a local copy up and running follow these simple example steps.</p>
+<p>You will need to install either <strong>npm</strong> or <strong>yarn</strong> to run the commands, and <strong>git</strong> to clone the repository.</p>
+
+# Installation
+
+1. Clone the repo:
+   ```sh
+   git clone https://github.com/polar0/chainlink-fall-2022-hackathon
+   ```
+2. Navigate into this subdirectory:
+   ```sh
+   cd backend/chainlink-ea-twitter-verification
+   ```
+3. Install NPM packages using `yarn` or `npm install`.
+4. Create a `.env` file at the root of this folder and add the variables listed in the `.env.example` file.
+
+# Usage
 
 ### Test
 
@@ -69,7 +90,23 @@ yarn start
 ## Call the external adapter/API server
 
 ```bash
-curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data": { "from": "ETH", "to": "USD" } }'
+curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data": { "username": "TwitterDev", "address": "0x0000000000000000000000000000000000000000"
+} }'
+```
+
+## Output
+
+```json
+{
+  "jobRunID": "b6ddd15e-02e8-4e3c-b884-0f75c7658ba8",
+  "data": {
+    "result": false // or true
+    "username": "TwitterDev",
+    "address": "0x0000000000000000000000000000000000000000",
+    "name": "Twitter Dev",
+  },
+  "statusCode": 200
+}
 ```
 
 ## Docker
@@ -107,8 +144,8 @@ zip -r external-adapter.zip .
 - Under Function code, select "Upload a .zip file" from the Code entry type drop-down
 - Click Upload and select the `external-adapter.zip` file
 - Handler:
-    - index.handler for REST API Gateways
-    - index.handlerv2 for HTTP API Gateways
+  - index.handler for REST API Gateways
+  - index.handlerv2 for HTTP API Gateways
 - Add the environment variable (repeat for all environment variables):
   - Key: API_KEY
   - Value: Your_API_key
@@ -155,3 +192,34 @@ If using a REST API Gateway, you will need to disable the Lambda proxy integrati
 - Click More, Add variable (repeat for all environment variables)
   - NAME: API_KEY
   - VALUE: Your_API_key
+
+# License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<!----><a id="contact"></a>
+
+# Contact - Social
+
+[![Website][website]](https://polarzero.xyz/)
+[![Twitter][twitter]](https://twitter.com/0xpolarzero/)
+[![LinkedIn][linkedin]](https://www.linkedin.com/in/antton-lepretre/)
+[![0xpolarzero@gmail.com][email]](mailto:0xpolarzero@gmail.com)
+
+Project Link: <strong><a href="https://github.com/polar0/chainlink-fall-2022-hackathon">https://github.com/polar0/chainlink-fall-2022-hackathon</a></strong>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[website]: https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white
+[twitter]: https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white
+[linkedin]: https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white
+[email]: https://img.shields.io/badge/0xpolarzero@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white
+[chainlink]: https://img.shields.io/badge/Chainlink-375BD2.svg?style=for-the-badge&logo=Chainlink&logoColor=white
+[javascript]: https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=for-the-badge&logo=JavaScript&logoColor=black
+[nodejs]: https://img.shields.io/badge/Node.js-339933.svg?style=for-the-badge&logo=nodedotjs&logoColor=white
+[aws]: https://img.shields.io/badge/AWS%20Lambda-FF9900.svg?style=for-the-badge&logo=AWS-Lambda&logoColor=white
+[express]: https://img.shields.io/badge/Express-000000.svg?style=for-the-badge&logo=Express&logoColor=white
+[mocha]: https://img.shields.io/badge/Mocha-8D6748.svg?style=for-the-badge&logo=Mocha&logoColor=white
