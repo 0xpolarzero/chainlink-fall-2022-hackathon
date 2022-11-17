@@ -383,12 +383,4 @@ contract MockPromiseFactory {
     function getOwner() public view returns (address) {
         return i_owner;
     }
-
-    function getTwitterVerifier() public view returns (address) {
-        return s_twitterVerifier;
-    }
-
-    function getStorageVerifier() public view returns (address) {
-        return s_storageVerifier;
-    }
 }
