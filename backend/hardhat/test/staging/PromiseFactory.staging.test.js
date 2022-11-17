@@ -1,5 +1,8 @@
 const { assert, expect } = require('chai');
-const { developmentChains } = require('../../helper-hardhat-config');
+const {
+  developmentChains,
+  LINK_TOKEN_MUMBAI,
+} = require('../../helper-hardhat-config');
 const { deployments, network, ethers } = require('hardhat');
 
 const REQUIRED_LINK_AMOUNT_FOR_TESTS = ethers.utils.parseEther('0.8');
@@ -9,7 +12,6 @@ developmentChains.includes(network.name)
   : describe.only('PromiseFactory staging tests', function() {
       let deployer;
       let user;
-      let notUser;
       let promiseFactoryDeploy;
       let promiseFactory;
       let verifyStorage;
@@ -32,11 +34,10 @@ developmentChains.includes(network.name)
         return { tx, txReceipt };
       };
 
-      beforeEach(async () => {
+      before(async () => {
         const accounts = await ethers.getSigners();
         deployer = accounts[0];
         user = accounts[1];
-        notUser = accounts[2];
 
         console.log('Deploying contracts...');
         await deployments.fixture('main');
@@ -47,10 +48,7 @@ developmentChains.includes(network.name)
 
         // Set the allowed verifier (VerifyStorage address) if needed
         console.log('Setting allowed verifier...');
-        const isVerifier = await promiseFactory.getStorageVerifier();
-        if (isVerifier !== verifyStorage.address) {
-          await promiseFactory.setStorageVerifier(verifyStorage.address);
-        }
+        await promiseFactory.setStorageVerifier(verifyStorage.address);
         console.log('Allowed verifier set.');
 
         // Fund the VerifyTwitter contract with LINK if the balance is < 0.2 LINK
@@ -86,9 +84,9 @@ developmentChains.includes(network.name)
           arweaveId: '35wFhCNgA8upsCl-jNQvdXOKCXzO8vx1OeEspMcl3jY',
           encryptedProof:
             '0xd614539bd56636494f7bc02e21a53e02f93850cabc465ae830d62e94beba1af3',
-          partyNames: ['Bob', 'Alice'],
-          partyTwitters: ['@bob', '@alice'],
-          partyAddresses: [deployer.address, user.address],
+          partyNames: ['Bob'],
+          partyTwitters: ['@bob'],
+          partyAddresses: [deployer.address],
         };
       });
 
@@ -203,7 +201,7 @@ developmentChains.includes(network.name)
           );
         });
 
-        it('Should create a new PromiseContract', async () => {
+        it('Should create a new PromiseContract and create a mapping between the sender and the child contract addresses', async () => {
           const { txReceipt } = await createCorrectPromiseContract();
           const promiseContractAddress = txReceipt.events[1].address;
           const promiseContract = await ethers.getContractAt(
@@ -212,20 +210,14 @@ developmentChains.includes(network.name)
           );
           const promiseContractOwner = await promiseContract.getOwner();
 
-          assert.equal(promiseContractOwner, deployer.address);
-        });
-
-        it('Should create a mapping between the sender and the child contract addresses', async () => {
-          const { txReceipt } = await createCorrectPromiseContract();
-          const expectedPromiseContractAddress = txReceipt.events[1].address;
-
           const receivedPromiseContractAddresses = await promiseFactory.getPromiseContractAddresses(
             deployer.address,
           );
 
+          assert.equal(promiseContractOwner, deployer.address);
           assert.equal(
             receivedPromiseContractAddresses[0],
-            expectedPromiseContractAddress,
+            promiseContractAddress,
           );
         });
 
@@ -309,7 +301,7 @@ developmentChains.includes(network.name)
         it('Should revert if the sender is not a participant the PromiseContract', async () => {
           await expect(
             promiseFactory
-              .connect(notUser)
+              .connect(user)
               .addParticipant(
                 promiseContract.address,
                 'name',
@@ -347,7 +339,7 @@ developmentChains.includes(network.name)
               promiseContract.address,
               'a'.repeat(31),
               'handle',
-              notUser.address,
+              user.address,
             ),
           ).to.be.revertedWith(
             "VM Exception while processing transaction: reverted with custom error 'PromiseFactory__INCORRECT_FIELD_LENGTH()'",
@@ -359,16 +351,16 @@ developmentChains.includes(network.name)
             promiseContract.address,
             'Charlie',
             'charlie',
-            notUser.address,
+            user.address,
           );
 
           const participant = await promiseContract.getParticipant(
-            notUser.address,
+            user.address,
           );
 
           assert.equal(participant.participantName, 'Charlie');
           assert.equal(participant.participantTwitterHandle, 'charlie');
-          assert.equal(participant.participantAddress, notUser.address);
+          assert.equal(participant.participantAddress, user.address);
 
           expect(tx)
             .to.emit(promiseFactory, 'ParticipantAdded')
@@ -376,7 +368,7 @@ developmentChains.includes(network.name)
               promiseContract.address,
               'Charlie',
               'charlie',
-              notUser.address,
+              user.address,
             );
         });
 
@@ -391,7 +383,7 @@ developmentChains.includes(network.name)
             promiseContract.address,
             'Charlie',
             'charlie',
-            notUser.address,
+            user.address,
           );
 
           assert.equal(
