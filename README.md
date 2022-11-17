@@ -51,6 +51,18 @@
 
 <img width="2056" alt="image" src="./resources/asset/usepromise-home.png">
 
+## What is promise?
+
+Promise is a blockchain service for founders, creators and regular users. The end purpose is to **improve trust in our digital relationships** and make founders more accountable for their promises. It is both a way for gathering information about a team and their project, and for them to make a genuine commitment that cannot be altered.
+
+This tool cannot enforce compliance with an objective or a commitment. But, one can imagine that such a process, if it became usual, could provide a much appreciated transparency and permanence in the _Web3_ ecosystem, and more extensively in projects that involve significant investments.
+
+In everything gravitating around blockchain, among other things, Twitter has become a corporate medium, used for business and marketing. A Twitter account, as well as an Ethereum address, can be crucial to the reputation of a person, a brand, a community, a product or a service.
+
+By **putting them at stake in a promise**, in a transparent and verifiable process, **it might provide a lucid picture, and an uncensorable record, of the reliability of a person or a group** - or at least, **of their willingness to be held accountable for their actions**.
+
+## Quick note
+
 This project is the product of a month of intense work, research, learning and struggle, as part of the Chainlink Fall 2022 Hackathon.
 
 Many thanks to Chainlink for this timely opportunity - the hackathon started the day I finished Patrick Collins 32h course on Full-Stack Blockchain Development, and I was able to put all my new knowledge to good use.
