@@ -259,7 +259,7 @@ contract PromiseFactory {
             revert PromiseFactory__INCORRECT_FIELD_LENGTH();
         }
 
-        // Add the participant to the contract and emit an event if successful
+        // Add the participant to the contract and emit an event
         PromiseContract(_promiseContractAddress).createParticipant(
             _partyName,
             _partyTwitterHandle,
