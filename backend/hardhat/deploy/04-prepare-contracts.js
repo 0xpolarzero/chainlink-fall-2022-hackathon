@@ -45,4 +45,4 @@ module.exports = async function({ getNamedAccounts, deployments }) {
   await linkToken.transfer(verifyStorage.address, LINK_FUNDING_AMOUNT);
 };
 
-module.exports.tags = ['all', 'prepare', 'main'];
+module.exports.tags = ['all', 'prepare'];
