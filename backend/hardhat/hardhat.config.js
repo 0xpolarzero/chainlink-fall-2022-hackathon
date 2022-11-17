@@ -77,7 +77,7 @@ module.exports = {
     enabled: false,
     outputFile: 'gas-report.txt',
     noColors: true,
-    currency: 'USD',
+    currency: 'MATIC',
     coinmarketcap: COINMARKETCAP_API_KEY,
   },
   mocha: {
