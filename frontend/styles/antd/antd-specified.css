@@ -5946,13 +5946,13 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
 .ant-upload-list-item-error,
 .ant-upload-list-item-error .ant-upload-text-icon > .anticon,
 .ant-upload-list-item-error .ant-upload-list-item-name {
-  color: #a61d24;
+  /* color: #a61d24; */
 }
 .ant-upload-list-item-error .ant-upload-list-item-card-actions .anticon {
-  color: #a61d24;
+  /* color: #a61d24; */
 }
 .ant-upload-list-item-error .ant-upload-list-item-card-actions-btn {
-  opacity: 1;
+  /* opacity: 1; */
 }
 .ant-upload-list-item-progress {
   position: absolute;
@@ -5976,7 +5976,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
 }
 .ant-upload-list-picture .ant-upload-list-item-error,
 .ant-upload-list-picture-card .ant-upload-list-item-error {
-  border-color: #a61d24;
+  /* border-color: #a61d24; */
 }
 .ant-upload-list-picture .ant-upload-list-item-info,
 .ant-upload-list-picture-card .ant-upload-list-item-info {
@@ -6016,7 +6016,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
   .anticon
   svg
   path[fill='#e6f7ff'] {
-  fill: #2a1215;
+  /* fill: #2a1215; */
 }
 .ant-upload-list-picture
   .ant-upload-list-item-error
@@ -6030,7 +6030,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
   .anticon
   svg
   path[fill='#1890ff'] {
-  fill: #a61d24;
+  /* fill: #a61d24; */
 }
 .ant-upload-list-picture .ant-upload-list-item-icon,
 .ant-upload-list-picture-card .ant-upload-list-item-icon {

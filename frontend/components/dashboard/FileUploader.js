@@ -63,7 +63,12 @@ export default function FileUploader() {
       valuePropName='fileList'
       getValueFromEvent={getFile}
     >
-      <Dragger {...uploadProps} fileList={fileList}>
+      <Dragger
+        {...uploadProps}
+        fileList={fileList}
+        action={false}
+        customRequest={() => {}}
+      >
         <p className='ant-upload-drag-icon'>
           <InboxOutlined />
         </p>
