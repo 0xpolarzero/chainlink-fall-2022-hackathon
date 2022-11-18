@@ -161,6 +161,22 @@ const { deployments, network, ethers } = require('hardhat');
           );
         });
 
+        it('Should now allow a user to create a promise without including their address', async () => {
+          await expect(
+            mockPromiseFactory.createPromiseContract(
+              args.name,
+              args.ipfsCid,
+              args.arweaveId,
+              args.encryptedProof,
+              args.partyNames,
+              args.partyTwitters,
+              [notUser.address, user.address],
+            ),
+          ).to.be.revertedWith(
+            'PromiseFactory__createPromiseContract__OWNER_MUST_BE_PARTICIPANT()',
+          );
+        });
+
         it('Should create a new PromiseContract', async () => {
           const { txReceipt } = await createCorrectPromiseContract();
           const promiseContractAddress = txReceipt.events[1].address;

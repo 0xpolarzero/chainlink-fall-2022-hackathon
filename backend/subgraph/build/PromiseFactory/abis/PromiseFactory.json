@@ -1,17 +1,6 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_twitterVerifier",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_storageVerifier",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -48,6 +37,11 @@
   {
     "inputs": [],
     "name": "PromiseFactory__createPromiseContract__DUPLICATE_FIELD",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PromiseFactory__createPromiseContract__OWNER_MUST_BE_PARTICIPANT",
     "type": "error"
   },
   {

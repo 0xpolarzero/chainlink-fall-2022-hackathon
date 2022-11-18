@@ -27,6 +27,7 @@ contract PromiseFactory {
     error PromiseFactory__EMPTY_FIELD();
     error PromiseFactory__INCORRECT_FIELD_LENGTH();
     error PromiseFactory__createPromiseContract__DUPLICATE_FIELD();
+    error PromiseFactory__createPromiseContract__OWNER_MUST_BE_PARTICIPANT();
     error PromiseFactory__addParticipant__NOT_PARTICIPANT();
     error PromiseFactory__addParticipant__ALREADY_PARTICIPANT();
     error PromiseFactory__NOT_OWNER();
@@ -181,6 +182,11 @@ contract PromiseFactory {
         // We can't make sure the provided CID is valid,
         // because it could be provided either in a Base58 or Base32 format
         // but it will be shown in the UI
+
+        // And lastly, we want to make sure the creator of the promise is the first participant
+        // and is actually a participant
+        if (_partyAddresses[0] != msg.sender)
+            revert PromiseFactory__createPromiseContract__OWNER_MUST_BE_PARTICIPANT();
 
         // Create a new contract for this promise
         PromiseContract promiseContract = new PromiseContract(

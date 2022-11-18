@@ -192,6 +192,20 @@ developmentChains.includes(network.name)
           ).to.be.reverted;
         });
 
+        it('Should not allow a user to create a promise without including their address', async () => {
+          await expect(
+            promiseFactory.createPromiseContract(
+              'Test',
+              IPFS_CID,
+              ARWEAVE_ID,
+              ENCRYPTED_PROOF,
+              PARTY_NAMES,
+              PARTY_TWITTER,
+              [user.address],
+            ),
+          ).to.be.reverted;
+        });
+
         it('Should create a new PromiseContract and create a mapping between the sender and the child contract addresses', async () => {
           const { txReceipt } = await createPromiseContract('Test 1', [
             deployer.address,
