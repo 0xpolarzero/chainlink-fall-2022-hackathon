@@ -68,7 +68,7 @@ export default function Home() {
                   Explore the directory
                 </Button>
               </Link>
-              <Link href='/user-dashboard'>
+              <Link href='/dashboard'>
                 <Button type='primary' className='action-btn'>
                   Publish your promise
                 </Button>

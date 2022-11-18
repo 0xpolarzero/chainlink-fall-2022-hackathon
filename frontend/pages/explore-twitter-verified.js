@@ -1,5 +1,5 @@
 import styles from '../styles/modules/Home.module.css';
-import VerifyTwitterDrawer from '../components/user-dashboard/VerifyTwitterDrawer';
+import VerifyTwitterDrawer from '../components/dashboard/VerifyTwitterDrawer';
 import TwitterVerifiedTable from '../components/explore-twitter/TwitterVerifiedTable';
 import TwitterVerifiedTableSkeleton from '../components/explore-twitter/TwitterVerifiedTableSkeleton';
 import PromisesDataContext from '../systems/context/PromisesDataContext';

@@ -21,7 +21,7 @@ export default function Header({ activePage, setActivePage }) {
               <i className='far fa-circle' />
               <i className='far fa-circle' />
             </span>
-            Explore promises
+            Promises
           </a>
         </Link>
       </Menu.Item>
@@ -47,7 +47,7 @@ export default function Header({ activePage, setActivePage }) {
   };
 
   const smoothScrollTo = (target) => {
-    // Make sure the activePage page is '/' and not '/explore-promises' or '/user-dashboard'
+    // Make sure the activePage page is '/' and not '/explore-promises' or '/dashboard'
     if (typeof window === 'undefined') return;
     if (window.location.pathname !== '/') return;
 
@@ -113,7 +113,7 @@ export default function Header({ activePage, setActivePage }) {
             <span>Explore</span> <i className='fas fa-chevron-down' />
           </a>
         </Dropdown>
-        <Link href='/user-dashboard'>
+        <Link href='/dashboard'>
           <a
             className={activePage === 3 ? 'active' : ''}
             onClick={(e) => handleNavItemClick(e, 3)}
