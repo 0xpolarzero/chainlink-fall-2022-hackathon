@@ -67,7 +67,11 @@ export default function FileUploader() {
         {...uploadProps}
         fileList={fileList}
         action={false}
-        customRequest={() => {}}
+        customRequest={({ onSuccess }) =>
+          setTimeout(() => {
+            onSuccess('ok', null);
+          }, 0)
+        }
       >
         <p className='ant-upload-drag-icon'>
           <InboxOutlined />
