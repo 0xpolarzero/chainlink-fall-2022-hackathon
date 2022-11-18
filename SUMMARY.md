@@ -1,7 +1,6 @@
 # Table of contents
 
 * [Overview](README.md)
-  * [Explain me like I'm 5](readme/explain-me-like-im-5.md)
 * [Links](introduction/explain-me-like-im-5.md)
 
 ## How to use

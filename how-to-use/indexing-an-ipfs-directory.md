@@ -59,7 +59,7 @@ The following steps can be followed to pin the content of a promise. This way, y
 
 ## Resources
 
-|                                                                                                                                              |
+| Documentation                                                                                                                                |
 | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Web3 Storage](https://web3.storage/)                                                                                                        |
 | [Getting started with IPFS & Filecoin](https://ecosystem-wg.notion.site/Getting-Started-With-IPFS-Filecoin-c00526cf97ba4087ba5c3ad5f5337a58) |
