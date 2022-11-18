@@ -3,6 +3,7 @@ const {
   developmentChains,
   LINK_TOKEN_MUMBAI,
   OPERATOR_MUMBAI,
+  STORAGE_JOB_ID,
 } = require('../helper-hardhat-config');
 const { verify } = require('../utils/verify');
 
@@ -13,7 +14,12 @@ module.exports = async function({ getNamedAccounts, deployments }) {
 
   const verifyStorage = await deploy('VerifyStorage', {
     from: deployer,
-    args: [LINK_TOKEN_MUMBAI, OPERATOR_MUMBAI, promiseFactory.address],
+    args: [
+      LINK_TOKEN_MUMBAI,
+      OPERATOR_MUMBAI,
+      promiseFactory.address,
+      STORAGE_JOB_ID,
+    ],
     log: true,
     waitConfirmations: network.config.blockConfirmations || 1,
   });
@@ -27,6 +33,7 @@ module.exports = async function({ getNamedAccounts, deployments }) {
       LINK_TOKEN_MUMBAI,
       OPERATOR_MUMBAI,
       promiseFactory.address,
+      STORAGE_JOB_ID,
     ]);
   }
 };

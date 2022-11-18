@@ -5,6 +5,7 @@ import "./tests/ChainlinkClientTestHelper.sol";
 import "./tests/ConfirmedOwnerTestHelper.sol";
 import "./IPromiseFactory.sol";
 import "./utils/AddressToString.sol";
+import "./utils/StringToBytes32.sol";
 
 /**
  * @author polarzero
@@ -80,7 +81,7 @@ contract MockVerifyStorage is
         address _oracleContract,
         address _promiseFactoryContract,
         address _fakePromiseFactoryContract,
-        bytes32 _oracleJobId
+        string memory _oracleJobId
     )
         ConfirmedOwnerTestHelper()
         ChainlinkClientTestHelper(_linkTokenContract, _oracleContract)
@@ -89,7 +90,7 @@ contract MockVerifyStorage is
         setChainlinkOracle(_oracleContract);
         setPromiseFactoryContract(_promiseFactoryContract);
         s_fakePromiseFactoryContract = _fakePromiseFactoryContract;
-        s_oracleJobId = _oracleJobId;
+        s_oracleJobId = stringToBytes32(_oracleJobId);
     }
 
     /**

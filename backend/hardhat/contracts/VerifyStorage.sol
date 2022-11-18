@@ -5,6 +5,7 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "./IPromiseFactory.sol";
 import "./utils/AddressToString.sol";
+import "./utils/StringToBytes32.sol";
 
 // storageStatus = 0 -> the provided IPFS and Arweave hashes have not yet been verified
 // storageStatus = 1 -> the provided IPFS and eventually Arweave hashes could not be verified
@@ -71,12 +72,12 @@ contract VerifyStorage is ChainlinkClient, ConfirmedOwner {
         address _linkTokenContract,
         address _oracleContract,
         address _promiseFactoryContract,
-        bytes32 _oracleJobId
+        string memory _oracleJobId
     ) ConfirmedOwner(msg.sender) {
         setChainlinkToken(_linkTokenContract);
         setChainlinkOracle(_oracleContract);
         setPromiseFactoryContract(_promiseFactoryContract);
-        setOracleJobId(_oracleJobId);
+        setOracleJobId(stringToBytes32(_oracleJobId));
     }
 
     /**

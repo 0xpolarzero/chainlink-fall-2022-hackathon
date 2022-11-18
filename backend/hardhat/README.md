@@ -130,6 +130,8 @@ If you would like to deploy your own version of promise, we recommend that you f
 - Deploy with the `--tags prepare` tag, which will run `04-prepare-contracts.js`, and set the allowed verifiers in the `PromiseFactory` contract, along with funding them with LINK tokens.
 - OR Set the verifiers manually, and fund them with LINK tokens (by just sending LINK to the verifiers' addresses).
 
+3. Check that `promiseFactoryContract` is set to the correct address in both verifier contracts. If not, set it manually with `setPromiseFactoryContract` in both.
+
 This is assuming you are using our Chainlink Node and External Adapters. If you are using your own, you should first:
 
 1. Deploy the `Operator.sol` contract.

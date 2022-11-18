@@ -6,6 +6,7 @@ import "./tests/ChainlinkClientTestHelper.sol";
 import "./tests/ConfirmedOwnerTestHelper.sol";
 import "./IPromiseFactory.sol";
 import "./utils/AddressToString.sol";
+import "./utils/StringToBytes32.sol";
 
 /**
  * @author polarzero
@@ -59,7 +60,7 @@ contract MockVerifyTwitter is
         // so we can test the fulfill function
         address _oracleContract,
         address _promiseFactoryContract,
-        bytes32 _oracleJobId
+        string memory _oracleJobId
     )
         ConfirmedOwnerTestHelper()
         ChainlinkClientTestHelper(_linkTokenContract, _oracleContract)
@@ -67,7 +68,7 @@ contract MockVerifyTwitter is
         setChainlinkToken(_linkTokenContract);
         setChainlinkOracle(_oracleContract);
         setPromiseFactoryContract(_promiseFactoryContract);
-        s_oracleJobId = _oracleJobId;
+        s_oracleJobId = stringToBytes32(_oracleJobId);
     }
 
     /**
