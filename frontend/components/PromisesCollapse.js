@@ -17,7 +17,6 @@ export default function PromisesCollapse({ promises, context }) {
         promise.contractAddress.toLowerCase() ===
         e.target.dataset.value.toLowerCase()
       ) {
-        console.log(promise);
         setDrawerPromise(promise);
         setDrawerOpen(true);
       }
