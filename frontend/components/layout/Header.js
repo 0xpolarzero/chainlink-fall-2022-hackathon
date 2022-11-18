@@ -15,12 +15,22 @@ export default function Header({ activePage, setActivePage }) {
     >
       <Menu.Item key='promises'>
         <Link href='/explore-promises'>
-          <a>Explore promises</a>
+          <a>
+            {/* <i className='fas fa-circle-half-stroke' /> */}
+            <span className='icon-promise'>
+              <i className='far fa-circle' />
+              <i className='far fa-circle' />
+            </span>
+            Explore promises
+          </a>
         </Link>
       </Menu.Item>
       <Menu.Item key='twitterHandles'>
         <Link href='/explore-twitter-verified'>
-          <a>Verified Twitter accounts</a>
+          <a>
+            <i className='fab fa-twitter' />
+            Verified Twitter accounts
+          </a>
         </Link>
       </Menu.Item>
     </Menu>
@@ -34,8 +44,6 @@ export default function Header({ activePage, setActivePage }) {
   const handleNavItemClick = (e, i) => {
     updateSlider(i);
     setActivePage(i);
-
-    if (e && i === 0) smoothScrollTo(e.target.attributes.to.value);
   };
 
   const smoothScrollTo = (target) => {
@@ -74,8 +82,8 @@ export default function Header({ activePage, setActivePage }) {
             onClick={(e) => handleNavItemClick(e, 0)}
             onMouseEnter={() => updateSlider(0)}
             onMouseLeave={() => updateSlider(activePage)}
-            to='.section-about'
           >
+            <i className='fas fa-info-circle' />
             The project
           </a>
         </Link>
@@ -84,7 +92,6 @@ export default function Header({ activePage, setActivePage }) {
             onMouseEnter={() => updateSlider(1)}
             onMouseLeave={() => updateSlider(activePage)}
             target='_blank'
-            style={{ display: 'flex', gap: '0.5rem' }}
           >
             <i className='fas fa-book'></i>Docs
           </a>
@@ -102,6 +109,7 @@ export default function Header({ activePage, setActivePage }) {
             onMouseEnter={() => updateSlider(2)}
             onMouseLeave={() => updateSlider(activePage)}
           >
+            <i className='fas fa-compass' />
             <span>Explore</span> <i className='fas fa-chevron-down' />
           </a>
         </Dropdown>
@@ -112,6 +120,7 @@ export default function Header({ activePage, setActivePage }) {
             onMouseEnter={() => updateSlider(3)}
             onMouseLeave={() => updateSlider(activePage)}
           >
+            <i className='fas fa-gear' />
             Dashboard
           </a>
         </Link>

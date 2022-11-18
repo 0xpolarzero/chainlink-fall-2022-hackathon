@@ -53,6 +53,7 @@
   height: 100%;
   padding: 0 1rem 0.5rem 1rem;
   cursor: pointer;
+  gap: 0.5rem;
 }
 
 .header .links a:hover {
@@ -76,7 +77,10 @@
   );
 }
 
-.links > :global(*.active),
-.links > :global(*.active > *) {
+.links > :global(* > i) {
+  transition: all 0.3s ease;
+}
+
+.links > :global(*.active > i) {
   text-shadow: 0 0 18px var(--popstar), 0 0 48px var(--popstar) !important;
 }

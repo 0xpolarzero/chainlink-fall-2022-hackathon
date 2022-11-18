@@ -297,32 +297,6 @@ main {
   text-align: center;
 }
 
-.banner {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(195, 87, 100, 0.8);
-  backdrop-filter: blur(10px);
-  font-size: 0.8rem;
-  text-align: center;
-  width: 100%;
-  border-radius: 0 0 6px 6px;
-  padding: 0.2rem 1rem;
-  z-index: 10;
-}
-
-.banner .bold {
-  font-weight: 600;
-}
-
-.banner i {
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-  transform: translateY(-50%);
-}
-
 /* OVERRIDES */
 
 /* Override Rainbow wallet CSS */
@@ -483,14 +457,32 @@ main {
   gap: 0.5rem !important;
 }
 
-.dropdown-title i {
+.dropdown-title span + i {
   transition: all 0.3s ease;
 }
 
-.ant-dropdown-open i {
+.ant-dropdown-open span + i {
   transform: translateY(0.1rem) !important;
 }
 
+.ant-dropdown-menu-title-content a {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.ant-dropdown-menu-title-content .icon-promise {
+  position: relative;
+  margin-right: 0.5rem;
+}
+
+.ant-dropdown-menu-title-content .icon-promise i + i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0.5rem;
+}
 /* Icon */
 .anticon-info-circle,
 .anticon-inbox {
