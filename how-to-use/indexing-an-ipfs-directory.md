@@ -6,7 +6,7 @@ description: How to pin the IPFS directory of a promise?
 
 Each promise, provided with a valid IPFS CID, displays the current indexing status of the IPFS directory it points to. Everyone can copy this CID, and proceeds to indexing it. Contributing to the network in such ways ensures that this content will be persistent - for as long as it is indexed by peers.
 
-<figure><img src="../.gitbook/assets/image (8).png" alt="The popup shown to disclose how many peers are pinning the content"><figcaption><p>The status of the IPFS content (pins &#x26; deals with Filecoin).</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt="The popup shown to disclose how many peers are pinning the content"><figcaption><p>The status of the IPFS content (pins &#x26; deals with Filecoin).</p></figcaption></figure>
 
 ## How to set up an IPFS Node?&#x20;
 
@@ -32,27 +32,27 @@ The following steps can be followed to pin the content of a promise. This way, y
 
 1.  Hover on the IPFS CID in the promise, and copy it from the popup&#x20;
 
-    <figure><img src="../.gitbook/assets/image (18).png" alt="The IPFS CID showing in a popup from the promise"><figcaption><p>Copy the IPFS CID from the promise.</p></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (14).png" alt="The IPFS CID showing in a popup from the promise"><figcaption><p>Copy the IPFS CID from the promise.</p></figcaption></figure>
 
 
 2.  Go to the **Files** tab **->** click **Import ->** click **From IPFS**.
 
-    <figure><img src="../.gitbook/assets/image (15).png" alt="The steps to follow to import a file from IPFS"><figcaption><p>Click <strong>Files</strong> -> <strong>Import</strong> -> <strong>From IPFS</strong>.</p></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (6).png" alt="The steps to follow to import a file from IPFS"><figcaption><p>Click <strong>Files</strong> -> <strong>Import</strong> -> <strong>From IPFS</strong>.</p></figcaption></figure>
 
 
 3.  In the pop-up, paste the CID, give it a name if you want, then click **Import**.
 
-    <figure><img src="../.gitbook/assets/image (19).png" alt="The pop-up that is displayed after clicking Import"><figcaption><p>Add the IPFS CID, a name, and click <strong>Import</strong>.</p></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (9).png" alt="The pop-up that is displayed after clicking Import"><figcaption><p>Add the IPFS CID, a name, and click <strong>Import</strong>.</p></figcaption></figure>
 
 
 4.  Once the content imported, you should make sure you are actually pinning it ; it will ensure it is not deleted during [garbage collection](https://docs.ipfs.tech/concepts/persistence/#garbage-collection). To do so, click the <img src="../.gitbook/assets/ellipsis-solid.svg" alt="" data-size="line">, then **Set pinning**.
 
-    <figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption><p>Click the ellipsis, then <strong>Set pinning</strong>.</p></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>Click the ellipsis, then <strong>Set pinning</strong>.</p></figcaption></figure>
 
 
 5.  Make sure **Local node** is checked, then click **Apply**.
 
-    <figure><img src="../.gitbook/assets/image (14).png" alt="The pop-up shown when checking the pinning status"><figcaption><p>Check <strong>Local node</strong>, then <strong>Apply</strong>.</p></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (5).png" alt="The pop-up shown when checking the pinning status"><figcaption><p>Check <strong>Local node</strong>, then <strong>Apply</strong>.</p></figcaption></figure>
 
 
 6. That's it! Enjoy the comfort of knowing that the content of this promise will not disappear. You don't need to _trust_ anyone - you actually _know_ that it will stay persistent and immutable, for as long as you keep it pinned with your node.

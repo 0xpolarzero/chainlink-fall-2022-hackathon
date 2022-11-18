@@ -4,7 +4,7 @@ description: How to create a promise?
 
 # Creating a promise
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1).png" alt="Using the menu to navigate to the dashboard"><figcaption><p>Go to the dashboard from the menu.</p></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/image (5) (1).png" alt="Creating a promise using the App"><figcaption><p>Click "New promise" to create a promise.</p></figcaption></figure>
 
