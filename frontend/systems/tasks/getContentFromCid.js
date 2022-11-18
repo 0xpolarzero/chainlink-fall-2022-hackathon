@@ -15,35 +15,37 @@ const getContentFromCid = async (inputUri) => {
     const data = await res.json();
 
     // If there is only one file in the directory, and it is a PDF, we can display it
-    if (
-      data.Objects[0].Links.length === 1 &&
-      data.Objects[0].Links[0].Name.endsWith('.pdf')
-    ) {
-      const pdf = data.Objects[0].Links[0].Hash;
-      const pdfUrl = `https://${convertCidToBase32(pdf)}.ipfs.dweb.link/`;
-      return {
-        link: pdfUrl,
-        content: 'pdf',
-      };
-      // If it contains multiple files, we can just display the directory
+    // ❌ We're not using this anymore since it sometimes shows the PDF in an incorrect way
+    // but we're keeping it here for documentation purposes
+    // if (
+    //   data.Objects[0].Links.length === 1 &&
+    //   data.Objects[0].Links[0].Name.endsWith('.pdf')
+    // ) {
+    //   const pdf = data.Objects[0].Links[0].Hash;
+    //   const pdfUrl = `https://${convertCidToBase32(pdf)}.ipfs.dweb.link/`;
+    //   return {
+    //     link: pdfUrl,
+    //     content: 'pdf',
+    //   };
+    // If it contains multiple files, we can just display the directory
+    // } else {
+    let url;
+    if (cid.includes('/')) {
+      // If it's a directory, split the path at the /
+      const split = cid.split('/', 2);
+      url = `https://${convertCidToBase32(split[0])}.ipfs.dweb.link/${
+        split[1]
+      }`;
     } else {
-      let url;
-      if (cid.includes('/')) {
-        // If it's a directory, split the path at the /
-        const split = cid.split('/', 2);
-        url = `https://${convertCidToBase32(split[0])}.ipfs.dweb.link/${
-          split[1]
-        }`;
-      } else {
-        url = `https://${convertCidToBase32(cid)}.ipfs.dweb.link/`;
-      }
-
-      return {
-        link: url,
-        content: data.Objects[0].Links,
-        baseCid: cid,
-      };
+      url = `https://${convertCidToBase32(cid)}.ipfs.dweb.link/`;
     }
+
+    return {
+      link: url,
+      content: data.Objects[0].Links,
+      baseCid: cid,
+    };
+    // }
   } catch (err) {
     console.log(err);
     return null;

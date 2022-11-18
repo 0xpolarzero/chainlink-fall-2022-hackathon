@@ -1,6 +1,4 @@
-import IpfsDisplayPdf from './IpfsDisplayPdf';
 import IpfsDisplayDirectory from './IpfsDisplayDirectory';
-import FormattedAddress from '../utils/FormattedAddress';
 import { getContentFromCid } from '../../systems/tasks/getContentFromCid';
 import { getWeb3StorageClient } from '../../systems/tasks/getWeb3StorageClient';
 import { Badge, Popover, Skeleton } from 'antd';
@@ -21,22 +19,25 @@ export default function IpfsResolver({ ipfsCid, contractAddress }) {
     getContentFromCid(ipfsCid)
       .then((data) => {
         if (data) {
-          if (data.content === 'pdf') {
-            setResolvedData({
-              link: data.link,
-              content: 'pdf',
-            });
-            setIsDisplayReady(true);
-          } else {
-            // It's a directory
-            setResolvedData({
-              link: data.link,
-              content: data.content,
-              baseCid: data.baseCid,
-            });
-            setIsDirectory(true);
-            setIsDisplayReady(true);
-          }
+          // We actually don't want to display PDFs like this anymore
+          // since it sometimes shows the PDF in an incorrect way
+          // such as cropped or with a white background
+          // if (data.content === 'pdf') {
+          //   setResolvedData({
+          //     link: data.link,
+          //     content: 'pdf',
+          //   });
+          //   setIsDisplayReady(true);
+          // } else {
+          // It's a directory
+          setResolvedData({
+            link: data.link,
+            content: data.content,
+            baseCid: data.baseCid,
+          });
+          setIsDirectory(true);
+          setIsDisplayReady(true);
+          // }
         } else {
           setIsError(true);
         }
@@ -59,25 +60,25 @@ export default function IpfsResolver({ ipfsCid, contractAddress }) {
     return <Skeleton active />;
   }
 
-  if (isDirectory) {
-    return (
-      <>
-        <IpfsDisplayDirectory
-          link={resolvedData.link}
-          originalContent={resolvedData.content}
-          baseCid={resolvedData.baseCid}
-        />
-        <IpfsPinning ipfsCid={ipfsCid} />
-      </>
-    );
-  }
-
+  // if (isDirectory) {
   return (
     <>
-      <IpfsDisplayPdf link={resolvedData.link} />
+      <IpfsDisplayDirectory
+        link={resolvedData.link}
+        originalContent={resolvedData.content}
+        baseCid={resolvedData.baseCid}
+      />
       <IpfsPinning ipfsCid={ipfsCid} />
     </>
   );
+  // }
+
+  // return (
+  //   <>
+  //     <IpfsDisplayPdf link={resolvedData.link} />
+  //     <IpfsPinning ipfsCid={ipfsCid} />
+  //   </>
+  // );
 }
 
 const IpfsPinning = ({ ipfsCid }) => {
