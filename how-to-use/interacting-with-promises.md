@@ -20,7 +20,7 @@ Any interaction with a promise is only available to participants in that specifi
 It will always trigger a transaction, that requires the user to approve and pay some gas for it to go through.
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image (13).png" alt="Clicking on a promise will open a popup"><figcaption><p>Click on a promise to start interacting with it.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (13) (1).png" alt="Clicking on a promise will open a popup"><figcaption><p>Click on a promise to start interacting with it.</p></figcaption></figure>
 
 <figure><img src="../.gitbook/assets/image (11) (1).png" alt="The drawer used for interacting with a promise"><figcaption><p>The drawer for interacting with a promise.</p></figcaption></figure>
 
@@ -46,7 +46,7 @@ Any time a participant is added, everyone needs to approve the promise again. Th
 
 </details>
 
-<figure><img src="../.gitbook/assets/image (4) (2).png" alt="The popup shown for adding a new participant to the promise"><figcaption><p>The popup shown for adding a participant.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt="The popup shown for adding a new participant to the promise"><figcaption><p>The popup shown for adding a participant.</p></figcaption></figure>
 
 <details>
 

@@ -53,7 +53,7 @@ After the verification is done, you can delete the tweet.
 
 ## From the contract
 
-<figure><img src="../.gitbook/assets/image (12) (1).png" alt="The contract address to verify a Twitter handle directly from the contract"><figcaption><p>Click the contract address to navigate to Polygonscan.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (12).png" alt="The contract address to verify a Twitter handle directly from the contract"><figcaption><p>Click the contract address to navigate to Polygonscan.</p></figcaption></figure>
 
 The address of the contract is provided at the bottom of the Drawer. Clicking it will open Polygonscan to this address, allowing you to interact straight with the contract.
 

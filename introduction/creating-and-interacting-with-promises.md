@@ -17,7 +17,7 @@ There are two ways of creating a promise:
 
 Using the App to create a promise will allow its content to get verified, and spare you the trouble of sending it to IPFS, and eventually to Arweave.&#x20;
 
-<figure><img src="../.gitbook/assets/image (7).png" alt="The window displayed for creating a promise on the App"><figcaption><p>The 'Create promise' drawer on the App.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (7) (1).png" alt="The window displayed for creating a promise on the App"><figcaption><p>The 'Create promise' drawer on the App.</p></figcaption></figure>
 
 ### Filling up the form
 
@@ -31,6 +31,10 @@ The process is rather straightforward:
 3. Add as many participants as needed.
 4. Choose whether you want to send the files to Arweave (if you do so, you will need to sign a message to connect your wallet to the Bundlr network [sending-to-arweave-with-bundlr.md](../ipfs-and-arweave/sending-to-arweave-with-bundlr.md "mention")).
 5. Upload as many files as needed (max 10 MB).
+
+{% hint style="warning" %}
+You must be included as a participant, so you won't be able to delete the row that includes your address.
+{% endhint %}
 
 {% hint style="warning" %}
 You cannot add duplicate Ethereum addresses.
@@ -80,6 +84,10 @@ Once in the `createPromiseContract` function, you will need to provide the follo
 | `_partyNames`          | \['Bob']        | <p>An array of strings.</p><p>It needs to be encapsulated in brackets: <code>[...]</code>.</p><p>Each name must be in quotes: <code>'name'</code>. </p><p>Names must be separated by a comma: <code>'name', 'name'</code>. </p>                                                                                                              |
 | `_partyTwitterHandles` | \['bobtwitter'] | <p>An array of strings.</p><p>It needs to be encapsulated in brackets: <code>[...]</code>.</p><p>Each handle must be in quotes: <code>'handle'</code>. </p><p>Handles must be separated by a comma: <code>'handle', 'handle'</code>.<br>The @ must not be provided.<br>For no handle, an empty string must be supplied: <code>''</code>.</p> |
 | `_partyAddresses`      | \[0x000...00]   | <p>An array of addresses.</p><p>It needs to be encapsulated in brackets: <code>[...]</code>.</p><p>Addresses must be separated by a comma: <code>'0x000...', '0x000...'</code>.</p>                                                                                                                                                          |
+
+{% hint style="warning" %}
+You must put your address as the first one in the array, otherwise the transaction will be reverted.
+{% endhint %}
 
 {% hint style="info" %}
 All fields need to be filled up in order to submit the transaction.
