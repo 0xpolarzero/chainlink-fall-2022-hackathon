@@ -120,6 +120,24 @@ gasReporter: {
 }
 ```
 
+## Recommendations
+
+If you would like to deploy your own version of promise, we recommend that you follow theses steps:
+
+1. Deploy main contracts (`PromiseFactory`, `VerifyStorage`, `VerifyTwitter`).
+2. Prepare contracts:
+
+- Deploy with the `--tags prepare` tag, which will run `04-prepare-contracts.js`, and set the allowed verifiers in the `PromiseFactory` contract, along with funding them with LINK tokens.
+- OR Set the verifiers manually, and fund them with LINK tokens (by just sending LINK to the verifiers' addresses).
+
+This is assuming you are using our Chainlink Node and External Adapters. If you are using your own, you should first:
+
+1. Deploy the `Operator.sol` contract.
+2. Setup a Node and authorize it in your Operator contract.
+3. Change the `OPERATOR_MUMBAI` variable in `helper-hardhat-config.js` to your Operator contract address.
+4. Setup your jobs and external adapters.
+5. Change the `STORAGE_JOB_ID` and `TWITTER_JOB_ID` variables in `helper-hardhat-config.js` to your job IDs.
+
 # License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.

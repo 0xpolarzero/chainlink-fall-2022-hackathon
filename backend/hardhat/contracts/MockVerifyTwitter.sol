@@ -25,7 +25,7 @@ contract MockVerifyTwitter is
 
     // Chainlink variables
     uint256 private constant ORACLE_PAYMENT = (1 * LINK_DIVISIBILITY) / 10; // 0.1 LINK
-    bytes32 private s_oracleJobId = "b6ddd15e02e84e3cb8840f75c7658ba8";
+    bytes32 private s_oracleJobId;
 
     // Declare the PromiseFactory contract address and the interface
     address private s_promiseFactoryContract;
@@ -58,7 +58,8 @@ contract MockVerifyTwitter is
         // In this mock, we're passing an address we own as the oracle address
         // so we can test the fulfill function
         address _oracleContract,
-        address _promiseFactoryContract
+        address _promiseFactoryContract,
+        bytes32 _oracleJobId
     )
         ConfirmedOwnerTestHelper()
         ChainlinkClientTestHelper(_linkTokenContract, _oracleContract)
@@ -66,6 +67,7 @@ contract MockVerifyTwitter is
         setChainlinkToken(_linkTokenContract);
         setChainlinkOracle(_oracleContract);
         setPromiseFactoryContract(_promiseFactoryContract);
+        s_oracleJobId = _oracleJobId;
     }
 
     /**

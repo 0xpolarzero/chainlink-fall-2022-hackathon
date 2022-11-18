@@ -2,6 +2,8 @@ const { network, ethers } = require('hardhat');
 const {
   LINK_TOKEN_MUMBAI,
   OPERATOR_MUMBAI,
+  STORAGE_JOB_ID,
+  TWITTER_JOB_ID,
 } = require('../helper-hardhat-config');
 
 module.exports = async function({ getNamedAccounts, deployments }) {
@@ -19,7 +21,12 @@ module.exports = async function({ getNamedAccounts, deployments }) {
 
   await deploy('MockVerifyTwitter', {
     from: deployer,
-    args: [LINK_TOKEN_MUMBAI, OPERATOR_MUMBAI, mockPromiseFactory.address],
+    args: [
+      LINK_TOKEN_MUMBAI,
+      OPERATOR_MUMBAI,
+      mockPromiseFactory.address,
+      TWITTER_JOB_ID,
+    ],
     log: true,
     waitConfirmations: network.config.blockConfirmations || 1,
   });
@@ -31,6 +38,7 @@ module.exports = async function({ getNamedAccounts, deployments }) {
       OPERATOR_MUMBAI,
       mockPromiseFactory.address,
       fakePromiseFactory.address,
+      STORAGE_JOB_ID,
     ],
     log: true,
     waitConfirmations: network.config.blockConfirmations || 1,

@@ -26,7 +26,7 @@ contract MockVerifyStorage is
 
     // Chainlink variables
     uint256 private constant ORACLE_PAYMENT = (1 * LINK_DIVISIBILITY) / 10; // 0.1 LINK
-    bytes32 private s_oracleJobId = "6b8a5d182e2640999421f57e9c0a1d4e";
+    bytes32 private s_oracleJobId;
 
     // Declare the PromiseFactory contract address and the interface
     address private s_promiseFactoryContract;
@@ -79,7 +79,8 @@ contract MockVerifyStorage is
         address _linkTokenContract,
         address _oracleContract,
         address _promiseFactoryContract,
-        address _fakePromiseFactoryContract
+        address _fakePromiseFactoryContract,
+        bytes32 _oracleJobId
     )
         ConfirmedOwnerTestHelper()
         ChainlinkClientTestHelper(_linkTokenContract, _oracleContract)
@@ -88,6 +89,7 @@ contract MockVerifyStorage is
         setChainlinkOracle(_oracleContract);
         setPromiseFactoryContract(_promiseFactoryContract);
         s_fakePromiseFactoryContract = _fakePromiseFactoryContract;
+        s_oracleJobId = _oracleJobId;
     }
 
     /**
