@@ -66,6 +66,9 @@ export default function RowPromiseVerification({
     if (verifyTwitter) {
       setIsWaitingForVerification(true);
       verifyTwitter();
+    } else {
+      toast.error('Error sending request');
+      setIsWaitingForVerification(false);
     }
   };
 

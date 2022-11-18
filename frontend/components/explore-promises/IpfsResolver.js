@@ -82,36 +82,41 @@ export default function IpfsResolver({ ipfsCid, contractAddress }) {
 }
 
 const IpfsPinning = ({ ipfsCid }) => {
-  const [ipfsStatus, setIpfsStatus] = useState([null]);
+  const [ipfsStatus, setIpfsStatus] = useState(null);
   const [longestDeal, setLongestDeal] = useState(0);
   const [isDealLongEnough, setIsDealLongEnough] = useState(false);
   const [badgeColor, setBadgeColor] = useState('var(--toastify-color-warning)');
 
   // Get the pinning status of the IPFS content
   const getIpfsPinningStatus = async () => {
-    const status = await web3StorageClient.status(ipfsCid);
+    const status = await web3StorageClient.status(ipfsCid).catch((err) => {
+      console.log(err);
+      setIpfsStatus('error');
+    });
 
-    // Get the longest deal
-    if (status.deals.length > 0) {
-      const longestDeal = status.deals.reduce((a, b) => {
-        return a.expiration > b.expiration ? a : b;
-      });
+    if (status) {
+      // Get the longest deal
+      if (status.deals.length > 0) {
+        const longestDeal = status.deals.reduce((a, b) => {
+          return a.expiration > b.expiration ? a : b;
+        });
 
-      const currentDate = new Date();
-      const expirationDate = new Date(longestDeal.expiration);
-      const diffTime = Math.abs(expirationDate - currentDate);
-      const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30));
+        const currentDate = new Date();
+        const expirationDate = new Date(longestDeal.expiration);
+        const diffTime = Math.abs(expirationDate - currentDate);
+        const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30));
 
-      if (diffMonths > 12) {
-        setIsDealLongEnough(true);
-      } else {
-        setIsDealLongEnough(false);
+        if (diffMonths > 12) {
+          setIsDealLongEnough(true);
+        } else {
+          setIsDealLongEnough(false);
+        }
+        setLongestDeal(expirationDate.toLocaleDateString());
       }
-      setLongestDeal(expirationDate.toLocaleDateString());
+      setIpfsStatus(status);
+    } else {
+      setIpfsStatus('error');
     }
-
-    console.log(status);
-    setIpfsStatus(status);
   };
 
   useEffect(() => {
@@ -119,6 +124,11 @@ const IpfsPinning = ({ ipfsCid }) => {
   }, []);
 
   useEffect(() => {
+    if (!ipfsStatus) {
+      setBadgeColor('var(--toastify-color-error)');
+      return;
+    }
+
     // Consider it's secure enough if there are at least 3 pins
     // or if the longest deal is at least still valid for 12 months
     if ((ipfsStatus.pins && ipfsStatus.pins.length > 3) || isDealLongEnough) {
@@ -128,7 +138,7 @@ const IpfsPinning = ({ ipfsCid }) => {
     }
   }, [ipfsStatus]);
 
-  if (!ipfsStatus || ipfsStatus.pins === undefined) {
+  if (!ipfsStatus) {
     return (
       <div className='security'>
         <Skeleton
@@ -137,6 +147,32 @@ const IpfsPinning = ({ ipfsCid }) => {
           avatar={{ size: 'small' }}
           title={false}
         />
+      </div>
+    );
+  }
+
+  if (ipfsStatus === 'error') {
+    return (
+      <div className='security'>
+        <Popover
+          content={
+            <div>
+              There was an error getting the pinning status of this content.
+            </div>
+          }
+          title='Error'
+        >
+          <Badge
+            color='var(--toastify-color-error)'
+            count={<i className='fas fa-exclamation-triangle' />}
+            style={{
+              marginRight: '-0.5rem',
+              color: 'var(--toastify-color-error)',
+            }}
+          >
+            <i className='fas fa-sitemap' />
+          </Badge>
+        </Popover>
       </div>
     );
   }
