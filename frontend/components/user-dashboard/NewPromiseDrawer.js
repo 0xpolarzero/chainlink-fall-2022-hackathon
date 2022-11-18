@@ -364,6 +364,7 @@ const NewPromiseForm = ({
                         />
                       </Tooltip>
                     }
+                    disabled={i === 0}
                   />
                 </Form.Item>
 
@@ -408,11 +409,13 @@ const NewPromiseForm = ({
                 <i
                   className='fas fa-trash'
                   onClick={() => {
-                    // Prevent the user from removing the field if there is only one left
-                    if (fields.length > 1) {
+                    // Prevent the user from removing themselves
+                    if (i !== 0) {
                       remove(field.name);
                     } else {
-                      toast.warning('You need at least one participant');
+                      toast.warning(
+                        "You can't remove yourself from the promise",
+                      );
                     }
                   }}
                 ></i>
