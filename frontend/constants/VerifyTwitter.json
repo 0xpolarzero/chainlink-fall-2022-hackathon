@@ -5,7 +5,8 @@
     "inputs": [
       { "type": "address", "name": "_linkTokenContract" },
       { "type": "address", "name": "_oracleContract" },
-      { "type": "address", "name": "_promiseFactoryContract" }
+      { "type": "address", "name": "_promiseFactoryContract" },
+      { "type": "string", "name": "_oracleJobId" }
     ]
   },
   {

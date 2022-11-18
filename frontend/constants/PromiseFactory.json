@@ -24,6 +24,11 @@
     "inputs": []
   },
   {
+    "type": "error",
+    "name": "PromiseFactory__createPromiseContract__OWNER_MUST_BE_PARTICIPANT",
+    "inputs": []
+  },
+  {
     "type": "event",
     "anonymous": false,
     "name": "ParticipantAdded",
