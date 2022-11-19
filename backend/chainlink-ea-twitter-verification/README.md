@@ -106,7 +106,7 @@ curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data 
 {
   "jobRunID": "b6ddd15e-02e8-4e3c-b884-0f75c7658ba8",
   "data": {
-    "result": false // or true
+    "result": false
     "username": "TwitterDev",
     "address": "0x0000000000000000000000000000000000000000",
     "name": "Twitter Dev",
