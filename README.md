@@ -14,7 +14,9 @@
     <br />
     <a href="https://docs.usepromise.xyz/"><strong>Explore the documentation »</strong></a>
     <br /><br />
-    <a href="https://usepromise.xyz/">View Demo</a>
+    <a href="https://usepromise.xyz/">View Demo (Vercel)</a>
+    ·
+    <a href="https://ipfs.usepromise.xyz/">View Demo (Fleek)</a>
     ·
     <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/issues">Report Bug</a>
     ·
