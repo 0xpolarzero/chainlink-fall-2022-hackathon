@@ -4,13 +4,7 @@ import {
   ParticipantAdded as ParticipantAddedEvent,
   TwitterAddVerifiedSuccessful as TwitterAddVerifiedSuccessfulEvent,
 } from '../generated/PromiseFactory/PromiseFactory';
-import {
-  ActivePromise,
-  PromiseContractCreated,
-  ParticipantAdded,
-  TwitterAddVerifiedSuccessful,
-  TwitterVerifiedUser,
-} from '../generated/schema';
+import { ActivePromise, TwitterVerifiedUser } from '../generated/schema';
 
 export function handlePromiseContractCreated(
   event: PromiseContractCreatedEvent,

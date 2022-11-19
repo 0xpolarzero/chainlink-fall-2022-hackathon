@@ -305,6 +305,3 @@ const confirmWithdraw = async (balance) => {
 };
 
 export { uploadToArweave, initializeBundlr };
-
-// 3.3608
-// 1.0455

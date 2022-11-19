@@ -365,14 +365,6 @@ export class ConstructorCall__Inputs {
   constructor(call: ConstructorCall) {
     this._call = call;
   }
-
-  get _twitterVerifier(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _storageVerifier(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
 }
 
 export class ConstructorCall__Outputs {

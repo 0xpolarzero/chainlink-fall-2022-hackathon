@@ -14,7 +14,11 @@ dataSources:
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
+        - ActivePromise
         - PromiseContractCreated
+        - ParticipantAdded
+        - TwitterVerifiedUser
+        - TwitterAddVerifiedSuccessful
       abis:
         - name: PromiseFactory
           file: ./abis/PromiseFactory.json
