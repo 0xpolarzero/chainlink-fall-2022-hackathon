@@ -26,14 +26,6 @@ Chainlink Node on Polygonscan
 Chainlink Operator contract on Polygonscan
 {% endembed %}
 
-{% embed url="https://docs.chain.link/" %}
-Chainlink documentation
-{% endembed %}
-
-{% embed url="https://naas.link/" %}
-Node as a Service
-{% endembed %}
-
 ### Twitter verifier
 
 {% embed url="https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-twitter-verification" %}
@@ -44,10 +36,6 @@ External Adapter - Twitter verification
 VerifyTwitter.sol
 {% endembed %}
 
-{% embed url="https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/staging/VerifyTwitter.staging.test.js" %}
-VerifyTwitter.staging.test.js
-{% endembed %}
-
 ### Storage verifier
 
 {% embed url="https://github.com/polar0/chainlink-fall-2022-hackathon/tree/main/backend/chainlink-ea-storage-verification" %}
@@ -56,10 +44,6 @@ External Adapter - Storage verification
 
 {% embed url="https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/contracts/VerifyStorage.sol" %}
 VerifyStorage.sol
-{% endembed %}
-
-{% embed url="https://github.com/polar0/chainlink-fall-2022-hackathon/blob/main/backend/hardhat/test/staging/VerifyStorage.staging.test.js" %}
-VerifyStorage.staging.test.sol
 {% endembed %}
 
 ## The Graph
@@ -74,16 +58,4 @@ Subgraph on the Hosted Service
 
 {% embed url="https://api.thegraph.com/subgraphs/name/polar0/promises-subgraph-mumbai-v1/graphql" %}
 Subgraph API
-{% endembed %}
-
-## IPFS
-
-{% embed url="https://web3.storage/docs/" %}
-Web3 Storage documentation
-{% endembed %}
-
-## Arweave
-
-{% embed url="https://docs.bundlr.network/docs/client/js" %}
-Bundlr documentation
 {% endembed %}

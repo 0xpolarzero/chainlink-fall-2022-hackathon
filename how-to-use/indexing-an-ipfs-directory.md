@@ -47,7 +47,7 @@ The following steps can be followed to pin the content of a promise. This way, y
 
 4.  Once the content imported, you should make sure you are actually pinning it ; it will ensure it is not deleted during [garbage collection](https://docs.ipfs.tech/concepts/persistence/#garbage-collection). To do so, click the <img src="../.gitbook/assets/ellipsis-solid.svg" alt="" data-size="line">, then **Set pinning**.
 
-    <figure><img src="../.gitbook/assets/image (15).png" alt=""><figcaption><p>Click the ellipsis, then <strong>Set pinning</strong>.</p></figcaption></figure>
+    <figure><img src="../.gitbook/assets/image (15) (1).png" alt=""><figcaption><p>Click the ellipsis, then <strong>Set pinning</strong>.</p></figcaption></figure>
 
 
 5.  Make sure **Local node** is checked, then click **Apply**.
