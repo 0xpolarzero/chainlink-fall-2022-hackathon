@@ -100,8 +100,8 @@ curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data 
 {
   "jobRunID": "cd430ded-65b6-4b5f-ae03-2f9b9b37b89d",
   "data": {
-    "result": 1
-    "promiseAddress": "0x0000000000000000000000000000000000000000",
+    "result": 1,
+    "promiseAddress": "0x0000000000000000000000000000000000000000"
   },
   "statusCode": 200
 }
