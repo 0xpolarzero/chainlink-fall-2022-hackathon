@@ -10,6 +10,10 @@ description: Useful links
 usepromise.xyz
 {% endembed %}
 
+{% embed url="https://ipfs.usepromise.xyz" %}
+ipfs.usepromise.xyz (hosted on Fleek)
+{% endembed %}
+
 ## App
 
 {% embed url="https://github.com/polar0/chainlink-fall-2022-hackathon/" %}
