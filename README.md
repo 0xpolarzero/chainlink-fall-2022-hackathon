@@ -4,6 +4,10 @@ description: 'A quick overview: what is promise? Why? How?'
 
 # Overview
 
+{% embed url="https://pitch.com/public/25c34d97-4863-48c0-95c6-4762804a8e7e" %}
+Pitch deck.
+{% endembed %}
+
 ## What is it? Why?
 
 Promise is a blockchain service for founders, creators and regular users. The end purpose is to improve trust in our digital relationships and make founders more accountable for their promises. It is both a way for gathering information about a team and their project, and for them to make a genuine commitment that cannot be altered.
