@@ -4,6 +4,7 @@ import Logo from '../../asset/logo-home.png';
 
 export default function ParticleLogo() {
   const [isParticleDisplayed, setIsParticleDisplayed] = useState(false);
+
   const initParticles = () => {
     const nextParticle = new NextParticle(document.querySelector('#logo'));
     setIsParticleDisplayed(true);

@@ -1,15 +1,17 @@
 import Link from 'next/link';
 import ParticleLogo from '../components/home/ParticleLogo';
+import { useWidth } from '../systems/hooks/useWidth';
 import { Button, Card, Divider } from 'antd';
 
 const gridStyle = {
   minWidth: '200px',
-  // textAlign: 'center',
   alignSelf: 'center',
   height: '100%',
 };
 
 export default function Home() {
+  const width = useWidth();
+
   const faqLinks = [
     {
       title: 'Understanding a promise',
@@ -46,9 +48,11 @@ export default function Home() {
     <>
       <main className='home'>
         <section className='section section-home'>
-          <div className='left'>
-            <ParticleLogo />
-          </div>
+          {width > 768 ? (
+            <div className='left'>
+              <ParticleLogo />
+            </div>
+          ) : null}
           <div className='right'>
             <div className='title'>
               <div className='title-main'>promise</div>

@@ -6,6 +6,16 @@
   padding: 7rem 3rem 4rem 3rem;
 }
 
+@media (max-width: 768px) {
+  .home {
+    /* padding: 3rem 1rem 2rem 1rem; */
+    padding: 6rem 1rem 1rem 1rem;
+  }
+  .section-home {
+    grid-template-columns: 1fr;
+  }
+}
+
 .section-home {
   display: grid;
   grid-template-columns: 1fr 1fr;

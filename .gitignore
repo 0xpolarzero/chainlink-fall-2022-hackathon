@@ -3,3 +3,4 @@ Devpost-submission.md
 **/node_modules
 **/.env
 **/.next
+**/.DS_Store
