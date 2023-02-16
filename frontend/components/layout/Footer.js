@@ -23,7 +23,7 @@ export default function Footer() {
           <i className='fab fa-twitter'></i>
         </a>
         <a
-          href='https://github.com/polar0/'
+          href='https://github.com/0xpolarzero/'
           target='_blank'
           rel='noopener noreferrer'
         >

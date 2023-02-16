@@ -5,7 +5,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/polar0/chainlink-fall-2022-hackathon">
+  <a href="https://github.com/0xpolarzero/chainlink-fall-2022-hackathon">
     <img src="./resources/asset/logo.svg" alt="Logo" width="80" height="80">
   </a>
 
@@ -20,9 +20,9 @@
     ·
     <a href="https://ipfs.usepromise.xyz/">View Demo (Fleek)</a>
     ·
-    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/issues">Report Bug</a>
+    <a href="https://github.com/0xpolarzero/chainlink-fall-2022-hackathon/issues">Report Bug</a>
     ·
-    <a href="https://github.com/polar0/chainlink-fall-2022-hackathon/issues">Request Feature</a>
+    <a href="https://github.com/0xpolarzero/chainlink-fall-2022-hackathon/issues">Request Feature</a>
   </p>
 </div>
 
@@ -131,7 +131,7 @@ Should you be curious to know more about the application, I strongly suggest to 
 
 1. Clone the repo:
    ```sh
-   git clone https://github.com/polar0/chainlink-fall-2022-hackathon
+   git clone https://github.com/0xpolarzero/chainlink-fall-2022-hackathon
    ```
 2. Navigate into a subdirectory:
    ```sh
@@ -156,7 +156,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [![LinkedIn][linkedin]](https://www.linkedin.com/in/antton-lepretre/)
 [![0xpolarzero@gmail.com][email]](mailto:0xpolarzero@gmail.com)
 
-Project Link: <strong><a href="https://github.com/polar0/chainlink-fall-2022-hackathon">https://github.com/polar0/chainlink-fall-2022-hackathon</a></strong>
+Project Link: <strong><a href="https://github.com/0xpolarzero/chainlink-fall-2022-hackathon">https://github.com/0xpolarzero/chainlink-fall-2022-hackathon</a></strong>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
